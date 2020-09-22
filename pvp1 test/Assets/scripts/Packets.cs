@@ -117,14 +117,16 @@ public class ConditionsAnalys
 public struct AnimationsForPlayers
 {
     public Animator animator;
-    AudioSource MyAudioSource;
-    AudioClip BasicMovement;
-    AudioClip BasicWeaponHit;
+    private AudioSource MyAudioSource;
+    private AudioClip BasicMovement;
+    private AudioClip BasicWeaponHit;
+    
 
     public int CurrentAnimationState;
 
     public AnimationsForPlayers(Animator animat, AudioSource AudSource)
-    {                
+    {
+        
         animator = animat;
         MyAudioSource = AudSource;
         CurrentAnimationState = 0;
@@ -207,6 +209,18 @@ public struct AnimationsForPlayers
                         Block();
                     }
                     break;
+                case 8:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+                    {
+                        Stunned();
+                    }
+                    break;
+                case 9:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+                    {
+                        ShieldSlam();
+                    }
+                    break;
             }
         }
     }
@@ -274,6 +288,23 @@ public struct AnimationsForPlayers
         CurrentAnimationState = 7;
         
     }
+
+    void Stunned()
+    {
+        animator.Play("stunned");
+        CurrentAnimationState = 8;
+        
+
+    }
+
+    void ShieldSlam()
+    {
+        animator.Play("shield slam");
+        CurrentAnimationState = 9;
+
+    }
+
+
 
     void Death()
     {

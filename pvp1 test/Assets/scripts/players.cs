@@ -32,15 +32,13 @@ public class players : MonoBehaviour
         PlayerTransform = this.GetComponent<Transform>();
         PlayerAnimator = new AnimationsForPlayers(this.GetComponent<Animator>(), this.GetComponent<AudioSource>());
         TempText1 = GameObject.Find("OtherHP").GetComponent<TextMeshProUGUI>();
-        PlayerTransform.position = Vector3.zero;
+        PlayerTransform.position = new Vector3(0, 0.2f, 0);
         PlayerEffects = this.GetComponent<effects>();
     }
 
     public void SyncPosNRot(float DeltaForLerp, float AverageCount)
     {
-        //position = pos;
-        //rotation = rot;
-
+        
         TempText1.text = SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool.ToString();
         pos_n_rot(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].position, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].rotation, DeltaForLerp, AverageCount);
         PlayerAnimator.RefreshAnimations(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].animation_id);
@@ -106,6 +104,7 @@ public class players : MonoBehaviour
         //StartCoroutine(MoveTo(PlayerTransform.position, PlayerTransform.rotation, pos,rot, delt));
     }
 
+    /*
     IEnumerator MoveTo(Vector3 OldPos, Quaternion OldRot, Vector3 NewPos, Vector3 NewRot, float delta)
     {
         for (float i=0;i<delta;i++)
@@ -133,4 +132,5 @@ public class players : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
     }
+    */
 }

@@ -8,20 +8,63 @@ public class effects : MonoBehaviour
     
     public AudioSource MyAudioSourse;
     private AudioClip HitWith1HSword;
-    public GameObject BlockWithShield, WeaponTrail;
+    public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff;
+
+    private Animator PlayerAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerAnimator = this.gameObject.GetComponent<Animator>();
+        StunEffect.SetActive(false);
         HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
-
+        ShieldSlam.SetActive(false);
         BlockWithShield.SetActive(false);
         WeaponTrail.SetActive(false);
+        ShieldSlamEff.SetActive(false);
+        CritSwordEff.SetActive(false);
 
     }
 
+    private void FixedUpdate()
+    {
+        if (PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+        {
+            if (!StunEffect.activeSelf)
+            {
+                StunEffect.SetActive(true);
+                
+            }
+        } 
+        else if (!PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+        {
+            if (StunEffect.activeSelf)
+            {
+                StunEffect.SetActive(false);
+            }
+        }
 
+        if (PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+        {
+            if (!ShieldSlam.activeSelf)
+            {
+                ShieldSlam.SetActive(true);
+                ShieldSlamEff.SetActive(true);
+            }
+        }
+        else if (!PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+        {
+            if (ShieldSlam.activeSelf)
+            {
+                ShieldSlam.SetActive(false);
+                ShieldSlamEff.SetActive(false);
+            }
+        }
+
+
+
+
+    }
 
     public void RegisterConds(Conds SomeConds)
     {
@@ -82,15 +125,17 @@ public class effects : MonoBehaviour
                 }
             }
 
-            
+            if (ConditionToProcess.cond_type == "dg" && ConditionToProcess.damage_or_heal > 0 && ConditionToProcess.isCrit)
+            {
+                if (general.MainPlayerClass == 1)
+                {
+                    StartCoroutine(TurnOnSomeEffect(CritSwordEff, 1f));
+                }
+            }
+
 
 
         }
-        
-
-
-
-
     }
 
 

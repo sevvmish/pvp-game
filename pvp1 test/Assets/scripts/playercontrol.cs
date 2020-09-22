@@ -97,7 +97,8 @@ public class playercontrol : MonoBehaviour
 
         if (general.MainPlayerClass == 1)
         {
-            MainPlayerGameObject = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), new Vector3(0, 0.15f, 0), Quaternion.identity, this.gameObject.transform);
+            MainPlayerGameObject = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.identity, this.gameObject.transform);
+            
             MainPlayerGameObject.GetComponent<players>().enabled = false;
         }
         myanimator = new AnimationsForPlayers(MainPlayerGameObject.GetComponent<Animator>(), MainPlayerGameObject.GetComponent<AudioSource>());
@@ -135,7 +136,8 @@ public class playercontrol : MonoBehaviour
 
     void AddPlayer(Vector3 pos, Vector3 rot, List<players> playerslist, int order)
     {
-        GameObject ggg = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), pos, Quaternion.Euler(rot));
+        GameObject ggg = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.Euler(rot));
+        
         ggg.GetComponent<players>().NumberInSendAndReceive = order;
         playerslist.Add(ggg.GetComponent<players>());
 
@@ -183,7 +185,7 @@ public class playercontrol : MonoBehaviour
         
         
 
-        
+        /*
         if (Input.GetKeyDown(KeyCode.U))
         {
             for (int i=0; i<MyConds.curr_conds.Count; i++)
@@ -203,7 +205,7 @@ public class playercontrol : MonoBehaviour
                 
             }
         }
-
+        */
         
 
         if (SendAndReceive.SpecificationReceived == 1)
