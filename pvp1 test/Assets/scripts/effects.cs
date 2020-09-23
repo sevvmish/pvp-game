@@ -7,8 +7,8 @@ public class effects : MonoBehaviour
     private List<Conds> CurrentConds = new List<Conds>();
     
     public AudioSource MyAudioSourse;
-    private AudioClip HitWith1HSword;
-    public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff;
+    private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge;
+    public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff, ShieldChargeEff;
 
     private Animator PlayerAnimator;
 
@@ -17,13 +17,17 @@ public class effects : MonoBehaviour
     {
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
+
         HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
+        ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
+        SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
+        
         ShieldSlam.SetActive(false);
         BlockWithShield.SetActive(false);
         WeaponTrail.SetActive(false);
         ShieldSlamEff.SetActive(false);
         CritSwordEff.SetActive(false);
-
+        ShieldChargeEff.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -50,6 +54,7 @@ public class effects : MonoBehaviour
             {
                 ShieldSlam.SetActive(true);
                 ShieldSlamEff.SetActive(true);
+                StartCoroutine(PlaySomeSound(SwingHuge, 0.2f));
             }
         }
         else if (!PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
@@ -60,10 +65,6 @@ public class effects : MonoBehaviour
                 ShieldSlamEff.SetActive(false);
             }
         }
-
-
-
-
     }
 
     public void RegisterConds(Conds SomeConds)
@@ -111,7 +112,8 @@ public class effects : MonoBehaviour
             {
 
                 case "me-b":
-                    StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f));
+
+                    if (general.MainPlayerClass==1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f));
 
                     break;
             }
@@ -124,6 +126,20 @@ public class effects : MonoBehaviour
                     MyAudioSourse.Play();
                 }
             }
+
+
+            if (ConditionToProcess.cond_type == "st" && ConditionToProcess.spell_index == 4)
+            {
+                StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f));                          
+            }
+
+            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.spell_index == 4)
+            {
+                StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, ConditionToProcess.cond_time));
+                
+            }
+
+
 
             if (ConditionToProcess.cond_type == "dg" && ConditionToProcess.damage_or_heal > 0 && ConditionToProcess.isCrit)
             {
@@ -149,6 +165,13 @@ public class effects : MonoBehaviour
             yield return new WaitForSeconds(timer);
             SomeEffect.SetActive(false);
         }
+    }
+
+    IEnumerator PlaySomeSound(AudioClip AClip, float DelayTime)
+    {        
+        yield return new WaitForSeconds(DelayTime);
+        MyAudioSourse.clip = AClip;
+        MyAudioSourse.Play();
     }
 
 

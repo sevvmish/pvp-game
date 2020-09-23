@@ -76,6 +76,7 @@ public class ConditionsAnalys
   
     public void Decode(string Data)
     {
+        
         curr_conds.Add(new Conds());
         int Index = curr_conds.Count - 1;
         string[] getstrcond1 = Data.Split(':');
@@ -110,6 +111,16 @@ public class ConditionsAnalys
         {
             curr_conds[Index].cond_message = getstrcond[1];
         }
+        else if (curr_conds[Index].cond_type == "st") //condition type in conditions
+        {
+            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+        }
+        else if (curr_conds[Index].cond_type == "ca") //condition type in conditions
+        {            
+            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+        }
 
     }
 }
@@ -118,7 +129,7 @@ public struct AnimationsForPlayers
 {
     public Animator animator;
     private AudioSource MyAudioSource;
-    private AudioClip BasicMovement;
+    //private AudioClip BasicMovement;
     private AudioClip BasicWeaponHit;
     
 
@@ -130,12 +141,12 @@ public struct AnimationsForPlayers
         animator = animat;
         MyAudioSource = AudSource;
         CurrentAnimationState = 0;
-        BasicMovement = null;
+        //BasicMovement = null;
         BasicWeaponHit = null;
 
         if (general.MainPlayerClass == 1)
         {
-            BasicMovement = Resources.Load<AudioClip>("sounds/heavy movement");
+            //BasicMovement = Resources.Load<AudioClip>("sounds/heavy movement");
             BasicWeaponHit = Resources.Load<AudioClip>("sounds/onehand swing bigger");
         }
     }
@@ -237,12 +248,14 @@ public struct AnimationsForPlayers
 
     void Run()
     {
+        /*
         if (MyAudioSource.clip != BasicMovement)
         {
             MyAudioSource.loop = true;
             MyAudioSource.clip = BasicMovement;
             MyAudioSource.Play();
         }
+        */
         if (playercontrol.MyJoystick.Vertical >= 0)
         {
             animator.Play("Run");

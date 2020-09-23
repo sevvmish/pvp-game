@@ -98,7 +98,7 @@ public class playercontrol : MonoBehaviour
         if (general.MainPlayerClass == 1)
         {
             MainPlayerGameObject = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.identity, this.gameObject.transform);
-            
+            MainPlayerGameObject.transform.localPosition = Vector3.zero;
             MainPlayerGameObject.GetComponent<players>().enabled = false;
         }
         myanimator = new AnimationsForPlayers(MainPlayerGameObject.GetComponent<Animator>(), MainPlayerGameObject.GetComponent<AudioSource>());
@@ -136,7 +136,8 @@ public class playercontrol : MonoBehaviour
 
     void AddPlayer(Vector3 pos, Vector3 rot, List<players> playerslist, int order)
     {
-        GameObject ggg = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.Euler(rot));
+        
+        GameObject ggg = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
         
         ggg.GetComponent<players>().NumberInSendAndReceive = order;
         playerslist.Add(ggg.GetComponent<players>());
