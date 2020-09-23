@@ -51,23 +51,26 @@ public class ConditionsAnalys
             {
 
                 string[] exact_getstrcond = getstrcond1[i].Split(':');
-
-                string IDForCheck = exact_getstrcond[0];
-                bool isNegative = false;
-
-                for (int ii = 0; ii < curr_conds.Count; ii++)
+                if (getstrcond1[i].Length > 1)
                 {
-                    
-                    if (curr_conds[ii].cond_id == IDForCheck)
+                    string IDForCheck = exact_getstrcond[0];
+                    string BulkData = exact_getstrcond[1];
+                    bool isNegative = false;
+
+                    for (int ii = 0; ii < curr_conds.Count; ii++)
                     {
-                        isNegative = true;
-                    }
-                }
 
-                if (!isNegative)
-                {
-                    Decode(getstrcond1[i]);
-                    
+                        if (curr_conds[ii].cond_id == IDForCheck && curr_conds[ii].cond_bulk == BulkData)
+                        {
+                            isNegative = true;
+                        }
+                    }
+
+                    if (!isNegative)
+                    {
+                        Decode(getstrcond1[i]);
+
+                    }
                 }
             }
         }
@@ -82,46 +85,59 @@ public class ConditionsAnalys
         string[] getstrcond1 = Data.Split(':');
         
         curr_conds[Index].cond_id = getstrcond1[0];
-        curr_conds[Index].cond_bulk = getstrcond1[1];
 
-        string[] getstrcond = getstrcond1[1].Split('-');
-        curr_conds[Index].cond_type = getstrcond[0];
+        
+            curr_conds[Index].cond_bulk = getstrcond1[1];
+        
 
-        if (curr_conds[Index].cond_type == "co") //condition type in conditions
-        {
-            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);            
-        }
-        else if (curr_conds[Index].cond_type == "dt" || curr_conds[Index].cond_type == "dg") //damage taken or given
-        {
-            curr_conds[Index].damage_or_heal = float.Parse(getstrcond[1], CultureInfo.InvariantCulture);
+            string[] getstrcond = getstrcond1[1].Split('-');
+            curr_conds[Index].cond_type = getstrcond[0];
 
-            if (getstrcond[2] == "s")
+            if (curr_conds[Index].cond_type == "co") //condition type in conditions
             {
-                curr_conds[Index].isCrit = false;
+                curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+                curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);            
             }
-            else if (getstrcond[2] == "c")
+            else if (curr_conds[Index].cond_type == "dt" || curr_conds[Index].cond_type == "dg") //damage taken or given
             {
-                curr_conds[Index].isCrit = true;
+                curr_conds[Index].damage_or_heal = float.Parse(getstrcond[1], CultureInfo.InvariantCulture);
+
+                if (getstrcond[2] == "s")
+                {
+                    curr_conds[Index].isCrit = false;
+                }
+                else if (getstrcond[2] == "c")
+                {
+                    curr_conds[Index].isCrit = true;
+                }
+
+                curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
             }
+            else if (curr_conds[Index].cond_type == "me") //messages of conditions
+            {
+                curr_conds[Index].cond_message = getstrcond[1];
+            }
+            else if (curr_conds[Index].cond_type == "st") //condition type in conditions
+            {
+                curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+                curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+            }
+            else if (curr_conds[Index].cond_type == "ca") //condition type in conditions
+            {
+                if (getstrcond[1] == "cncld")
+                {
+                    curr_conds[Index].cond_message = "CANCELED";
+                    
+                }
+                else
+                {
+                    curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+                    curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+                }
 
-            curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
-        }
-        else if (curr_conds[Index].cond_type == "me") //messages of conditions
-        {
-            curr_conds[Index].cond_message = getstrcond[1];
-        }
-        else if (curr_conds[Index].cond_type == "st") //condition type in conditions
-        {
-            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
-        }
-        else if (curr_conds[Index].cond_type == "ca") //condition type in conditions
-        {            
-            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
-        }
-
+            }
+        
+        
     }
 }
 
