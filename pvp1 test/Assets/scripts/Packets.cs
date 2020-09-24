@@ -358,12 +358,13 @@ public struct ReceivePlayersData
     public int animation_id;
     public string conditions;
     public float health_pool;
-    
+    public float max_health_pool;
     public float energy;
 
     public Vector3 position;
     public Vector3 rotation;
 
+    private string[] all_health;
 
     public void ReceiveForPlayers(string ReceivedPacket)
     {
@@ -381,7 +382,10 @@ public struct ReceivePlayersData
             speed = float.Parse(getstr[6], CultureInfo.InvariantCulture);
             animation_id = int.Parse(getstr[7]);
             conditions = getstr[8];
-            health_pool = float.Parse(getstr[9], CultureInfo.InvariantCulture);
+            
+            all_health = getstr[9].Split('-');
+            health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
+            max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
             
             energy = float.Parse(getstr[10], CultureInfo.InvariantCulture);
             position = new Vector3(position_x, position_y, position_z);
@@ -396,6 +400,7 @@ public struct ReceivePlayersData
             //if (ReceivedPacket!=null) playercontrol.OtherLatency1.text = playercontrol.OtherLatency1.text + "wrong packet format - " + ReceivedPacket;
         }
 
+        
     }
 }
 
@@ -629,14 +634,13 @@ public class PlayerUI : MonoBehaviour
 {
     public GameObject AllObject;
     private GameObject cond_example;
-    private float HealthCurrentAmount = -1.12f;
-    private float EnergyCurrentAmount = -1.12f;
-    private float HealthAllAmount = -1.12f;
-    private float EnergyAllAmount = -1.12f;
+    private float HealthCurrentAmount = 0;
+    private float EnergyCurrentAmount = 0;
+    private float HealthAllAmount = 0;
+    private float EnergyAllAmount = 100;
     private Image HealthButton;
     private Image EnergyButton;
-    private bool isHealth;
-    private bool isEnergy;
+    
     private int CondObjectLenth = 21;
     public bool isMainPlayer;
 
@@ -864,27 +868,16 @@ public class PlayerUI : MonoBehaviour
     }
 
 
-    public void HealthInput(float HealthAm)
+    public void HealthInput(float HealthAm, float MaxHealthAm)
     {
-
-        if (HealthAm > 0 && !isHealth)
-        {
-            HealthAllAmount = HealthAm;
-            isHealth = true;
-        }
-
         HealthCurrentAmount = HealthAm;
+        HealthAllAmount = MaxHealthAm;
+     
         HealthButton.fillAmount = HealthCurrentAmount / HealthAllAmount;
     }
 
     public void EnergyInput(float EnergyAm)
     {
-        if (EnergyAm > 0 && !isEnergy)
-        {
-            EnergyAllAmount = EnergyAm;
-            isEnergy = true;
-        }
-
         EnergyCurrentAmount = EnergyAm;
         EnergyButton.fillAmount = EnergyCurrentAmount / EnergyAllAmount;
     }

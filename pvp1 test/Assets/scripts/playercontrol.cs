@@ -170,7 +170,7 @@ public class playercontrol : MonoBehaviour
         for (int i=0; i<OtherGamers.Count; i++)
         {
             OtherGamers[i].Conds.Check(SendAndReceive.OtherPlayerData[i].conditions);
-            OtherGamers[i].OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[0].health_pool);
+            OtherGamers[i].OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[0].health_pool, SendAndReceive.OtherPlayerData[0].max_health_pool);
             OtherGamers[i].OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[0].energy);
         }
         
@@ -180,9 +180,11 @@ public class playercontrol : MonoBehaviour
         MyJoystick.CheckTouches(MyJoystickTemp.Vertical, MyJoystickTemp.Horizontal);
 
         //print(PlayerTransform.rotation.eulerAngles.y + " - from me: " + SendAndReceive.MyPlayerData.rotation.y + " - from server");
-        MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool);
-        MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
 
+        
+        MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool, SendAndReceive.MyPlayerData.max_health_pool);
+        MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
+        
         
         
 
@@ -301,7 +303,7 @@ public class playercontrol : MonoBehaviour
         //==================================================================
         if (cur_time >= 0.04f)
         {
-            
+
             MyHPText.text = SendAndReceive.MyPlayerData.health_pool.ToString();
 
 

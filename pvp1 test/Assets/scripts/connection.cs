@@ -109,7 +109,7 @@ public class connection : MonoBehaviour
             //sck.Send(Encoding.UTF8.GetBytes(DataForServer));
             //print("-----=====----- " + DataForServer);
             sck.SendTo(Encoding.UTF8.GetBytes(DataForServer), endpoint);
-
+            
         }
         catch (Exception ex)
         {
