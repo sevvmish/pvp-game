@@ -565,6 +565,23 @@ public class playercontrol : MonoBehaviour
                     //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
                     MyConds.curr_conds[i].isChecked = true;
                 }
+                else if (MyConds.curr_conds[i].cond_type == "ca")
+                {
+                    print(MyConds.curr_conds[i].cond_bulk);
+                    if (!MyUI.isCasting)
+                    {
+                        StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+                    else if (MyUI.isCasting && MyConds.curr_conds[i].cond_message == "CANCELED")
+                    {
+                        
+                        MyUI.StopCurrentCasting();
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+                }
+
+
                 else if (MyConds.curr_conds[i].cond_type == "me")
                 {
                     if (MyConds.curr_conds[i].cond_message == "d")

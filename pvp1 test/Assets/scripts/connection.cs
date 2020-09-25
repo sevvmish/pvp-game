@@ -63,7 +63,11 @@ public class connection : MonoBehaviour
             //print(DataForCheck);
         }
 
-        ListenToServer();
+
+        if ((SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) < 4)
+        {
+            ListenToServer();
+        }
 
         /*
         if (isstart)

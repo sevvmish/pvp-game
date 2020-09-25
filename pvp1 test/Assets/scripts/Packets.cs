@@ -640,9 +640,15 @@ public class PlayerUI : MonoBehaviour
     private float EnergyAllAmount = 100;
     private Image HealthButton;
     private Image EnergyButton;
-    
+
+    private Image CastingBar;
+    private Image CastingSpellImage;
+
     private int CondObjectLenth = 21;
     public bool isMainPlayer;
+
+    public bool isCasting = false;
+    
 
     public class CondManager
     {
@@ -722,8 +728,41 @@ public class PlayerUI : MonoBehaviour
         HealthButton = AllObject.transform.GetChild(0).Find("HealthBarButton").GetComponent<Image>();
         EnergyButton = AllObject.transform.GetChild(1).Find("EnergyBarButton").GetComponent<Image>();
 
+        CastingBar = AllObject.transform.GetChild(3).Find("CastingBar").GetComponent<Image>();
+        CastingSpellImage = AllObject.transform.GetChild(3).Find("SpellForCast").GetComponent<Image>();
+        CastingBar.gameObject.SetActive(false);
+        CastingSpellImage.gameObject.SetActive(false);
+
+
     }
 
+    public void StopCurrentCasting()
+    {
+        
+        CastingBar.gameObject.SetActive(false);
+        CastingSpellImage.gameObject.SetActive(false);
+        isCasting = false;
+    }
+
+    public IEnumerator AddCasting(string castID, int spell_ind, float spell_time)
+    {
+                
+        isCasting = true;
+        CastingBar.gameObject.SetActive(true);
+        CastingSpellImage.gameObject.SetActive(true);
+        CastingBar.fillAmount = 1;
+        CastingSpellImage.sprite = DB.GetSpellByNumber(spell_ind).Spell1_icon;
+
+        for (float i = spell_time; i > 0; i -= 0.1f)
+        {
+            CastingBar.fillAmount = i;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        CastingBar.gameObject.SetActive(false);
+        CastingSpellImage.gameObject.SetActive(false);
+        isCasting = false;
+    }
 
 
     public IEnumerator AddCondition(string condID, int spell_ind, float spell_time)
