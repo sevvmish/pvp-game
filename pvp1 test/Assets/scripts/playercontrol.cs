@@ -567,7 +567,7 @@ public class playercontrol : MonoBehaviour
                 }
                 else if (MyConds.curr_conds[i].cond_type == "ca")
                 {
-                    print(MyConds.curr_conds[i].cond_bulk);
+                    
                     if (!MyUI.isCasting)
                     {
                         StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
@@ -577,6 +577,7 @@ public class playercontrol : MonoBehaviour
                     {
                         
                         MyUI.StopCurrentCasting();
+                        MyEffects.CancelCasting();
                         MyConds.curr_conds[i].isChecked = true;
                     }
                 }

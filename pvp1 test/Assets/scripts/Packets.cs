@@ -648,7 +648,8 @@ public class PlayerUI : MonoBehaviour
     public bool isMainPlayer;
 
     public bool isCasting = false;
-    
+    private TextMeshProUGUI CancelationText;
+    private bool isShowStopCastingText;
 
     public class CondManager
     {
@@ -730,18 +731,20 @@ public class PlayerUI : MonoBehaviour
 
         CastingBar = AllObject.transform.GetChild(3).Find("CastingBar").GetComponent<Image>();
         CastingSpellImage = AllObject.transform.GetChild(3).Find("SpellForCast").GetComponent<Image>();
+        CancelationText = AllObject.transform.GetChild(3).Find("CanceledText").GetComponent<TextMeshProUGUI>();
         CastingBar.gameObject.SetActive(false);
         CastingSpellImage.gameObject.SetActive(false);
-
-
+        CancelationText.gameObject.SetActive(false);
+        CancelationText.text = lang.Canceled;
     }
 
     public void StopCurrentCasting()
     {
-        
+        isShowStopCastingText = true;
         CastingBar.gameObject.SetActive(false);
         CastingSpellImage.gameObject.SetActive(false);
         isCasting = false;
+        CancelationText.gameObject.SetActive(false);
     }
 
     public IEnumerator AddCasting(string castID, int spell_ind, float spell_time)
@@ -756,12 +759,20 @@ public class PlayerUI : MonoBehaviour
         for (float i = spell_time; i > 0; i -= 0.1f)
         {
             CastingBar.fillAmount = i;
+            if (isShowStopCastingText)
+            {
+                CancelationText.gameObject.SetActive(true);
+            }
             yield return new WaitForSeconds(0.1f);
         }
 
+        isCasting = false;
         CastingBar.gameObject.SetActive(false);
         CastingSpellImage.gameObject.SetActive(false);
-        isCasting = false;
+        yield return new WaitForSeconds(1f);
+        
+        isShowStopCastingText = false;
+        CancelationText.gameObject.SetActive(false);
     }
 
 
@@ -975,7 +986,7 @@ public class Buttons
     {
         if (GetButton(1).interactable)
         {
-            //connection.RawPacketsProcess(connection.SendAndGetTCP(SendAndReceive.DataForSending.ToSendButtons(1, 0, 0, 0, 0, 0)));
+           
             playercontrol.isButtonSend = true;
             playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(1, 0, 0, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 1);
@@ -986,7 +997,7 @@ public class Buttons
     {
         if (GetButton(2).interactable)
         {
-            //connection.RawPacketsProcess(connection.SendAndGetTCP(SendAndReceive.DataForSending.ToSendButtons(0, 1, 0, 0, 0, 0)));
+            
             playercontrol.isButtonSend = true;
             playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 1, 0, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 2);
@@ -997,7 +1008,7 @@ public class Buttons
     {
         if (GetButton(3).interactable)
         {
-            //connection.RawPacketsProcess(connection.SendAndGetTCP(SendAndReceive.DataForSending.ToSendButtons(0, 0, 1, 0, 0, 0)));
+            
             playercontrol.isButtonSend = true;
             playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 1, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 3);
@@ -1008,7 +1019,7 @@ public class Buttons
     {
         if (GetButton(4).interactable)
         {
-            //connection.RawPacketsProcess(connection.SendAndGetTCP(SendAndReceive.DataForSending.ToSendButtons(0, 0, 1, 0, 0, 0)));
+            
             playercontrol.isButtonSend = true;
             playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 1, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 4);
@@ -1016,17 +1027,25 @@ public class Buttons
     }
 
     private void Button5Pressed()
-    {        
-        //connection.RawPacketsProcess(connection.SendAndGetTCP(SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 0, 1, 0)));
-        
-        WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 5);
+    {
+        if (GetButton(5).interactable)
+        {
+            
+            playercontrol.isButtonSend = true;
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 0, 1, 0);
+            WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 5);
+        }
     }
 
     private void Button6Pressed()
-    {        
-        //connection.RawPacketsProcess(connection.SendAndGetTCP(SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 0, 0, 1)));
-        
-        WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 6);
+    {
+        if (GetButton(6).interactable)
+        {
+
+            playercontrol.isButtonSend = true;
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 0, 0, 1);
+            WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 6);
+        }
     }
 
 

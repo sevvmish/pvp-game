@@ -7,8 +7,8 @@ public class effects : MonoBehaviour
     private List<Conds> CurrentConds = new List<Conds>();
     
     public AudioSource MyAudioSourse;
-    private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss;
-    public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff, ShieldChargeEff, BuffEff, BloodLossEff;
+    private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
+    public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff, ShieldChargeEff, BuffEff, BloodLossEff, ShieldOnEff;
 
     private Animator PlayerAnimator;
 
@@ -23,6 +23,8 @@ public class effects : MonoBehaviour
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
         BloodLoss = Resources.Load<AudioClip>("sounds/blood loss");
+        CancelCastingEffinBar = Resources.Load<AudioClip>("sounds/canceled spell sound");
+        CastingSpellSound = Resources.Load<AudioClip>("sounds/casting spell");
 
         ShieldSlam.SetActive(false);
         BlockWithShield.SetActive(false);
@@ -32,6 +34,7 @@ public class effects : MonoBehaviour
         ShieldChargeEff.SetActive(false);
         BuffEff.SetActive(false);
         BloodLossEff.SetActive(false);
+        ShieldOnEff.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -58,7 +61,7 @@ public class effects : MonoBehaviour
             {
                 ShieldSlam.SetActive(true);
                 ShieldSlamEff.SetActive(true);
-                StartCoroutine(PlaySomeSound(SwingHuge, 0.2f));
+                StartCoroutine(PlaySomeSound(SwingHuge, 0.2f, false));
             }
         }
         else if (!PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
@@ -134,10 +137,15 @@ public class effects : MonoBehaviour
 
             if (ConditionToProcess.cond_type == "st" && ConditionToProcess.spell_index == 4)
             {
-                StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f));                          
+                StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));                          
             }
 
-            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.spell_index == 4)
+            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.cond_message != "CANCELED")
+            {                
+                StartCoroutine(PlaySomeSound(CastingSpellSound, 0, true));
+            }
+
+            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.spell_index==4)
             {
                 StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, ConditionToProcess.cond_time));
                 
@@ -158,13 +166,19 @@ public class effects : MonoBehaviour
             {
                 PlayerAnimator.Play("buff");
                 StartCoroutine(TurnOnSomeEffect(BuffEff, 3f));
-                StartCoroutine(PlaySomeSound(BuffSound, 0));
+                StartCoroutine(PlaySomeSound(BuffSound, 0, false));
+            }
+
+            if (ConditionToProcess.cond_type == "co" && ConditionToProcess.spell_index == 5)
+            {                
+                StartCoroutine(TurnOnSomeEffect(ShieldOnEff, ConditionToProcess.cond_time));
+                
             }
 
             if (ConditionToProcess.cond_type == "dt" && ConditionToProcess.spell_index == 2 && ConditionToProcess.damage_or_heal > 0)
             {
                 StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f));
-                StartCoroutine(PlaySomeSound(BloodLoss, 0));
+                StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
             }
 
 
@@ -173,6 +187,17 @@ public class effects : MonoBehaviour
     }
 
 
+    public void CancelCasting()
+    {
+        if (MyAudioSourse.clip == CastingSpellSound)
+        {
+            
+            MyAudioSourse.Stop();
+            StartCoroutine(PlaySomeSound(CancelCastingEffinBar, 0, false));
+        }
+
+        
+    }
 
     IEnumerator TurnOnSomeEffect(GameObject SomeEffect, float timer)
     {
@@ -185,9 +210,11 @@ public class effects : MonoBehaviour
         }
     }
 
-    IEnumerator PlaySomeSound(AudioClip AClip, float DelayTime)
-    {        
+    IEnumerator PlaySomeSound(AudioClip AClip, float DelayTime, bool isLooping)
+    {
+        
         yield return new WaitForSeconds(DelayTime);
+        MyAudioSourse.loop = isLooping;
         MyAudioSourse.clip = AClip;
         MyAudioSourse.Play();
     }

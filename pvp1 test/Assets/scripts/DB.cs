@@ -60,6 +60,10 @@ public struct spellsIDs
 
 public static class lang
 {
+    //envir===================================
+    public static string Canceled = "ОТМЕНА";
+
+
     //all spells===============================
     public static string Spell1Name = "простой удар";
     public static string Spell1ShortDescri = "простой удар одноручным оружием";
@@ -72,4 +76,37 @@ public static class lang
     public static string Spell3Name = "крепкое здоровье";
     public static string Spell3ShortDescri = "здоровье +20%, восстановление жизни +1 на 60 сек";
     public static string Spell3FullDescri = "увеличивает запас здоровья на 20% и регенерацию здоровья на 1 на 60 сек";
+
+    public static string Spell4Name = "удар щитом";
+    public static string Spell4ShortDescri = "удар щитом и оглушение на 3 сек";
+    public static string Spell4FullDescri = "удар щитом наносит легкое повреждение и оглушает противника на 3 секунды";
+
+    public static string Spell5Name = "за щитом";
+    public static string Spell5ShortDescri = "блок всех атак на 5 сек";
+    public static string Spell5FullDescri = "блокирует все прямые удары и заклинания в течение 5 сек, но понижает скорость передвижения";
 }
+
+public static class UNlang
+{
+    //all spells===============================
+    public static string Spell1Name = "simple hit";
+    public static string Spell1ShortDescri = "simple hit with a 1H weapon";
+    public static string Spell1FullDescri = "simple hit with a 1H weapon";
+
+    public static string Spell2Name = "bleeding";
+    public static string Spell2ShortDescri = "light damage for 5 sec";
+    public static string Spell2FullDescri = "deal light damage every second for 5 seconds";
+
+    public static string Spell3Name = "strong health";
+    public static string Spell3ShortDescri = "health +20%, HP regen +1 for 60 sec";
+    public static string Spell3FullDescri = "increases HP amount for 20% and HP regen for 1 for 60 seconds";
+
+    public static string Spell4Name = "shield slam";
+    public static string Spell4ShortDescri = "slam with shield and stuns for 3 sec";
+    public static string Spell4FullDescri = "shield slam deal light damage and stuns enemy for 3 seconds";
+
+    public static string Spell5Name = "shield on";
+    public static string Spell5ShortDescri = "blocks all attacks for 5 sec";
+    public static string Spell5FullDescri = "blocks all direct hits and spells for 5 sec but slows movement speed";
+}
+
