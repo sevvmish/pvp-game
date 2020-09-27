@@ -60,7 +60,7 @@ public class ConditionsAnalys
                     for (int ii = 0; ii < curr_conds.Count; ii++)
                     {
 
-                        if (curr_conds[ii].cond_id == IDForCheck && curr_conds[ii].cond_bulk == BulkData)
+                        if (curr_conds[ii].cond_id == IDForCheck)
                         {
                             isNegative = true;
                         }
@@ -131,6 +131,8 @@ public class ConditionsAnalys
                 }
                 else
                 {
+                
+
                     curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
                     curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
                 }
@@ -756,9 +758,11 @@ public class PlayerUI : MonoBehaviour
         CastingBar.fillAmount = 1;
         CastingSpellImage.sprite = DB.GetSpellByNumber(spell_ind).Spell1_icon;
 
+        float delta = 1 / (spell_time / 0.1f);
+
         for (float i = spell_time; i > 0; i -= 0.1f)
         {
-            CastingBar.fillAmount = i;
+            CastingBar.fillAmount -=delta;
             if (isShowStopCastingText)
             {
                 CancelationText.gameObject.SetActive(true);
@@ -858,10 +862,10 @@ public class PlayerUI : MonoBehaviour
 
                 do
                 {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                     
-                    CondObjects[index].spell_timer -= 1f;
-                    CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString();
+                    CondObjects[index].spell_timer -= 0.1f;
+                    CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString("f0");
                     
                 } while (CondObjects[index].spell_timer > 0);
 

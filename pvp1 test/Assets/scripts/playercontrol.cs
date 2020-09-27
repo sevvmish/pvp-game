@@ -473,7 +473,7 @@ public class playercontrol : MonoBehaviour
                     {
                         //MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time);
                         StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii].cond_id, OtherGamers[ii].Conds.curr_conds[iii].spell_index, OtherGamers[ii].Conds.curr_conds[iii].cond_time));
-                        //print("aniothett");
+                        
                         //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
                         OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
                     }
@@ -567,9 +567,11 @@ public class playercontrol : MonoBehaviour
                 }
                 else if (MyConds.curr_conds[i].cond_type == "ca")
                 {
-                    
+                    //print(MyConds.curr_conds[i].cond_bulk + "===================================");
+
                     if (!MyUI.isCasting)
                     {
+                        
                         StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
                         MyConds.curr_conds[i].isChecked = true;
                     }
