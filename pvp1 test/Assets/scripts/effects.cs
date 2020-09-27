@@ -135,7 +135,7 @@ public class effects : MonoBehaviour
             }
 
 
-            if (ConditionToProcess.cond_type == "st" && ConditionToProcess.spell_index == 4)
+            if (ConditionToProcess.cond_type == "dt" && ConditionToProcess.spell_index == 4)
             {
                 StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));                          
             }

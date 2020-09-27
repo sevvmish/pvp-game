@@ -7,6 +7,10 @@ public class DB : MonoBehaviour
     public static spellsIDs spell1 = new spellsIDs(lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Spell1ShortDescri, lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee);
     public static spellsIDs spell2 = new spellsIDs(lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), lang.Spell2ShortDescri, lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee);
     public static spellsIDs spell3 = new spellsIDs(lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spell3"), lang.Spell3ShortDescri, lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff);
+    public static spellsIDs spell4 = new spellsIDs(lang.Spell4Name, 4, Resources.Load<Sprite>("sprites/spell4"), lang.Spell4ShortDescri, lang.Spell4FullDescri, spellsIDs.spell_types.positive_eff);
+    public static spellsIDs spell5 = new spellsIDs(lang.Spell4Name, 5, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff);
+
+    public static spellsIDs spell1002 = new spellsIDs(lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), lang.Spell1002ShortDescri, lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff);
 
     public static spellsIDs GetSpellByNumber(int SpellNumber)
     {
@@ -21,6 +25,18 @@ public class DB : MonoBehaviour
                 break;
             case 3:
                 result = spell3;
+                break;
+            case 4:
+                result = spell4;
+                break;
+            case 5:
+                result = spell5;
+                break;
+
+
+
+            case 1002:
+                result = spell1002;
                 break;
         }
 
@@ -37,7 +53,9 @@ public struct spellsIDs
         direct_magic,
         DOT_melee,
         DOT_magic,
-        positive_buff
+        positive_buff,
+        positive_eff,
+        negative_eff
     }
 
     public string Spell1_name;
@@ -84,10 +102,18 @@ public static class lang
     public static string Spell5Name = "за щитом";
     public static string Spell5ShortDescri = "блок всех атак на 5 сек";
     public static string Spell5FullDescri = "блокирует все прямые удары и заклинания в течение 5 сек, но понижает скорость передвижения";
+
+    public static string Spell1002Name = "оглушение";
+    public static string Spell1002ShortDescri = "оглушение";
+    public static string Spell1002FullDescri = "невозможно двигаться, атаковать и произносить заклинания";
 }
 
 public static class UNlang
 {
+    //envir===================================
+    public static string Canceled = "CANCELED";
+
+
     //all spells===============================
     public static string Spell1Name = "simple hit";
     public static string Spell1ShortDescri = "simple hit with a 1H weapon";
@@ -108,5 +134,9 @@ public static class UNlang
     public static string Spell5Name = "shield on";
     public static string Spell5ShortDescri = "blocks all attacks for 5 sec";
     public static string Spell5FullDescri = "blocks all direct hits and spells for 5 sec but slows movement speed";
+
+    public static string Spell1002Name = "stun";
+    public static string Spell1002ShortDescri = "stunned";
+    public static string Spell1002FullDescri = "unable to move, attack or cast spells";
 }
 

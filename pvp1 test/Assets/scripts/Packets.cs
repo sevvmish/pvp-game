@@ -778,7 +778,7 @@ public class PlayerUI : MonoBehaviour
 
     public IEnumerator AddCondition(string condID, int spell_ind, float spell_time)
     {
-
+        print(condID + ": " + spell_ind + " - ");
         bool isOK = true;
 
         for (int i = 0; i < CondObjects.Count; i++)
