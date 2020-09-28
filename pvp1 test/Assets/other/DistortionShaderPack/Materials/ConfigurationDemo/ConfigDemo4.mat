@@ -31,7 +31,7 @@ Material:
     - _DistortionCircle: 0
     - _DistortionStrength: 0
     - _NormalTexFrameless: 0
-    - _NormalTexStrength: 0.14488894
+    - _NormalTexStrength: 0.8774577
     - _StrengthAlpha: 0
     m_Colors:
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}

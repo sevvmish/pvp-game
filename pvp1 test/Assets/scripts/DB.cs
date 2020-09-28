@@ -45,6 +45,22 @@ public class DB : MonoBehaviour
 
 }
 
+
+public struct SessionData
+{
+    public string PlayerName;
+    public int PlayerClass;
+    public int PlayerTeam;
+    public int Spell1;
+    public int Spell2;
+    public int Spell3;
+    public int Spell4;
+    public int Spell5;
+    public int Spell6;
+
+}
+
+
 public struct spellsIDs
 {
     public enum spell_types

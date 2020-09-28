@@ -41,5 +41,5 @@ Material:
     - _TextureStrength: 1
     m_Colors:
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}
-    - _UVOffset: {r: 0.09999179, g: -0.0012817513, b: 2.2585666, a: -0.028951583}
+    - _UVOffset: {r: 0.09999179, g: -0.0012817513, b: 0, a: -0}
   m_BuildTextureStacks: []

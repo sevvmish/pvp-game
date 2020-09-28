@@ -34,7 +34,7 @@ Material:
     m_Floats:
     - _DistortionCircle: 1
     - _DistortionStrength: 2
-    - _NormalTexFrameless: 0.14488894
+    - _NormalTexFrameless: 0.8774577
     - _NormalTexStrength: 0.1
     - _StrengthAlpha: 1
     - _TextureDistortion: 0

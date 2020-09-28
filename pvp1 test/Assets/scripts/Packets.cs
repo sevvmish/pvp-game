@@ -149,13 +149,13 @@ public struct AnimationsForPlayers
     private AudioSource MyAudioSource;
     //private AudioClip BasicMovement;
     private AudioClip BasicWeaponHit;
-    
+    private effects MyEffects;
 
     public int CurrentAnimationState;
 
     public AnimationsForPlayers(Animator animat, AudioSource AudSource)
     {
-        
+        MyEffects = animat.gameObject.GetComponent<effects>();
         animator = animat;
         MyAudioSource = AudSource;
         CurrentAnimationState = 0;
@@ -189,7 +189,35 @@ public struct AnimationsForPlayers
             animator.Play("Run");
         }
 
-        
+
+        if (state<2)
+        {
+            animator.SetBool("isTransit", true);
+        } 
+        else
+        {
+            animator.SetBool("isTransit", false);
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+        {
+            MyEffects.isStunned = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+        {
+            MyEffects.isStunned = false;
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+        {
+            MyEffects.isShieldSlam = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+        {
+            MyEffects.isShieldSlam = false;
+        }
+
+
 
         if (CurrentAnimationState != state)
         {
@@ -248,6 +276,12 @@ public struct AnimationsForPlayers
                     if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
                     {
                         ShieldSlam();
+                    }
+                    break;
+                case 10:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShieldOn"))
+                    {
+                        ShieldOn();
                     }
                     break;
             }
@@ -332,6 +366,13 @@ public struct AnimationsForPlayers
     {
         animator.Play("shield slam");
         CurrentAnimationState = 9;
+
+    }
+
+    void ShieldOn()
+    {
+        animator.Play("ShieldOn");
+        CurrentAnimationState = 10;
 
     }
 

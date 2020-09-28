@@ -11,9 +11,9 @@ public class general
     public static int LoginServerTCPPort = 2324;
     public static string LoginServerIP = "45.67.57.30";
 
-    public static string SessionTicket;
-    public static string SessionPlayerID;
-    
+    public static string SessionPlayerID; //playerX
+    public static string SessionTicket; //sessionX
+
     public static int SessionNumberOfPlayers = 2;
     public static int MainPlayerClass = 1;
 

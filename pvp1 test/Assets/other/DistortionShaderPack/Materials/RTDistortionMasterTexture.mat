@@ -4,10 +4,11 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: RTDistortionMasterTexture
-  m_Shader: {fileID: 4800000, guid: e2de4f80f01b4104bb05390c0760e0bc, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1dd07a93e68a2ec4495fa8a7aa64f4ee, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
@@ -31,9 +32,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _DistortionCircle: 0.219
+    - _DistortionStrength: -2
     - _NormalTexFrameless: 0
     - _NormalTexStrength: 0.1
+    - _StrengthAlpha: 0.5
+    - _TextureDistortion: 0
     - _TextureStrength: 1
     m_Colors:
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}
-    - _UVOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _UVOffset: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

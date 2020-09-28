@@ -5,7 +5,9 @@ using UnityEngine;
 public class effects : MonoBehaviour
 {
     private List<Conds> CurrentConds = new List<Conds>();
-    
+
+    public bool isStunned, isShieldSlam;
+
     public AudioSource MyAudioSourse;
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
     public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff, ShieldChargeEff, BuffEff, BloodLossEff, ShieldOnEff;
@@ -37,8 +39,46 @@ public class effects : MonoBehaviour
         ShieldOnEff.SetActive(false);
     }
 
+    
+
     private void FixedUpdate()
     {
+
+        if (isStunned)
+        {
+            if (!StunEffect.activeSelf)
+            {
+                StunEffect.SetActive(true);
+
+            }
+        } 
+        else
+        {
+            if (StunEffect.activeSelf)
+            {
+                StunEffect.SetActive(false);
+            }
+        }
+
+        if (isShieldSlam)
+        {
+            if (!ShieldSlam.activeSelf)
+            {
+                ShieldSlam.SetActive(true);
+                ShieldSlamEff.SetActive(true);
+                StartCoroutine(PlaySomeSound(SwingHuge, 0.2f, false));
+            }
+        }
+        else
+        {
+            if (ShieldSlam.activeSelf)
+            {
+                ShieldSlam.SetActive(false);
+                ShieldSlamEff.SetActive(false);
+            }
+        }
+
+        /*
         if (PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
         {
             if (!StunEffect.activeSelf)
@@ -72,6 +112,7 @@ public class effects : MonoBehaviour
                 ShieldSlamEff.SetActive(false);
             }
         }
+        */
     }
 
     public void RegisterConds(Conds SomeConds)

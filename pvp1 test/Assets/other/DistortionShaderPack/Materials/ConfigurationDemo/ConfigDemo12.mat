@@ -38,7 +38,7 @@ Material:
     - _NormalTexStrength: 0.05
     - _StrengthAlpha: 1
     - _TextureDistortion: 0
-    - _TextureStrength: 0.42755553
+    - _TextureStrength: 0.9387288
     m_Colors:
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}
     - _UVOffset: {r: 0, g: 0, b: 0, a: 0}

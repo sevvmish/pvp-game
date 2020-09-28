@@ -32,7 +32,7 @@ Material:
     - _DistortionStrength: 2
     - _NormalTexFrameless: 0
     - _NormalTexStrength: 0
-    - _StrengthAlpha: 0.14488894
+    - _StrengthAlpha: 0.8774577
     m_Colors:
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}
     - _UVOffset: {r: 0, g: 0, b: 0, a: 0}

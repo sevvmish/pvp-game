@@ -40,6 +40,6 @@ Material:
     - _TextureDistortion: 0
     - _TextureStrength: 1
     m_Colors:
-    - _MainColor: {r: 0.14488894, g: 0, b: 0, a: 0.14488894}
+    - _MainColor: {r: 0.8774577, g: 0, b: 0, a: 0.8774577}
     - _UVOffset: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -29,11 +29,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _DistortionCircle: 1
-    - _DistortionStrength: -2.8503702
+    - _DistortionStrength: -6.258192
     - _NormalTexFrameless: 1
-    - _NormalTexStrength: 1.4251851
+    - _NormalTexStrength: 3.129096
     - _StrengthAlpha: 0
     m_Colors:
-    - _MainColor: {r: 1.4251851, g: 0, b: 1.4251851, a: 1.4251851}
-    - _UVOffset: {r: 0, g: -0.3, b: 0, a: -1.3347654}
+    - _MainColor: {r: 3.129096, g: 0, b: 3.129096, a: 3.129096}
+    - _UVOffset: {r: 0, g: -0.3, b: 0, a: -0.006}
   m_BuildTextureStacks: []
