@@ -150,11 +150,13 @@ public struct AnimationsForPlayers
     //private AudioClip BasicMovement;
     private AudioClip BasicWeaponHit;
     private effects MyEffects;
+    private int PrevAnimationState;
 
     public int CurrentAnimationState;
 
     public AnimationsForPlayers(Animator animat, AudioSource AudSource)
     {
+        PrevAnimationState = 0;
         MyEffects = animat.gameObject.GetComponent<effects>();
         animator = animat;
         MyAudioSource = AudSource;
@@ -170,7 +172,12 @@ public struct AnimationsForPlayers
     }
 
     public void RefreshAnimations(int state)
-    {        
+    {
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10) && (state==1 || state==0) )
+        {
+            Idle();
+        }
+
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && CurrentAnimationState != 0)
         {
             CurrentAnimationState = 0;
@@ -189,15 +196,24 @@ public struct AnimationsForPlayers
             animator.Play("Run");
         }
 
-
+        /*
         if (state<2)
-        {
-            animator.SetBool("isTransit", true);
+        {            
+            if (!animator.GetBool("isTransit") )
+            {
+                animator.StopPlayback();
+                animator.SetBool("isTransit", true);
+                animator.StartPlayback();
+            }            
         } 
         else
         {
-            animator.SetBool("isTransit", false);
+            if (animator.GetBool("isTransit"))
+            {
+                animator.SetBool("isTransit", false);
+            }
         }
+        */
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
         {
@@ -243,9 +259,9 @@ public struct AnimationsForPlayers
                     }
                     break;
                 case 3:
-                    if (CurrentAnimationState == 0 || CurrentAnimationState == 1)
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("casting"))
                     {
-                        //HitWith1H();
+                        Casting();
                     }
                     break;
                 case 4:
@@ -286,6 +302,8 @@ public struct AnimationsForPlayers
                     break;
             }
         }
+
+        PrevAnimationState = CurrentAnimationState;
     }
 
     void Idle()
@@ -327,10 +345,10 @@ public struct AnimationsForPlayers
         MyAudioSource.Play();
     }
 
-    void HitWith2H()
+    void Casting()
     {
-        animator.Play("HitWith2H");
-        
+        animator.Play("casting");
+        CurrentAnimationState = 3;
     }
 
     void ReceiveDamage()
@@ -385,6 +403,8 @@ public struct AnimationsForPlayers
         //CurrentAnimationState = 4;
         //StartCoroutine(CheckEnd("ReceiveDamage"));
     }
+
+    
 
 }
 
@@ -605,6 +625,9 @@ public static class SendAndReceive
             case 7:
                 ReturnMess = "not enough energy";
                 break;
+            case 8:
+                ReturnMess = "hit+DOT";
+                break;
 
         }
         return ReturnMess;
@@ -807,6 +830,7 @@ public class PlayerUI : MonoBehaviour
             if (isShowStopCastingText)
             {
                 CancelationText.gameObject.SetActive(true);
+                break;
             }
             yield return new WaitForSeconds(0.1f);
         }

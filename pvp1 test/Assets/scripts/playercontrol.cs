@@ -95,12 +95,11 @@ public class playercontrol : MonoBehaviour
         
         PlayerTransform = this.GetComponent<Transform>();
 
-        if (general.MainPlayerClass == 1)
-        {
-            MainPlayerGameObject = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.identity, this.gameObject.transform);
-            MainPlayerGameObject.transform.localPosition = Vector3.zero;
-            MainPlayerGameObject.GetComponent<players>().enabled = false;
-        }
+        
+        MainPlayerGameObject = Instantiate(general.GetPlayerByClass(general.MainPlayerClass), Vector3.zero, Quaternion.identity, this.gameObject.transform);
+        MainPlayerGameObject.transform.localPosition = Vector3.zero;
+        MainPlayerGameObject.GetComponent<players>().enabled = false;
+        
         myanimator = new AnimationsForPlayers(MainPlayerGameObject.GetComponent<Animator>(), MainPlayerGameObject.GetComponent<AudioSource>());
         MyJoystickTemp = GameObject.Find("Floating Joystick").GetComponent<FloatingJoystick>();
         CurrentCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -127,7 +126,7 @@ public class playercontrol : MonoBehaviour
         MyUI = new PlayerUI(temp1, true);
 
         MyEffects = MainPlayerGameObject.GetComponent<effects>();
-
+        MyEffects.MyPlayerClass = general.MainPlayerClass;
         
         ButtonMessage = GameObject.Find("ButtonMessages").GetComponent<TextMeshProUGUI>();
 
@@ -136,9 +135,9 @@ public class playercontrol : MonoBehaviour
 
     void AddPlayer(Vector3 pos, Vector3 rot, List<players> playerslist, int order)
     {
-        
-        GameObject ggg = Instantiate(Resources.Load<GameObject>("prefabs/warr 1 prefab"), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
-        
+        int WhatPlayersClass = 1;
+        GameObject ggg = Instantiate(general.GetPlayerByClass(WhatPlayersClass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+        ggg.GetComponent<effects>().MyPlayerClass = WhatPlayersClass;
         ggg.GetComponent<players>().NumberInSendAndReceive = order;
         playerslist.Add(ggg.GetComponent<players>());
 

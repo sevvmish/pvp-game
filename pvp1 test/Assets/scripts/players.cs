@@ -32,7 +32,7 @@ public class players : MonoBehaviour
         PlayerTransform = this.GetComponent<Transform>();
         PlayerAnimator = new AnimationsForPlayers(this.GetComponent<Animator>(), this.GetComponent<AudioSource>());
         TempText1 = GameObject.Find("OtherHP").GetComponent<TextMeshProUGUI>();
-        PlayerTransform.position = new Vector3(0, 0.2f, 0);
+        PlayerTransform.position = Vector3.zero;
         PlayerEffects = this.GetComponent<effects>();
     }
 

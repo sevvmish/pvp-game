@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class effects : MonoBehaviour
 {
+        
+    public int MyPlayerClass;
+
     private List<Conds> CurrentConds = new List<Conds>();
 
     public bool isStunned, isShieldSlam;
@@ -19,24 +22,28 @@ public class effects : MonoBehaviour
     {
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
+        BloodLossEff.SetActive(false);
 
-        HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
-        ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
         BloodLoss = Resources.Load<AudioClip>("sounds/blood loss");
         CancelCastingEffinBar = Resources.Load<AudioClip>("sounds/canceled spell sound");
         CastingSpellSound = Resources.Load<AudioClip>("sounds/casting spell");
 
-        ShieldSlam.SetActive(false);
-        BlockWithShield.SetActive(false);
-        WeaponTrail.SetActive(false);
-        ShieldSlamEff.SetActive(false);
-        CritSwordEff.SetActive(false);
-        ShieldChargeEff.SetActive(false);
-        BuffEff.SetActive(false);
-        BloodLossEff.SetActive(false);
-        ShieldOnEff.SetActive(false);
+        if (MyPlayerClass == 1)
+        {
+            HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
+            ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
+            ShieldSlam.SetActive(false);
+            BlockWithShield.SetActive(false);
+            WeaponTrail.SetActive(false);
+            ShieldSlamEff.SetActive(false);
+            CritSwordEff.SetActive(false);
+            ShieldChargeEff.SetActive(false);
+            BuffEff.SetActive(false);            
+            ShieldOnEff.SetActive(false);
+        }
+        
     }
 
     
@@ -60,59 +67,27 @@ public class effects : MonoBehaviour
             }
         }
 
-        if (isShieldSlam)
+        if (MyPlayerClass == 1)
         {
-            if (!ShieldSlam.activeSelf)
+            if (isShieldSlam)
             {
-                ShieldSlam.SetActive(true);
-                ShieldSlamEff.SetActive(true);
-                StartCoroutine(PlaySomeSound(SwingHuge, 0.2f, false));
+                if (!ShieldSlam.activeSelf)
+                {
+                    ShieldSlam.SetActive(true);
+                    ShieldSlamEff.SetActive(true);
+                    StartCoroutine(PlaySomeSound(SwingHuge, 0.2f, false));
+                }
             }
-        }
-        else
-        {
-            if (ShieldSlam.activeSelf)
+            else
             {
-                ShieldSlam.SetActive(false);
-                ShieldSlamEff.SetActive(false);
-            }
-        }
-
-        /*
-        if (PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
-        {
-            if (!StunEffect.activeSelf)
-            {
-                StunEffect.SetActive(true);
-                
-            }
-        } 
-        else if (!PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
-        {
-            if (StunEffect.activeSelf)
-            {
-                StunEffect.SetActive(false);
+                if (ShieldSlam.activeSelf)
+                {
+                    ShieldSlam.SetActive(false);
+                    ShieldSlamEff.SetActive(false);
+                }
             }
         }
 
-        if (PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
-        {
-            if (!ShieldSlam.activeSelf)
-            {
-                ShieldSlam.SetActive(true);
-                ShieldSlamEff.SetActive(true);
-                StartCoroutine(PlaySomeSound(SwingHuge, 0.2f, false));
-            }
-        }
-        else if (!PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
-        {
-            if (ShieldSlam.activeSelf)
-            {
-                ShieldSlam.SetActive(false);
-                ShieldSlamEff.SetActive(false);
-            }
-        }
-        */
     }
 
     public void RegisterConds(Conds SomeConds)
@@ -161,14 +136,14 @@ public class effects : MonoBehaviour
 
                 case "me-b":
 
-                    if (general.MainPlayerClass==1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f));
+                    if (MyPlayerClass == 1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f));
 
                     break;
             }
 
             if (ConditionToProcess.cond_type=="dt" && ConditionToProcess.damage_or_heal>0 &&  DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type==spellsIDs.spell_types.direct_melee )
             {
-                if (general.MainPlayerClass==1)
+                if (MyPlayerClass == 1)
                 {
                     MyAudioSourse.clip = HitWith1HSword;
                     MyAudioSourse.Play();
@@ -196,7 +171,7 @@ public class effects : MonoBehaviour
 
             if (ConditionToProcess.cond_type == "dg" && ConditionToProcess.damage_or_heal > 0 && ConditionToProcess.isCrit)
             {
-                if (general.MainPlayerClass == 1)
+                if (MyPlayerClass == 1)
                 {
                     StartCoroutine(TurnOnSomeEffect(CritSwordEff, 1f));
                 }
@@ -206,7 +181,7 @@ public class effects : MonoBehaviour
             if (ConditionToProcess.cond_type == "co" && ConditionToProcess.spell_index==3)
             {
                 PlayerAnimator.Play("buff");
-                StartCoroutine(TurnOnSomeEffect(BuffEff, 3f));
+                StartCoroutine(TurnOnSomeEffect(BuffEff, 6f));
                 StartCoroutine(PlaySomeSound(BuffSound, 0, false));
             }
 

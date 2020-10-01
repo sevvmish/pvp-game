@@ -15,6 +15,26 @@ public class general
     public static string SessionTicket; //sessionX
 
     public static int SessionNumberOfPlayers = 2;
-    public static int MainPlayerClass = 1;
+    public static int MainPlayerClass = 2;
+
+    public static GameObject GetPlayerByClass(int ClassNumber)
+    {
+        GameObject result = null;
+
+        switch(ClassNumber)
+        {
+            case 1:
+                result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
+                break;
+            case 2:
+                result = Resources.Load<GameObject>("prefabs/mage 1 prefab");
+                break;
+            case 3:
+                break;
+
+        }
+
+        return result;
+    }
 
 }

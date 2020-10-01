@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class DB : MonoBehaviour
 {
-    public static spellsIDs spell1 = new spellsIDs(lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Spell1ShortDescri, lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee);
-    public static spellsIDs spell2 = new spellsIDs(lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), lang.Spell2ShortDescri, lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee);
-    public static spellsIDs spell3 = new spellsIDs(lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spell3"), lang.Spell3ShortDescri, lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff);
-    public static spellsIDs spell4 = new spellsIDs(lang.Spell4Name, 4, Resources.Load<Sprite>("sprites/spell4"), lang.Spell4ShortDescri, lang.Spell4FullDescri, spellsIDs.spell_types.positive_eff);
-    public static spellsIDs spell5 = new spellsIDs(lang.Spell4Name, 5, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff);
+    public static spellsIDs spell1 = new spellsIDs(lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Spell1ShortDescri, lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee, 10);
+    public static spellsIDs spell2 = new spellsIDs(lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), lang.Spell2ShortDescri, lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee, 20);
+    public static spellsIDs spell3 = new spellsIDs(lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spell3"), lang.Spell3ShortDescri, lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff, 10);
+    public static spellsIDs spell4 = new spellsIDs(lang.Spell4Name, 4, Resources.Load<Sprite>("sprites/spell4"), lang.Spell4ShortDescri, lang.Spell4FullDescri, spellsIDs.spell_types.positive_eff, 25);
+    public static spellsIDs spell5 = new spellsIDs(lang.Spell4Name, 5, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
 
-    public static spellsIDs spell1002 = new spellsIDs(lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), lang.Spell1002ShortDescri, lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff);
+    public static spellsIDs spell51 = new spellsIDs(lang.Spell4Name, 51, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.direct_magic, 10);
+
+    public static spellsIDs spell1002 = new spellsIDs(lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), lang.Spell1002ShortDescri, lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff,0);
 
     public static spellsIDs GetSpellByNumber(int SpellNumber)
     {
@@ -33,7 +35,9 @@ public class DB : MonoBehaviour
                 result = spell5;
                 break;
 
-
+            case 51:
+                result = spell51;
+                break;
 
             case 1002:
                 result = spell1002;
@@ -80,8 +84,9 @@ public struct spellsIDs
     public string Spell1_short_description;
     public string Spell1_full_description;
     public spell_types spell_type;
+    public float Spell_manacost;
 
-    public spellsIDs(string name, int number, Sprite sprt, string descri_short, string descri_full, spell_types spell_ty)
+    public spellsIDs(string name, int number, Sprite sprt, string descri_short, string descri_full, spell_types spell_ty, float manacost)
     {
         Spell1_name = name;
         Spell1_number = number;
@@ -89,6 +94,7 @@ public struct spellsIDs
         Spell1_short_description = descri_short;
         Spell1_full_description = descri_full;
         spell_type = spell_ty;
+        Spell_manacost = manacost;
     }
 }
 
