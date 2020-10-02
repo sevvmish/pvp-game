@@ -30,6 +30,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player1";
         general.SessionTicket = "session";
+                
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -37,6 +38,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player2";
         general.SessionTicket = "session";
+        
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -44,6 +46,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player3";
         general.SessionTicket = "session1";
+        GetPlayersData();
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -51,6 +54,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player4";
         general.SessionTicket = "session1";
+        GetPlayersData();
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -58,6 +62,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player5";
         general.SessionTicket = "session2";
+        GetPlayersData();
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -65,6 +70,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player6";
         general.SessionTicket = "session2";
+        GetPlayersData();
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -72,6 +78,7 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player7";
         general.SessionTicket = "session3";
+        GetPlayersData();
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -79,9 +86,15 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player8";
         general.SessionTicket = "session3";
+        GetPlayersData();
         SceneManager.LoadScene("SampleScene");
     }
 
+
+    void GetPlayersData()
+    {
+        
+    }
 
 
 }

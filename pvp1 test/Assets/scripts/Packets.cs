@@ -196,45 +196,38 @@ public struct AnimationsForPlayers
             animator.Play("Run");
         }
 
-        /*
-        if (state<2)
-        {            
-            if (!animator.GetBool("isTransit") )
-            {
-                animator.StopPlayback();
-                animator.SetBool("isTransit", true);
-                animator.StartPlayback();
-            }            
-        } 
-        else
-        {
-            if (animator.GetBool("isTransit"))
-            {
-                animator.SetBool("isTransit", false);
-            }
-        }
-        */
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+       
+        //data control send to EFFECTS
+        //STUNNED
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
         {
             MyEffects.isStunned = true;
         }
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && MyEffects.isStunned)
         {
             MyEffects.isStunned = false;
         }
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+        //SHIELD SLAM
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam") && !MyEffects.isShieldSlam)
         {
             MyEffects.isShieldSlam = true;
         }
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam") && MyEffects.isShieldSlam)
         {
             MyEffects.isShieldSlam = false;
         }
+        //CASTING
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && !MyEffects.isCasting)
+        {
+            MyEffects.isCasting = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && MyEffects.isCasting )
+        {
+            MyEffects.isCasting = false;
+        }
 
 
-
+        //changing state
         if (CurrentAnimationState != state)
         {
             switch (state)
@@ -468,6 +461,7 @@ public struct ReceivePlayersData
 }
 
 
+
 public struct ToSend
 {
     public int OrderToSend;
@@ -503,6 +497,9 @@ public struct ToSend
 
         return OrderToSend.ToString() + "~3~" + PlayerID + "~" + TemporaryTable;
     }
+
+
+    
 
 
     public string ToSendMovement(float Horiz, float Vert)

@@ -5,20 +5,17 @@ using TMPro;
 using UnityEngine;
 
 public class players : MonoBehaviour
-{    
+{
+    public SessionData PlayerSessionData;
     private Transform PlayerTransform;    
-    private Vector3 PreviousPos;
-    private Vector3 PreviousRot;
-    private AnimationsForPlayers PlayerAnimator;
-    private Vector3 position, rotation;
+    private AnimationsForPlayers PlayerAnimator;    
     private TextMeshProUGUI TempText1;
     public int NumberInSendAndReceive;
     public int previousstate;
     public string previouscondition;
     Vector3 speed = Vector3.zero;
     float ResultDelta, DeltaOnlyForRot;
-    Vector3 CorrectionForPosition;
-    Vector3 CorrectionForRotation;
+    Vector3 CorrectionForPosition;    
     public effects PlayerEffects;
 
     public ConditionsAnalys Conds = new ConditionsAnalys();
@@ -97,40 +94,8 @@ public class players : MonoBehaviour
 
         PlayerTransform.rotation = Quaternion.AngleAxis((PlayerTransform.rotation.eulerAngles.y + rotAngle * sighAngle / Average), Vector3.up);
 
-
-        PreviousPos = pos;
-        PreviousRot = rot;
         
-        //StartCoroutine(MoveTo(PlayerTransform.position, PlayerTransform.rotation, pos,rot, delt));
     }
 
-    /*
-    IEnumerator MoveTo(Vector3 OldPos, Quaternion OldRot, Vector3 NewPos, Vector3 NewRot, float delta)
-    {
-        for (float i=0;i<delta;i++)
-        {
-            PlayerTransform.position = Vector3.Lerp(OldPos, NewPos, (i / (delta-1)));
-            PlayerTransform.rotation = Quaternion.Lerp(OldRot, Quaternion.Euler(NewRot), (i / (delta - 1)));
-            yield return new WaitForSeconds(0.02f);
-        }
-    }
-
-    IEnumerator MoveTo(Vector3 OldPos, Vector3 NewPos, float delta)
-    {
-        for (float i = 0; i < delta; i++)
-        {
-            PlayerTransform.position = Vector3.Lerp(OldPos, NewPos, (i / (delta - 1)));            
-            yield return new WaitForSeconds(0.02f);
-        }
-    }
-
-    IEnumerator MoveTo(Quaternion OldRot, Vector3 NewRot, float delta)
-    {
-        for (float i = 0; i < delta; i++)
-        {            
-            PlayerTransform.rotation = Quaternion.Lerp(OldRot, Quaternion.Euler(NewRot), (i / (delta - 1)));
-            yield return new WaitForSeconds(0.02f);
-        }
-    }
-    */
+    
 }

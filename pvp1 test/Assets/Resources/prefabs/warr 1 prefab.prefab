@@ -10256,17 +10256,21 @@ MonoBehaviour:
   MyPlayerClass: 0
   isStunned: 0
   isShieldSlam: 0
+  isCasting: 0
+  isChanneling: 0
   MyAudioSourse: {fileID: 3647619682833273866}
+  StunEffect: {fileID: 2797772647104008276}
+  BloodLossEff: {fileID: 5291197750734425153}
   BlockWithShield: {fileID: 7326274467353089417}
   WeaponTrail: {fileID: 5848088110489444693}
-  StunEffect: {fileID: 2797772647104008276}
   ShieldSlam: {fileID: 177817869369141498}
   ShieldSlamEff: {fileID: 8278615901271021497}
   CritSwordEff: {fileID: 2152088508741880629}
-  ShieldChargeEff: {fileID: 5506661515984377213}
   BuffEff: {fileID: 4958676068500458048}
-  BloodLossEff: {fileID: 5291197750734425153}
   ShieldOnEff: {fileID: 2513167682896494310}
+  ShieldChargeEff: {fileID: 5506661515984377213}
+  CastingEffFireHandL: {fileID: 0}
+  CastingEffFireHandR: {fileID: 0}
 --- !u!114 &5836247613011876970
 MonoBehaviour:
   m_ObjectHideFlags: 0

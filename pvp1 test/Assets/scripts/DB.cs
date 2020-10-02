@@ -34,11 +34,9 @@ public class DB : MonoBehaviour
             case 5:
                 result = spell5;
                 break;
-
             case 51:
                 result = spell51;
                 break;
-
             case 1002:
                 result = spell1002;
                 break;
@@ -49,20 +47,6 @@ public class DB : MonoBehaviour
 
 }
 
-
-public struct SessionData
-{
-    public string PlayerName;
-    public int PlayerClass;
-    public int PlayerTeam;
-    public int Spell1;
-    public int Spell2;
-    public int Spell3;
-    public int Spell4;
-    public int Spell5;
-    public int Spell6;
-
-}
 
 
 public struct spellsIDs
@@ -75,7 +59,8 @@ public struct spellsIDs
         DOT_magic,
         positive_buff,
         positive_eff,
-        negative_eff
+        negative_eff,
+        healing
     }
 
     public string Spell1_name;

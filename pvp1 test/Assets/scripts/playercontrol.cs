@@ -42,7 +42,7 @@ public class playercontrol : MonoBehaviour
     AnimationsForPlayers myanimator;
     
     //other players data    
-    public static List<players> OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
+    public static List<players> OtherGamers;
     
     float cur_time, cur_time_2, cur_speed;
 
@@ -87,7 +87,21 @@ public class playercontrol : MonoBehaviour
 
 
     void Start()
-    {        
+    {
+        //SendAndReceive.GetDataSessionPlayers(connection.SendAndGetTCP(SendAndReceive.DataForSending.SendSessionDataRequest()));
+        string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
+        SessionData.GetDataSessionPlayers(SessionResult);
+        general.SetSessionData();
+        if (general.DataForSession.Count > 0)
+        {
+            for (int i = 0; i < general.DataForSession.Count; i++)
+            {
+                print(general.DataForSession[i].PlayerName+ " - " + general.DataForSession[i].PlayerClass + " - " + general.DataForSession[i].PlayerOrder);
+            }
+        }
+
+        OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
+
         ButtonsManagement.Init();
         
         Screen.SetResolution(1280, 720, true);

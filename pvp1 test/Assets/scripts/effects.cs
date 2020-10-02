@@ -9,11 +9,19 @@ public class effects : MonoBehaviour
 
     private List<Conds> CurrentConds = new List<Conds>();
 
-    public bool isStunned, isShieldSlam;
+    public bool isStunned, isShieldSlam, isCasting, isChanneling;
 
     public AudioSource MyAudioSourse;
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
-    public GameObject BlockWithShield, WeaponTrail, StunEffect, ShieldSlam, ShieldSlamEff, CritSwordEff, ShieldChargeEff, BuffEff, BloodLossEff, ShieldOnEff;
+
+    //common effects
+    public GameObject StunEffect, BloodLossEff;
+
+    //warr 1 effects
+    public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
+
+    //mage 1 effects
+    public GameObject CastingEffFireHandL, CastingEffFireHandR;
 
     private Animator PlayerAnimator;
 
@@ -23,6 +31,7 @@ public class effects : MonoBehaviour
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
+        
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
@@ -40,10 +49,16 @@ public class effects : MonoBehaviour
             ShieldSlamEff.SetActive(false);
             CritSwordEff.SetActive(false);
             ShieldChargeEff.SetActive(false);
-            BuffEff.SetActive(false);            
+            BuffEff.SetActive(false);
             ShieldOnEff.SetActive(false);
         }
-        
+        if (MyPlayerClass == 2)
+        {            
+            CastingEffFireHandL.SetActive(false);
+            CastingEffFireHandR.SetActive(false);
+        }
+
+
     }
 
     
@@ -66,6 +81,49 @@ public class effects : MonoBehaviour
                 StunEffect.SetActive(false);
             }
         }
+
+        
+        if (isCasting)
+        {
+            
+            if (!MyAudioSourse.isPlaying || (MyAudioSourse.isPlaying && MyAudioSourse.clip.name != "casting spell"))
+            {
+                StartCoroutine(PlaySomeSound(CastingSpellSound, 0, true));                
+            }
+
+            //casting effects MAGE 1
+            if (MyPlayerClass == 2)
+            {
+                if (CurrentConds[CurrentConds.Count-1].spell_index == 51)
+                {
+
+                    if (!CastingEffFireHandL.activeSelf)
+                    {
+                        CastingEffFireHandL.SetActive(true);
+                        CastingEffFireHandR.SetActive(true);
+                    }
+                }
+            }
+
+
+        } else
+        {
+            //casting effects MAGE 1
+            if (MyPlayerClass == 2)
+            {
+                if (CastingEffFireHandL.activeSelf)
+                {
+                    CastingEffFireHandL.SetActive(false);
+                    CastingEffFireHandR.SetActive(false);
+                }
+            }
+
+            if (MyAudioSourse.isPlaying && MyAudioSourse.clip.name == "casting spell")
+            {
+                StopSound();                
+            }
+        }
+        
 
         if (MyPlayerClass == 1)
         {
@@ -156,17 +214,49 @@ public class effects : MonoBehaviour
                 StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));                          
             }
 
-            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.cond_message != "CANCELED")
-            {                
-                StartCoroutine(PlaySomeSound(CastingSpellSound, 0, true));
+
+            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.cond_message == "CANCELED")
+            {
+                CancelCasting();
             }
 
-            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.spell_index==4)
+
+
+
+            //CASTING of magic ONLY
+                /*
+                if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.cond_message != "CANCELED" && (DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type==spellsIDs.spell_types.direct_magic || DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type == spellsIDs.spell_types.DOT_magic || DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type == spellsIDs.spell_types.healing))
+                {
+                    if (MyPlayerClass == 2)
+                    { 
+                        if (ConditionToProcess.spell_index==51)
+                        {
+
+                            if (!CastingEffFireHandL.activeSelf)
+                            {
+                                CastingEffFireHandL.SetActive(true);
+                                CastingEffFireHandR.SetActive(true);
+                            }
+                        }
+                    }
+
+                }
+                */
+
+
+
+                //ONLY FOR WARRIOR
+                if (MyPlayerClass == 1)
             {
-                StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, ConditionToProcess.cond_time));
+                
+                if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.spell_index == 4)
+                {
+                    StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, ConditionToProcess.cond_time));
+
+                }
                 
             }
-
+            //=======================
 
 
             if (ConditionToProcess.cond_type == "dg" && ConditionToProcess.damage_or_heal > 0 && ConditionToProcess.isCrit)
@@ -191,28 +281,29 @@ public class effects : MonoBehaviour
                 
             }
 
+
+            //SPELL 2 bleeding
             if (ConditionToProcess.cond_type == "dt" && ConditionToProcess.spell_index == 2 && ConditionToProcess.damage_or_heal > 0)
             {
                 StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f));
                 StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
             }
-
-
-
         }
     }
 
+    public void StopSound()
+    {
+        MyAudioSourse.Stop();
+        MyAudioSourse.loop = false;
+    }
 
     public void CancelCasting()
     {
         if (MyAudioSourse.clip == CastingSpellSound)
-        {
-            
+        {            
             MyAudioSourse.Stop();
             StartCoroutine(PlaySomeSound(CancelCastingEffinBar, 0, false));
-        }
-
-        
+        }        
     }
 
     IEnumerator TurnOnSomeEffect(GameObject SomeEffect, float timer)
