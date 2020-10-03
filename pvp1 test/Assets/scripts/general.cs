@@ -16,7 +16,7 @@ public class general
 
     public static List<SessionData> DataForSession = new List<SessionData>();
 
-    public static int SessionNumberOfPlayers=2;
+    public static int SessionNumberOfPlayers = 2;
     public static int MainPlayerClass;
     public static string MainPlayerName;
     public static int MainPlayerOrder;
@@ -29,6 +29,7 @@ public class general
         MainPlayerName = DataForSession[0].PlayerName;
         MainPlayerClass = DataForSession[0].PlayerClass;
         MainPlayerTeam = DataForSession[0].PlayerTeam;
+        SessionNumberOfPlayers = DataForSession.Count;
     }
 
     public static GameObject GetPlayerByClass(int ClassNumber)

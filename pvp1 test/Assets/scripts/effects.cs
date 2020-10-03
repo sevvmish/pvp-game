@@ -201,10 +201,9 @@ public class effects : MonoBehaviour
 
             if (ConditionToProcess.cond_type=="dt" && ConditionToProcess.damage_or_heal>0 &&  DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type==spellsIDs.spell_types.direct_melee )
             {
-                if (MyPlayerClass == 1)
+                if (MyPlayerClass == 1 || MyPlayerClass == 2)
                 {
-                    MyAudioSourse.clip = HitWith1HSword;
-                    MyAudioSourse.Play();
+                    StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
                 }
             }
 

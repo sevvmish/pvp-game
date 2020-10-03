@@ -439,7 +439,7 @@ public struct ReceivePlayersData
             animation_id = int.Parse(getstr[7]);
             conditions = getstr[8];
             
-            all_health = getstr[9].Split('-');
+            all_health = getstr[9].Split('=');
             health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
             max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
             

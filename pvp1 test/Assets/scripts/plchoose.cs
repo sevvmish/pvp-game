@@ -30,16 +30,16 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player1";
         general.SessionTicket = "session";
-                
-        SceneManager.LoadScene("SampleScene");
+        StartCoroutine(StartLevel());
+        
     }
 
     void play2()
     {
         general.SessionPlayerID = "player2";
         general.SessionTicket = "session";
-        
-        SceneManager.LoadScene("SampleScene");
+        StartCoroutine(StartLevel());
+
     }
 
     void play3()
@@ -96,5 +96,15 @@ public class plchoose : MonoBehaviour
         
     }
 
+
+    IEnumerator StartLevel()
+    {
+        
+
+        yield return new WaitForSeconds(0.1f);
+
+        SceneManager.LoadScene("SampleScene");
+
+    }
 
 }

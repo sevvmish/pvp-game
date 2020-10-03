@@ -9,6 +9,8 @@ using System.Globalization;
 
 public class playercontrol : MonoBehaviour
 {
+    private bool isStart;
+
     //Joystick data from Canvas
     private FloatingJoystick MyJoystickTemp;
     public static Joysticks MyJoystick;
@@ -88,7 +90,7 @@ public class playercontrol : MonoBehaviour
 
     void Start()
     {
-        //SendAndReceive.GetDataSessionPlayers(connection.SendAndGetTCP(SendAndReceive.DataForSending.SendSessionDataRequest()));
+
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
         SessionData.GetDataSessionPlayers(SessionResult);
         general.SetSessionData();
@@ -96,11 +98,10 @@ public class playercontrol : MonoBehaviour
         {
             for (int i = 0; i < general.DataForSession.Count; i++)
             {
-                print(general.DataForSession[i].PlayerName+ " - " + general.DataForSession[i].PlayerClass + " - " + general.DataForSession[i].PlayerOrder);
+                print(general.DataForSession[i].PlayerName + " - " + general.DataForSession[i].PlayerClass + " - " + general.DataForSession[i].PlayerOrder);
             }
         }
 
-        OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
 
         ButtonsManagement.Init();
         
@@ -125,11 +126,13 @@ public class playercontrol : MonoBehaviour
             GameObject temp = Instantiate(GameObject.Find("InfoText"), Vector3.zero, Quaternion.identity, GameObject.Find("CanvasUI").transform);
             texts.Add(temp.GetComponent<TextMeshProUGUI>());
         }
+
         //=====================
 
-        for (int i = 0; i < general.SessionNumberOfPlayers-1; i++)
+        OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
+        for (int i = 1; i <= general.SessionNumberOfPlayers-1; i++)
         {
-            AddPlayer(new Vector3(0, 0, 0), new Vector3(0, 0, 0), OtherGamers, i);
+            AddPlayer(Vector3.zero, Vector3.zero, OtherGamers, i);
         }
         
         StartCoroutine(SyncForPosition());
@@ -149,10 +152,12 @@ public class playercontrol : MonoBehaviour
 
     void AddPlayer(Vector3 pos, Vector3 rot, List<players> playerslist, int order)
     {
-        int WhatPlayersClass = 1;
+        //print(general.DataForSession[order].PlayerClass + "================================");
+        int WhatPlayersClass = general.DataForSession[order].PlayerClass;
         GameObject ggg = Instantiate(general.GetPlayerByClass(WhatPlayersClass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
         ggg.GetComponent<effects>().MyPlayerClass = WhatPlayersClass;
-        ggg.GetComponent<players>().NumberInSendAndReceive = order;
+        ggg.GetComponent<players>().NumberInSendAndReceive = (order-1);
+        ggg.GetComponent<players>().PlayerSessionData = general.DataForSession[order];
         playerslist.Add(ggg.GetComponent<players>());
 
         
@@ -169,269 +174,272 @@ public class playercontrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (RawPackets.Count > 0)
-        {
-            SendAndReceive.TranslateDataFromServer(RawPackets[0]);
-            RawPackets.Remove(RawPackets[0]);
-        }
-        
-
-        MyConds.Check(SendAndReceive.MyPlayerData.conditions);
-        //OtherPlayerConds.Check(SendAndReceive.OtherPlayerData[0].conditions);
-        
-        for (int i=0; i<OtherGamers.Count; i++)
-        {
-            OtherGamers[i].Conds.Check(SendAndReceive.OtherPlayerData[i].conditions);
-            OtherGamers[i].OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[0].health_pool, SendAndReceive.OtherPlayerData[0].max_health_pool);
-            OtherGamers[i].OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[0].energy);
-        }
-        
-        
-        //print(SendAndReceive.OrderReceived + "---------------============ \n");
-
-        MyJoystick.CheckTouches(MyJoystickTemp.Vertical, MyJoystickTemp.Horizontal);
-
-        //print(PlayerTransform.rotation.eulerAngles.y + " - from me: " + SendAndReceive.MyPlayerData.rotation.y + " - from server");
 
         
-        MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool, SendAndReceive.MyPlayerData.max_health_pool);
-        MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
-        
-        
-        
 
-        /*
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            for (int i=0; i<MyConds.curr_conds.Count; i++)
+            if (RawPackets.Count > 0)
             {
-                print(MyConds.curr_conds[i].cond_id + " - " + MyConds.curr_conds[i].cond_bulk);
+                SendAndReceive.TranslateDataFromServer(RawPackets[0]);
+                RawPackets.Remove(RawPackets[0]);
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
+
+            MyConds.Check(SendAndReceive.MyPlayerData.conditions);
+            //OtherPlayerConds.Check(SendAndReceive.OtherPlayerData[0].conditions);
+
             for (int i = 0; i < OtherGamers.Count; i++)
             {
-                for (int ii = 0; ii < OtherGamers[i].Conds.curr_conds.Count; ii++)
-                {
-                    print(i + ": -" + OtherGamers[i].Conds.curr_conds[ii].cond_bulk);
-                }            
-                
+                OtherGamers[i].Conds.Check(SendAndReceive.OtherPlayerData[i].conditions);
+                OtherGamers[i].OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[0].health_pool, SendAndReceive.OtherPlayerData[0].max_health_pool);
+                OtherGamers[i].OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[0].energy);
             }
-        }
-        */
-        
-
-        if (SendAndReceive.SpecificationReceived == 1)
-        {
-            
-            StartCoroutine(killmess(SendAndReceive.MessageType));
-            
-            //ButtonsManagement.CheckResponse();
-            StartCoroutine(ButtonsManagement.buttoncooldown());
-        }
-        
-        if (SendAndReceive.SpecificationReceived==1 && button_order != SendAndReceive.OrderReceived)
-        {
-            
-            button_order = SendAndReceive.OrderReceived;
-            print(SendAndReceive.ButtonState + " - " + SendAndReceive.MessageType + " - " + SendAndReceive.SpellCooldown + SendAndReceive.SwButtonCond + " : -" + RawPackets[0]);
-            
-            //print("me - " + SendAndReceive.MyPlayerData.conditions + " = " + SendAndReceive.OrderReceived + "   him - " + SendAndReceive.OtherPlayerData[0].conditions + " = " + SendAndReceive.OrderReceived);
-        }
 
 
-        /*
-        if (MyConds.curr_conds.Count > 0)  //SendAndReceive.MyPlayerData.MyConds.curr_conds.Count>0
-        {
-            CheckMessagesAndConditions();
-        }
+            //print(SendAndReceive.OrderReceived + "---------------============ \n");
 
-        if (OtherPlayerConds.curr_conds.Count>0)
-        {
-            CheckMessagesAndConditionsForOther();
-        }
-        */
+            MyJoystick.CheckTouches(MyJoystickTemp.Vertical, MyJoystickTemp.Horizontal);
+
+            //print(PlayerTransform.rotation.eulerAngles.y + " - from me: " + SendAndReceive.MyPlayerData.rotation.y + " - from server");
 
 
-        //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        CheckMessagesAndConditions();
-        CheckMessagesAndConditionsForOther();
+            MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool, SendAndReceive.MyPlayerData.max_health_pool);
+            MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
 
-        //MY ANIMATIONS===========================================================        
-        myanimator.RefreshAnimations(SendAndReceive.MyPlayerData.animation_id);
-               
-        //LATENCY
-        if (latency_check == SendAndReceive.OrderReceived && isLatency)
-        {
-            LatencyMain.Add(latency_timer * 1000f);
-            TempText1.text = AverageLatency().ToString("f0");
-            
-            latency_timer = 0;
-            isLatency = false;
 
-        }
-        else
-        {
-            latency_timer += Time.deltaTime;
-            if (latency_timer > 2f)
+
+
+            /*
+            if (Input.GetKeyDown(KeyCode.U))
             {
+                for (int i=0; i<MyConds.curr_conds.Count; i++)
+                {
+                    print(MyConds.curr_conds[i].cond_id + " - " + MyConds.curr_conds[i].cond_bulk);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                for (int i = 0; i < OtherGamers.Count; i++)
+                {
+                    for (int ii = 0; ii < OtherGamers[i].Conds.curr_conds.Count; ii++)
+                    {
+                        print(i + ": -" + OtherGamers[i].Conds.curr_conds[ii].cond_bulk);
+                    }            
+
+                }
+            }
+            */
+
+
+            if (SendAndReceive.SpecificationReceived == 1)
+            {
+
+                StartCoroutine(killmess(SendAndReceive.MessageType));
+
+                //ButtonsManagement.CheckResponse();
+                StartCoroutine(ButtonsManagement.buttoncooldown());
+            }
+
+            if (SendAndReceive.SpecificationReceived == 1 && button_order != SendAndReceive.OrderReceived)
+            {
+
+                button_order = SendAndReceive.OrderReceived;
+                print(SendAndReceive.ButtonState + " - " + SendAndReceive.MessageType + " - " + SendAndReceive.SpellCooldown + SendAndReceive.SwButtonCond + " : -" + RawPackets[0]);
+
+                //print("me - " + SendAndReceive.MyPlayerData.conditions + " = " + SendAndReceive.OrderReceived + "   him - " + SendAndReceive.OtherPlayerData[0].conditions + " = " + SendAndReceive.OrderReceived);
+            }
+
+
+            /*
+            if (MyConds.curr_conds.Count > 0)  //SendAndReceive.MyPlayerData.MyConds.curr_conds.Count>0
+            {
+                CheckMessagesAndConditions();
+            }
+
+            if (OtherPlayerConds.curr_conds.Count>0)
+            {
+                CheckMessagesAndConditionsForOther();
+            }
+            */
+
+
+            //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            CheckMessagesAndConditions();
+            CheckMessagesAndConditionsForOther();
+
+            //MY ANIMATIONS===========================================================        
+            myanimator.RefreshAnimations(SendAndReceive.MyPlayerData.animation_id);
+
+            //LATENCY
+            if (latency_check == SendAndReceive.OrderReceived && isLatency)
+            {
+                LatencyMain.Add(latency_timer * 1000f);
+                TempText1.text = AverageLatency().ToString("f0");
+
                 latency_timer = 0;
                 isLatency = false;
+
             }
-        }
-               
-
-        //speed Vector3 CHECK
-        if (cur_speed>0.2f)
-        {
-            DataAnalys.text = connection.DataForCheck;
-
-            cur_speed = 0;
-
-            TempText2.text = (Vector3.Distance(PlayerCurrentSpeed, PlayerTransform.position)*5f).ToString("f1");
-            PlayerCurrentSpeed = PlayerTransform.position;
-            //connection.connector.ListenToServer();
-        }
-        else
-        {
-            cur_speed += Time.deltaTime;
-        }
-        
-
-        
-
-        if (cur_time_2>0.1f)
-        {
-            //OtherLatency.text = ToOtherLatency + "\n";
-            cur_time_2 = 0;
-        } else
-        {
-            cur_time_2 += Time.deltaTime;
-        }
-
-
-        //==================================================================
-        if (cur_time >= 0.04f)
-        {
-
-            MyHPText.text = SendAndReceive.MyPlayerData.health_pool.ToString();
-
-
-            
-            try
+            else
             {
-                if (isButtonSend)
+                latency_timer += Time.deltaTime;
+                if (latency_timer > 2f)
                 {
-                    isButtonSend = false;
-                    connection.connector.TalkToServer(ButtonMessToSend);
-                } 
-                else
+                    latency_timer = 0;
+                    isLatency = false;
+                }
+            }
+
+
+            //speed Vector3 CHECK
+            if (cur_speed > 0.2f)
+            {
+                DataAnalys.text = connection.DataForCheck;
+
+                cur_speed = 0;
+
+                TempText2.text = (Vector3.Distance(PlayerCurrentSpeed, PlayerTransform.position) * 5f).ToString("f1");
+                PlayerCurrentSpeed = PlayerTransform.position;
+                //connection.connector.ListenToServer();
+            }
+            else
+            {
+                cur_speed += Time.deltaTime;
+            }
+
+
+
+
+            if (cur_time_2 > 0.1f)
+            {
+                //OtherLatency.text = ToOtherLatency + "\n";
+                cur_time_2 = 0;
+            }
+            else
+            {
+                cur_time_2 += Time.deltaTime;
+            }
+
+
+            //==================================================================
+            if (cur_time >= 0.04f)
+            {
+
+                MyHPText.text = SendAndReceive.MyPlayerData.health_pool.ToString();
+
+
+
+                try
                 {
-                    connection.connector.TalkToServer(SendAndReceive.DataForSending.ToSendMovement(AgregateHoriz, AgregateVertic));
+                    if (isButtonSend)
+                    {
+                        isButtonSend = false;
+                        connection.connector.TalkToServer(ButtonMessToSend);
+                    }
+                    else
+                    {
+                        connection.connector.TalkToServer(SendAndReceive.DataForSending.ToSendMovement(AgregateHoriz, AgregateVertic));
 
-                    AgregateHoriz = 0;
-                    AgregateVertic = 0;
+                        AgregateHoriz = 0;
+                        AgregateVertic = 0;
 
 
+                    }
+
+
+
+                    if (!isLatency)
+                    {
+                        isLatency = true;
+                        latency_check = SendAndReceive.DataForSending.OrderToSend;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    print(ex);
+
+                    //connection.connector.AnotherReconnect();
+                    connection.connector.Reconnect();
                 }
 
 
 
-                if (!isLatency)
-                {
-                    isLatency = true;
-                    latency_check = SendAndReceive.DataForSending.OrderToSend;
-                }
+
+                //CORRECTIONS
+                CorrectionForPosition = SendAndReceive.MyPlayerData.position - PlayerTransform.position;
+                CorrectionForRotation = SendAndReceive.MyPlayerData.rotation - PlayerTransform.rotation.eulerAngles;
+
+                //COUNTS FOR LERP           
+                CountsBeforeServerReq.Add(CountSumForCounts);
+                AverageCountForDeltaForLerp = AverageSumOfList();
+                CountSumForCounts = 0;
+
+                cur_time = 0;
 
             }
-            catch (Exception ex)
+            else
             {
-                print(ex);
-
-                //connection.connector.AnotherReconnect();
-                connection.connector.Reconnect();
+                cur_time += Time.deltaTime;
             }
-           
 
-            
-            
-            //CORRECTIONS
-            CorrectionForPosition = SendAndReceive.MyPlayerData.position - PlayerTransform.position;
-            CorrectionForRotation = SendAndReceive.MyPlayerData.rotation - PlayerTransform.rotation.eulerAngles;
+            //==================================================================
 
-            //COUNTS FOR LERP           
-            CountsBeforeServerReq.Add(CountSumForCounts);
-            AverageCountForDeltaForLerp = AverageSumOfList();
-            CountSumForCounts = 0;
+            AgregateHoriz += MyJoystick.Horizontal;
+            AgregateVertic += MyJoystick.Vertical;
 
-            cur_time = 0;
-            
-        }
-        else
-        {
-            cur_time += Time.deltaTime;
-        }
+            PredictionMachine(MyJoystick.Horizontal,
+                MyJoystick.Vertical, PlayerTransform.position, PlayerTransform.rotation.eulerAngles,
+                out Player2NewPos, out Player2NewRot);
 
-        //==================================================================
-        
-        AgregateHoriz += MyJoystick.Horizontal;
-        AgregateVertic += MyJoystick.Vertical;
-        
-        PredictionMachine(MyJoystick.Horizontal,
-            MyJoystick.Vertical, PlayerTransform.position , PlayerTransform.rotation.eulerAngles,
-            out Player2NewPos, out Player2NewRot);
-        
-        CountSumForCounts++;
+            CountSumForCounts++;
 
-        //DeltaForLerpMovingNRotation = CountSumForCounts / AverageCountForDeltaForLerp;
-        DeltaForRotOnly = CountSumForCounts / AverageCountForDeltaForLerp;
+            //DeltaForLerpMovingNRotation = CountSumForCounts / AverageCountForDeltaForLerp;
+            DeltaForRotOnly = CountSumForCounts / AverageCountForDeltaForLerp;
 
-        if (AgregateVertic == 0)
-        {
-            //ResultDelta*=0.7f;
-            //DeltaForLerpMovingNRotation *= ResultDelta;
-            DeltaForLerpMovingNRotation *= 0.7f;
-        } 
-        else
-        {
-            DeltaForLerpMovingNRotation = 0.07f;
-        }
+            if (AgregateVertic == 0)
+            {
+                //ResultDelta*=0.7f;
+                //DeltaForLerpMovingNRotation *= ResultDelta;
+                DeltaForLerpMovingNRotation *= 0.7f;
+            }
+            else
+            {
+                DeltaForLerpMovingNRotation = 0.07f;
+            }
 
-                
-        if (AverageCountForDeltaForLerp == 0) AverageCountForDeltaForLerp = 1;
-        PlayerTransform.position = Vector3.SmoothDamp(PlayerTransform.position, (Player2NewPos + CorrectionForPosition / (AverageCountForDeltaForLerp)), ref speed, DeltaForLerpMovingNRotation); //DeltaForLerpMovingNRotation/6f
 
-        rotAngle = Quaternion.Angle(Quaternion.Euler(SendAndReceive.MyPlayerData.rotation), PlayerTransform.rotation);
-        
-        if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y)>=0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) <180)
-        {
-            sighAngle = 1;
-        } 
-        else if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 180)
-        {
-            sighAngle = -1;
-        } 
-        else if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) >= 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) > 180)
-        {
-            sighAngle = -1;
-        }
-        else if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) > 180)
-        {
-            sighAngle = 1;
-        }
+            if (AverageCountForDeltaForLerp == 0) AverageCountForDeltaForLerp = 1;
+            PlayerTransform.position = Vector3.SmoothDamp(PlayerTransform.position, (Player2NewPos + CorrectionForPosition / (AverageCountForDeltaForLerp)), ref speed, DeltaForLerpMovingNRotation); //DeltaForLerpMovingNRotation/6f
 
-                
-        PlayerTransform.rotation = Quaternion.AngleAxis((PlayerTransform.rotation.eulerAngles.y + rotAngle * sighAngle/AverageCountForDeltaForLerp), Vector3.up);
+            rotAngle = Quaternion.Angle(Quaternion.Euler(SendAndReceive.MyPlayerData.rotation), PlayerTransform.rotation);
 
-        for (int i = 0; i < OtherGamers.Count; i++)
-        {                
-            OtherGamers[i].SyncPosNRot(DeltaForLerpMovingNRotation, AverageCountForDeltaForLerp);
-        }
-              
+            if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) >= 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 180)
+            {
+                sighAngle = 1;
+            }
+            else if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 180)
+            {
+                sighAngle = -1;
+            }
+            else if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) >= 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) > 180)
+            {
+                sighAngle = -1;
+            }
+            else if ((SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) < 0 && Mathf.Abs(SendAndReceive.MyPlayerData.rotation.y - PlayerTransform.rotation.eulerAngles.y) > 180)
+            {
+                sighAngle = 1;
+            }
 
+
+            PlayerTransform.rotation = Quaternion.AngleAxis((PlayerTransform.rotation.eulerAngles.y + rotAngle * sighAngle / AverageCountForDeltaForLerp), Vector3.up);
+
+            for (int i = 0; i < OtherGamers.Count; i++)
+            {
+                OtherGamers[i].SyncPosNRot(DeltaForLerpMovingNRotation, AverageCountForDeltaForLerp);
+            }
+
+       
     }
 
 
@@ -756,7 +764,7 @@ public class playercontrol : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         PlayerTransform.position = SendAndReceive.MyPlayerData.position;
         PlayerTransform.rotation = Quaternion.Euler(SendAndReceive.MyPlayerData.rotation);
-        
+        isStart = true;
     }
 
 
