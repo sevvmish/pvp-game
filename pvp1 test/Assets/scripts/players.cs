@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class players : MonoBehaviour
 {
-    public SessionData PlayerSessionData;
+    
     private Transform PlayerTransform;    
     private AnimationsForPlayers PlayerAnimator;    
     private TextMeshProUGUI TempText1;

@@ -157,7 +157,7 @@ public class playercontrol : MonoBehaviour
         GameObject ggg = Instantiate(general.GetPlayerByClass(WhatPlayersClass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
         ggg.GetComponent<effects>().MyPlayerClass = WhatPlayersClass;
         ggg.GetComponent<players>().NumberInSendAndReceive = (order-1);
-        ggg.GetComponent<players>().PlayerSessionData = general.DataForSession[order];
+        ggg.GetComponent<effects>().PlayerSessionData = general.DataForSession[order];
         playerslist.Add(ggg.GetComponent<players>());
 
         
@@ -478,6 +478,92 @@ public class playercontrol : MonoBehaviour
     }
 
 
+
+
+    private void CheckMessagesAndConditions()
+    {        
+
+        for (int i = 0; i < MyConds.curr_conds.Count; i++)
+        {
+            if (!MyConds.curr_conds[i].isChecked)
+            {
+
+                MyEffects.RegisterConds(MyConds.curr_conds[i]);
+
+                if (MyConds.curr_conds[i].cond_type == "dt" && MyConds.curr_conds[i].damage_or_heal > 0)
+                {
+                    MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), PlayerTransform.position + new Vector3(0, 2, 0), Color.red, MyConds.curr_conds[i].isCrit);
+                    MyConds.curr_conds[i].isChecked = true;
+                }
+                else if (MyConds.curr_conds[i].cond_type == "dg" && MyConds.curr_conds[i].damage_or_heal > 0)
+                {
+                    for (int ii = 0; ii < OtherGamers.Count; ii++)
+                    {
+                        for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
+                        {
+                            if (OtherGamers[ii].Conds.curr_conds[iii].cond_id == MyConds.curr_conds[i].cond_id)
+                            {
+                                MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.yellow, MyConds.curr_conds[i].isCrit);
+                                //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
+                                MyConds.curr_conds[i].isChecked = true;
+                            }
+                        }
+                    }
+
+                }
+                else if (MyConds.curr_conds[i].cond_type == "dg" && MyConds.curr_conds[i].damage_or_heal == 0)
+                {
+                    //====================================
+                }
+                else if (MyConds.curr_conds[i].cond_type == "co")
+                {
+                    //MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time);
+                    StartCoroutine(MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
+                    //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
+                    MyConds.curr_conds[i].isChecked = true;
+                }
+
+                else if (MyConds.curr_conds[i].cond_type == "ca")
+                {
+
+                    if (!MyUI.isCasting)
+                    {
+                        StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+                    if (MyConds.curr_conds[i].cond_message == "CANCELED")
+                    {
+                        MyUI.StopCurrentCasting();
+                        MyEffects.CancelCasting();
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+                }
+
+
+                else if (MyConds.curr_conds[i].cond_type == "me")
+                {
+                    if (MyConds.curr_conds[i].cond_message == "d")
+                    {
+                        MakeSign("DODGE", PlayerTransform.position, Color.white, false);
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+                    else if (MyConds.curr_conds[i].cond_message == "b")
+                    {
+                        MakeSign("BLOCKED", PlayerTransform.position, Color.white, false);
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+
+                }
+
+
+
+            }
+
+
+        }
+    }
+
+
     private void CheckMessagesAndConditionsForOther()
     {
         
@@ -522,112 +608,6 @@ public class playercontrol : MonoBehaviour
 
 
 
-    private void CheckMessagesAndConditions()
-    {
-        
-        //MyConds.Check(SendAndReceive.MyPlayerData.conditions);
-     
-        for (int i = 0; i < MyConds.curr_conds.Count; i++)
-        {
-            if (!MyConds.curr_conds[i].isChecked)
-            {
-
-                MyEffects.RegisterConds(MyConds.curr_conds[i]);
-
-                if (MyConds.curr_conds[i].cond_type == "dt" && MyConds.curr_conds[i].damage_or_heal>0)
-                {
-                    MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), PlayerTransform.position + new Vector3(0, 2, 0), Color.red, MyConds.curr_conds[i].isCrit);                    
-                    MyConds.curr_conds[i].isChecked = true;
-                }
-                else if (MyConds.curr_conds[i].cond_type == "dg" && MyConds.curr_conds[i].damage_or_heal > 0)
-                {
-                    for (int ii = 0; ii < OtherGamers.Count; ii++)
-                    {
-                        for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
-                        {
-                            if (OtherGamers[ii].Conds.curr_conds[iii].cond_id == MyConds.curr_conds[i].cond_id)
-                            {
-                                MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.yellow, MyConds.curr_conds[i].isCrit);
-                                //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
-                                MyConds.curr_conds[i].isChecked = true;
-                            }
-                        }
-                    }
-
-                }
-                else if (MyConds.curr_conds[i].cond_type == "dg" && MyConds.curr_conds[i].damage_or_heal == 0)
-                {
-                    /*
-                    for (int ii = 0; ii < OtherGamers.Count; ii++)
-                    {
-                        for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
-                        {
-                            if (OtherGamers[ii].Conds.curr_conds[iii].cond_type=="me")
-                            {   
-                                if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "d")
-                                {
-                                    MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
-                                    MyConds.curr_conds[i].isChecked = true;
-                                }
-                                else if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "b")
-                                {
-                                    MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
-                                    MyConds.curr_conds[i].isChecked = true;
-                                }
-                            }
-                        }
-                    }
-                    */
-                }
-                else if (MyConds.curr_conds[i].cond_type == "co")
-                {
-                    //MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time);
-                    StartCoroutine(MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
-                    //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
-                    MyConds.curr_conds[i].isChecked = true;
-                }
-                else if (MyConds.curr_conds[i].cond_type == "ca")
-                {
-                    //print(MyConds.curr_conds[i].cond_bulk + "===================================");
-
-                    if (!MyUI.isCasting)
-                    {
-                        
-                        StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
-                        MyConds.curr_conds[i].isChecked = true;
-                    }
-                    else if (MyUI.isCasting && MyConds.curr_conds[i].cond_message == "CANCELED")
-                    {
-                        
-                        MyUI.StopCurrentCasting();
-                        MyEffects.CancelCasting();
-                        MyConds.curr_conds[i].isChecked = true;
-                    }
-                }
-
-
-                else if (MyConds.curr_conds[i].cond_type == "me")
-                {
-                    if (MyConds.curr_conds[i].cond_message == "d")
-                    {
-                        MakeSign("DODGE", PlayerTransform.position, Color.white, false);
-                        MyConds.curr_conds[i].isChecked = true;
-                    }
-                    else if (MyConds.curr_conds[i].cond_message == "b")
-                    {
-                        MakeSign("BLOCKED", PlayerTransform.position, Color.white, false);
-                        MyConds.curr_conds[i].isChecked = true;
-                    }
-                                        
-                }
-
-
-
-            }
-
-            
-        }
-    }
       
     
 

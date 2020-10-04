@@ -21,6 +21,7 @@ public class Conds
     public int spell_index;
     public float cond_time;
     public bool isChecked;
+    public float coord_x, coord_z;
 }
 
 
@@ -87,59 +88,71 @@ public class ConditionsAnalys
         curr_conds[Index].cond_id = getstrcond1[0];
 
         
-            curr_conds[Index].cond_bulk = getstrcond1[1];
+        curr_conds[Index].cond_bulk = getstrcond1[1];
         
+        
+        string[] getstrcond = getstrcond1[1].Split('-');
+        curr_conds[Index].cond_type = getstrcond[0];
 
-            string[] getstrcond = getstrcond1[1].Split('-');
-            curr_conds[Index].cond_type = getstrcond[0];
+        if (curr_conds[Index].cond_type == "co") //condition type in conditions
+        {
+            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);            
+        }
+        else if (curr_conds[Index].cond_type == "dt" || curr_conds[Index].cond_type == "dg") //damage taken or given
+        {
+            curr_conds[Index].damage_or_heal = float.Parse(getstrcond[1], CultureInfo.InvariantCulture);
 
-            if (curr_conds[Index].cond_type == "co") //condition type in conditions
+            if (getstrcond[2] == "s")
             {
-                curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-                curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);            
+                curr_conds[Index].isCrit = false;
             }
-            else if (curr_conds[Index].cond_type == "dt" || curr_conds[Index].cond_type == "dg") //damage taken or given
+            else if (getstrcond[2] == "c")
             {
-                curr_conds[Index].damage_or_heal = float.Parse(getstrcond[1], CultureInfo.InvariantCulture);
-
-                if (getstrcond[2] == "s")
-                {
-                    curr_conds[Index].isCrit = false;
-                }
-                else if (getstrcond[2] == "c")
-                {
-                    curr_conds[Index].isCrit = true;
-                }
-
-                curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
+                curr_conds[Index].isCrit = true;
             }
-            else if (curr_conds[Index].cond_type == "me") //messages of conditions
+
+            curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
+        }
+        else if (curr_conds[Index].cond_type == "me") //messages of conditions
+        {
+            curr_conds[Index].cond_message = getstrcond[1];
+        }
+        else if (curr_conds[Index].cond_type == "st") //condition type in conditions
+        {
+            curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
+            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+        }
+        else if (curr_conds[Index].cond_type == "ca") //condition type in conditions
+        {
+
+            if (getstrcond[1] == "cncld")
             {
-                curr_conds[Index].cond_message = getstrcond[1];
+                curr_conds[Index].cond_message = "CANCELED";                    
             }
-            else if (curr_conds[Index].cond_type == "st") //condition type in conditions
+            else
             {
                 curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
                 curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
             }
-            else if (curr_conds[Index].cond_type == "ca") //condition type in conditions
-            {
-                if (getstrcond[1] == "cncld")
-                {
-                    curr_conds[Index].cond_message = "CANCELED";
-                    
-                }
-                else
-                {
-                
 
-                    curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-                    curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
-                }
+            
+
+        } else if (curr_conds[Index].cond_type.Contains("="))
+        {
+            string[] anothergetstrcond = getstrcond1[1].Split('=');
+            curr_conds[Index].cond_type = anothergetstrcond[0];
+            if (curr_conds[Index].cond_type == "cs") //spell bolt flying around
+            {
+                curr_conds[Index].spell_index = int.Parse(anothergetstrcond[1]);
+                curr_conds[Index].coord_x = float.Parse(anothergetstrcond[2], CultureInfo.InvariantCulture);
+                curr_conds[Index].coord_z = float.Parse(anothergetstrcond[3], CultureInfo.InvariantCulture);
 
             }
-        
-        
+        }
+
+
+
     }
 }
 
@@ -263,6 +276,12 @@ public struct AnimationsForPlayers
                         ReceiveDamage();
                     }
                     break;
+                case 5:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shoot spell"))
+                    {
+                        ShootSpell();
+                    }
+                    break;
                 case 6:
                     if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Dodge"))
                     {
@@ -349,6 +368,14 @@ public struct AnimationsForPlayers
         animator.Play("ReceiveDamage");
         CurrentAnimationState = 4;
         
+    }
+
+
+    void ShootSpell()
+    {
+        animator.Play("shoot spell");
+        CurrentAnimationState = 5;
+
     }
 
     void Dodge()
@@ -812,7 +839,7 @@ public class PlayerUI : MonoBehaviour
 
     public IEnumerator AddCasting(string castID, int spell_ind, float spell_time)
     {
-                
+            
         isCasting = true;
         CastingBar.gameObject.SetActive(true);
         CastingSpellImage.gameObject.SetActive(true);

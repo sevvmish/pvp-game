@@ -4,45 +4,70 @@ using UnityEngine;
 
 public class effects : MonoBehaviour
 {
-        
+    public SessionData PlayerSessionData;
+
+    //private SessionData[] OtherPlayers = new SessionData[general.SessionNumberOfPlayers - 1];
+
     public int MyPlayerClass;
 
     private List<Conds> CurrentConds = new List<Conds>();
 
-    public bool isStunned, isShieldSlam, isCasting, isChanneling;
+    public bool isStunned, isShieldSlam, isCasting, isChanneling, isSpellShooting;
 
     public AudioSource MyAudioSourse;
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall;
 
     //warr 1 effects
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
 
     //mage 1 effects
-    public GameObject CastingEffFireHandL, CastingEffFireHandR;
+    public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball;
 
-    private Animator PlayerAnimator;
+    private Animator PlayerAnimator;    
+    private Vector2 CastingPos;
+
+
+    private Vector3 GetPlayerCoordsByOrderNumber(int OrderNumber)
+    {
+        Vector3 result = Vector3.zero;
+
+        Transform source = GameObject.Find("OtherPlayers").transform;
+
+        for (int i = 0; i < source.childCount; i++)
+        {
+            if (OrderNumber == source.GetChild(i).gameObject.GetComponent<effects>().PlayerSessionData.PlayerOrder)
+            {
+                return source.GetChild(i).position ;
+            }
+        }
+
+        return result;
+
+    }
 
     // Start is called before the first frame update
     void Start()
-    {
+    {      
+
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
-        
+        ExplosionFireBall.SetActive(false);
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
         BloodLoss = Resources.Load<AudioClip>("sounds/blood loss");
+        HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
+        ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
         CancelCastingEffinBar = Resources.Load<AudioClip>("sounds/canceled spell sound");
         CastingSpellSound = Resources.Load<AudioClip>("sounds/casting spell");
 
         if (MyPlayerClass == 1)
         {
-            HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
-            ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
+            
             ShieldSlam.SetActive(false);
             BlockWithShield.SetActive(false);
             WeaponTrail.SetActive(false);
@@ -56,8 +81,8 @@ public class effects : MonoBehaviour
         {            
             CastingEffFireHandL.SetActive(false);
             CastingEffFireHandR.SetActive(false);
+            Fireball.SetActive(false);
         }
-
 
     }
 
@@ -65,6 +90,11 @@ public class effects : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            print(GetPlayerCoordsByOrderNumber(1) + " - " + GetPlayerCoordsByOrderNumber(2));
+        }
 
         if (isStunned)
         {
@@ -82,6 +112,7 @@ public class effects : MonoBehaviour
             }
         }
 
+        
         
         if (isCasting)
         {
@@ -189,6 +220,25 @@ public class effects : MonoBehaviour
 
         if (!ConditionToProcess.isChecked)
         {
+            if (ConditionToProcess.cond_type == "cs")
+            {
+                CastingPos = new Vector2(ConditionToProcess.coord_x, ConditionToProcess.coord_z);
+            }
+
+
+            if (ConditionToProcess.cond_type == "cs" && !isSpellShooting)
+            {
+                isSpellShooting = true;
+                StartCoroutine(SpellShooting());
+                
+            }
+
+            if (ConditionToProcess.cond_type != "cs" && isSpellShooting)
+            {
+                isSpellShooting = false;
+                
+            }
+
             switch (ConditionToProcess.cond_bulk)
             {
 
@@ -199,12 +249,20 @@ public class effects : MonoBehaviour
                     break;
             }
 
-            if (ConditionToProcess.cond_type=="dt" && ConditionToProcess.damage_or_heal>0 &&  DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type==spellsIDs.spell_types.direct_melee )
+            if (ConditionToProcess.cond_type.Contains("dt") && ConditionToProcess.damage_or_heal>0)
             {
-                if (MyPlayerClass == 1 || MyPlayerClass == 2)
+                
+                if (DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type == spellsIDs.spell_types.direct_melee)
                 {
                     StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
+                } 
+                else if (DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type == spellsIDs.spell_types.direct_magic)
+                {
+                    
+                    StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
+                    StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f));
                 }
+                
             }
 
 
@@ -323,6 +381,23 @@ public class effects : MonoBehaviour
         MyAudioSourse.loop = isLooping;
         MyAudioSourse.clip = AClip;
         MyAudioSourse.Play();
+    }
+
+
+    IEnumerator SpellShooting()
+    {
+        GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+        SpellSource.SetActive(true);
+        do
+        {
+            SpellSource.transform.position = new Vector3(CastingPos.x, 1, CastingPos.y);
+            //print(isSpellShooting + "=============================");
+            yield return new WaitForSeconds(0.04f);
+        } 
+        while (isSpellShooting);
+        SpellSource.SetActive(false);
+        Destroy(SpellSource);
+        
     }
 
 

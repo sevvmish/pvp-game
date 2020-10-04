@@ -28,6 +28,9 @@ public class connection : MonoBehaviour
     private TcpClient client;
     NetworkStream stream;
 
+    CancellationTokenSource cts;
+    CancellationToken token;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -43,6 +46,9 @@ public class connection : MonoBehaviour
 
     private void Start()
     {
+        cts = new CancellationTokenSource();
+        token = cts.Token;
+
         isstart = true;
         connector = this;
         Reconnect();
@@ -67,23 +73,8 @@ public class connection : MonoBehaviour
         if ((SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) < 4)
         {
             ListenToServer();
-        }
-
-        /*
-        if (isstart)
-        {
-            ListenToServer();
-            isstart = false;
         } 
         
-        
-        if (SendAndReceive.OrderReceived < SendAndReceive.DataForSending.OrderToSend)
-        {
-            
-            ListenToServer();
-            
-        }
-        */
 
     }
 
@@ -131,13 +122,17 @@ public class connection : MonoBehaviour
     {
         //await Task.Run(() => ReceiveData());
         //await Task.Run(() => TryStreamReceive());
+        
+
         await Task.Run(() => TalkToServer(Data));
     }
 
 
     public async void ListenToServer()
     {
-        await Task.Run(() => ReceiveData());
+        
+
+        await Task.Run(() => ReceiveData(token));
         //await Task.Run(() => TryStreamReceive());
         //await Task.Run(() => TalkToServer(Data));
 
@@ -145,7 +140,7 @@ public class connection : MonoBehaviour
 
 
 
-    public void ReceiveData()
+    public void ReceiveData(CancellationToken token)
     {
 
         howmany++;
@@ -162,6 +157,12 @@ public class connection : MonoBehaviour
                 size = sck.ReceiveFrom(msgBuff, ref remoteIp);
                 messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
                 cur_time++;
+
+                if (token.IsCancellationRequested)
+                {
+                    Console.WriteLine("Операция прервана токеном");
+                    return;
+                }
             }
             while (sck.Available > 0) ;
 
@@ -175,7 +176,7 @@ public class connection : MonoBehaviour
                     print(messrec.ToString());
                 }
                 */
-                print(messrec.ToString());
+                //print(messrec.ToString());
 
                 howmany--;
 
@@ -306,11 +307,17 @@ public class connection : MonoBehaviour
 
 
     
-    void OnApplicationQuit()
+    async void OnApplicationQuit()
+    {
+        cts.Cancel();
+        await Task.Run(() => KillConnectionOnDestroy());
+    }
+    
+    private void KillConnectionOnDestroy()
     {
         int CurrentPort_tcp = general.GameServerTCPPort;
         string CurrentIP_tcp = general.GameServerIP;
-        
+
         IPEndPoint endpoint_tcp = new IPEndPoint(IPAddress.Parse(CurrentIP_tcp), CurrentPort_tcp);
         Socket sck_tcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         //=============================CONNECT======================================
@@ -320,7 +327,7 @@ public class connection : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log(ex);            
+            Debug.Log(ex);
         }
         //===============================SEND======================================
         try
@@ -330,22 +337,23 @@ public class connection : MonoBehaviour
         catch (Exception ex)
         {
             Debug.Log(ex);
-            
+
         }
-                          
+
         sck.Shutdown(SocketShutdown.Both);
         sck.Close();
     }
-    
 
+
+
+    /*
     public void ConnectionDestroy()
     {
 
         sck.Shutdown(SocketShutdown.Both);
         sck.Close();
-        //stream.Close();
-        //client.Close();
+        
     }
-
+    */
 
 }
