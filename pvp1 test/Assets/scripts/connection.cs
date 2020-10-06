@@ -74,7 +74,6 @@ public class connection : MonoBehaviour
         {
             ListenToServer();
         } 
-        
 
     }
 
@@ -176,7 +175,7 @@ public class connection : MonoBehaviour
                     print(messrec.ToString());
                 }
                 */
-                //print(messrec.ToString());
+                print(messrec.ToString());
 
                 howmany--;
 
@@ -307,14 +306,10 @@ public class connection : MonoBehaviour
 
 
     
-    async void OnApplicationQuit()
+    void OnApplicationQuit()
     {
         cts.Cancel();
-        await Task.Run(() => KillConnectionOnDestroy());
-    }
-    
-    private void KillConnectionOnDestroy()
-    {
+
         int CurrentPort_tcp = general.GameServerTCPPort;
         string CurrentIP_tcp = general.GameServerIP;
 
@@ -343,7 +338,7 @@ public class connection : MonoBehaviour
         sck.Shutdown(SocketShutdown.Both);
         sck.Close();
     }
-
+    
 
 
     /*

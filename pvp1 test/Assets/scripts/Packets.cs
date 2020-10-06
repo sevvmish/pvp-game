@@ -312,6 +312,18 @@ public struct AnimationsForPlayers
                         ShieldOn();
                     }
                     break;
+                case 11:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("alternative attack"))
+                    {
+                        AltAttack();
+                    }
+                    break;
+                case 12:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("superior attack"))
+                    {
+                        SuperAttack();
+                    }
+                    break;
             }
         }
 
@@ -323,8 +335,8 @@ public struct AnimationsForPlayers
         
         animator.Play("Idle");
         CurrentAnimationState = 0;
-        MyAudioSource.Stop();
-        MyAudioSource.clip = null;
+        //MyAudioSource.Stop();
+        //MyAudioSource.clip = null;
         
     }
 
@@ -414,7 +426,19 @@ public struct AnimationsForPlayers
 
     }
 
+    void AltAttack()
+    {
+        animator.Play("alternative attack");
+        CurrentAnimationState = 11;
 
+    }
+
+    void SuperAttack()
+    {
+        animator.Play("superior attack");
+        CurrentAnimationState = 12;
+
+    }
 
     void Death()
     {
@@ -1073,6 +1097,12 @@ public class Buttons
         SpellButton6 = GameObject.Find("spell6").GetComponent<Button>();
         SpellButton6.onClick.AddListener(Button6Pressed);
 
+        SpellButton1.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell1).Spell1_icon;
+        SpellButton2.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell2).Spell1_icon;
+        SpellButton3.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell3).Spell1_icon;
+        SpellButton4.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell4).Spell1_icon;
+        SpellButton5.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell5).Spell1_icon;
+        //SpellButton6.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell6).Spell1_icon;
     }
 
     private void Button1Pressed()
