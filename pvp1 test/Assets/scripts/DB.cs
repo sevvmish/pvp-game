@@ -8,9 +8,11 @@ public class DB : MonoBehaviour
     public static spellsIDs spell2 = new spellsIDs(lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), lang.Spell2ShortDescri, lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee, 20);
     public static spellsIDs spell3 = new spellsIDs(lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spell3"), lang.Spell3ShortDescri, lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff, 10);
     public static spellsIDs spell4 = new spellsIDs(lang.Spell4Name, 4, Resources.Load<Sprite>("sprites/spell4"), lang.Spell4ShortDescri, lang.Spell4FullDescri, spellsIDs.spell_types.direct_melee, 25);
-    public static spellsIDs spell5 = new spellsIDs(lang.Spell4Name, 5, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
+    public static spellsIDs spell5 = new spellsIDs(lang.Spell5Name, 5, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
+    public static spellsIDs spell6 = new spellsIDs(lang.Spell6Name, 6, Resources.Load<Sprite>("sprites/spell6"), lang.Spell6ShortDescri, lang.Spell6FullDescri, spellsIDs.spell_types.direct_melee, 20);
 
-    public static spellsIDs spell51 = new spellsIDs(lang.Spell4Name, 51, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell51 = new spellsIDs(lang.Spell51Name, 51, Resources.Load<Sprite>("sprites/spell51"), lang.Spell51ShortDescri, lang.Spell51FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell52 = new spellsIDs(lang.Spell52Name, 52, Resources.Load<Sprite>("sprites/spell52"), lang.Spell52ShortDescri, lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
 
     public static spellsIDs spell1002 = new spellsIDs(lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), lang.Spell1002ShortDescri, lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff,0);
 
@@ -34,8 +36,14 @@ public class DB : MonoBehaviour
             case 5:
                 result = spell5;
                 break;
+            case 6:
+                result = spell6;
+                break;
             case 51:
                 result = spell51;
+                break;
+            case 52:
+                result = spell52;
                 break;
             case 1002:
                 result = spell1002;
@@ -110,6 +118,18 @@ public static class lang
     public static string Spell5ShortDescri = "блок всех атак на 5 сек";
     public static string Spell5FullDescri = "блокирует все прямые удары и заклинания в течение 5 сек, но понижает скорость передвижения";
 
+    public static string Spell6Name = "серия с щитом";
+    public static string Spell6ShortDescri = "серия из трех ударов с растущей силой удара";
+    public static string Spell6FullDescri = "серия из трех ударов, сила каждого последующего удара в связке вырастает";
+
+    public static string Spell51Name = "огненный выстрел";
+    public static string Spell51ShortDescri = "выстрел огненным шаром";
+    public static string Spell51FullDescri = "выстрел огненным шаром, который попадает в первого противника и наносит повреждение в небольшом радиусе";
+
+    public static string Spell52Name = "метеор";
+    public static string Spell52ShortDescri = "метеор приземляется в мага, наносит повтерждение и огрушает противников";
+    public static string Spell52FullDescri = "метеор приземляется в точку нахождения мага, наносит повреждение и оглушает всех противников по области";
+
     public static string Spell1002Name = "оглушение";
     public static string Spell1002ShortDescri = "оглушение";
     public static string Spell1002FullDescri = "невозможно двигаться, атаковать и произносить заклинания";
@@ -141,6 +161,18 @@ public static class UNlang
     public static string Spell5Name = "shield on";
     public static string Spell5ShortDescri = "blocks all attacks for 5 sec";
     public static string Spell5FullDescri = "blocks all direct hits and spells for 5 sec but slows movement speed";
+
+    public static string Spell6Name = "shield series";
+    public static string Spell6ShortDescri = "series of three hits with increasing power of hit";
+    public static string Spell6FullDescri = "series of three hits, one after another, with each hit the power of hit increases for 50%";
+
+    public static string Spell51Name = "fireball";
+    public static string Spell51ShortDescri = "shot with a fire ball";
+    public static string Spell51FullDescri = "shot with a fire ball, which hits first enemy and inflicts damage in a small radius";
+
+    public static string Spell52Name = "meteor";
+    public static string Spell52ShortDescri = "meteor lands on mage, inflicts damage and stuns enemies";
+    public static string Spell52FullDescri = "meteor lands in mage place, inflicts damage and stuns all enemies in range of hit";
 
     public static string Spell1002Name = "stun";
     public static string Spell1002ShortDescri = "stunned";

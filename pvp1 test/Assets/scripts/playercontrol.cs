@@ -489,6 +489,11 @@ public class playercontrol : MonoBehaviour
             {
 
                 MyEffects.RegisterConds(MyConds.curr_conds[i]);
+                
+                //if (MyConds.curr_conds[i].cond_type == "cs")
+                //{
+                    MyConds.curr_conds[i].isChecked = true;
+                //}
 
                 if (MyConds.curr_conds[i].cond_type == "dt" && MyConds.curr_conds[i].damage_or_heal > 0)
                 {
@@ -571,44 +576,46 @@ public class playercontrol : MonoBehaviour
         {
             for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
             {
-                OtherGamers[ii].PlayerEffects.RegisterConds(OtherGamers[ii].Conds.curr_conds[iii]);
-
 
                 if (!OtherGamers[ii].Conds.curr_conds[iii].isChecked)
                 {
+
+                    OtherGamers[ii].PlayerEffects.RegisterConds(OtherGamers[ii].Conds.curr_conds[iii]);
+
+                    
                     if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "co")
                     {
                         //MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time);
                         StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii].cond_id, OtherGamers[ii].Conds.curr_conds[iii].spell_index, OtherGamers[ii].Conds.curr_conds[iii].cond_time));
-                        
+
                         //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
                         OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
                     }
-                }
 
 
-                if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "me" && !OtherGamers[ii].Conds.curr_conds[iii].isChecked)
-                {
-                    if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "d")
+                    if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "me" )
                     {
-                        MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
-                        OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
-                        
+                        if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "d")
+                        {
+                            MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
+                            OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+
+                        }
+                        else if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "b")
+                        {
+                            MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
+                            OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+                        }
                     }
-                    else if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "b")
-                    {
-                        MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
-                        OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
-                    }
+
+                    OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+
                 }
             }
         }
 
     }
-
-
-
-      
+          
     
 
     void PredictionMachine(float Horizontal, float Vertical, Vector3 old_pos, Vector3 old_rot, out Vector3 position_delta, out Vector3 rotation_delta)

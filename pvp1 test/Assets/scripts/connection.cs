@@ -148,7 +148,7 @@ public class connection : MonoBehaviour
         {
 
             StringBuilder messrec = new StringBuilder();
-            byte[] msgBuff = new byte[256*general.SessionNumberOfPlayers];
+            byte[] msgBuff = new byte[65000];
             int size = 0;
             
             {
@@ -175,7 +175,7 @@ public class connection : MonoBehaviour
                     print(messrec.ToString());
                 }
                 */
-                print(messrec.ToString());
+                //print(messrec.ToString());
 
                 howmany--;
 

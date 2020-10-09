@@ -676,6 +676,9 @@ public static class SendAndReceive
             case 8:
                 ReturnMess = "hit+DOT";
                 break;
+            case 10:
+                ReturnMess = "you are stunned!";
+                break;
 
         }
         return ReturnMess;
@@ -1102,7 +1105,7 @@ public class Buttons
         SpellButton3.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell3).Spell1_icon;
         SpellButton4.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell4).Spell1_icon;
         SpellButton5.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell5).Spell1_icon;
-        //SpellButton6.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell6).Spell1_icon;
+        SpellButton6.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell6).Spell1_icon;
     }
 
     private void Button1Pressed()
