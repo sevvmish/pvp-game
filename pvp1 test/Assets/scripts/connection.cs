@@ -73,12 +73,19 @@ public class connection : MonoBehaviour
         if ((SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) < 4)
         {
             ListenToServer();
-        } 
+        } else if ((SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) > 8)
+        {
+            Reconnect();
+        }
 
     }
 
     public void Reconnect()
     {
+
+        SendAndReceive.OrderReceived = 0;
+        SendAndReceive.DataForSending.OrderToSend = 0;
+
         endpoint = new IPEndPoint(IPAddress.Parse(CurrentIP), CurrentPort);
         remoteIp = new IPEndPoint(IPAddress.Any, 0);
         sck = new Socket(AddressFamily.InterNetwork, SocketType.Dgram , ProtocolType.Udp);

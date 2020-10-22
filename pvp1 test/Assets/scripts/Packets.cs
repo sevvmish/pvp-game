@@ -324,6 +324,12 @@ public struct AnimationsForPlayers
                         SuperAttack();
                     }
                     break;
+                case 13:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell"))
+                    {
+                        ChannelingSpell();
+                    }
+                    break;
             }
         }
 
@@ -437,6 +443,14 @@ public struct AnimationsForPlayers
     {
         animator.Play("superior attack");
         CurrentAnimationState = 12;
+
+    }
+
+
+    void ChannelingSpell()
+    {
+        animator.Play("channeling spell");
+        CurrentAnimationState = 13;
 
     }
 
