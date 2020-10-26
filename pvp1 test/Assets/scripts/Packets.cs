@@ -186,7 +186,7 @@ public struct AnimationsForPlayers
 
     public void RefreshAnimations(int state)
     {
-        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10) && (state==1 || state==0) )
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13) && (state==1 || state==0) )
         {
             Idle();
         }
