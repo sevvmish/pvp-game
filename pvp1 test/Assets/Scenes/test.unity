@@ -812,10 +812,15 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 6baff6d4af9243c4aa83de457c8d0a8e, type: 2}
+    - target: {fileID: -9047021058368736630, guid: 4d263545f112b174ca5a2c5f16034b88,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d263545f112b174ca5a2c5f16034b88,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.16483998
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d263545f112b174ca5a2c5f16034b88,
         type: 3}
@@ -825,7 +830,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4d263545f112b174ca5a2c5f16034b88,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.4138458
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d263545f112b174ca5a2c5f16034b88,
         type: 3}
@@ -875,6 +880,16 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4d263545f112b174ca5a2c5f16034b88,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 4d263545f112b174ca5a2c5f16034b88,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e9d5bf299b7077a43b9dd6c11f9a3945, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 4d263545f112b174ca5a2c5f16034b88,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1309,6 +1324,10 @@ PrefabInstance:
     - target: {fileID: 100122, guid: b01a3f6cbfa877645ae1653f51bd4cbe, type: 3}
       propertyPath: m_Name
       value: VillagerHuman (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100122, guid: b01a3f6cbfa877645ae1653f51bd4cbe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400122, guid: b01a3f6cbfa877645ae1653f51bd4cbe, type: 3}
       propertyPath: m_LocalPosition.x
