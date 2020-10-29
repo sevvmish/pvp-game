@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DB : MonoBehaviour
 {
+    //WARRIOR
     public static spellsIDs spell1 = new spellsIDs(lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Spell1ShortDescri, lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee, 10);
     public static spellsIDs spell2 = new spellsIDs(lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), lang.Spell2ShortDescri, lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee, 20);
     public static spellsIDs spell3 = new spellsIDs(lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spell3"), lang.Spell3ShortDescri, lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff, 10);
@@ -11,8 +12,11 @@ public class DB : MonoBehaviour
     public static spellsIDs spell5 = new spellsIDs(lang.Spell5Name, 5, Resources.Load<Sprite>("sprites/spell5"), lang.Spell5ShortDescri, lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
     public static spellsIDs spell6 = new spellsIDs(lang.Spell6Name, 6, Resources.Load<Sprite>("sprites/spell6"), lang.Spell6ShortDescri, lang.Spell6FullDescri, spellsIDs.spell_types.direct_melee, 20);
 
+    //MAGE
     public static spellsIDs spell51 = new spellsIDs(lang.Spell51Name, 51, Resources.Load<Sprite>("sprites/spell51"), lang.Spell51ShortDescri, lang.Spell51FullDescri, spellsIDs.spell_types.direct_magic, 10);
     public static spellsIDs spell52 = new spellsIDs(lang.Spell52Name, 52, Resources.Load<Sprite>("sprites/spell52"), lang.Spell52ShortDescri, lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell53 = new spellsIDs(lang.Spell52Name, 53, Resources.Load<Sprite>("sprites/spell52"), lang.Spell52ShortDescri, lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell54 = new spellsIDs(lang.Spell52Name, 54, Resources.Load<Sprite>("sprites/spell52"), lang.Spell52ShortDescri, lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
 
     public static spellsIDs spell1002 = new spellsIDs(lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), lang.Spell1002ShortDescri, lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff,0);
 
@@ -44,6 +48,12 @@ public class DB : MonoBehaviour
                 break;
             case 52:
                 result = spell52;
+                break;
+            case 53:
+                result = spell53;
+                break;
+            case 54:
+                result = spell54;
                 break;
             case 1002:
                 result = spell1002;

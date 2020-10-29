@@ -195,24 +195,29 @@ public struct AnimationsForPlayers
         {
             CurrentAnimationState = 0;
         }
-        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("Runback")) && CurrentAnimationState != 1)
+        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && CurrentAnimationState != 1)
         {
             CurrentAnimationState = 1;
         }
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && playercontrol.MyJoystick.Vertical < 0 && CurrentAnimationState==1)
+        if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && playercontrol.MyJoystick.Vertical <= -0.3f && CurrentAnimationState==1)
         {
             animator.Play("Runback");
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") && playercontrol.MyJoystick.Vertical >= 0 && CurrentAnimationState == 1)
+        } 
+        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && playercontrol.MyJoystick.Vertical >= 0.3f && CurrentAnimationState == 1)
         {
             animator.Play("Run");
         }
+        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("Runback")) && playercontrol.MyJoystick.Vertical < 0.3f && playercontrol.MyJoystick.Vertical > -0.3f && CurrentAnimationState == 1)
+        {
+            animator.Play("turning");
+        }
 
-       
-        //data control send to EFFECTS
-        //STUNNED
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
+                
+
+            //data control send to EFFECTS
+            //STUNNED
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
         {
             MyEffects.isStunned = true;
         }
@@ -348,21 +353,20 @@ public struct AnimationsForPlayers
 
     void Run()
     {
-        /*
-        if (MyAudioSource.clip != BasicMovement)
-        {
-            MyAudioSource.loop = true;
-            MyAudioSource.clip = BasicMovement;
-            MyAudioSource.Play();
-        }
-        */
-        if (playercontrol.MyJoystick.Vertical >= 0)
+        
+        if (playercontrol.MyJoystick.Vertical >= 0.3f)
         {
             animator.Play("Run");
-        } else
+        } 
+        else if (playercontrol.MyJoystick.Vertical <= -0.3f)
         {
             animator.Play("Runback");
         }
+        else if (playercontrol.MyJoystick.Vertical < 0.3f && playercontrol.MyJoystick.Vertical > -0.3f)
+        {
+            animator.Play("turning");
+        }
+
         CurrentAnimationState = 1;
     }
 

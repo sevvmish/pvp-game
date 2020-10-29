@@ -9,6 +9,7 @@ public class effects : MonoBehaviour
     //private SessionData[] OtherPlayers = new SessionData[general.SessionNumberOfPlayers - 1];
 
     public int MyPlayerClass;
+    private Transform VFXRespPlace;
 
     private List<Conds> CurrentConds = new List<Conds>();
     private List<Conds> CastingSpell = new List<Conds>();
@@ -27,7 +28,7 @@ public class effects : MonoBehaviour
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
 
     //mage 1 effects
-    public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor;
+    public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff;
 
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
@@ -37,7 +38,7 @@ public class effects : MonoBehaviour
     {
         Vector3 result = Vector3.zero;
 
-        Transform source = GameObject.Find("OtherPlayers").transform;
+        Transform source = VFXRespPlace;
 
         for (int i = 0; i < source.childCount; i++)
         {
@@ -53,8 +54,8 @@ public class effects : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {      
-
+    {
+        VFXRespPlace = GameObject.Find("OtherPlayers").transform;
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
@@ -86,6 +87,8 @@ public class effects : MonoBehaviour
             CastingEffFireHandR.SetActive(false);
             Fireball.SetActive(false);
             Meteor.SetActive(false);
+            FireHandEff.SetActive(false);
+            FireStepEff.SetActive(false);
         }
 
     }
@@ -197,9 +200,9 @@ public class effects : MonoBehaviour
             {
                 bool isOK = true;
 
-                for (int i=0; i<CurrentConds.Count; i++)
+                for (int i = 0; i < CurrentConds.Count; i++)
                 {
-                    if (CurrentConds[i].spell_index==SomeConds.spell_index)
+                    if (CurrentConds[i].spell_index == SomeConds.spell_index)
                     {
                         CurrentConds[i].coord_x = SomeConds.coord_x;
                         CurrentConds[i].coord_z = SomeConds.coord_z;
@@ -210,7 +213,7 @@ public class effects : MonoBehaviour
                 if (isOK)
                 {
                     CurrentConds.Add(SomeConds);
-                    int CurrCondIndex = CurrentConds.Count-1;
+                    int CurrCondIndex = CurrentConds.Count - 1;
 
                     switch (SomeConds.spell_index)
                     {
@@ -219,6 +222,9 @@ public class effects : MonoBehaviour
                             break;
                         case 52:
                             StartCoroutine(SpellShooting52(CurrentConds[CurrCondIndex]));
+                            break;
+                        case 54:
+                            StartCoroutine(SpellShooting54(CurrentConds[CurrCondIndex]));
                             break;
                     }
 
@@ -233,7 +239,7 @@ public class effects : MonoBehaviour
 
                 case "me-b":
 
-                    if (MyPlayerClass == 1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f));
+                    if (MyPlayerClass == 1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f, 0));
 
                     break;
             }
@@ -244,13 +250,13 @@ public class effects : MonoBehaviour
                 if (DB.GetSpellByNumber(SomeConds.spell_index).spell_type == spellsIDs.spell_types.direct_melee)
                 {
                     StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
-                    
+
                 }
                 else if (DB.GetSpellByNumber(SomeConds.spell_index).spell_type == spellsIDs.spell_types.direct_magic)
                 {
 
                     StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
-                    StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f));
+                    StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
                 }
 
             }
@@ -269,201 +275,62 @@ public class effects : MonoBehaviour
 
 
 
-            //ONLY FOR WARRIOR
-            if (MyPlayerClass == 1)
+            //ONLY FOR WARRIOR====================================            
+            if (SomeConds.cond_type == "ca" && SomeConds.spell_index == 4)
             {
-
-                if (SomeConds.cond_type == "ca" && SomeConds.spell_index == 4)
-                {
-                    StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, SomeConds.cond_time));
-
-                }
+                StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, SomeConds.cond_time, 0));
 
             }
-            //=======================
-
 
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 3)
             {
                 PlayerAnimator.Play("buff");
-                StartCoroutine(TurnOnSomeEffect(BuffEff, 6f));
+                StartCoroutine(TurnOnSomeEffect(BuffEff, 6f, 0));
                 StartCoroutine(PlaySomeSound(BuffSound, 0, false));
             }
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 5)
             {
-                StartCoroutine(TurnOnSomeEffect(ShieldOnEff, SomeConds.cond_time));
+                StartCoroutine(TurnOnSomeEffect(ShieldOnEff, SomeConds.cond_time, 0));
 
             }
 
-
-            //SPELL 2 bleeding
+                                
             if (SomeConds.cond_type == "dt" && SomeConds.spell_index == 2 && SomeConds.damage_or_heal > 0)
             {
-                StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f));
+                StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f, 0));
                 StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
             }
-        }
+            //=====================================================
 
 
 
-
-
-        /*
-        if (CurrentConds.Count > 0)
-        {
-            if (CurrentConds.Count > general.SessionNumberOfPlayers * 10)
+            
+            //MMMMMMMMAAAAAAAAAGGGGGGGGGGGGEEEEEEEEE
+           
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 53)
             {
-                CurrentConds.Remove(CurrentConds[0]);
+                StartCoroutine(TurnOnSomeEffect(FireHandEff, 2.5f, 0.5f));
+                StartCoroutine(TurnOnSomeEffect(CastingEffFireHandR, 3f, 0));                    
             }
 
-            bool isgood = true;
-            for (int i = 0; i < CurrentConds.Count; i++)
-            {
-                if (CurrentConds[i].cond_id == SomeConds.cond_id)
-                {
-                    isgood = false;
-                }
-            }
-            if (isgood)
-            {
 
-                CurrentConds.Add(SomeConds);
-                WorkWithCond(CurrentConds[CurrentConds.Count - 1]);
-            }
+
+
+
+           
+            //=====================================================
+
+
+
+
         }
-        else
-        {
-            CurrentConds.Add(SomeConds);
-            WorkWithCond(CurrentConds[CurrentConds.Count - 1]);
-        }
-        */
 
 
     }
 
-    private void WorkWithCond(Conds ConditionToProcess)
-    {
-        //print(ConditionToProcess.cond_id + "-ID, " + ConditionToProcess.cond_bulk + " - all  ///" + ConditionToProcess.isChecked);
-
-        /*
-        if (!ConditionToProcess.isChecked)
-        {
-            
-
-            if (ConditionToProcess.cond_type == "cs" && !isSpellShooting)
-            {
-                
-                
-                isSpellShooting = true;
-                switch(ConditionToProcess.spell_index)
-                {
-                    case 51:
-                        StartCoroutine(SpellShooting51());
-                        break;
-                    case 52:
-                        StartCoroutine(SpellShooting52());
-                        break;
-                }
-                
-                
-            }
-
-            if (ConditionToProcess.cond_type != "cs" && isSpellShooting)
-            {
-                isSpellShooting = false;
-                
-            }
-
-            switch (ConditionToProcess.cond_bulk)
-            {
-
-                case "me-b":
-
-                    if (MyPlayerClass == 1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f));
-
-                    break;
-            }
-
-            if (ConditionToProcess.cond_type.Contains("dt") && ConditionToProcess.damage_or_heal>0)
-            {
-                
-                if (DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type == spellsIDs.spell_types.direct_melee)
-                {
-                    StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
-                } 
-                else if (DB.GetSpellByNumber(ConditionToProcess.spell_index).spell_type == spellsIDs.spell_types.direct_magic)
-                {
-                    
-                    StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
-                    StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f));
-                }
-                
-            }
-
-
-            if (ConditionToProcess.cond_type == "dt" && ConditionToProcess.spell_index == 4)
-            {
-                StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));                          
-            }
-
-
-            if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.cond_message == "CANCELED")
-            {
-                CancelCasting();
-            }
-
-
-
-
-
-                //ONLY FOR WARRIOR
-                if (MyPlayerClass == 1)
-            {
-                
-                if (ConditionToProcess.cond_type == "ca" && ConditionToProcess.spell_index == 4)
-                {
-                    StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, ConditionToProcess.cond_time));
-
-                }
-                
-            }
-            //=======================
-
-
-            if (ConditionToProcess.cond_type == "dg" && ConditionToProcess.damage_or_heal > 0 && ConditionToProcess.isCrit)
-            {
-                if (MyPlayerClass == 1)
-                {
-                    StartCoroutine(TurnOnSomeEffect(CritSwordEff, 1f));
-                }
-            }
-
-
-            if (ConditionToProcess.cond_type == "co" && ConditionToProcess.spell_index==3)
-            {
-                PlayerAnimator.Play("buff");
-                StartCoroutine(TurnOnSomeEffect(BuffEff, 6f));
-                StartCoroutine(PlaySomeSound(BuffSound, 0, false));
-            }
-
-            if (ConditionToProcess.cond_type == "co" && ConditionToProcess.spell_index == 5)
-            {                
-                StartCoroutine(TurnOnSomeEffect(ShieldOnEff, ConditionToProcess.cond_time));
-                
-            }
-
-
-            //SPELL 2 bleeding
-            if (ConditionToProcess.cond_type == "dt" && ConditionToProcess.spell_index == 2 && ConditionToProcess.damage_or_heal > 0)
-            {
-                StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f));
-                StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
-            }
-        }
-    */
-   }
+  
 
     public void StopSound()
     {
@@ -480,13 +347,15 @@ public class effects : MonoBehaviour
         }        
     }
 
-    IEnumerator TurnOnSomeEffect(GameObject SomeEffect, float timer)
+    IEnumerator TurnOnSomeEffect(GameObject SomeEffect, float HowLongTimer, float DelayBeforStart)
     {
+        yield return new WaitForSeconds(DelayBeforStart);
+
         if (!SomeEffect.activeSelf)
         {
             SomeEffect.SetActive(true);
             
-            yield return new WaitForSeconds(timer);
+            yield return new WaitForSeconds(HowLongTimer);
             SomeEffect.SetActive(false);
         }
     }
@@ -503,7 +372,7 @@ public class effects : MonoBehaviour
 
     IEnumerator SpellShooting51(Conds CurrConditions)
     {
-        GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+        GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.SetActive(true);
         for (float i=0; i<2; i+=0.04f)
         {
@@ -521,7 +390,7 @@ public class effects : MonoBehaviour
     IEnumerator SpellShooting52(Conds CurrConditions)
     {
         
-        GameObject SpellSource = Instantiate(Meteor, Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+        GameObject SpellSource = Instantiate(Meteor, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.SetActive(true);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
         isSpellShooting = false;
@@ -533,6 +402,21 @@ public class effects : MonoBehaviour
         
     }
 
+    IEnumerator SpellShooting54(Conds CurrConditions)
+    {
+
+        GameObject SpellSource = Instantiate(FireStepEff, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.SetActive(true);
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
+        isSpellShooting = false;
+        yield return new WaitForSeconds(0.1f);
+        CurrentConds.Remove(CurrConditions);
+        yield return new WaitForSeconds(3f);
+        SpellSource.SetActive(false);
+        Destroy(SpellSource);
+
+    }
+
 
     public IEnumerator SpellShooting(Conds CastingConds)
     {
@@ -542,19 +426,6 @@ public class effects : MonoBehaviour
         yield return new WaitForSeconds(0.04f);
 
 
-        /*
-        GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
-        SpellSource.SetActive(true);
-        do
-        {
-            SpellSource.transform.position = new Vector3(CastingPos.x, 1, CastingPos.y);
-            //print(isSpellShooting + "=============================");
-            yield return new WaitForSeconds(0.04f);
-        }
-        while (isSpellShooting);
-        SpellSource.SetActive(false);
-        Destroy(SpellSource);
-        */
     }
 
 
