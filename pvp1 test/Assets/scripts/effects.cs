@@ -15,6 +15,7 @@ public class effects : MonoBehaviour
     private List<Conds> CastingSpell = new List<Conds>();
     private List<Vector2> CastingCoords = new List<Vector2>();
 
+    private ObjectPooling FireSteps;
 
     public bool isStunned, isShieldSlam, isCasting, isChanneling, isSpellShooting;
 
@@ -55,7 +56,9 @@ public class effects : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         VFXRespPlace = GameObject.Find("OtherPlayers").transform;
+        FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
@@ -405,15 +408,13 @@ public class effects : MonoBehaviour
     IEnumerator SpellShooting54(Conds CurrConditions)
     {
 
-        GameObject SpellSource = Instantiate(FireStepEff, Vector3.zero, Quaternion.identity, VFXRespPlace);
-        SpellSource.SetActive(true);
+        GameObject SpellSource = FireSteps.GetObject();
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
         isSpellShooting = false;
         yield return new WaitForSeconds(0.1f);
         CurrentConds.Remove(CurrConditions);
         yield return new WaitForSeconds(3f);
         SpellSource.SetActive(false);
-        Destroy(SpellSource);
 
     }
 

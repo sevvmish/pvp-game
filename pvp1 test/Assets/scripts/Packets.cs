@@ -27,7 +27,7 @@ public class Conds
 
 public class ConditionsAnalys
 {
-
+    
     int Limit = general.SessionNumberOfPlayers * 10;
 
     public List<Conds> curr_conds = new List<Conds>();
@@ -1255,4 +1255,38 @@ public class Buttons
         return result;
     }
 
+}
+
+
+
+public class ObjectPooling : MonoBehaviour
+{
+    public GameObject[] Objects;
+
+    public ObjectPooling(int Index, GameObject Example, Transform Storage)
+    {
+        Objects = new GameObject[Index];
+
+        for (int i = 0; i < Objects.Length; i++)
+        {
+            Objects[i] = Instantiate(Example, Storage);
+            Objects[i].SetActive(false);
+        }
+    }
+
+    public GameObject GetObject()
+    {
+        GameObject result = Objects[0];
+        for (int i = 0; i < Objects.Length; i++)
+        {
+            if (!Objects[i].activeSelf)
+            {
+                Objects[i].SetActive(true);
+                return Objects[i];
+            }
+        }
+
+        return result;
+
+    }
 }
