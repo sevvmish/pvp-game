@@ -186,7 +186,8 @@ public struct AnimationsForPlayers
 
     public void RefreshAnimations(int state)
     {
-        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13) && (state==1 || state==0) )
+        
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13) && (/*state==1 || state==0*/ state < 2) )
         {
             Idle();
         }
@@ -195,11 +196,34 @@ public struct AnimationsForPlayers
         {
             CurrentAnimationState = 0;
         }
+        /*
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") && CurrentAnimationState != -2)
+        {
+            CurrentAnimationState = -2;
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("turning") && CurrentAnimationState != -1)
+        {
+            CurrentAnimationState = 0;
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("run") && CurrentAnimationState != 1)
+        {
+            CurrentAnimationState = 1;
+        }
+        */
+
+        /*
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && CurrentAnimationState != 0)
+        {
+            CurrentAnimationState = 0;
+        }
         else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && CurrentAnimationState != 1)
         {
             CurrentAnimationState = 1;
         }
-
+        */
+        /*
         if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && playercontrol.MyJoystick.Vertical <= -0.3f && CurrentAnimationState==1)
         {
             animator.Play("Runback");
@@ -212,12 +236,12 @@ public struct AnimationsForPlayers
         {
             animator.Play("turning");
         }
+        */
 
-                
 
-            //data control send to EFFECTS
-            //STUNNED
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
+        //data control send to EFFECTS
+        //STUNNED
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
         {
             MyEffects.isStunned = true;
         }
@@ -250,7 +274,18 @@ public struct AnimationsForPlayers
         {
             switch (state)
             {
-
+                case -2:
+                    if (CurrentAnimationState < 2)
+                    {
+                        Runback();
+                    }
+                    break;
+                case -1:
+                    if (CurrentAnimationState < 2)
+                    {
+                        turning();
+                    }
+                    break;
                 case 0:
                     if (CurrentAnimationState < 2)
                     {
@@ -341,6 +376,18 @@ public struct AnimationsForPlayers
         PrevAnimationState = CurrentAnimationState;
     }
 
+    void Runback()
+    {
+        animator.Play("Runback");
+        CurrentAnimationState = -2;
+    }
+
+    void turning()
+    {
+        animator.Play("turning");
+        CurrentAnimationState = -1;
+    }
+
     void Idle()
     {
         
@@ -353,7 +400,7 @@ public struct AnimationsForPlayers
 
     void Run()
     {
-        
+        /*
         if (playercontrol.MyJoystick.Vertical >= 0.3f)
         {
             animator.Play("Run");
@@ -366,7 +413,8 @@ public struct AnimationsForPlayers
         {
             animator.Play("turning");
         }
-
+        */
+        animator.Play("Run");
         CurrentAnimationState = 1;
     }
 

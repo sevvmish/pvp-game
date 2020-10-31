@@ -15,6 +15,8 @@ public class effects : MonoBehaviour
     private List<Conds> CastingSpell = new List<Conds>();
     private List<Vector2> CastingCoords = new List<Vector2>();
 
+    private List<GameObject> Cancels = new List<GameObject>();
+
     private ObjectPooling FireSteps;
 
     public bool isStunned, isShieldSlam, isCasting, isChanneling, isSpellShooting;
@@ -58,7 +60,7 @@ public class effects : MonoBehaviour
     {
         
         VFXRespPlace = GameObject.Find("OtherPlayers").transform;
-        FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
+        
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
@@ -71,6 +73,7 @@ public class effects : MonoBehaviour
         ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
         CancelCastingEffinBar = Resources.Load<AudioClip>("sounds/canceled spell sound");
         CastingSpellSound = Resources.Load<AudioClip>("sounds/casting spell");
+        
 
         if (MyPlayerClass == 1)
         {
@@ -91,6 +94,7 @@ public class effects : MonoBehaviour
             Fireball.SetActive(false);
             Meteor.SetActive(false);
             FireHandEff.SetActive(false);
+            FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
             FireStepEff.SetActive(false);
         }
 
@@ -100,7 +104,8 @@ public class effects : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+
+       
         if (Input.GetKeyDown(KeyCode.O))
         {
             print(GetPlayerCoordsByOrderNumber(1) + " - " + GetPlayerCoordsByOrderNumber(2));
@@ -273,6 +278,7 @@ public class effects : MonoBehaviour
 
             if (SomeConds.cond_type == "ca" && SomeConds.cond_message == "CANCELED")
             {
+                
                 CancelCasting();
             }
 
@@ -315,9 +321,14 @@ public class effects : MonoBehaviour
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 53)
             {
                 StartCoroutine(TurnOnSomeEffect(FireHandEff, 2.5f, 0.5f));
-                StartCoroutine(TurnOnSomeEffect(CastingEffFireHandR, 3f, 0));                    
+                StartCoroutine(TurnOnSomeEffect(CastingEffFireHandR, 2.5f, 0));                    
             }
-
+            if (SomeConds.cond_type == "ca" && SomeConds.cond_message == "CANCELED" && (FireHandEff.activeSelf || CastingEffFireHandR.activeSelf))
+            {                
+                StartCoroutine(TurnOFFSomeEffect(FireHandEff, 0.61f));
+                StartCoroutine(TurnOFFSomeEffect(CastingEffFireHandR, 0.05f));
+                
+            }
 
 
 
@@ -350,6 +361,15 @@ public class effects : MonoBehaviour
         }        
     }
 
+    IEnumerator TurnOFFSomeEffect(GameObject SomeEffect, float CleanTime)
+    {
+        Cancels.Add(SomeEffect);
+        SomeEffect.SetActive(false);
+        yield return new WaitForSeconds(CleanTime);
+        Cancels.Remove(SomeEffect);
+    }
+
+
     IEnumerator TurnOnSomeEffect(GameObject SomeEffect, float HowLongTimer, float DelayBeforStart)
     {
         yield return new WaitForSeconds(DelayBeforStart);
@@ -357,8 +377,21 @@ public class effects : MonoBehaviour
         if (!SomeEffect.activeSelf)
         {
             SomeEffect.SetActive(true);
+
+            //yield return new WaitForSeconds(HowLongTimer);
+            float delta = HowLongTimer / 0.04f;
+            for (float i=0; i< HowLongTimer; i+=0.04f)
+            {
+                
+                if (Cancels.Contains(SomeEffect))
+                {
+                    
+                    break;
+                }
+
+                yield return new WaitForSeconds(0.04f);
+            }
             
-            yield return new WaitForSeconds(HowLongTimer);
             SomeEffect.SetActive(false);
         }
     }
@@ -378,8 +411,7 @@ public class effects : MonoBehaviour
         GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.SetActive(true);
         for (float i=0; i<2; i+=0.04f)
-        {
-            print(CurrConditions.coord_x + " - " + CurrConditions.coord_z);
+        {            
             SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z);
             //print(isSpellShooting + "=============================");
             yield return new WaitForSeconds(0.04f);
@@ -396,9 +428,11 @@ public class effects : MonoBehaviour
         GameObject SpellSource = Instantiate(Meteor, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.SetActive(true);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
+        StartCoroutine(TurnOnSomeEffect(SpellSource.transform.GetChild(0).gameObject, 1.5f, 1.5f));
         isSpellShooting = false;
         yield return new WaitForSeconds(0.1f);
         CurrentConds.Remove(CurrConditions);
+        
         yield return new WaitForSeconds(7f);       
         SpellSource.SetActive(false);
         Destroy(SpellSource);

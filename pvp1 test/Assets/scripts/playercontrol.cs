@@ -94,6 +94,7 @@ public class playercontrol : MonoBehaviour
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
         SessionData.GetDataSessionPlayers(SessionResult);
         general.SetSessionData();
+        /*
         if (general.DataForSession.Count > 0)
         {
             for (int i = 0; i < general.DataForSession.Count; i++)
@@ -101,7 +102,7 @@ public class playercontrol : MonoBehaviour
                 print(general.DataForSession[i].PlayerName + " - " + general.DataForSession[i].PlayerClass + " - " + general.DataForSession[i].PlayerOrder);
             }
         }
-
+        */
 
         ButtonsManagement.Init();
         
