@@ -94,7 +94,7 @@ public class playercontrol : MonoBehaviour
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
         SessionData.GetDataSessionPlayers(SessionResult);
         general.SetSessionData();
-        /*
+        
         if (general.DataForSession.Count > 0)
         {
             for (int i = 0; i < general.DataForSession.Count; i++)
@@ -102,7 +102,7 @@ public class playercontrol : MonoBehaviour
                 print(general.DataForSession[i].PlayerName + " - " + general.DataForSession[i].PlayerClass + " - " + general.DataForSession[i].PlayerOrder);
             }
         }
-        */
+        
 
         ButtonsManagement.Init();
         
@@ -133,7 +133,7 @@ public class playercontrol : MonoBehaviour
         OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
         for (int i = 1; i <= general.SessionNumberOfPlayers-1; i++)
         {
-            AddPlayer(Vector3.zero, Vector3.zero, OtherGamers, i);
+            AddPlayer(Vector3.zero, Vector3.zero, i);
         }
         
         StartCoroutine(SyncForPosition());
@@ -151,22 +151,30 @@ public class playercontrol : MonoBehaviour
     }
 
 
-    void AddPlayer(Vector3 pos, Vector3 rot, List<players> playerslist, int order)
+    void AddPlayer(Vector3 pos, Vector3 rot, int order)
     {
         //print(general.DataForSession[order].PlayerClass + "================================");
         int WhatPlayersClass = general.DataForSession[order].PlayerClass;
         GameObject ggg = Instantiate(general.GetPlayerByClass(WhatPlayersClass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
         ggg.GetComponent<effects>().MyPlayerClass = WhatPlayersClass;
         ggg.GetComponent<players>().NumberInSendAndReceive = (order-1);
+        ggg.GetComponent<players>().OtherPlayerName = general.DataForSession[order].PlayerName;
         ggg.GetComponent<effects>().PlayerSessionData = general.DataForSession[order];
-        playerslist.Add(ggg.GetComponent<players>());
+        ggg.GetComponent<players>().CreateUI();
+        OtherGamers.Add(ggg.GetComponent<players>());
+
+        /*
+        GameObject temp2 = Instantiate(Resources.Load<GameObject>("prefabs/otherplayerUI"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("CanvasInterface").transform);
+        temp2.name = general.DataForSession[order].PlayerName;
+        temp2.GetComponent<RectTransform>().anchoredPosition = new Vector2(970, -50*order*1.5f);
+        temp2.SetActive(true);
+        //ggg.GetComponent<players>().OtherPlayerUI = new PlayerUI(temp2, false);
+        OtherGamers[OtherGamers.Count-1].GetComponent<players>().OtherPlayerUI = new PlayerUI(temp2, false);
+        OtherGamers[OtherGamers.Count - 1].GetComponent<players>().OtherPlayerUI.AllObject = temp2;
+        */
 
         
-        GameObject temp2 = Instantiate(Resources.Load<GameObject>("prefabs/otherplayerUI"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("CanvasInterface").transform);
-        temp2.GetComponent<RectTransform>().anchoredPosition = new Vector2(970, -50);
-        temp2.SetActive(true);        
-        ggg.GetComponent<players>().OtherPlayerUI = new PlayerUI(temp2, false);
-        
+
     }
 
 
@@ -217,19 +225,21 @@ public class playercontrol : MonoBehaviour
                     print(MyConds.curr_conds[i].cond_id + " - " + MyConds.curr_conds[i].cond_bulk);
                 }
             }
+            */
 
+            
             if (Input.GetKeyDown(KeyCode.H))
             {
                 for (int i = 0; i < OtherGamers.Count; i++)
                 {
-                    for (int ii = 0; ii < OtherGamers[i].Conds.curr_conds.Count; ii++)
-                    {
-                        print(i + ": -" + OtherGamers[i].Conds.curr_conds[ii].cond_bulk);
-                    }            
-
+                    print(i + " - " + OtherGamers[i].OtherPlayerUI.HealthCurrentAmount + " : " + OtherGamers[i].OtherPlayerName);
                 }
-            }
-            */
+
+            print("0 - " + SendAndReceive.OtherPlayerData[0].health_pool);
+            print("1 - " + SendAndReceive.OtherPlayerData[1].health_pool);
+
+        }
+            
 
 
             if (SendAndReceive.SpecificationReceived == 1)

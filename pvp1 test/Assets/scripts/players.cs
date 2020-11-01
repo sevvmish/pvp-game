@@ -21,6 +21,8 @@ public class players : MonoBehaviour
     public ConditionsAnalys Conds = new ConditionsAnalys();
     public PlayerUI OtherPlayerUI;
 
+    public string OtherPlayerName;
+
     float rotAngle, sighAngle;
 
     // Start is called before the first frame update
@@ -31,12 +33,25 @@ public class players : MonoBehaviour
         TempText1 = GameObject.Find("OtherHP").GetComponent<TextMeshProUGUI>();
         PlayerTransform.position = Vector3.zero;
         PlayerEffects = this.GetComponent<effects>();
+
+        
+    }
+
+    public void CreateUI()
+    {
+        GameObject temp2 = Instantiate(Resources.Load<GameObject>("prefabs/otherplayerUI"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("CanvasInterface").transform);
+        temp2.name = OtherPlayerName;
+        temp2.GetComponent<RectTransform>().anchoredPosition = new Vector2(970, -50 * (NumberInSendAndReceive+1) * 1.5f);
+        temp2.SetActive(true);
+        OtherPlayerUI = new PlayerUI(temp2, false);
     }
 
     public void SyncPosNRot(float DeltaForLerp, float AverageCount)
     {
         
         TempText1.text = SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool.ToString();
+        OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].max_health_pool);
+        OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].energy);
         pos_n_rot(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].position, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].rotation, DeltaForLerp, AverageCount);
         PlayerAnimator.RefreshAnimations(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].animation_id);
 

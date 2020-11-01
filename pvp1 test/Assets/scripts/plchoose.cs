@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class plchoose : MonoBehaviour
 {
-    public Button pl1, pl2, pl3, pl4, pl5, pl6, pl7, pl8;
+    public Button pl1, pl2, pl2_3, pl3, pl4, pl5, pl6, pl7, pl8;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +15,7 @@ public class plchoose : MonoBehaviour
         Application.targetFrameRate = 60;
         pl1.onClick.AddListener(play1);
         pl2.onClick.AddListener(play2);
+        pl2_3.onClick.AddListener(play2_3);
         pl3.onClick.AddListener(play3);
         pl4.onClick.AddListener(play4);
         pl5.onClick.AddListener(play5);
@@ -37,6 +38,14 @@ public class plchoose : MonoBehaviour
     void play2()
     {
         general.SessionPlayerID = "player2";
+        general.SessionTicket = "session";
+        StartCoroutine(StartLevel());
+
+    }
+
+    void play2_3()
+    {
+        general.SessionPlayerID = "player3";
         general.SessionTicket = "session";
         StartCoroutine(StartLevel());
 

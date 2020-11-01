@@ -16,7 +16,7 @@ public class general
 
     public static List<SessionData> DataForSession = new List<SessionData>();
 
-    public static int SessionNumberOfPlayers = 2;
+    public static int SessionNumberOfPlayers = 3;
     public static int MainPlayerClass;
     public static string MainPlayerName;
     public static int MainPlayerOrder;
@@ -45,6 +45,7 @@ public class general
                 result = Resources.Load<GameObject>("prefabs/mage 1 prefab");
                 break;
             case 3:
+                result = Resources.Load<GameObject>("prefabs/barbarian 1 prefab");
                 break;
 
         }

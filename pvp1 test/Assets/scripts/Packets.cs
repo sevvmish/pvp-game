@@ -817,7 +817,7 @@ public class PlayerUI : MonoBehaviour
 {
     public GameObject AllObject;
     private GameObject cond_example;
-    private float HealthCurrentAmount = 0;
+    public float HealthCurrentAmount = 0;
     private float EnergyCurrentAmount = 0;
     private float HealthAllAmount = 0;
     private float EnergyAllAmount = 100;
