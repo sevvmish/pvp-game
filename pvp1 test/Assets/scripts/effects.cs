@@ -323,7 +323,7 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOnSomeEffect(FireHandEff, 2.5f, 0.5f));
                 StartCoroutine(TurnOnSomeEffect(CastingEffFireHandR, 2.5f, 0));                    
             }
-            if (SomeConds.cond_type == "ca" && SomeConds.cond_message == "CANCELED" && (FireHandEff.activeSelf || CastingEffFireHandR.activeSelf))
+            if (SomeConds.cond_type == "ca" && MyPlayerClass == 2 && SomeConds.cond_message == "CANCELED" && (FireHandEff.activeSelf || CastingEffFireHandR.activeSelf))
             {                
                 StartCoroutine(TurnOFFSomeEffect(FireHandEff, 0.61f));
                 StartCoroutine(TurnOFFSomeEffect(CastingEffFireHandR, 0.05f));
