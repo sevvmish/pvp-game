@@ -155,9 +155,11 @@ public class connection : MonoBehaviour
         {
 
             StringBuilder messrec = new StringBuilder();
-            byte[] msgBuff = new byte[65000];
+            byte[] msgBuff = new byte[1024 * general.SessionNumberOfPlayers];
             int size = 0;
+
             
+
             {
                 //size = sck.Receive(msgBuff);
                 size = sck.ReceiveFrom(msgBuff, ref remoteIp);

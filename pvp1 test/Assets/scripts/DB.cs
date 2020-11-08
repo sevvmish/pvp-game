@@ -18,6 +18,10 @@ public class DB : MonoBehaviour
     public static spellsIDs spell53 = new spellsIDs(lang.Spell52Name, 53, Resources.Load<Sprite>("sprites/spell52"), lang.Spell52ShortDescri, lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
     public static spellsIDs spell54 = new spellsIDs(lang.Spell52Name, 54, Resources.Load<Sprite>("sprites/spell52"), lang.Spell52ShortDescri, lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
 
+    //BARBARIAN
+    public static spellsIDs spell101 = new spellsIDs(lang.Spell51Name, 101, Resources.Load<Sprite>("sprites/spell51"), lang.Spell51ShortDescri, lang.Spell51FullDescri, spellsIDs.spell_types.direct_melee, 10);
+
+
     public static spellsIDs spell1002 = new spellsIDs(lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), lang.Spell1002ShortDescri, lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff,0);
 
     public static spellsIDs GetSpellByNumber(int SpellNumber)
@@ -54,6 +58,9 @@ public class DB : MonoBehaviour
                 break;
             case 54:
                 result = spell54;
+                break;
+            case 101:
+                result = spell101;
                 break;
             case 1002:
                 result = spell1002;

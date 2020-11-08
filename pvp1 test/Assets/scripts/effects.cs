@@ -33,6 +33,9 @@ public class effects : MonoBehaviour
     //mage 1 effects
     public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff;
 
+    //barbarian 1 effects
+    public GameObject SplashEffSimpleHit;
+
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
 
@@ -96,6 +99,12 @@ public class effects : MonoBehaviour
             FireHandEff.SetActive(false);
             FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
             FireStepEff.SetActive(false);
+        }
+
+        if (MyPlayerClass == 3)
+        {
+            SplashEffSimpleHit.SetActive(false);
+            
         }
 
     }
@@ -316,8 +325,7 @@ public class effects : MonoBehaviour
 
 
             
-            //MMMMMMMMAAAAAAAAAGGGGGGGGGGGGEEEEEEEEE
-           
+            //MMMMMMMMAAAAAAAAAGGGGGGGGGGGGEEEEEEEEE           
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 53)
             {
                 StartCoroutine(TurnOnSomeEffect(FireHandEff, 2.5f, 0.5f));
@@ -329,14 +337,14 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOFFSomeEffect(CastingEffFireHandR, 0.05f));
                 
             }
-
-
-
-
-           
             //=====================================================
 
 
+            //BARBARIAN==========================
+            if (SomeConds.cond_type == "dg" && SomeConds.spell_index == 101)
+            {
+                StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));                
+            }
 
 
         }
