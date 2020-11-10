@@ -187,7 +187,7 @@ public struct AnimationsForPlayers
     public void RefreshAnimations(int state)
     {
         
-        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13) && (/*state==1 || state==0*/ state < 2) )
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15) && (/*state==1 || state==0*/ state < 2) )
         {
             Idle();
         }
@@ -370,6 +370,24 @@ public struct AnimationsForPlayers
                         ChannelingSpell();
                     }
                     break;
+                case 14:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("invisibility"))
+                    {
+                        invisibility();
+                    }
+                    break;
+                case 15:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("hurricane"))
+                    {
+                        hurricane();
+                    }
+                    break;
+                case 16:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("heroic leap"))
+                    {
+                        heroicleap();
+                    }
+                    break;
             }
         }
 
@@ -393,27 +411,12 @@ public struct AnimationsForPlayers
         
         animator.Play("Idle");
         CurrentAnimationState = 0;
-        //MyAudioSource.Stop();
-        //MyAudioSource.clip = null;
-        
+                
     }
 
     void Run()
     {
-        /*
-        if (playercontrol.MyJoystick.Vertical >= 0.3f)
-        {
-            animator.Play("Run");
-        } 
-        else if (playercontrol.MyJoystick.Vertical <= -0.3f)
-        {
-            animator.Play("Runback");
-        }
-        else if (playercontrol.MyJoystick.Vertical < 0.3f && playercontrol.MyJoystick.Vertical > -0.3f)
-        {
-            animator.Play("turning");
-        }
-        */
+        
         animator.Play("Run");
         CurrentAnimationState = 1;
     }
@@ -506,15 +509,24 @@ public struct AnimationsForPlayers
 
     }
 
-    void Death()
+    void invisibility()
     {
-        animator.Play("Death");
-        CurrentAnimationState = 4;
-        //CurrentAnimationState = 4;
-        //StartCoroutine(CheckEnd("ReceiveDamage"));
+        animator.Play("invisibility");
+        CurrentAnimationState = 14;
     }
 
-    
+    void hurricane()
+    {
+        animator.Play("hurricane");
+        CurrentAnimationState = 15;
+    }
+
+    void heroicleap()
+    {
+        animator.Play("heroic leap");
+        CurrentAnimationState = 16;
+    }
+
 
 }
 
