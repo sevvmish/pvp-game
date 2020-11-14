@@ -757,6 +757,12 @@ public static class SendAndReceive
             case 10:
                 ReturnMess = "you are stunned!";
                 break;
+            case 11:
+                ReturnMess = "you are feared";
+                break;
+            case 12:
+                ReturnMess = "you are busy with another spell";
+                break;
 
         }
         return ReturnMess;

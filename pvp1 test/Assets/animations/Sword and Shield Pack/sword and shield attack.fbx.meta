@@ -38,7 +38,7 @@ ModelImporter:
       name: sword and shield superior att
       takeName: mixamo.com
       internalID: 0
-      firstFrame: 0
+      firstFrame: 10
       lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
