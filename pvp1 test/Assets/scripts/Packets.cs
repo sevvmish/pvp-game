@@ -299,10 +299,12 @@ public struct AnimationsForPlayers
                     }
                     break;
                 case 2:
+                    
                     if (!animator.GetCurrentAnimatorStateInfo(0).IsName("HitWith1H"))
                     {
                         HitWith1H();
                     }
+                    
                     break;
                 case 3:
                     if (!animator.GetCurrentAnimatorStateInfo(0).IsName("casting"))
