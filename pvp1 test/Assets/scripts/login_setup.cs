@@ -141,3 +141,42 @@ public class login_setup : MonoBehaviour
 
 }
 
+
+
+public static class codes
+{
+    public static string GetCodeResult(string CodeResult)
+    {
+        string result = null;
+
+        switch(CodeResult)
+        {
+            case "wll":
+                result = "wrong length for login";
+                break;
+            case "wlp":
+                result = "wrong length for password";
+                break;
+            case "uae":
+                result = "username allready exists";
+                break;
+            case "ecu":
+                result = "error creating new user in DB";
+                break;
+            case "ude":
+                result = "username doesn't exist";
+                break;
+            case "wp":
+                result = "wrong password";
+                break;
+            case "uc":
+                result = "user created";
+                break;
+        }
+
+        return result;
+
+    }
+}
+
+
