@@ -7,35 +7,80 @@ using System;
 using System.Text;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class login_setup : MonoBehaviour
 {
+    public Canvas NewLogOrGuest, CanvasLogin, CanvasGetServer, ConnectionError, CanvasWaiting;    
     public TMP_InputField login_input;
     public TMP_InputField password_input;
-    public Button login_button;
+    public Button login_button, createnew_button, beforelogin_newlog, beforelogin_asguest, MoscowButton;
     public TextMeshProUGUI InfoMessages;
+
+    public static bool isConnectionError;
 
     // Start is called before the first frame update    
     private void Start()
     {
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
+        NewLogOrGuest.gameObject.SetActive(false);
+        CanvasLogin.gameObject.SetActive(false);
+
+        if (SendAndGetLoginSetup("0~0~0~0") != "online")
+        {
+            isConnectionError = true;
+        }
+        else
+        {
+
+            if (PlayerPrefs.GetInt("EnterAs") == 0)
+            {
+                NewLogOrGuest.gameObject.SetActive(true);
+            }
+            else if (PlayerPrefs.GetInt("EnterAs") == 2)
+            {
+                StartCoroutine(WaitingAndEnter());
+
+            }
+            else if (PlayerPrefs.GetInt("EnterAs") == 1)
+            {
+
+                CanvasLogin.gameObject.SetActive(true);
+
+            }
+        }
+
+
+        
+        
+        CanvasGetServer.gameObject.SetActive(false);
+        ConnectionError.gameObject.SetActive(false);
+        
+        beforelogin_newlog.onClick.AddListener(Beforelogin_newlog);
         login_button.onClick.AddListener(TryLoginSend);
+        beforelogin_asguest.onClick.AddListener(Beforelogin_asguest);
+        createnew_button.onClick.AddListener(CreateNewLog);
         login_button.interactable = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        if (isConnectionError)
+        {
+            StartCoroutine(ConnectionErr());
+        }
+
         if (login_input.text != null && password_input.text != null)
         {
 
             bool isOK = true;
-            if (login_input.text.Length < 8 || login_input.text.Length > 18)
+            if (login_input.text.Length < 8 || login_input.text.Length > 16)
             {
                 isOK = false;
             }
 
-            if (password_input.text.Length < 8 || password_input.text.Length > 18)
+            if (password_input.text.Length < 8 || password_input.text.Length > 16)
             {
                 isOK = false;
             }
@@ -44,25 +89,116 @@ public class login_setup : MonoBehaviour
             if (isOK)
             {
                 login_button.interactable = true;
-                InfoMessages.text = "";
+                createnew_button.interactable = true;
+                //InfoMessages.text = "";
             }
             else
             {
                 login_button.interactable = false;
+                createnew_button.interactable = false;
             }
         }
         else
         {
             login_button.interactable = false;
+            createnew_button.interactable = false;
+        }
+    }
+
+
+
+    public void Beforelogin_asguest()
+    {
+
+        if (PlayerPrefs.GetString("GuestLogin")=="")
+        {
+            string result1 = SendAndGetLoginSetup("0~2");
+                        
+            string[] getstr1 = result1.Split('~');
+            
+            if (result1==null || result1=="")
+            {
+                StartCoroutine(ConnectionErr());
+                
+            } else
+            {                
+                PlayerPrefs.SetString("GuestLogin", getstr1[2]);
+                PlayerPrefs.SetString("GuestPassword", getstr1[3]);
+                string result = SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+                string[] getstr = result.Split('~');
+                general.CurrentTicket = getstr[2];
+                print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
+            }            
+        } 
+        else
+        {
+            string result = SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+            string[] getstr = result.Split('~');
+
+            if (result == null || result == "")
+            {
+                StartCoroutine(ConnectionErr());
+
+            } else
+            {
+                general.CurrentTicket = getstr[2];
+                print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
+            }            
         }
 
+        //add the server map
+        PlayerPrefs.SetInt("EnterAs", 2);
+        SceneManager.LoadScene("plchoose");
+    }
 
+
+    public void Beforelogin_newlog()
+    {
+        NewLogOrGuest.gameObject.SetActive(false);
+        CanvasLogin.gameObject.SetActive(true);
     }
 
     private void TryLoginSend()
     {
-        print(SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text));
+        string result = SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
+        string[] getstr = result.Split('~');
+
+        if (result == null || result == "")
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        else if (getstr[2]=="wll" || getstr[2] == "wlp" || getstr[2] == "ude" || getstr[2] == "wp")
+        {
+            StartCoroutine(Info(getstr[2]));
+        } 
+        else
+        {
+            general.CurrentTicket = getstr[2];
+            print(general.CurrentTicket + " - " + login_input.text + " - " + password_input.text);
+            PlayerPrefs.SetInt("EnterAs", 1);
+            SceneManager.LoadScene("plchoose");
+        }
     }
+
+    private void CreateNewLog()
+    {
+        string result = SendAndGetLoginSetup("0~0~" + login_input.text + "~" + password_input.text);
+        string[] getstr = result.Split('~');
+
+        if (result == null || result == "")
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        else if (getstr[2] == "wll" || getstr[2] == "wlp" || getstr[2] == "uae" || getstr[2] == "ecu")
+        {
+            StartCoroutine(Info(getstr[2]));
+        }
+        else
+        {
+            TryLoginSend();
+        }
+    }
+
 
     public static string SendAndGetLoginSetup(string DataForSending)
     {
@@ -79,12 +215,16 @@ public class login_setup : MonoBehaviour
         }
         catch (Exception ex)
         {
+            isConnectionError = true;
             Debug.Log(ex);
             result = ex.ToString();
 
+            /*
             sck.Shutdown(SocketShutdown.Both);
             sck.Close();
+            */
             return result;
+            
         }
         //===============================SEND======================================
         try
@@ -93,6 +233,7 @@ public class login_setup : MonoBehaviour
         }
         catch (Exception ex)
         {
+            isConnectionError = true;
             Debug.Log(ex);
             result = ex.ToString();
 
@@ -124,6 +265,7 @@ public class login_setup : MonoBehaviour
         }
         catch (Exception ex)
         {
+            isConnectionError = true;
             Debug.Log(ex);
             result = ex.ToString();
 
@@ -135,11 +277,49 @@ public class login_setup : MonoBehaviour
         sck.Shutdown(SocketShutdown.Both);
         sck.Close();
         return result;
-
     }
 
 
+    IEnumerator ConnectionErr()
+    {
+        ConnectionError.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("login");
+    }
+
+    IEnumerator WaitingAndEnter()
+    {
+        CanvasWaiting.gameObject.SetActive(true);
+
+
+        string result = SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+        string[] getstr = result.Split('~');
+
+        if (result == null || result == "")
+        {
+            StartCoroutine(ConnectionErr());
+
+        }
+        else
+        {
+            general.CurrentTicket = getstr[2];
+            print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
+        }
+
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("plchoose");
+    }
+
+    IEnumerator Info(string Message)
+    {
+        InfoMessages.text = codes.GetCodeResult(Message);        
+        yield return new WaitForSeconds(1f);
+        InfoMessages.text = "";
+    }
+
 }
+
 
 
 

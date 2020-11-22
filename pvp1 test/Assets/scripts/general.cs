@@ -6,13 +6,14 @@ public class general
 {
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string GameServerIP = "45.67.57.30";  //134.0.116.169       45.67.57.30
+    public static string GameServerIP = "45.67.57.30";  //134.0.116.169       45.67.57.30      185.18.53.239
 
     public static int LoginServerTCPPort = 2324;
-    public static string LoginServerIP = "45.67.57.30";
+    public static string LoginServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
 
     public static string SessionPlayerID; //playerX
     public static string SessionTicket; //sessionX
+    public static string CurrentTicket; //current ticket
 
     public static List<SessionData> DataForSession = new List<SessionData>();
 
