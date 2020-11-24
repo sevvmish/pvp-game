@@ -30,6 +30,8 @@ public class player_choose : MonoBehaviour
         pl3.onClick.AddListener(Click3);
         pl4.onClick.AddListener(Click4);
         pl5.onClick.AddListener(Click5);
+
+        print(sr.SendAndGetLoginSetup("1~0~" + "77NGYzGd9"));
     }
 
     // Update is called once per frame

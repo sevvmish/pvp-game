@@ -17,7 +17,7 @@ public class login_setup : MonoBehaviour
     public Button login_button, createnew_button, beforelogin_newlog, beforelogin_asguest, MoscowButton;
     public TextMeshProUGUI InfoMessages;
 
-    public static bool isConnectionError;
+    
 
     // Start is called before the first frame update    
     private void Start()
@@ -27,9 +27,9 @@ public class login_setup : MonoBehaviour
         NewLogOrGuest.gameObject.SetActive(false);
         CanvasLogin.gameObject.SetActive(false);
 
-        if (SendAndGetLoginSetup("0~0~0~0") != "online")
+        if (sr.SendAndGetLoginSetup("0~0~0~0") != "online")
         {
-            isConnectionError = true;
+            sr.isConnectionError = true;
         }
         else
         {
@@ -66,7 +66,7 @@ public class login_setup : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isConnectionError)
+        if (sr.isConnectionError)
         {
             StartCoroutine(ConnectionErr());
         }
@@ -112,7 +112,7 @@ public class login_setup : MonoBehaviour
 
         if (PlayerPrefs.GetString("GuestLogin")=="")
         {
-            string result1 = SendAndGetLoginSetup("0~2");
+            string result1 = sr.SendAndGetLoginSetup("0~2");
                         
             string[] getstr1 = result1.Split('~');
             
@@ -124,7 +124,7 @@ public class login_setup : MonoBehaviour
             {                
                 PlayerPrefs.SetString("GuestLogin", getstr1[2]);
                 PlayerPrefs.SetString("GuestPassword", getstr1[3]);
-                string result = SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+                string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
                 string[] getstr = result.Split('~');
                 general.CurrentTicket = getstr[2];
                 print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
@@ -132,7 +132,7 @@ public class login_setup : MonoBehaviour
         } 
         else
         {
-            string result = SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+            string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
             string[] getstr = result.Split('~');
 
             if (result == null || result == "")
@@ -160,7 +160,7 @@ public class login_setup : MonoBehaviour
 
     private void TryLoginSend()
     {
-        string result = SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
+        string result = sr.SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
         string[] getstr = result.Split('~');
 
         if (result == null || result == "")
@@ -182,7 +182,7 @@ public class login_setup : MonoBehaviour
 
     private void CreateNewLog()
     {
-        string result = SendAndGetLoginSetup("0~0~" + login_input.text + "~" + password_input.text);
+        string result = sr.SendAndGetLoginSetup("0~0~" + login_input.text + "~" + password_input.text);
         string[] getstr = result.Split('~');
 
         if (result == null || result == "")
@@ -199,87 +199,7 @@ public class login_setup : MonoBehaviour
         }
     }
 
-
-    public static string SendAndGetLoginSetup(string DataForSending)
-    {
-        int CurrentPort = 2324;
-        string CurrentIP = "45.67.57.30";
-        string result = null;
-
-        IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(CurrentIP), CurrentPort);
-        Socket sck = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        //=============================CONNECT======================================
-        try
-        {
-            sck.Connect(endpoint);
-        }
-        catch (Exception ex)
-        {
-            isConnectionError = true;
-            Debug.Log(ex);
-            result = ex.ToString();
-
-            /*
-            sck.Shutdown(SocketShutdown.Both);
-            sck.Close();
-            */
-            return result;
-            
-        }
-        //===============================SEND======================================
-        try
-        {
-            sck.Send(Encoding.UTF8.GetBytes(DataForSending));
-        }
-        catch (Exception ex)
-        {
-            isConnectionError = true;
-            Debug.Log(ex);
-            result = ex.ToString();
-
-            sck.Shutdown(SocketShutdown.Both);
-            sck.Close();
-            return result;
-        }
-        //================================GET======================================
-        try
-        {
-            StringBuilder messrec = new StringBuilder();
-            byte[] msgBuff = new byte[255];
-            int size = 0;
-
-            {
-                size = sck.Receive(msgBuff);
-                messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
-            }
-            while (sck.Available > 0) ;
-
-            if (messrec.ToString() != "" && messrec.ToString() != null)
-            {
-                result = messrec.ToString();
-            }
-            else
-            {
-                result = "error in received data";
-            }
-        }
-        catch (Exception ex)
-        {
-            isConnectionError = true;
-            Debug.Log(ex);
-            result = ex.ToString();
-
-            sck.Shutdown(SocketShutdown.Both);
-            sck.Close();
-            return result;
-        }
-        //error case
-        sck.Shutdown(SocketShutdown.Both);
-        sck.Close();
-        return result;
-    }
-
-
+   
     IEnumerator ConnectionErr()
     {
         ConnectionError.gameObject.SetActive(true);
@@ -292,7 +212,7 @@ public class login_setup : MonoBehaviour
         CanvasWaiting.gameObject.SetActive(true);
 
 
-        string result = SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+        string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
         string[] getstr = result.Split('~');
 
         if (result == null || result == "")

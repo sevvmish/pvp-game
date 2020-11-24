@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Net.Sockets;
+using System.Net;
+using System;
+using System.Text;
 
 public class general
 {
@@ -123,5 +127,90 @@ public struct SessionData
         }
     }
 
+}
+
+
+
+public static class sr
+{
+    public static bool isConnectionError;
+    public static string SendAndGetLoginSetup(string DataForSending)
+    {
+        int CurrentPort = 2324;
+        string CurrentIP = "45.67.57.30";
+        string result = null;
+
+        IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(CurrentIP), CurrentPort);
+        Socket sck = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        //=============================CONNECT======================================
+        try
+        {
+            sck.Connect(endpoint);
+        }
+        catch (Exception ex)
+        {
+            isConnectionError = true;
+            Debug.Log(ex);
+            result = ex.ToString();
+
+            /*
+            sck.Shutdown(SocketShutdown.Both);
+            sck.Close();
+            */
+            return result;
+
+        }
+        //===============================SEND======================================
+        try
+        {
+            sck.Send(Encoding.UTF8.GetBytes(DataForSending));
+        }
+        catch (Exception ex)
+        {
+            isConnectionError = true;
+            Debug.Log(ex);
+            result = ex.ToString();
+
+            sck.Shutdown(SocketShutdown.Both);
+            sck.Close();
+            return result;
+        }
+        //================================GET======================================
+        try
+        {
+            StringBuilder messrec = new StringBuilder();
+            byte[] msgBuff = new byte[255];
+            int size = 0;
+
+            {
+                size = sck.Receive(msgBuff);
+                messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
+            }
+            while (sck.Available > 0) ;
+
+            if (messrec.ToString() != "" && messrec.ToString() != null)
+            {
+                result = messrec.ToString();
+            }
+            else
+            {
+                result = "error in received data";
+            }
+        }
+        catch (Exception ex)
+        {
+            isConnectionError = true;
+            Debug.Log(ex);
+            result = ex.ToString();
+
+            sck.Shutdown(SocketShutdown.Both);
+            sck.Close();
+            return result;
+        }
+        //error case
+        sck.Shutdown(SocketShutdown.Both);
+        sck.Close();
+        return result;
+    }
 }
 
