@@ -15,7 +15,7 @@ public class player_choose : MonoBehaviour
 
     public Transform PlayerLine;
 
-    public Button pl1, pl2, pl3, pl4, pl5;
+    public Button pl1, pl2, pl3, pl4, pl5, create_char_button;
 
     private int CurrentPlayerNumber = 1;
     private bool isBusy;
@@ -31,7 +31,8 @@ public class player_choose : MonoBehaviour
         pl4.onClick.AddListener(Click4);
         pl5.onClick.AddListener(Click5);
 
-        print(sr.SendAndGetLoginSetup("1~0~" + "77NGYzGd9"));
+        //print(sr.SendAndGetLoginSetup("1~1~" + "YtPWSSp4SE" + "~" + "wizardika" + "~" + 5));
+
     }
 
     // Update is called once per frame
@@ -59,6 +60,10 @@ public class player_choose : MonoBehaviour
             {
                 pl5.interactable = false;
             }
+            if (create_char_button.interactable)
+            {
+                create_char_button.interactable = false;
+            }
         }
 
 
@@ -83,6 +88,10 @@ public class player_choose : MonoBehaviour
             if (!pl5.interactable)
             {
                 pl5.interactable = true;
+            }
+            if (!create_char_button.interactable)
+            {
+                create_char_button.interactable = true;
             }
         }
     }
