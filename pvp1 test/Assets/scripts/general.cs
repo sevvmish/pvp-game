@@ -134,6 +134,18 @@ public struct SessionData
 public static class sr
 {
     public static bool isConnectionError;
+
+    public static void isServerOff()
+    {
+        if (sr.SendAndGetLoginSetup("0~0~0~0") != "online")
+        {
+            Debug.Log("BBBBBBAAAAAAAAAADDDDDDDDD");
+            sr.isConnectionError = true;
+            
+        }
+        
+    }
+
     public static string SendAndGetLoginSetup(string DataForSending)
     {
         int CurrentPort = 2324;

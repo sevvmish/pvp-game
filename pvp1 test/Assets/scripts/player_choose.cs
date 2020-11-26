@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class player_choose : MonoBehaviour
 {
@@ -12,10 +13,12 @@ public class player_choose : MonoBehaviour
     private Vector3 BarbarPos = new Vector3(-14, 0, 0);
     private Vector3 RogPos = new Vector3(-21, 0, 0);
     private Vector3 WizPos = new Vector3(-28, 0, 0);
+    private float cur_time;
 
+    public TMP_InputField login_input;
     public Transform PlayerLine;
-
-    public Button pl1, pl2, pl3, pl4, pl5, create_char_button;
+    public GameObject EnterNamePanel, ConnectionError;
+    public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing;
 
     private int CurrentPlayerNumber = 1;
     private bool isBusy;
@@ -25,11 +28,15 @@ public class player_choose : MonoBehaviour
     {
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
+        EnterNamePanel.SetActive(false);
+        ConnectionError.SetActive(false);
         pl1.onClick.AddListener(Click1);
         pl2.onClick.AddListener(Click2);
         pl3.onClick.AddListener(Click3);
         pl4.onClick.AddListener(Click4);
         pl5.onClick.AddListener(Click5);
+        create_char_button.onClick.AddListener(create_char_panel_on);
+        OkOnChoosing.onClick.AddListener(OkOnChoose);
 
         //print(sr.SendAndGetLoginSetup("1~1~" + "YtPWSSp4SE" + "~" + "wizardika" + "~" + 5));
 
@@ -40,88 +47,186 @@ public class player_choose : MonoBehaviour
     {
         if (isBusy)
         {
-            if (pl1.interactable)
-            {
-                pl1.interactable = false;
-            }
-            if (pl2.interactable)
-            {
-                pl2.interactable = false;
-            }
-            if (pl3.interactable)
-            {
-                pl3.interactable = false;
-            }
-            if (pl4.interactable)
-            {
-                pl4.interactable = false;
-            }
-            if (pl5.interactable)
-            {
-                pl5.interactable = false;
-            }
-            if (create_char_button.interactable)
-            {
-                create_char_button.interactable = false;
-            }
+            Off();
+        } 
+        else if (!isBusy)
+        {
+            Onn();
         }
 
-
-        if (!isBusy)
+        if (sr.isConnectionError)
         {
-            if (!pl1.interactable)
+            StartCoroutine(ConnectionErr());
+        }
+
+        /*
+        if (cur_time>2)
+        {
+            cur_time = 0;
+            await Task.Run(() => sr.isServerOff());            
+
+        } else
+        {
+            cur_time += Time.deltaTime;
+        }
+        */
+
+        if (login_input.text != null)
+        {
+
+            bool isOK = true;
+            if (login_input.text.Length < 8 || login_input.text.Length > 16)
             {
-                pl1.interactable = true;
+                isOK = false;
             }
-            if (!pl2.interactable)
+                        
+
+            if (isOK)
             {
-                pl2.interactable = true;
+                OkOnChoosing.interactable = true;
+                
             }
-            if (!pl3.interactable)
+            else
             {
-                pl3.interactable = true;
+                OkOnChoosing.interactable = false;
+                
             }
-            if (!pl4.interactable)
-            {
-                pl4.interactable = true;
-            }
-            if (!pl5.interactable)
-            {
-                pl5.interactable = true;
-            }
-            if (!create_char_button.interactable)
-            {
-                create_char_button.interactable = true;
-            }
+        }
+        else
+        {
+            OkOnChoosing.interactable = false;            
+        }
+
+    }
+
+
+    private void OkOnChoose()
+    {
+        EnterNamePanel.SetActive(false);
+        string result = null;
+        result = sr.SendAndGetLoginSetup("1~1~" + "YtPWSSp4SE" + "~" + login_input.text + "~" + CurrentPlayerNumber);
+
+        string[] getstr = result.Split('~');
+        switch(getstr[2])
+        {
+            case "ok":
+                print("OK");
+                break;
+            case "wcn":
+                print("wrong character name");
+                break;
+            case "cae":
+                print("character name allready in use");
+                break;
+            case "tae":
+                print("you allready have such character type");
+                break;
+            case "err":
+                print("error creating character");
+                break;
+            case "nst":
+                print("wrong login");
+                break;
+
+        }
+        
+        
+    }
+
+    private void create_char_panel_on()
+    {
+        Off();
+        EnterNamePanel.SetActive(true);
+    }
+
+    private void Off()
+    {
+        if (pl1.interactable)
+        {
+            pl1.interactable = false;
+        }
+        if (pl2.interactable)
+        {
+            pl2.interactable = false;
+        }
+        if (pl3.interactable)
+        {
+            pl3.interactable = false;
+        }
+        if (pl4.interactable)
+        {
+            pl4.interactable = false;
+        }
+        if (pl5.interactable)
+        {
+            pl5.interactable = false;
+        }
+        if (create_char_button.interactable)
+        {
+            create_char_button.interactable = false;
+        }
+    }
+
+    private void Onn()
+    {
+        if (!pl1.interactable)
+        {
+            pl1.interactable = true;
+        }
+        if (!pl2.interactable)
+        {
+            pl2.interactable = true;
+        }
+        if (!pl3.interactable)
+        {
+            pl3.interactable = true;
+        }
+        if (!pl4.interactable)
+        {
+            pl4.interactable = true;
+        }
+        if (!pl5.interactable)
+        {
+            pl5.interactable = true;
+        }
+        if (!create_char_button.interactable)
+        {
+            create_char_button.interactable = true;
         }
     }
 
     private void Click1()
     {
+        if (CurrentPlayerNumber == 1) return;
         CurrentPlayerNumber = 1;
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
+        
     }
 
     private void Click2()
     {
+        if (CurrentPlayerNumber == 2) return;
         CurrentPlayerNumber = 2;
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
     private void Click3()
     {
+        if (CurrentPlayerNumber == 3) return;
         CurrentPlayerNumber = 3;
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
     private void Click4()
     {
+        if (CurrentPlayerNumber == 4) return;
         CurrentPlayerNumber = 4;
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
     private void Click5()
     {
+        if (CurrentPlayerNumber == 5) return;
         CurrentPlayerNumber = 5;
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
@@ -167,6 +272,13 @@ public class player_choose : MonoBehaviour
 
         isBusy = false;
 
+    }
+
+    IEnumerator ConnectionErr()
+    {
+        ConnectionError.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("player_get_new");
     }
 
 }
