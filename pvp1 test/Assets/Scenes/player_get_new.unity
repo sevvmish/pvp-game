@@ -1519,7 +1519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70005e2cfe6ae44419b5a3e91284e55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  login_input: {fileID: 269261723}
+  char_name_input: {fileID: 269261723}
   PlayerLine: {fileID: 1595416115}
   EnterNamePanel: {fileID: 183169312}
   ConnectionError: {fileID: 958648284}

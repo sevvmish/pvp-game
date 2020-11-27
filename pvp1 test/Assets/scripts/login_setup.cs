@@ -22,6 +22,8 @@ public class login_setup : MonoBehaviour
     // Start is called before the first frame update    
     private void Start()
     {
+        sr.isConnectionError = false;
+
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
         NewLogOrGuest.gameObject.SetActive(false);

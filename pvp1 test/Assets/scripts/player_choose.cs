@@ -15,7 +15,7 @@ public class player_choose : MonoBehaviour
     private Vector3 WizPos = new Vector3(-28, 0, 0);
     private float cur_time;
 
-    public TMP_InputField login_input;
+    public TMP_InputField char_name_input;
     public Transform PlayerLine;
     public GameObject EnterNamePanel, ConnectionError;
     public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing;
@@ -26,6 +26,8 @@ public class player_choose : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sr.isConnectionError = false;
+
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
         EnterNamePanel.SetActive(false);
@@ -38,7 +40,7 @@ public class player_choose : MonoBehaviour
         create_char_button.onClick.AddListener(create_char_panel_on);
         OkOnChoosing.onClick.AddListener(OkOnChoose);
 
-        //print(sr.SendAndGetLoginSetup("1~1~" + "YtPWSSp4SE" + "~" + "wizardika" + "~" + 5));
+        //print(sr.SendAndGetLoginSetup("1~2~" + "77NGYdzGd9" + "~" + "wizwizwiz"));
 
     }
 
@@ -71,11 +73,11 @@ public class player_choose : MonoBehaviour
         }
         */
 
-        if (login_input.text != null)
+        if (char_name_input.text != null)
         {
 
             bool isOK = true;
-            if (login_input.text.Length < 8 || login_input.text.Length > 16)
+            if (char_name_input.text.Length < 6 || char_name_input.text.Length > 16)
             {
                 isOK = false;
             }
@@ -104,7 +106,7 @@ public class player_choose : MonoBehaviour
     {
         EnterNamePanel.SetActive(false);
         string result = null;
-        result = sr.SendAndGetLoginSetup("1~1~" + "YtPWSSp4SE" + "~" + login_input.text + "~" + CurrentPlayerNumber);
+        result = sr.SendAndGetLoginSetup("1~1~" + "77NGYdzGd9" + "~" + char_name_input.text + "~" + CurrentPlayerNumber);
 
         string[] getstr = result.Split('~');
         switch(getstr[2])
