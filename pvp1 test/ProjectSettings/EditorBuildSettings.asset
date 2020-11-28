@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/player_get_new.unity
     guid: c91475ff75f2acd4d9928d07ce58e0bf
+  - enabled: 1
+    path: Assets/Scenes/player_choose.unity
+    guid: 611346d4b441bfd46acd49bde863e314
   m_configObjects: {}

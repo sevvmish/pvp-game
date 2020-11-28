@@ -1,27 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
+using UnityEngine.UI;
+using TMPro;
+
 
 public class player_choose : MonoBehaviour
 {
-    private Vector3 WarrPos = new Vector3(0, 0, 0);
-    private Vector3 MagePos = new Vector3(-7, 0, 0);
-    private Vector3 BarbarPos = new Vector3(-14, 0, 0);
-    private Vector3 RogPos = new Vector3(-21, 0, 0);
-    private Vector3 WizPos = new Vector3(-28, 0, 0);
-    private float cur_time;
+    public Button pl1, pl2, pl3, pl4, pl5, ChooseAnother, EnterTheGame;
 
-    public TMP_InputField char_name_input;
-    public Transform PlayerLine;
-    public GameObject EnterNamePanel, ConnectionError;
-    public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing;
+    public GameObject warr, mage, barb, rog, wiz, ConnectionError;
 
-    private int CurrentPlayerNumber = 1;
-    private bool isBusy;
+    public struct chars
+    {
+        public string char_name;
+        public int char_type;
+
+        public chars(string nam, int char_t)
+        {
+            char_name = nam;
+            char_type = char_t;
+        }
+    }
+
+    
+    private List<chars> WhatCharacters = new List<chars>();
 
     // Start is called before the first frame update
     void Start()
@@ -30,257 +34,194 @@ public class player_choose : MonoBehaviour
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
-        EnterNamePanel.SetActive(false);
         ConnectionError.SetActive(false);
-        pl1.onClick.AddListener(Click1);
-        pl2.onClick.AddListener(Click2);
-        pl3.onClick.AddListener(Click3);
-        pl4.onClick.AddListener(Click4);
-        pl5.onClick.AddListener(Click5);
-        create_char_button.onClick.AddListener(create_char_panel_on);
-        OkOnChoosing.onClick.AddListener(OkOnChoose);
+        warr.SetActive(false);
+        mage.SetActive(false);
+        barb.SetActive(false);
+        rog.SetActive(false);
+        wiz.SetActive(false);
+        pl1.gameObject.SetActive(false);
+        pl2.gameObject.SetActive(false);
+        pl3.gameObject.SetActive(false);
+        pl4.gameObject.SetActive(false);
+        pl5.gameObject.SetActive(false);
 
-        //print(sr.SendAndGetLoginSetup("1~2~" + "77NGYdzGd9" + "~" + "wizwizwiz"));
+        pl1.onClick.AddListener(p1);
+        pl2.onClick.AddListener(p2);
+        pl3.onClick.AddListener(p3);
+        pl4.onClick.AddListener(p4);
+        pl5.onClick.AddListener(p5);
+        ChooseAnother.onClick.AddListener(ChooseAnotPl);
+        EnterTheGame.onClick.AddListener(EnterTheG);
 
+        WhatCharacters.Add(new chars("none", 0));
+
+        string result = null;
+        result = sr.SendAndGetLoginSetup("1~0~" + general.CurrentTicket);
+
+        string[] getstr = result.Split('~');
+        switch (getstr[2])
+        {           
+            case "nst":
+                print("wrong login");
+                break;
+            case "nc":
+                print("no characters");
+                SceneManager.LoadScene("player_get_new");
+                break;
+        }
+
+        if (getstr[2]!= "nst" && getstr[2] != "nc")
+        {
+            int index = int.Parse(getstr[2]);
+            
+            for (int i=1; i<=index; i++)
+            {
+
+                switch(i)
+                {
+                    case 1: //3 4
+                        pl1.gameObject.SetActive(true);
+                        SetName(pl1, getstr[3]);
+                        WhatCharacters.Add(new chars(getstr[3], int.Parse(getstr[4])));
+                        print(getstr[3] + " - " + int.Parse(getstr[4]));
+                        break;
+                    case 2: //5 6
+                        pl2.gameObject.SetActive(true);
+                        SetName(pl2, getstr[5]);
+                        WhatCharacters.Add(new chars(getstr[5], int.Parse(getstr[6])));
+                        break;
+                    case 3:
+                        pl3.gameObject.SetActive(true);
+                        SetName(pl3, getstr[7]);
+                        WhatCharacters.Add(new chars(getstr[7], int.Parse(getstr[8])));
+                        break;
+                    case 4:
+                        pl4.gameObject.SetActive(true);
+                        SetName(pl4, getstr[9]);
+                        WhatCharacters.Add(new chars(getstr[9], int.Parse(getstr[10])));
+                        break;
+                    case 5:
+                        pl5.gameObject.SetActive(true);
+                        SetName(pl5, getstr[11]);
+                        WhatCharacters.Add(new chars(getstr[11], int.Parse(getstr[12])));
+                        break;
+                }
+            }
+
+            GetPlayerByNumber(WhatCharacters[1].char_type);
+
+        }
+    }
+
+
+    private void ChooseAnotPl()
+    {
+        SceneManager.LoadScene("player_get_new");
+    }
+
+    private void EnterTheG()
+    {
+        
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        if (isBusy)
-        {
-            Off();
-        } 
-        else if (!isBusy)
-        {
-            Onn();
-        }
-
         if (sr.isConnectionError)
         {
             StartCoroutine(ConnectionErr());
         }
-
-        /*
-        if (cur_time>2)
-        {
-            cur_time = 0;
-            await Task.Run(() => sr.isServerOff());            
-
-        } else
-        {
-            cur_time += Time.deltaTime;
-        }
-        */
-
-        if (char_name_input.text != null)
-        {
-
-            bool isOK = true;
-            if (char_name_input.text.Length < 6 || char_name_input.text.Length > 16)
-            {
-                isOK = false;
-            }
-                        
-
-            if (isOK)
-            {
-                OkOnChoosing.interactable = true;
-                
-            }
-            else
-            {
-                OkOnChoosing.interactable = false;
-                
-            }
-        }
-        else
-        {
-            OkOnChoosing.interactable = false;            
-        }
-
     }
 
-
-    private void OkOnChoose()
-    {
-        EnterNamePanel.SetActive(false);
-        string result = null;
-        result = sr.SendAndGetLoginSetup("1~1~" + "77NGYdzGd9" + "~" + char_name_input.text + "~" + CurrentPlayerNumber);
-
-        string[] getstr = result.Split('~');
-        switch(getstr[2])
-        {
-            case "ok":
-                print("OK");
-                break;
-            case "wcn":
-                print("wrong character name");
-                break;
-            case "cae":
-                print("character name allready in use");
-                break;
-            case "tae":
-                print("you allready have such character type");
-                break;
-            case "err":
-                print("error creating character");
-                break;
-            case "nst":
-                print("wrong login");
-                break;
-
-        }
-        
-        
-    }
-
-    private void create_char_panel_on()
-    {
-        Off();
-        EnterNamePanel.SetActive(true);
-    }
-
-    private void Off()
-    {
-        if (pl1.interactable)
-        {
-            pl1.interactable = false;
-        }
-        if (pl2.interactable)
-        {
-            pl2.interactable = false;
-        }
-        if (pl3.interactable)
-        {
-            pl3.interactable = false;
-        }
-        if (pl4.interactable)
-        {
-            pl4.interactable = false;
-        }
-        if (pl5.interactable)
-        {
-            pl5.interactable = false;
-        }
-        if (create_char_button.interactable)
-        {
-            create_char_button.interactable = false;
-        }
-    }
-
-    private void Onn()
-    {
-        if (!pl1.interactable)
-        {
-            pl1.interactable = true;
-        }
-        if (!pl2.interactable)
-        {
-            pl2.interactable = true;
-        }
-        if (!pl3.interactable)
-        {
-            pl3.interactable = true;
-        }
-        if (!pl4.interactable)
-        {
-            pl4.interactable = true;
-        }
-        if (!pl5.interactable)
-        {
-            pl5.interactable = true;
-        }
-        if (!create_char_button.interactable)
-        {
-            create_char_button.interactable = true;
-        }
-    }
-
-    private void Click1()
-    {
-        if (CurrentPlayerNumber == 1) return;
-        CurrentPlayerNumber = 1;
-        StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
-        
-    }
-
-    private void Click2()
-    {
-        if (CurrentPlayerNumber == 2) return;
-        CurrentPlayerNumber = 2;
-        StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
-    }
-
-    private void Click3()
-    {
-        if (CurrentPlayerNumber == 3) return;
-        CurrentPlayerNumber = 3;
-        StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
-    }
-
-    private void Click4()
-    {
-        if (CurrentPlayerNumber == 4) return;
-        CurrentPlayerNumber = 4;
-        StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
-    }
-
-    private void Click5()
-    {
-        if (CurrentPlayerNumber == 5) return;
-        CurrentPlayerNumber = 5;
-        StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
-    }
-
-    private Vector3 GetPlayerByNumber(int Number)
-    {
-        Vector3 result = Vector3.zero;
-
-        switch(Number)
-        {
-            case 1:
-                result = WarrPos;
-                break;
-            case 2:
-                result = MagePos;
-                break;
-            case 3:
-                result = BarbarPos;
-                break;
-            case 4:
-                result = RogPos;
-                break;
-            case 5:
-                result = WizPos;
-                break;
-
-        }
-
-        return result;
-    }
-
-    IEnumerator ChangePlayer(Vector3 NewCoords)
-    {
-        isBusy = true;
-
-        for (float i=0; i<1; i+=0.05f)
-        {
-
-            PlayerLine.position = Vector3.Lerp(PlayerLine.position, NewCoords, i);
-
-            yield return new WaitForSeconds(0.05f);
-        }
-
-        isBusy = false;
-
-    }
 
     IEnumerator ConnectionErr()
     {
         ConnectionError.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("player_get_new");
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("player_choose");
+    }
+
+    IEnumerator OK()
+    {
+        ConnectionError.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("player_choose");
+    }
+
+    private void SetName(Button button, string ButtonName)
+    {
+        button.gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = ButtonName;
+    }
+
+    private void p1()
+    {
+        GetPlayerByNumber(WhatCharacters[1].char_type);
+    }
+
+    private void p2()
+    {
+        GetPlayerByNumber(WhatCharacters[2].char_type);
+    }
+
+    private void p3()
+    {
+        GetPlayerByNumber(WhatCharacters[3].char_type);
+    }
+
+    private void p4()
+    {
+        GetPlayerByNumber(WhatCharacters[4].char_type);
+    }
+
+    private void p5()
+    {
+        GetPlayerByNumber(WhatCharacters[5].char_type);
+    }
+
+
+    private void GetPlayerByNumber(int Number)
+    {
+        
+        switch(Number)
+        {
+            case 1:
+                warr.SetActive(true);
+                mage.SetActive(false);
+                barb.SetActive(false);
+                rog.SetActive(false);
+                wiz.SetActive(false);
+                break;
+            case 2:
+                warr.SetActive(false);
+                mage.SetActive(true);
+                barb.SetActive(false);
+                rog.SetActive(false);
+                wiz.SetActive(false);
+                break;
+            case 3:
+                warr.SetActive(false);
+                mage.SetActive(false);
+                barb.SetActive(true);
+                rog.SetActive(false);
+                wiz.SetActive(false);
+                break;
+            case 4:
+                warr.SetActive(false);
+                mage.SetActive(false);
+                barb.SetActive(false);
+                rog.SetActive(true);
+                wiz.SetActive(false);
+                break;
+            case 5:
+                warr.SetActive(false);
+                mage.SetActive(false);
+                barb.SetActive(false);
+                rog.SetActive(false);
+                wiz.SetActive(true);
+                break;
+        }
+                
     }
 
 }

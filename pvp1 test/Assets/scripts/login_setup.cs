@@ -29,31 +29,29 @@ public class login_setup : MonoBehaviour
         NewLogOrGuest.gameObject.SetActive(false);
         CanvasLogin.gameObject.SetActive(false);
 
-        if (sr.SendAndGetLoginSetup("0~0~0~0") != "online")
+        
+
+        if (PlayerPrefs.GetInt("EnterAs") == 0)
         {
-            sr.isConnectionError = true;
+            NewLogOrGuest.gameObject.SetActive(true);
+            login_button.gameObject.SetActive(false);
+            createnew_button.gameObject.SetActive(true);
+
         }
-        else
+        else if (PlayerPrefs.GetInt("EnterAs") == 2)
+        {
+            StartCoroutine(WaitingAndEnter());
+
+        }
+        else if (PlayerPrefs.GetInt("EnterAs") == 1)
         {
 
-            if (PlayerPrefs.GetInt("EnterAs") == 0)
-            {
-                NewLogOrGuest.gameObject.SetActive(true);
-            }
-            else if (PlayerPrefs.GetInt("EnterAs") == 2)
-            {
-                StartCoroutine(WaitingAndEnter());
+            CanvasLogin.gameObject.SetActive(true);
+            login_button.gameObject.SetActive(true);
+            createnew_button.gameObject.SetActive(false);
 
-            }
-            else if (PlayerPrefs.GetInt("EnterAs") == 1)
-            {
-
-                CanvasLogin.gameObject.SetActive(true);
-
-            }
         }
-
-
+       
         
         
         CanvasGetServer.gameObject.SetActive(false);
@@ -150,7 +148,7 @@ public class login_setup : MonoBehaviour
 
         //add the server map
         PlayerPrefs.SetInt("EnterAs", 2);
-        SceneManager.LoadScene("plchoose");
+        SceneManager.LoadScene("player_choose");
     }
 
 
@@ -177,14 +175,17 @@ public class login_setup : MonoBehaviour
         {
             general.CurrentTicket = getstr[2];
             print(general.CurrentTicket + " - " + login_input.text + " - " + password_input.text);
-            PlayerPrefs.SetInt("EnterAs", 1);
-            SceneManager.LoadScene("plchoose");
+            //PlayerPrefs.SetInt("EnterAs", 1);
+            SceneManager.LoadScene("player_choose");
         }
     }
 
     private void CreateNewLog()
     {
         string result = sr.SendAndGetLoginSetup("0~0~" + login_input.text + "~" + password_input.text);
+
+        print(result);
+
         string[] getstr = result.Split('~');
 
         if (result == null || result == "")
@@ -197,7 +198,24 @@ public class login_setup : MonoBehaviour
         }
         else
         {
-            TryLoginSend();
+            string result11 = sr.SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
+            string[] getstr11 = result11.Split('~');
+
+            if (result == null || result == "")
+            {
+                StartCoroutine(ConnectionErr());
+            }
+            else if (getstr11[2] == "wll" || getstr11[2] == "wlp" || getstr11[2] == "ude" || getstr11[2] == "wp")
+            {
+                StartCoroutine(Info(getstr11[2]));
+            }
+            else
+            {
+                general.CurrentTicket = getstr11[2];
+                print(general.CurrentTicket + " - " + login_input.text + " - " + password_input.text);
+                PlayerPrefs.SetInt("EnterAs", 1);
+                SceneManager.LoadScene("player_choose");
+            }
         }
     }
 
@@ -230,7 +248,7 @@ public class login_setup : MonoBehaviour
 
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("plchoose");
+        SceneManager.LoadScene("player_choose");
     }
 
     IEnumerator Info(string Message)
