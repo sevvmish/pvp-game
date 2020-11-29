@@ -642,8 +642,8 @@ public struct ToSend
         VerticalTouch = Vert;
         StringBuilder Result = new StringBuilder(70);
         OrderToSend++;
-        Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.') + "~0~0~0~0~0~0|"); //+ "~0~0~0~0~0"
-        
+        Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+
         return Result.ToString();
     }
 

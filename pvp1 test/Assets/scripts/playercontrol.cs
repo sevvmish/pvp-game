@@ -163,16 +163,6 @@ public class playercontrol : MonoBehaviour
         ggg.GetComponent<players>().CreateUI();
         OtherGamers.Add(ggg.GetComponent<players>());
 
-        /*
-        GameObject temp2 = Instantiate(Resources.Load<GameObject>("prefabs/otherplayerUI"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("CanvasInterface").transform);
-        temp2.name = general.DataForSession[order].PlayerName;
-        temp2.GetComponent<RectTransform>().anchoredPosition = new Vector2(970, -50*order*1.5f);
-        temp2.SetActive(true);
-        //ggg.GetComponent<players>().OtherPlayerUI = new PlayerUI(temp2, false);
-        OtherGamers[OtherGamers.Count-1].GetComponent<players>().OtherPlayerUI = new PlayerUI(temp2, false);
-        OtherGamers[OtherGamers.Count - 1].GetComponent<players>().OtherPlayerUI.AllObject = temp2;
-        */
-
         
 
     }
@@ -260,18 +250,6 @@ public class playercontrol : MonoBehaviour
                 //print("me - " + SendAndReceive.MyPlayerData.conditions + " = " + SendAndReceive.OrderReceived + "   him - " + SendAndReceive.OtherPlayerData[0].conditions + " = " + SendAndReceive.OrderReceived);
             }
 
-
-            /*
-            if (MyConds.curr_conds.Count > 0)  //SendAndReceive.MyPlayerData.MyConds.curr_conds.Count>0
-            {
-                CheckMessagesAndConditions();
-            }
-
-            if (OtherPlayerConds.curr_conds.Count>0)
-            {
-                CheckMessagesAndConditionsForOther();
-            }
-            */
 
 
             //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -24,7 +24,7 @@ public class player_choose : MonoBehaviour
         }
     }
 
-    
+    private chars CurrentPlayerChosen;
     private List<chars> WhatCharacters = new List<chars>();
 
     // Start is called before the first frame update
@@ -55,6 +55,7 @@ public class player_choose : MonoBehaviour
         EnterTheGame.onClick.AddListener(EnterTheG);
 
         WhatCharacters.Add(new chars("none", 0));
+
 
         string result = null;
         result = sr.SendAndGetLoginSetup("1~0~" + general.CurrentTicket);
@@ -110,8 +111,9 @@ public class player_choose : MonoBehaviour
             }
 
             GetPlayerByNumber(WhatCharacters[1].char_type);
-
+            CurrentPlayerChosen = WhatCharacters[1];
         }
+        
     }
 
 
@@ -122,7 +124,9 @@ public class player_choose : MonoBehaviour
 
     private void EnterTheG()
     {
-        
+        general.CharacterName = CurrentPlayerChosen.char_name;
+        general.CharacterType = CurrentPlayerChosen.char_type;
+        SceneManager.LoadScene("player_setup");
     }
 
     // Update is called once per frame
@@ -157,26 +161,31 @@ public class player_choose : MonoBehaviour
     private void p1()
     {
         GetPlayerByNumber(WhatCharacters[1].char_type);
+        CurrentPlayerChosen = WhatCharacters[1];
     }
 
     private void p2()
     {
         GetPlayerByNumber(WhatCharacters[2].char_type);
+        CurrentPlayerChosen = WhatCharacters[2];
     }
 
     private void p3()
     {
         GetPlayerByNumber(WhatCharacters[3].char_type);
+        CurrentPlayerChosen = WhatCharacters[3];
     }
 
     private void p4()
     {
         GetPlayerByNumber(WhatCharacters[4].char_type);
+        CurrentPlayerChosen = WhatCharacters[4];
     }
 
     private void p5()
     {
         GetPlayerByNumber(WhatCharacters[5].char_type);
+        CurrentPlayerChosen = WhatCharacters[5];
     }
 
 
