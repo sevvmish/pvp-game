@@ -18,7 +18,7 @@ public class player_get_new : MonoBehaviour
     public TMP_InputField char_name_input;
     public Transform PlayerLine;
     public GameObject EnterNamePanel, ConnectionError;
-    public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing;
+    public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing, back_button;
 
     private int CurrentPlayerNumber = 1;
     private bool isBusy;
@@ -39,6 +39,7 @@ public class player_get_new : MonoBehaviour
         pl5.onClick.AddListener(Click5);
         create_char_button.onClick.AddListener(create_char_panel_on);
         OkOnChoosing.onClick.AddListener(OkOnChoose);
+        back_button.onClick.AddListener(Back);
 
         //print(sr.SendAndGetLoginSetup("1~2~" + "77NGYdzGd9" + "~" + "wizwizwiz"));
 
@@ -101,6 +102,11 @@ public class player_get_new : MonoBehaviour
 
     }
 
+
+    private void Back()
+    {
+        SceneManager.LoadScene("player_choose");
+    }
 
     private void OkOnChoose()
     {

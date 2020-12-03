@@ -32,6 +32,10 @@ public class player_setup : MonoBehaviour
         {
             StartCoroutine(ConnectionErr());
         }
+
+
+
+
     }
 
 
