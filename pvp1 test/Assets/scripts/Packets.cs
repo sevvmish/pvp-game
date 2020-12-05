@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System;
 using TMPro;
 using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 
 public class Conds
 {
@@ -640,9 +640,17 @@ public struct ToSend
         TemporaryTable = general.SessionTicket;
         HorizontalTouch = Horiz;
         VerticalTouch = Vert;
+       
         StringBuilder Result = new StringBuilder(70);
         OrderToSend++;
-        Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+
+        if (!CheckTouchForStrafe.isNowhereTouched)
+        {
+            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+        } else
+        {
+            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+        }
 
         return Result.ToString();
     }
@@ -1186,6 +1194,7 @@ public class Buttons
         SpellButton6 = GameObject.Find("spell6").GetComponent<Button>();
         SpellButton6.onClick.AddListener(Button6Pressed);
 
+                
         SpellButton1.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell1).Spell1_icon;
         SpellButton2.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell2).Spell1_icon;
         SpellButton3.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell3).Spell1_icon;
@@ -1194,11 +1203,12 @@ public class Buttons
         SpellButton6.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell6).Spell1_icon;
     }
 
+
     private void Button1Pressed()
     {
         if (GetButton(1).interactable)
         {
-           
+            //CheckTouchForStrafe.isButtonTouched = true;
             playercontrol.isButtonSend = true;
             playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(1, 0, 0, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 1);
@@ -1357,4 +1367,9 @@ public class ObjectPooling : MonoBehaviour
         return result;
 
     }
+}
+
+public static class CheckTouchForStrafe
+{    
+    public static bool isNowhereTouched;
 }
