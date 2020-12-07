@@ -28,6 +28,7 @@ public class general
     public static string MainPlayerName;
     public static int MainPlayerOrder;
     public static int MainPlayerTeam;
+    public const float Tick = 0.05f;
 
 
     public static void SetSessionData()

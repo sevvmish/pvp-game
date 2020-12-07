@@ -15,7 +15,7 @@ public class login_setup : MonoBehaviour
     public TMP_InputField login_input;
     public TMP_InputField password_input;
     public Button login_button, createnew_button, beforelogin_newlog, beforelogin_asguest, MoscowButton;
-    public TextMeshProUGUI InfoMessages;
+    public TextMeshProUGUI InfoMessages, Createnewtext, Logintext, ConnError, AwaitingText, TheLoginText, ThePasswordText;
 
     
 
@@ -29,7 +29,12 @@ public class login_setup : MonoBehaviour
         NewLogOrGuest.gameObject.SetActive(false);
         CanvasLogin.gameObject.SetActive(false);
 
-        
+        Createnewtext.text = lang.CreateNewText;
+        Logintext.text = lang.LoginText;
+        ConnError.text = lang.ConnectionErrorText;
+        AwaitingText.text = lang.AwaitingText;
+        TheLoginText.text = lang.TheLoginText;
+        ThePasswordText.text = lang.ThePasswordText;
 
         if (PlayerPrefs.GetInt("EnterAs") == 0)
         {
@@ -272,25 +277,25 @@ public static class codes
         switch(CodeResult)
         {
             case "wll":
-                result = "wrong length for login";
+                result = lang.wlltext;
                 break;
             case "wlp":
-                result = "wrong length for password";
+                result = lang.wlptext;
                 break;
             case "uae":
-                result = "username allready exists";
+                result = lang.uaetext;
                 break;
             case "ecu":
-                result = "error creating new user in DB";
+                result = lang.ecutext;
                 break;
             case "ude":
-                result = "username doesn't exist";
+                result = lang.udetext;
                 break;
             case "wp":
-                result = "wrong password";
+                result = lang.wptext;
                 break;
             case "uc":
-                result = "user created";
+                result = lang.uctext;
                 break;
         }
 

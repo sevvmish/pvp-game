@@ -12,6 +12,8 @@ public class player_choose : MonoBehaviour
 
     public GameObject warr, mage, barb, rog, wiz, ConnectionError;
 
+    public TextMeshProUGUI EnterTheGameText, ChooseAnotherText, ConnError;
+
     public struct chars
     {
         public string char_name;
@@ -34,6 +36,11 @@ public class player_choose : MonoBehaviour
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
+
+        EnterTheGameText.text = lang.EnterTheGameText;
+        ChooseAnotherText.text = lang.ChooseAnotherText;
+        ConnError.text = lang.ConnectionErrorText;
+
         ConnectionError.SetActive(false);
         warr.SetActive(false);
         mage.SetActive(false);

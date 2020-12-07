@@ -110,6 +110,69 @@ public struct spellsIDs
 
 public static class lang
 {
+    //логин и вызов пользователя
+    //public static string LoginText = "";
+    public static string LoginText = "ВОЙТИ";
+    public static string CreateNewText = "СОЗДАТЬ";
+    public static string AwaitingText = "ЗАГРУЗКА...";
+    public static string ConnectionErrorText = "НЕТ СОЕДИНЕНИЯ";
+
+    public static string TheLoginText = "ЛОГИН";
+    public static string ThePasswordText = "ПАРОЛЬ";
+
+    public static string SignForNameForEnter = "имя для ввода:";
+
+
+    public static string wlltext = "неправильная длина логина";
+    public static string wlptext = "неправильная длина пароля";
+    public static string uaetext = "такой логин уже существует";
+    public static string ecutext = "ошибка при создании логина";
+    public static string udetext = "нет такого пользователя";
+    public static string wptext = "ошибка в пароле";
+    public static string uctext = "пользователь создан";
+
+    public static string WarriorText = "ВОИН";
+    public static string ElemText = "ЕЛЕМЕНТАЛИСТ";
+    public static string BarbarText = "ВАРВАР";
+    public static string RogText = "РАЗБОЙНИК";
+    public static string WizText = "ВОЛШЕБНИК";
+
+    public static string CreateNewCharacter = "СОЗДАТЬ НОВОГО ГЕРОЯ";
+    public static string back = "НАЗАД";
+
+    public static string EnterTheGameText = "ВОЙТИ В ИГРУ";
+    public static string ChooseAnotherText = "ВЫБРАТЬ ДРУГОГО ГЕРОЯ";
+
+    public static string SpeedText = "скорость";
+    public static string HealthText = "здоровье";
+    public static string HealthRegenText = "восст здоровья";
+    public static string EnergyRegenText = "восст энергии";
+    public static string WeaponAttackText = "атака оружия";
+    public static string HitPowerText = "сила удара";
+    public static string ArmorText = "броня";
+    public static string ShieldBlockText = "блокировка щитом";
+    public static string MagicResistanceText = "защита от магии";
+    public static string DodgeText = "уклонение";
+    public static string CastSpeedText = "скорость заклинания";
+    public static string MeleeCritText = "крит ближней атаки";
+    public static string MagicCritText = "крит магической атаки";
+    public static string SpellPowerText = "сила магии";
+
+    public static string SpeedTextHint = "скорость";
+    public static string HealthTextHint = "здоровье";
+    public static string HealthRegenTextHint = "восст здоровья";
+    public static string EnergyRegenTextHint = "восст энергии";
+    public static string WeaponAttackTextHint = "атака оружия";
+    public static string HitPowerTextHint = "сила удара";
+    public static string ArmorTextHint = "броня";
+    public static string ShieldBlockTextHint = "блокировка щитом";
+    public static string MagicResistanceTextHint = "защита от магии";
+    public static string DodgeTextHint = "уклонение";
+    public static string CastSpeedTextHint = "скорость заклинания";
+    public static string MeleeCritTextHint = "крит ближней атаки";
+    public static string MagicCritTextHint = "крит магической атаки";
+    public static string SpellPowerTextHint = "сила магии";
+
     //envir===================================
     public static string Canceled = "ОТМЕНА";
 
@@ -154,6 +217,54 @@ public static class lang
 
 public static class UNlang
 {
+
+    //логин и вызов пользователя
+    //public static string LoginText = "";
+    public static string LoginText = "LOGIN";
+    public static string CreateNewText = "CREATE";
+    public static string AwaitingText = "LOADING...";
+    public static string ConnectionErrorText = "CONNECTION ERROR";
+
+    public static string TheLoginText = "LOGIN";
+    public static string ThePasswordText = "PASSWORD";
+
+    public static string SignForNameForEnter = "name to enter:";
+
+    public static string wlltext = "wrong length for login";
+    public static string wlptext = "wrong length for password";
+    public static string uaetext = "login allready exists";
+    public static string ecutext = "error creating new login";
+    public static string udetext = "username doesn't exist";
+    public static string wptext = "wrong password";
+    public static string uctext = "login created";
+
+    public static string WarriorText = "WARRIOR";
+    public static string ElemText = "ELEMENTALIST";
+    public static string BarbarText = "BARBARIAN";
+    public static string RogText = "ROGUE";
+    public static string WizText = "WIZARD";
+
+    public static string CreateNewCharacter = "CREATE NEW HERO";
+    public static string back = "BACK";
+
+    public static string EnterTheGameText = "ENTER THE GAME";
+    public static string ChooseAnotherText = "CHOOSE ANOTHER HERO";
+
+    public static string SpeedText = "speed";
+    public static string HealthText = "health";
+    public static string HealthRegenText = "health regen";
+    public static string EnergyRegenText = "energy energy";
+    public static string WeaponAttackText = "weapon attack";
+    public static string HitPowerText = "hit power";
+    public static string ArmorText = "armor";
+    public static string ShieldBlockText = "shield block";
+    public static string MagicResistanceText = "magic resistance";
+    public static string DodgeText = "dodge";
+    public static string CastSpeedText = "cast speed";
+    public static string MeleeCritText = "melee crit";
+    public static string MagicCritText = "magic crit";
+    public static string SpellPowerText = "spell power";
+
     //envir===================================
     public static string Canceled = "CANCELED";
 

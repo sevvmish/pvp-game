@@ -23,6 +23,8 @@ public class player_get_new : MonoBehaviour
     private int CurrentPlayerNumber = 1;
     private bool isBusy;
 
+    public TextMeshProUGUI warrtext, elemtext, barbartext, rogtext, wizardtext, createnewchartext, backtext, enterloginname;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,14 @@ public class player_get_new : MonoBehaviour
         create_char_button.onClick.AddListener(create_char_panel_on);
         OkOnChoosing.onClick.AddListener(OkOnChoose);
         back_button.onClick.AddListener(Back);
+
+        warrtext.text = lang.WarriorText;
+        elemtext.text = lang.ElemText;
+        barbartext.text = lang.BarbarText;
+        rogtext.text = lang.RogText;
+        wizardtext.text = lang.WizText;
+        createnewchartext.text = lang.CreateNewCharacter;
+        backtext.text = lang.back;
 
         //print(sr.SendAndGetLoginSetup("1~2~" + "77NGYdzGd9" + "~" + "wizwizwiz"));
 

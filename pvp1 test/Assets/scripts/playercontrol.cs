@@ -345,7 +345,7 @@ public class playercontrol : MonoBehaviour
 
 
         //==================================================================
-        if (cur_time >= 0.04f)
+        if (cur_time >= general.Tick)
         {
 
             MyHPText.text = SendAndReceive.MyPlayerData.health_pool.ToString();
