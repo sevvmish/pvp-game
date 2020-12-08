@@ -13,7 +13,7 @@ public class player_setup : MonoBehaviour
 {
     public GameObject ConnectionError, 
         PlayerType1, PlayerType2, PlayerType3, PlayerType4, PlayerType5,
-        MeleeDataPanel, MagicDataPanel, podskazka;
+        MeleeDataPanel, MagicDataPanel, podskazka, AllPlayersTypes;
 
     public character_data CurrentCharacterData;
 
@@ -25,7 +25,7 @@ public class player_setup : MonoBehaviour
         HitPowerTextText, ArmorTextText, ShieldBlockTextText, MagicResistanceTextText, DodgeTextText, CastSpeedTextText,
         MeleeCritTextText, MagicCritTextText, SpellPowerTextText;
 
-    public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin;
+    public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB;
 
     public Canvas Hero, Talents, PVP, options;
 
@@ -149,6 +149,8 @@ public class player_setup : MonoBehaviour
         Talents.gameObject.SetActive(false);
         PVP.gameObject.SetActive(false);
         options.gameObject.SetActive(false);
+        
+        HeroB.gameObject.transform.position = new Vector3(-35, HeroB.transform.position.y, 0);
 
         podskazka.SetActive(false);
 
@@ -187,10 +189,12 @@ public class player_setup : MonoBehaviour
                 switch(EventSystem.current.currentSelectedGameObject.name)
                 {
                     case "herobutton":
-                        Hero.gameObject.SetActive(true);
+                        Hero.gameObject.SetActive(true);                        
                         Talents.gameObject.SetActive(false);
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(false);
+                        
+                        ChangeCanvasButton(true, false, false, false);
                         break;
 
                     case "talentsbutton":
@@ -198,6 +202,8 @@ public class player_setup : MonoBehaviour
                         Talents.gameObject.SetActive(true);
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(false);
+                        
+                        ChangeCanvasButton(false, true, false, false);
                         break;
 
                     case "PVPbutton":
@@ -205,6 +211,8 @@ public class player_setup : MonoBehaviour
                         Talents.gameObject.SetActive(false);
                         PVP.gameObject.SetActive(true);
                         options.gameObject.SetActive(false);
+                        
+                        ChangeCanvasButton(false, false, true, false);
                         break;
 
                     case "optionsbutton":
@@ -212,10 +220,12 @@ public class player_setup : MonoBehaviour
                         Talents.gameObject.SetActive(false);
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(true);
+                        
+                        ChangeCanvasButton(false, false, false, true);
                         break;
                 }
 
-                if (EventSystem.current.currentSelectedGameObject.tag == "hints")
+                if (EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.tag == "hints")
                 {
                     StartCoroutine(GetHintOver(EventSystem.current.currentSelectedGameObject.name, new Vector2(EventSystem.current.currentSelectedGameObject.transform.position.x, EventSystem.current.currentSelectedGameObject.transform.position.y)));
                 } 
@@ -232,6 +242,52 @@ public class player_setup : MonoBehaviour
 
     }
 
+
+    private void ChangeCanvasButton(bool h, bool t, bool p, bool o)
+    {
+                
+        StartCoroutine(CanvasButtonOn(HeroB.gameObject, h));
+        StartCoroutine(CanvasButtonOn(TalentsB.gameObject, t));
+        StartCoroutine(CanvasButtonOn(PVPB.gameObject, p));
+        StartCoroutine(CanvasButtonOn(optionsB.gameObject, o));
+       
+    }
+
+
+    IEnumerator CanvasButtonOn(GameObject ButtonGameObject, bool direction)
+    {
+        // -80  -30
+        
+        if ((direction && ButtonGameObject.transform.position.x != -35) || (!direction && ButtonGameObject.transform.position.x != -75))
+        {
+
+            HeroB.interactable = false;
+            TalentsB.interactable = false;
+            PVPB.interactable = false;
+            optionsB.interactable = false;
+
+            for (float i = 0; i < 1; i += 0.1f)
+            {
+                if (direction)
+                {
+                    if (ButtonGameObject.transform.position.x != -35) ButtonGameObject.transform.position = Vector3.Lerp(new Vector3(-80, ButtonGameObject.transform.position.y, 0), new Vector3(-30, ButtonGameObject.transform.position.y, 0), i);
+                }
+                else
+                {
+                    if (ButtonGameObject.transform.position.x != -75) ButtonGameObject.transform.position = Vector3.Lerp(new Vector3(-30, ButtonGameObject.transform.position.y, 0), new Vector3(-80, ButtonGameObject.transform.position.y, 0), i);
+                }
+
+
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+
+            HeroB.interactable = true;
+            TalentsB.interactable = true;
+            PVPB.interactable = true;
+            optionsB.interactable = true;
+        }
+
+    }
 
 
     IEnumerator ConnectionErr()
