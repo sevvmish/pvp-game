@@ -25,7 +25,8 @@ public class player_setup : MonoBehaviour
         HitPowerTextText, ArmorTextText, ShieldBlockTextText, MagicResistanceTextText, DodgeTextText, CastSpeedTextText,
         MeleeCritTextText, MagicCritTextText, SpellPowerTextText;
 
-    public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB;
+    public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
+        pvp11, pvp22, pvp33;
 
     public Canvas Hero, Talents, PVP, options;
 
@@ -154,16 +155,40 @@ public class player_setup : MonoBehaviour
 
         podskazka.SetActive(false);
 
-        string result = sr.SendAndGetLoginSetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
-        CurrentCharacterData = new character_data(result);
+        //string result = sr.SendAndGetLoginSetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        //CurrentCharacterData = new character_data(result);
 
         GetCharDataToView();
 
         BackToLogin.onClick.AddListener(BackToLogChoose);
+        pvp11.onClick.AddListener(pvp1vs1);
+        pvp22.onClick.AddListener(pvp2vs2);
+        pvp33.onClick.AddListener(pvp3vs3);
 
-        
     }
 
+
+    private void pvp1vs1()
+    {
+        //cDHdvB6q5F     user 29      warwar      char 34
+        //string result = sr.SendAndGetLoginSetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
+        string result = sr.SendAndGetLoginSetup("3~1~" + "cDHdvB6q5F" + "~" + "warwar");
+        print(result);
+    }
+
+
+    private void pvp2vs2()
+    {
+        string result = sr.SendAndGetLoginSetup("3~2~" + "cDHdvB6q5F" + "~" + "warwar");
+        print(result);
+    }
+
+
+    private void pvp3vs3()
+    {
+        string result = sr.SendAndGetLoginSetup("3~3~" + "cDHdvB6q5F" + "~" + "warwar");
+        print(result);
+    }
 
     private void BackToLogChoose()
     {
