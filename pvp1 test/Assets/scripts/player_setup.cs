@@ -155,7 +155,7 @@ public class player_setup : MonoBehaviour
 
         podskazka.SetActive(false);
 
-        //string result = sr.SendAndGetLoginSetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        //string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
         //CurrentCharacterData = new character_data(result);
 
         GetCharDataToView();
@@ -163,30 +163,30 @@ public class player_setup : MonoBehaviour
         BackToLogin.onClick.AddListener(BackToLogChoose);
         pvp11.onClick.AddListener(pvp1vs1);
         pvp22.onClick.AddListener(pvp2vs2);
-        pvp33.onClick.AddListener(pvp3vs3);
+        pvp33.onClick.AddListener(pvp5vs5);
 
     }
 
 
     private void pvp1vs1()
     {
-        //cDHdvB6q5F     user 29      warwar      char 34
-        //string result = sr.SendAndGetLoginSetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
-        string result = sr.SendAndGetLoginSetup("3~1~" + "cDHdvB6q5F" + "~" + "warwar");
+        //0ybyW38IIn     user 29      warwar      char 34
+        //string result = sr.SendAndGetOnlySetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
+        string result = sr.SendAndGetOnlySetup("3~1~" + "0ybyW38IIn" + "~" + "warwar");
         print(result);
     }
 
 
     private void pvp2vs2()
     {
-        string result = sr.SendAndGetLoginSetup("3~2~" + "cDHdvB6q5F" + "~" + "warwar");
+        string result = sr.SendAndGetOnlySetup("3~2~" + "0ybyW38IIn" + "~" + "warwar");
         print(result);
     }
 
 
-    private void pvp3vs3()
+    private void pvp5vs5()
     {
-        string result = sr.SendAndGetLoginSetup("3~3~" + "cDHdvB6q5F" + "~" + "warwar");
+        string result = sr.SendAndGetOnlySetup("3~3~" + "0ybyW38IIn" + "~" + "warwar");
         print(result);
     }
 

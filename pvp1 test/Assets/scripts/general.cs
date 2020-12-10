@@ -12,6 +12,9 @@ public class general
     public static int GameServerUDPPort = 2325;
     public static string GameServerIP = "45.67.57.30";  //134.0.116.169       45.67.57.30      185.18.53.239
 
+    public static int SetupServerTCPPort = 2326;
+    public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+
     public static int LoginServerTCPPort = 2324;
     public static string LoginServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
 
@@ -44,7 +47,7 @@ public class general
     {
         GameObject result = null;
 
-        switch(ClassNumber)
+        switch (ClassNumber)
         {
             case 1:
                 result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
@@ -100,7 +103,7 @@ public struct SessionData
 
     public static string SendSessionDataRequest()
     {
-        
+
         return "0~4~" + general.SessionPlayerID + "~" + general.SessionTicket;
     }
 
@@ -144,15 +147,97 @@ public static class sr
         {
             Debug.Log("BBBBBBAAAAAAAAAADDDDDDDDD");
             sr.isConnectionError = true;
-            
+
         }
-        
+
     }
+
+
+    public static string SendAndGetOnlySetup(string DataForSending)
+    {
+        int CurrentPort = general.SetupServerTCPPort;
+        string CurrentIP = general.SetupServerIP;
+        string result = null;
+
+        IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(CurrentIP), CurrentPort);
+        Socket sck = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        //=============================CONNECT======================================
+        try
+        {
+            sck.Connect(endpoint);
+        }
+        catch (Exception ex)
+        {
+            isConnectionError = true;
+            Debug.Log(ex);
+            result = ex.ToString();
+
+            /*
+            sck.Shutdown(SocketShutdown.Both);
+            sck.Close();
+            */
+            return result;
+
+        }
+        //===============================SEND======================================
+        try
+        {
+            sck.Send(Encoding.UTF8.GetBytes(DataForSending));
+        }
+        catch (Exception ex)
+        {
+            isConnectionError = true;
+            Debug.Log(ex);
+            result = ex.ToString();
+
+            sck.Shutdown(SocketShutdown.Both);
+            sck.Close();
+            return result;
+        }
+        //================================GET======================================
+        try
+        {
+            StringBuilder messrec = new StringBuilder();
+            byte[] msgBuff = new byte[255];
+            int size = 0;
+
+            {
+                size = sck.Receive(msgBuff);
+                messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
+            }
+            while (sck.Available > 0) ;
+
+            if (messrec.ToString() != "" && messrec.ToString() != null)
+            {
+                result = messrec.ToString();
+            }
+            else
+            {
+                result = "error in received data";
+            }
+        }
+        catch (Exception ex)
+        {
+            isConnectionError = true;
+            Debug.Log(ex);
+            result = ex.ToString();
+
+            sck.Shutdown(SocketShutdown.Both);
+            sck.Close();
+            return result;
+        }
+        //error case
+        sck.Shutdown(SocketShutdown.Both);
+        sck.Close();
+        return result;
+    }
+
+
 
     public static string SendAndGetLoginSetup(string DataForSending)
     {
-        int CurrentPort = 2324;
-        string CurrentIP = "45.67.57.30";
+        int CurrentPort = general.LoginServerTCPPort;
+        string CurrentIP = general.LoginServerIP;
         string result = null;
 
         IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(CurrentIP), CurrentPort);
