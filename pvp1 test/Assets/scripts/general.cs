@@ -26,7 +26,7 @@ public class general
 
     public static string CharacterName;
     public static int CharacterType;
-    public static int SessionNumberOfPlayers = 5;
+    public static int SessionNumberOfPlayers; //5
     public static int MainPlayerClass;
     public static string MainPlayerName;
     public static int MainPlayerOrder;

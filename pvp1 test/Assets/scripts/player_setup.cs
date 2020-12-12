@@ -30,6 +30,8 @@ public class player_setup : MonoBehaviour
 
     public Canvas Hero, Talents, PVP, options;
 
+    private bool isStartWaitingPVP;
+    private float WaitingTimeForPing = 1f, cur_time;
 
     private void GetCharDataToView()
     {
@@ -155,8 +157,8 @@ public class player_setup : MonoBehaviour
 
         podskazka.SetActive(false);
 
-        //string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
-        //CurrentCharacterData = new character_data(result);
+        string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        CurrentCharacterData = new character_data(result);
 
         GetCharDataToView();
 
@@ -170,24 +172,69 @@ public class player_setup : MonoBehaviour
 
     private void pvp1vs1()
     {
-        //0ybyW38IIn     user 29      warwar      char 34
-        //string result = sr.SendAndGetOnlySetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
-        string result = sr.SendAndGetOnlySetup("3~1~" + "0ybyW38IIn" + "~" + "warwar");
+        
+        string result = sr.SendAndGetOnlySetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
         print(result);
+
+        string[] getstr = result.Split('~');
+        string type = getstr[2];
+        int session_type = int.Parse(getstr[3]);
+
+        if (type=="in" && session_type==1)
+        {
+            general.SessionNumberOfPlayers = 2;
+            isStartWaitingPVP = true;
+        }
+
+        if (type == "out" && session_type == 1)
+        {
+            isStartWaitingPVP = false;
+        }
+
     }
 
 
     private void pvp2vs2()
     {
-        string result = sr.SendAndGetOnlySetup("3~2~" + "0ybyW38IIn" + "~" + "warwar");
+        string result = sr.SendAndGetOnlySetup("3~2~" + general.CurrentTicket + "~" + general.CharacterName);
         print(result);
+
+        string[] getstr = result.Split('~');
+        string type = getstr[2];
+        int session_type = int.Parse(getstr[3]);
+
+        if (type == "in" && session_type == 2)
+        {
+            general.SessionNumberOfPlayers = 4;
+            isStartWaitingPVP = true;
+        }
+
+        if (type == "out" && session_type == 2)
+        {
+            isStartWaitingPVP = false;
+        }
     }
 
 
     private void pvp5vs5()
     {
-        string result = sr.SendAndGetOnlySetup("3~3~" + "0ybyW38IIn" + "~" + "warwar");
+        string result = sr.SendAndGetOnlySetup("3~3~" + general.CurrentTicket + "~" + general.CharacterName);
         print(result);
+
+        string[] getstr = result.Split('~');
+        string type = getstr[2];
+        int session_type = int.Parse(getstr[3]);
+
+        if (type == "in" && session_type == 3)
+        {
+            general.SessionNumberOfPlayers = 10;
+            isStartWaitingPVP = true;
+        }
+
+        if (type == "out" && session_type == 3)
+        {
+            isStartWaitingPVP = false;
+        }
     }
 
     private void BackToLogChoose()
@@ -263,6 +310,62 @@ public class player_setup : MonoBehaviour
             {
                 podskazka.SetActive(false);
             }
+        }
+
+        if (isStartWaitingPVP)
+        {
+            if (cur_time>WaitingTimeForPing)
+            {
+                print(general.CurrentTicket + " ============" + general.CharacterName);
+                cur_time = 0;
+                string result = sr.SendAndGetOnlySetup("4~0~" + general.CurrentTicket + "~" + general.CharacterName);
+                print(result);
+
+                string[] getstr = result.Split('~');
+
+                int session_type = int.Parse(getstr[2]);
+                string ticket = getstr[3];
+                string session = getstr[4];
+
+                if (session_type==0 && ticket=="nst")
+                {
+                    SceneManager.LoadScene("player_choose");
+                }
+
+                if (session_type == 2)
+                {
+                    
+                    print("GGGGGGGEEEEEEEETTTTTT      RRRRRRRREEEEEAAAADDDDDDDDYYYYYYYYY");
+                }
+
+                if (session_type == 4)
+                {
+                    
+                    general.CurrentTicket = ticket;
+
+                    print("FFFFFFFAAAAAAAAAAIIIILLLLLLLLLLLLLEEEEEEEEEDDDDDDDDDDDD");
+                    SceneManager.LoadScene("player_choose");
+                }
+
+                if (session_type == 3)
+                {
+                    general.SessionTicket = session;
+                    general.CurrentTicket = ticket;
+                    general.SessionPlayerID = ticket;
+                    print("OOOOOOOOOOOKKKKKKKKKKKKKK");
+
+                    SceneManager.LoadScene("SampleScene");
+
+                }
+
+
+            } 
+            else
+            {
+                cur_time += Time.deltaTime;
+            }
+            
+
         }
 
     }

@@ -184,7 +184,7 @@ public class connection : MonoBehaviour
                     print(messrec.ToString());
                 }
                 */
-                print(messrec.ToString());
+                //print(messrec.ToString());
 
                 howmany--;
 
