@@ -92,6 +92,9 @@ public class playercontrol : MonoBehaviour
 
     void Start()
     {
+        Screen.SetResolution(1280, 720, true);
+        Camera.main.aspect = 16f / 9f;
+        Application.targetFrameRate = 60;
 
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
         SessionData.GetDataSessionPlayers(SessionResult);
@@ -104,13 +107,12 @@ public class playercontrol : MonoBehaviour
                 print(general.DataForSession[i].PlayerName + " - " + general.DataForSession[i].PlayerClass + " - " + general.DataForSession[i].PlayerOrder);
             }
         }
-        
+        print("player - " + general.SessionPlayerID + " .......  ticketforsession - " + general.SessionTicket);
 
         ButtonsManagement.Init();
         
-        Screen.SetResolution(1280, 720, true);
-        Camera.main.aspect = 16f / 9f;
         
+
         PlayerTransform = this.GetComponent<Transform>();
 
         
