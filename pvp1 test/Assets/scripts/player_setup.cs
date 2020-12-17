@@ -26,7 +26,7 @@ public class player_setup : MonoBehaviour
         MeleeCritTextText, MagicCritTextText, SpellPowerTextText;
 
     public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
-        pvp11, pvp22, pvp33;
+        pvp11, pvp22, pvp33, testing_but;
 
     public Canvas Hero, Talents, PVP, options;
 
@@ -166,7 +166,44 @@ public class player_setup : MonoBehaviour
         pvp11.onClick.AddListener(pvp1vs1);
         pvp22.onClick.AddListener(pvp2vs2);
         pvp33.onClick.AddListener(pvp5vs5);
+        testing_but.onClick.AddListener(testing_regime);
+    }
 
+
+    private void testing_regime()
+    {
+        string result = sr.SendAndGetOnlySetup("3~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        print(result + "=====================================================");
+
+        string[] getstr = result.Split('~');
+        string ticket = getstr[2];
+
+        if (ticket=="err")
+        {
+
+        } 
+        else
+        {
+            string session = getstr[3];
+            string hub_data = getstr[4];
+
+            general.SessionTicket = session;
+            general.CurrentTicket = ticket;
+            general.SessionPlayerID = ticket;
+
+            switch (hub_data)
+            {
+                case "1":
+                    general.GameServerIP = general.HUB1_ip;
+                    break;
+            }
+
+            general.SessionNumberOfPlayers = 3;
+
+            print("OOOOOOOOOOOKKKKKKKKKKKKKK" + general.CurrentTicket + " - " + general.SessionTicket);
+
+            SceneManager.LoadScene("SampleScene");
+        }        
     }
 
 
@@ -326,6 +363,7 @@ public class player_setup : MonoBehaviour
                 int session_type = int.Parse(getstr[2]);
                 string ticket = getstr[3];
                 string session = getstr[4];
+                string hub_data = getstr[5];
 
                 if (session_type==0 && ticket=="nst")
                 {
@@ -352,10 +390,17 @@ public class player_setup : MonoBehaviour
                     general.SessionTicket = session;
                     general.CurrentTicket = ticket;
                     general.SessionPlayerID = ticket;
+
+                    switch(hub_data)
+                    {
+                        case "1":
+                            general.GameServerIP = general.HUB1_ip;
+                            break;
+                    }
+                    
                     print("OOOOOOOOOOOKKKKKKKKKKKKKK");
 
                     SceneManager.LoadScene("SampleScene");
-
                 }
 
 

@@ -10,7 +10,8 @@ public class general
 {
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string GameServerIP = "45.67.57.30";  //134.0.116.169       45.67.57.30      185.18.53.239
+    public static string HUB1_ip = "45.67.57.30";
+    public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239
 
     public static int SetupServerTCPPort = 2326;
     public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
@@ -49,6 +50,9 @@ public class general
 
         switch (ClassNumber)
         {
+            case -1:
+                result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
+                break;
             case 1:
                 result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
                 break;
