@@ -582,6 +582,23 @@ public class playercontrol : MonoBehaviour
                         MakeSign("BLOCKED", PlayerTransform.position, Color.white, false);
                         MyConds.curr_conds[i].isChecked = true;
                     }
+                    else if (MyConds.curr_conds[i].cond_message == "r")
+                    {
+                        MakeSign("RESISTED", PlayerTransform.position, Color.white, false);
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
+
+                }
+
+
+
+                else if (MyConds.curr_conds[i].cond_type == "him")
+                {
+                    if (MyConds.curr_conds[i].cond_message == "r")
+                    {
+                        MakeSign("RESISTED", PlayerTransform.position, Color.white, false);
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
 
                 }
 

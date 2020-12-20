@@ -33,7 +33,8 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player1";
         general.SessionTicket = "session";
-        general.SessionNumberOfPlayers = 5;
+        general.GameServerIP = general.HUB1_ip;
+        general.SessionNumberOfPlayers=7;
         StartCoroutine(StartLevel());
         
     }
@@ -42,7 +43,8 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player2";
         general.SessionTicket = "session";
-        general.SessionNumberOfPlayers = 5;
+        general.GameServerIP = general.HUB1_ip;
+        general.SessionNumberOfPlayers = 7;
         StartCoroutine(StartLevel());
 
     }
@@ -51,7 +53,8 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player3";
         general.SessionTicket = "session";
-        general.SessionNumberOfPlayers = 5;
+        general.GameServerIP = general.HUB1_ip;
+        general.SessionNumberOfPlayers = 7;
         StartCoroutine(StartLevel());
 
     }
@@ -60,7 +63,8 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player4";
         general.SessionTicket = "session";
-        general.SessionNumberOfPlayers = 5;
+        general.GameServerIP = general.HUB1_ip;
+        general.SessionNumberOfPlayers = 7;
         StartCoroutine(StartLevel());
 
     }
@@ -69,7 +73,8 @@ public class plchoose : MonoBehaviour
     {
         general.SessionPlayerID = "player5";
         general.SessionTicket = "session";
-        general.SessionNumberOfPlayers = 5;
+        general.GameServerIP = general.HUB1_ip;
+        general.SessionNumberOfPlayers = 7;
         StartCoroutine(StartLevel());
 
     }

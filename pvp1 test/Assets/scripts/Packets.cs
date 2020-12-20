@@ -114,7 +114,7 @@ public class ConditionsAnalys
 
             curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
         }
-        else if (curr_conds[Index].cond_type == "me") //messages of conditions
+        else if (curr_conds[Index].cond_type == "me" || curr_conds[Index].cond_type == "him") //messages of conditions
         {
             curr_conds[Index].cond_message = getstrcond[1];
         }
@@ -772,6 +772,9 @@ public static class SendAndReceive
                 break;
             case 12:
                 ReturnMess = "you are busy with another spell";
+                break;
+            case 13:
+                ReturnMess = "you allready on this spell";
                 break;
 
         }

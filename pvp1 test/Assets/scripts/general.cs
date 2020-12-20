@@ -50,8 +50,11 @@ public class general
 
         switch (ClassNumber)
         {
+            case -2:
+                result = Resources.Load<GameObject>("prefabs/pugalo heavy");
+                break;
             case -1:
-                result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
+                result = Resources.Load<GameObject>("prefabs/pugalo light");
                 break;
             case 1:
                 result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
