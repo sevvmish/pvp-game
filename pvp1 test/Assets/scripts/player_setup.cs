@@ -26,7 +26,7 @@ public class player_setup : MonoBehaviour
         MeleeCritTextText, MagicCritTextText, SpellPowerTextText;
 
     public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
-        pvp11, pvp22, pvp33, testing_but;
+        pvp11, pvp22, pvp33, testing_but, sending_talent_info;
 
     public Canvas Hero, Talents, PVP, options;
 
@@ -167,6 +167,15 @@ public class player_setup : MonoBehaviour
         pvp22.onClick.AddListener(pvp2vs2);
         pvp33.onClick.AddListener(pvp5vs5);
         testing_but.onClick.AddListener(testing_regime);
+
+        sending_talent_info.onClick.AddListener(send_talents);
+    }
+
+
+    private void send_talents()
+    {
+        string result = sr.SendAndGetOnlySetup("3~4~" + general.CurrentTicket + "~" + general.CharacterName + "~" + CurrentCharacterData.talents);
+        print(result);
     }
 
 
@@ -575,6 +584,8 @@ public struct character_data
     public int spell4;
     public int spell5;
     public int spell6;
+    public string spell_book;
+    public string talents;
 
     public character_data(string resultdata)
     {
@@ -602,7 +613,9 @@ public struct character_data
         spell4 = int.Parse(getstr[19]);
         spell5 = int.Parse(getstr[20]);
         spell6 = int.Parse(getstr[21]);
+        spell_book = getstr[22];
+        talents = getstr[23];
 
-        
+
     }
 }
