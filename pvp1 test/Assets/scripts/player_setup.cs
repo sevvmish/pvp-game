@@ -8,7 +8,6 @@ using System.Globalization;
 using UnityEngine.EventSystems;
 
 
-
 public class player_setup : MonoBehaviour
 {
     public GameObject ConnectionError, 
@@ -23,18 +22,38 @@ public class player_setup : MonoBehaviour
 
         SpeedTextText, HealthTextText, HealthRegenTextText, EnergyRegenTextText, WeaponAttackTextText,
         HitPowerTextText, ArmorTextText, ShieldBlockTextText, MagicResistanceTextText, DodgeTextText, CastSpeedTextText,
-        MeleeCritTextText, MagicCritTextText, SpellPowerTextText;
+        MeleeCritTextText, MagicCritTextText, SpellPowerTextText,
+        
+        UsedTalentsInfo;
 
     public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
         pvp11, pvp22, pvp33, testing_but, sending_talent_info;
 
     public Canvas Hero, Talents, PVP, options;
 
-    private bool isStartWaitingPVP;
-    private float WaitingTimeForPing = 1f, cur_time;
+    private bool isStartWaitingPVP, isNoTalentPointAvailable;
+    private float WaitingTimeForPing = 1f, cur_time, cur_time_check_talents;
+    private int CurrentTalentsCount;
+    
+
+    //public List<Object> TalentButtonUI = new List<Object>();
+
+    public int[,] CurrentTalentsSpread = new int [,] { {0,0,0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+
+    TalentsButton r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72;
+    List<TalentsButton> TalentBottonsList = new List<TalentsButton>();
 
     private void GetCharDataToView()
     {
+        string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);        
+        CurrentCharacterData = new character_data(result);
+
+        FromStringToArrTalents(out CurrentTalentsSpread, CurrentCharacterData.talents);
+
+        
+
+        print(FromArrToStringTalents(CurrentTalentsSpread) + " !");
+
         CharNameText.text = general.CharacterName;
         SpeedText.text = CurrentCharacterData.speed.ToString();
         HealthText.text = CurrentCharacterData.health.ToString();
@@ -57,6 +76,8 @@ public class player_setup : MonoBehaviour
         SpellButton4.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell4).Spell1_icon;
         SpellButton5.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell5).Spell1_icon;
         SpellButton6.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell6).Spell1_icon;
+
+
 
         switch (general.CharacterType)
         {
@@ -122,10 +143,18 @@ public class player_setup : MonoBehaviour
     }
 
 
+
     // Start is called before the first frame update
     void Start()
     {
         sr.isConnectionError = false;
+        
+
+        //toDELETE
+        general.CharacterType = 2;
+        general.CurrentTicket = "N6SA0aIj7S";
+        general.CharacterName = "elemeleMain";
+        //===================
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
@@ -157,10 +186,60 @@ public class player_setup : MonoBehaviour
 
         podskazka.SetActive(false);
 
-        string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
-        CurrentCharacterData = new character_data(result);
 
         GetCharDataToView();
+
+        int StartTalentNumber = 0;
+
+        switch(general.CharacterType)
+        {
+            case 1:
+                StartTalentNumber = 1;
+                break;
+            case 2:
+                StartTalentNumber = 1;
+                break;
+            case 3:
+                StartTalentNumber = 45;
+                break;
+            case 4:
+                StartTalentNumber = 67;
+                break;
+            case 5:
+                StartTalentNumber = 89;
+                break;
+
+        }
+
+        Talents.gameObject.SetActive(true);
+        r00 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber).Talent_icon, CurrentTalentsSpread[0, 0], 3, "r00", new Vector2(-424, 146));
+        r01 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 1).Talent_icon, CurrentTalentsSpread[0, 1], 3, "r01", new Vector2(-424, 5));
+        r02 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 2).Talent_icon, CurrentTalentsSpread[0, 2], 3, "r02", new Vector2(-424, -139));
+        r10 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 3).Talent_icon, CurrentTalentsSpread[1, 0], 2, "r10", new Vector2(-279, 146));
+        r11 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 4).Talent_icon, CurrentTalentsSpread[1, 1], 2, "r11", new Vector2(-279, 5));
+        r12 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 5).Talent_icon, CurrentTalentsSpread[1, 2], 2, "r12", new Vector2(-279, -139));
+        r20 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 6).Talent_icon, CurrentTalentsSpread[2, 0], 1, "r20", new Vector2(-154, 146));
+        r21 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 7).Talent_icon, CurrentTalentsSpread[2, 1], 1, "r21", new Vector2(-154, 5));
+        r30 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 8).Talent_icon, CurrentTalentsSpread[3, 0], 2, "r30", new Vector2(-35, 146));
+        r31 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 9).Talent_icon, CurrentTalentsSpread[3, 1], 2, "r31", new Vector2(-35, 5));
+        r32 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 10).Talent_icon, CurrentTalentsSpread[3, 2], 2, "r32", new Vector2(-35, -139));
+        r40 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 11).Talent_icon, CurrentTalentsSpread[4, 0], 3, "r40", new Vector2(98, 146));
+        r41 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 12).Talent_icon, CurrentTalentsSpread[4, 1], 3, "r41", new Vector2(98, 5));
+        r42 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 13).Talent_icon, CurrentTalentsSpread[4, 2], 3, "r42", new Vector2(98, -139));
+        r50 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 14).Talent_icon, CurrentTalentsSpread[5, 0], 1, "r50", new Vector2(223, 146));
+        r51 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 15).Talent_icon, CurrentTalentsSpread[5, 1], 1, "r51", new Vector2(223, 5));
+        r60 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 16).Talent_icon, CurrentTalentsSpread[6, 0], 2, "r60", new Vector2(345, 146));
+        r61 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 17).Talent_icon, CurrentTalentsSpread[6, 1], 2, "r61", new Vector2(345, 5));
+        r62 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 18).Talent_icon, CurrentTalentsSpread[6, 2], 2, "r62", new Vector2(345, -139));
+        r70 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 19).Talent_icon, CurrentTalentsSpread[7, 0], 1, "r70", new Vector2(479, 146));
+        r71 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 20).Talent_icon, CurrentTalentsSpread[7, 1], 1, "r71", new Vector2(479, 5));
+        r72 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 21).Talent_icon, CurrentTalentsSpread[7, 2], 1, "r72", new Vector2(479, -139));
+
+        TalentBottonsList.AddRange(new TalentsButton[] { r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72 });
+
+        
+
+        Talents.gameObject.SetActive(false);
 
         BackToLogin.onClick.AddListener(BackToLogChoose);
         pvp11.onClick.AddListener(pvp1vs1);
@@ -169,12 +248,166 @@ public class player_setup : MonoBehaviour
         testing_but.onClick.AddListener(testing_regime);
 
         sending_talent_info.onClick.AddListener(send_talents);
+
     }
 
+    private void CheckNormalTalentDisp()
+    {
+        /*r20.MakeInactive(); r21.MakeInactive();
+        r30.MakeInactive(); r31.MakeInactive(); r32.MakeInactive();
+        r40.MakeInactive();
+        r50.MakeInactive();
+        r60.MakeInactive();
+        r70.MakeInactive();*/
+        /*
+        int sum = 0;
+
+        for (int i=0; i<TalentBottonsList.Count; i++)
+        {
+            sum = sum + TalentBottonsList[i].GetCurrentTalentPoint();
+        }
+
+        UsedTalentsInfo.text = sum.ToString() + "/16";
+
+        if (sum>=16)
+        {
+            isNoTalentPointAvailable = true;
+        } 
+        else
+        {
+            isNoTalentPointAvailable = false;
+        }
+        */
+        //TalentBottonsList.AddRange(new TalentsButton[] { r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72 });
+        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint())<3)
+        {
+            r20.MakeInactive();
+            r30.MakeInactive();
+            r40.MakeInactive();            
+        } else
+        {
+            r20.MakeActive();
+            r30.MakeActive();
+            r40.MakeActive();
+            
+        }
+
+        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint()) < 3)
+        {
+            r21.MakeInactive();
+            r31.MakeInactive();
+            r41.MakeInactive();
+            
+        } else
+        {
+            r21.MakeActive();
+            r31.MakeActive();
+            r41.MakeActive();
+            
+        }
+
+        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint()) < 3)
+        {            
+            r32.MakeInactive();
+            r42.MakeInactive();            
+            
+        } else
+        {
+            r32.MakeActive();
+            r42.MakeActive();
+            
+        }
+
+        //==================================================
+
+        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint()) < 6)
+        {
+            r50.MakeInactive();
+            r60.MakeInactive();            
+        }
+        else
+        {
+            r50.MakeActive();
+            r60.MakeActive();
+            
+
+        }
+
+        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint()  +r31.GetCurrentTalentPoint()  +r41.GetCurrentTalentPoint()) < 6)
+        {
+            r51.MakeInactive();
+            r61.MakeInactive();
+        }
+        else
+        {
+            r51.MakeActive();
+            r61.MakeActive();
+        }
+
+        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint()) < 6)
+        {
+            
+            r62.MakeInactive();
+
+        }
+        else
+        {
+            
+            r62.MakeActive();
+
+        }
+
+        //==================================================
+
+        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint() + r50.GetCurrentTalentPoint() + r60.GetCurrentTalentPoint()) < 10)
+        {
+            r70.MakeInactive();            
+        }
+        else
+        {
+            r70.MakeActive();            
+        }
+
+        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint() +r31.GetCurrentTalentPoint() +r41.GetCurrentTalentPoint() + r51.GetCurrentTalentPoint() + r61.GetCurrentTalentPoint()) < 10)
+        {
+            r71.MakeInactive();            
+        }
+        else
+        {
+            r71.MakeActive();            
+        }
+
+        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint() + r62.GetCurrentTalentPoint()) < 10)
+        {
+
+            r72.MakeInactive();
+
+        }
+        else
+        {
+
+            r72.MakeActive();
+
+        }
+
+        
+
+    }
 
     private void send_talents()
     {
-        string result = sr.SendAndGetOnlySetup("3~4~" + general.CurrentTicket + "~" + general.CharacterName + "~" + CurrentCharacterData.talents);
+        string TalentsToSend = r00.GetCurrentTalentPointString() + "-" + r01.GetCurrentTalentPointString() + "-" + r02.GetCurrentTalentPointString() + "," +
+            r10.GetCurrentTalentPointString() + "-" + r11.GetCurrentTalentPointString() + "-" + r12.GetCurrentTalentPointString() + "," +
+            r20.GetCurrentTalentPointString() + "-" + r21.GetCurrentTalentPointString() + "," +
+            r30.GetCurrentTalentPointString() + "-" + r31.GetCurrentTalentPointString() + "-" + r32.GetCurrentTalentPointString() + "," +
+            r40.GetCurrentTalentPointString() + "-" + r41.GetCurrentTalentPointString() + "-" + r42.GetCurrentTalentPointString() + "," +
+            r50.GetCurrentTalentPointString() + "-" + r51.GetCurrentTalentPointString() + "," +
+            r60.GetCurrentTalentPointString() + "-" + r61.GetCurrentTalentPointString() + "-" + r62.GetCurrentTalentPointString() + "," +
+            r70.GetCurrentTalentPointString() + "-" + r71.GetCurrentTalentPointString() + "-" + r72.GetCurrentTalentPointString();
+
+        print(TalentsToSend + " - for sending");
+
+        string result = sr.SendAndGetOnlySetup("3~4~" + general.CurrentTicket + "~" + general.CharacterName + "~" + TalentsToSend);
         print(result);
     }
 
@@ -288,6 +521,42 @@ public class player_setup : MonoBehaviour
         SceneManager.LoadScene("player_choose");
     }
 
+    private bool CheckIfNameEqual(string TestName)
+    {
+        bool result = false;
+
+        for (int i=0; i<TalentBottonsList.Count; i++)
+        {
+            
+            if (TalentBottonsList[i].GetName() == TestName)
+            {
+
+                if (!isNoTalentPointAvailable)
+                {
+                    //CheckNormalTalentDisp();
+                    TalentBottonsList[i].AddTalentPoint();
+                    //CheckNormalTalentDisp();
+                    result = true;
+                    return result;
+                } else
+                {
+                    //CheckNormalTalentDisp();
+                    TalentBottonsList[i].RemoveTalentPoint();
+                    //CheckNormalTalentDisp();
+                    result = true;
+                    return result;
+                }
+
+
+            } 
+            
+        }
+
+        
+        return result;
+
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -295,6 +564,46 @@ public class player_setup : MonoBehaviour
         {
             StartCoroutine(ConnectionErr());
         }
+
+        //=================================================
+        if (Talents.gameObject.activeSelf)
+        {
+            if (cur_time_check_talents > 0.1f)
+            {
+                cur_time_check_talents = 0;
+
+                int sum = 0;
+
+                for (int i = 0; i < TalentBottonsList.Count; i++)
+                {
+                    sum = sum + TalentBottonsList[i].GetCurrentTalentPoint();
+                }
+
+                if (CurrentTalentsCount != sum)
+                {
+                    CheckNormalTalentDisp();
+                }
+
+                CurrentTalentsCount = sum;
+
+                UsedTalentsInfo.text = sum.ToString() + "/16";
+
+                if (sum >= 16)
+                {
+                    isNoTalentPointAvailable = true;
+                }
+                else
+                {
+                    isNoTalentPointAvailable = false;
+                }
+            }
+            else
+            {
+                cur_time_check_talents += Time.deltaTime;
+            }
+        }
+
+        //=================================================
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -304,7 +613,20 @@ public class player_setup : MonoBehaviour
             {
                 print(EventSystem.current.currentSelectedGameObject.name);
 
-                switch(EventSystem.current.currentSelectedGameObject.name)
+                if (Talents.gameObject.activeSelf)
+                {
+                    
+                    bool result = CheckIfNameEqual(EventSystem.current.currentSelectedGameObject.name);
+
+
+                    
+
+                }
+
+
+
+
+                switch (EventSystem.current.currentSelectedGameObject.name)
                 {
                     case "herobutton":
                         Hero.gameObject.SetActive(true);                        
@@ -320,6 +642,8 @@ public class player_setup : MonoBehaviour
                         Talents.gameObject.SetActive(true);
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(false);
+                        
+                        CheckNormalTalentDisp();
                         
                         ChangeCanvasButton(false, true, false, false);
                         break;
@@ -424,6 +748,67 @@ public class player_setup : MonoBehaviour
 
     }
 
+    private string FromArrToStringTalents(int[,] TalentsSpread)
+    {
+        string result = "0-0-0,0-0-0,0-0,0-0-0,0-0-0,0-0,0-0-0,0-0-0";
+
+        result = TalentsSpread[0, 0] + "-" + TalentsSpread[0, 1] + "-" + TalentsSpread[0, 2] + "," +
+            TalentsSpread[1, 0] + "-" + TalentsSpread[1, 1] + "-" + TalentsSpread[1, 2] + "," +
+            TalentsSpread[2, 0] + "-" + TalentsSpread[2, 1] + "," +
+            TalentsSpread[3, 0] + "-" + TalentsSpread[3, 1] + "-" + TalentsSpread[3, 2] + "," +
+            TalentsSpread[4, 0] + "-" + TalentsSpread[4, 1] + "-" + TalentsSpread[4, 2] + "," +
+            TalentsSpread[5, 0] + "-" + TalentsSpread[5, 1] + "," +
+            TalentsSpread[6, 0] + "-" + TalentsSpread[6, 1] + "-" + TalentsSpread[6, 2] + "," +
+            TalentsSpread[7, 0] + "-" + TalentsSpread[7, 1] + "-" + TalentsSpread[7, 2];
+
+
+        return result;
+    }
+    
+    private void FromStringToArrTalents(out int [,] TalentsSpread, string talents_string)
+    {
+        TalentsSpread = new int[,] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+        string[] get_talents = talents_string.Split(',');
+        List<string[]> Rows = new List<string[]>();
+
+        for (int i=0; i< get_talents.Length; i++)
+        {
+            string[] current_row = get_talents[i].Split('-');
+            Rows.Add(current_row);
+        }
+
+        TalentsSpread[0, 0] = int.Parse( Rows[0].GetValue(0).ToString());
+        TalentsSpread[0, 1] = int.Parse(Rows[0].GetValue(1).ToString());
+        TalentsSpread[0, 2] = int.Parse(Rows[0].GetValue(2).ToString());
+
+        TalentsSpread[1, 0] = int.Parse(Rows[1].GetValue(0).ToString());
+        TalentsSpread[1, 1] = int.Parse(Rows[1].GetValue(1).ToString());
+        TalentsSpread[1, 2] = int.Parse(Rows[1].GetValue(2).ToString());
+
+        TalentsSpread[2, 0] = int.Parse(Rows[2].GetValue(0).ToString());
+        TalentsSpread[2, 1] = int.Parse(Rows[2].GetValue(1).ToString());
+
+        TalentsSpread[3, 0] = int.Parse(Rows[3].GetValue(0).ToString());
+        TalentsSpread[3, 1] = int.Parse(Rows[3].GetValue(1).ToString());
+        TalentsSpread[3, 2] = int.Parse(Rows[3].GetValue(2).ToString());
+
+        TalentsSpread[4, 0] = int.Parse(Rows[4].GetValue(0).ToString());
+        TalentsSpread[4, 1] = int.Parse(Rows[4].GetValue(1).ToString());
+        TalentsSpread[4, 2] = int.Parse(Rows[4].GetValue(2).ToString());
+
+        TalentsSpread[5, 0] = int.Parse(Rows[5].GetValue(0).ToString());
+        TalentsSpread[5, 1] = int.Parse(Rows[5].GetValue(1).ToString());
+
+        TalentsSpread[6, 0] = int.Parse(Rows[6].GetValue(0).ToString());
+        TalentsSpread[6, 1] = int.Parse(Rows[6].GetValue(1).ToString());
+        TalentsSpread[6, 2] = int.Parse(Rows[6].GetValue(2).ToString());
+
+        TalentsSpread[7, 0] = int.Parse(Rows[7].GetValue(0).ToString());
+        TalentsSpread[7, 1] = int.Parse(Rows[7].GetValue(1).ToString());
+        TalentsSpread[7, 2] = int.Parse(Rows[7].GetValue(2).ToString());
+
+    }
+    
 
     private void ChangeCanvasButton(bool h, bool t, bool p, bool o)
     {
@@ -559,6 +944,134 @@ public class player_setup : MonoBehaviour
 
     }
 
+
+
+
+
+
+
+
+
+
+    public class TalentsButton : MonoBehaviour
+    {
+        public GameObject WholeButtonImage;
+        private Button MainThemeImage;
+        private TextMeshProUGUI TalentsNumbers;
+        private int MaxTalents;
+        private int CurrentTalents;
+        private bool isActive;
+
+        public TalentsButton(Sprite MainTheme, int CurrTalents, int MTalents, string TalentName, Vector2 coords)
+        {
+            WholeButtonImage = Instantiate(Resources.Load<GameObject>("prefabs/point"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("talents").transform);
+            WholeButtonImage.gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(coords.x, coords.y, 0);
+
+            MainThemeImage = WholeButtonImage.transform.GetChild(0).GetComponent<Button>();
+            MainThemeImage.image.sprite = MainTheme;
+            WholeButtonImage.name = TalentName;
+            MainThemeImage.name = TalentName;
+
+            CurrentTalents = CurrTalents;
+            MaxTalents = MTalents;
+
+            isActive = true;
+
+            TalentsNumbers = WholeButtonImage.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+
+            GetCurrTalents();
+
+
+        }
+
+        public string GetName()
+        {
+            return MainThemeImage.name;
+        }
+
+        public void MakeInactive()
+        {
+            CurrentTalents = 0;
+            GetCurrTalents();
+            //MainThemeImage.interactable = false;
+            Color curcolor = MainThemeImage.image.color;
+            curcolor.a = 0.4f;
+            MainThemeImage.image.color = curcolor;
+
+            isActive = false;
+        }
+
+        public void MakeActive()
+        {
+            //MainThemeImage.interactable = true;
+            Color curcolor = MainThemeImage.image.color;
+            curcolor.a = 1f;
+            MainThemeImage.image.color = curcolor;
+            isActive = true;
+        }
+
+
+        public void AddTalentPoint()
+        {
+            if (isActive)
+            {
+                if (CurrentTalents == MaxTalents)
+                {
+                    CurrentTalents = 0;
+                    GetCurrTalents();
+                }
+                else
+                {
+                    CurrentTalents++;
+                    GetCurrTalents();
+                }
+            }
+        }
+
+        public void RemoveTalentPoint()
+        {
+            if (isActive)
+            {
+                if (CurrentTalents == 0)
+                {
+                    CurrentTalents = 0;
+                    GetCurrTalents();
+                }
+                else
+                {
+                    CurrentTalents--;
+                    GetCurrTalents();
+                }
+            }
+        }
+
+        public string GetCurrentTalentPointString()
+        {
+            return CurrentTalents.ToString();
+        }
+
+        public int GetCurrentTalentPoint()
+        {
+            return CurrentTalents;
+        }
+
+        private void GetCurrTalents()
+        {
+            TalentsNumbers.text = CurrentTalents + "/" + MaxTalents;
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -586,6 +1099,7 @@ public struct character_data
     public int spell6;
     public string spell_book;
     public string talents;
+    
 
     public character_data(string resultdata)
     {
@@ -618,4 +1132,12 @@ public struct character_data
 
 
     }
+
+
+
+
+
+
 }
+
+

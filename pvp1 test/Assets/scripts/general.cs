@@ -8,6 +8,9 @@ using System.Text;
 
 public class general
 {
+    public static bool isRus = true;
+    
+
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
     public static string HUB1_ip = "45.67.57.30";

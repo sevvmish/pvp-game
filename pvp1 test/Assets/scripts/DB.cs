@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -70,8 +71,131 @@ public class DB : MonoBehaviour
         return result;
     }
 
+    public static talentsIDs GetTalentByNumber(int TalentNumber)
+    {
+        talentsIDs result = talent1;
+        switch (TalentNumber)
+        {
+            case 1:
+                result = talent1;
+                break;
+            case 2:
+                result = talent2;
+                break;
+            case 3:
+                result = talent3;
+                break;
+            case 4:
+                result = talent4;
+                break;
+            case 5:
+                result = talent5;
+                break;
+            case 6:
+                result = talent6;
+                break;
+            case 7:
+                result = talent7;
+                break;
+            case 8:
+                result = talent8;
+                break;
+            case 9:
+                result = talent9;
+                break;
+            case 10:
+                result = talent10;
+                break;
+            case 11:
+                result = talent11;
+                break;
+            case 12:
+                result = talent12;
+                break;
+            case 13:
+                result = talent13;
+                break;
+            case 14:
+                result = talent14;
+                break;
+            case 15:
+                result = talent15;
+                break;
+            case 16:
+                result = talent16;
+                break;
+            case 17:
+                result = talent17;
+                break;
+            case 18:
+                result = talent18;
+                break;
+            case 19:
+                result = talent19;
+                break;
+            case 20:
+                result = talent20;
+                break;
+            case 21:
+                result = talent21;
+                break;
+            case 22:
+                result = talent22;
+                break;
+
+        }
+
+        return result;
+    }
+
+    //WARRIOR
+    public static talentsIDs talent1 = new talentsIDs(lang.Talent1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent2 = new talentsIDs(lang.Talent1Name, 2, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent3 = new talentsIDs(lang.Talent1Name, 3, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent4 = new talentsIDs(lang.Talent1Name, 4, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent5 = new talentsIDs(lang.Talent1Name, 5, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent6 = new talentsIDs(lang.Talent1Name, 6, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent7 = new talentsIDs(lang.Talent1Name, 7, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent8 = new talentsIDs(lang.Talent1Name, 8, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent9 = new talentsIDs(lang.Talent1Name, 9, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent10 = new talentsIDs(lang.Talent1Name, 10, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent11 = new talentsIDs(lang.Talent1Name, 11, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent12 = new talentsIDs(lang.Talent1Name, 12, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent13 = new talentsIDs(lang.Talent1Name, 13, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent14 = new talentsIDs(lang.Talent1Name, 14, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent15 = new talentsIDs(lang.Talent1Name, 15, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent16 = new talentsIDs(lang.Talent1Name, 16, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent17 = new talentsIDs(lang.Talent1Name, 17, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent18 = new talentsIDs(lang.Talent1Name, 18, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent19 = new talentsIDs(lang.Talent1Name, 19, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent20 = new talentsIDs(lang.Talent1Name, 20, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent21 = new talentsIDs(lang.Talent1Name, 21, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent22 = new talentsIDs(lang.Talent1Name, 22, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+
+
+
 }
 
+
+
+
+public struct talentsIDs
+{
+    
+    public string Talent_name;
+    public int Talent_number;
+    public Sprite Talent_icon;
+    public string Talent_description;
+    
+
+    public talentsIDs(string name, int number, Sprite sprt, string descri)
+    {
+        Talent_name = name;
+        Talent_number = number;
+        Talent_icon = sprt;
+        Talent_description = descri;
+    }
+}
 
 
 public struct spellsIDs
@@ -108,8 +232,12 @@ public struct spellsIDs
     }
 }
 
+
+
 public static class lang
 {
+
+
     //логин и вызов пользователя
     //public static string LoginText = "";
     public static string LoginText = "ВОЙТИ";
@@ -213,9 +341,13 @@ public static class lang
     public static string Spell1002Name = "оглушение";
     public static string Spell1002ShortDescri = "оглушение";
     public static string Spell1002FullDescri = "невозможно двигаться, атаковать и произносить заклинания";
+
+    //ТАЛАНТЫ======================
+    public static string Talent1Name = "оглушение";
+    public static string Talent1Description = "оглушение gvbrffgd egerg  egref";
 }
 
-public static class UNlang
+public static class ENlang
 {
 
     //логин и вызов пользователя
@@ -305,5 +437,9 @@ public static class UNlang
     public static string Spell1002Name = "stun";
     public static string Spell1002ShortDescri = "stunned";
     public static string Spell1002FullDescri = "unable to move, attack or cast spells";
+
+    //ТАЛАНТЫ======================
+    public static string Talent1Name = "stuunn";
+    public static string Talent1Description = "kbdsfks fuiw f frf";
 }
 
