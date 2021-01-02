@@ -24,10 +24,10 @@ public class player_setup : MonoBehaviour
         HitPowerTextText, ArmorTextText, ShieldBlockTextText, MagicResistanceTextText, DodgeTextText, CastSpeedTextText,
         MeleeCritTextText, MagicCritTextText, SpellPowerTextText,
         
-        UsedTalentsInfo;
+        Line1Talents, Line2Talents, Line3Talents, UsedTalentsInfo;
 
     public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
-        pvp11, pvp22, pvp33, testing_but, sending_talent_info;
+        pvp11, pvp22, pvp33, testing_but, sending_talent_info, ResetTalentsButton;
 
     public Canvas Hero, Talents, PVP, options;
 
@@ -55,20 +55,20 @@ public class player_setup : MonoBehaviour
         print(FromArrToStringTalents(CurrentTalentsSpread) + " !");
 
         CharNameText.text = general.CharacterName;
-        SpeedText.text = CurrentCharacterData.speed.ToString();
-        HealthText.text = CurrentCharacterData.health.ToString();
-        HealthRegenText.text = CurrentCharacterData.health_regen.ToString();
-        EnergyRegenText.text = CurrentCharacterData.energy_regen.ToString();
+        SpeedText.text = CurrentCharacterData.speed.ToString("f1");
+        HealthText.text = CurrentCharacterData.health.ToString("f0");
+        HealthRegenText.text = CurrentCharacterData.health_regen.ToString("f1");
+        EnergyRegenText.text = CurrentCharacterData.energy_regen.ToString("f1");
         WeaponAttackText.text = CurrentCharacterData.weapon_attack;
-        HitPowerText.text = CurrentCharacterData.hit_power.ToString();
-        ArmorText.text = CurrentCharacterData.armor.ToString();
-        ShieldBlockText.text = CurrentCharacterData.shield_block.ToString();
-        MagicResistanceText.text = CurrentCharacterData.magic_resistance.ToString();
-        DodgeText.text = CurrentCharacterData.dodge.ToString();
-        CastSpeedText.text = CurrentCharacterData.cast_speed.ToString();
-        MeleeCritText.text = CurrentCharacterData.melee_crit.ToString();
-        MagicCritText.text = CurrentCharacterData.magic_crit.ToString();
-        SpellPowerText.text = CurrentCharacterData.spell_power.ToString();
+        HitPowerText.text = CurrentCharacterData.hit_power.ToString("f1");
+        ArmorText.text = CurrentCharacterData.armor.ToString("f0");
+        ShieldBlockText.text = CurrentCharacterData.shield_block.ToString("f1");
+        MagicResistanceText.text = CurrentCharacterData.magic_resistance.ToString("f1");
+        DodgeText.text = CurrentCharacterData.dodge.ToString("f1");
+        CastSpeedText.text = CurrentCharacterData.cast_speed.ToString("f1");
+        MeleeCritText.text = CurrentCharacterData.melee_crit.ToString("f1");
+        MagicCritText.text = CurrentCharacterData.magic_crit.ToString("f1");
+        SpellPowerText.text = CurrentCharacterData.spell_power.ToString("f1");
 
         SpellButton1.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell1).Spell1_icon;
         SpellButton2.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell2).Spell1_icon;
@@ -148,12 +148,12 @@ public class player_setup : MonoBehaviour
     void Start()
     {
         sr.isConnectionError = false;
-        
+
 
         //toDELETE
-        general.CharacterType = 2;
-        general.CurrentTicket = "N6SA0aIj7S";
-        general.CharacterName = "elemeleMain";
+        general.CharacterType = 1;
+        general.CurrentTicket = "EymWc316Q6";
+        general.CharacterName = "warWARmain";
         //===================
 
         Screen.SetResolution(1280, 720, true);
@@ -177,10 +177,7 @@ public class player_setup : MonoBehaviour
         MagicCritTextText.text = lang.MagicCritText;
         SpellPowerTextText.text = lang.SpellPowerText;
 
-        Hero.gameObject.SetActive(true);
-        Talents.gameObject.SetActive(false);
-        PVP.gameObject.SetActive(false);
-        options.gameObject.SetActive(false);
+        
         
         HeroB.gameObject.transform.position = new Vector3(-35, HeroB.transform.position.y, 0);
 
@@ -197,7 +194,7 @@ public class player_setup : MonoBehaviour
                 StartTalentNumber = 1;
                 break;
             case 2:
-                StartTalentNumber = 1;
+                StartTalentNumber = 23;
                 break;
             case 3:
                 StartTalentNumber = 45;
@@ -211,74 +208,91 @@ public class player_setup : MonoBehaviour
 
         }
 
-        Talents.gameObject.SetActive(true);
-        r00 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber).Talent_icon, CurrentTalentsSpread[0, 0], 3, "r00", new Vector2(-424, 146));
-        r01 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 1).Talent_icon, CurrentTalentsSpread[0, 1], 3, "r01", new Vector2(-424, 5));
-        r02 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 2).Talent_icon, CurrentTalentsSpread[0, 2], 3, "r02", new Vector2(-424, -139));
-        r10 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 3).Talent_icon, CurrentTalentsSpread[1, 0], 2, "r10", new Vector2(-279, 146));
-        r11 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 4).Talent_icon, CurrentTalentsSpread[1, 1], 2, "r11", new Vector2(-279, 5));
-        r12 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 5).Talent_icon, CurrentTalentsSpread[1, 2], 2, "r12", new Vector2(-279, -139));
-        r20 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 6).Talent_icon, CurrentTalentsSpread[2, 0], 1, "r20", new Vector2(-154, 146));
-        r21 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 7).Talent_icon, CurrentTalentsSpread[2, 1], 1, "r21", new Vector2(-154, 5));
-        r30 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 8).Talent_icon, CurrentTalentsSpread[3, 0], 2, "r30", new Vector2(-35, 146));
-        r31 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 9).Talent_icon, CurrentTalentsSpread[3, 1], 2, "r31", new Vector2(-35, 5));
-        r32 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 10).Talent_icon, CurrentTalentsSpread[3, 2], 2, "r32", new Vector2(-35, -139));
-        r40 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 11).Talent_icon, CurrentTalentsSpread[4, 0], 3, "r40", new Vector2(98, 146));
-        r41 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 12).Talent_icon, CurrentTalentsSpread[4, 1], 3, "r41", new Vector2(98, 5));
-        r42 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 13).Talent_icon, CurrentTalentsSpread[4, 2], 3, "r42", new Vector2(98, -139));
-        r50 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 14).Talent_icon, CurrentTalentsSpread[5, 0], 1, "r50", new Vector2(223, 146));
-        r51 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 15).Talent_icon, CurrentTalentsSpread[5, 1], 1, "r51", new Vector2(223, 5));
-        r60 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 16).Talent_icon, CurrentTalentsSpread[6, 0], 2, "r60", new Vector2(345, 146));
-        r61 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 17).Talent_icon, CurrentTalentsSpread[6, 1], 2, "r61", new Vector2(345, 5));
-        r62 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 18).Talent_icon, CurrentTalentsSpread[6, 2], 2, "r62", new Vector2(345, -139));
-        r70 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 19).Talent_icon, CurrentTalentsSpread[7, 0], 1, "r70", new Vector2(479, 146));
-        r71 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 20).Talent_icon, CurrentTalentsSpread[7, 1], 1, "r71", new Vector2(479, 5));
-        r72 = new TalentsButton(DB.GetTalentByNumber(StartTalentNumber + 21).Talent_icon, CurrentTalentsSpread[7, 2], 1, "r72", new Vector2(479, -139));
+        
+        r00 = new TalentsButton(StartTalentNumber, DB.GetTalentByNumber(StartTalentNumber).Talent_icon, CurrentTalentsSpread[0, 0], 3, "r00", new Vector2(-424, 146), 80);
+        r01 = new TalentsButton(StartTalentNumber + 1, DB.GetTalentByNumber(StartTalentNumber + 1).Talent_icon, CurrentTalentsSpread[0, 1], 3, "r01", new Vector2(-424, 5),70);
+        r02 = new TalentsButton(StartTalentNumber + 2, DB.GetTalentByNumber(StartTalentNumber + 2).Talent_icon, CurrentTalentsSpread[0, 2], 3, "r02", new Vector2(-424, -139), 100);
+        r10 = new TalentsButton(StartTalentNumber + 3, DB.GetTalentByNumber(StartTalentNumber + 3).Talent_icon, CurrentTalentsSpread[1, 0], 2, "r10", new Vector2(-279, 146), 100);
+        r11 = new TalentsButton(StartTalentNumber + 4, DB.GetTalentByNumber(StartTalentNumber + 4).Talent_icon, CurrentTalentsSpread[1, 1], 2, "r11", new Vector2(-279, 5), 100);
+        r12 = new TalentsButton(StartTalentNumber + 5, DB.GetTalentByNumber(StartTalentNumber + 5).Talent_icon, CurrentTalentsSpread[1, 2], 2, "r12", new Vector2(-279, -139), 100);
+        r20 = new TalentsButton(StartTalentNumber + 6, DB.GetTalentByNumber(StartTalentNumber + 6).Talent_icon, CurrentTalentsSpread[2, 0], 1, "r20", new Vector2(-154, 146), 100);
+        r21 = new TalentsButton(StartTalentNumber + 7, DB.GetTalentByNumber(StartTalentNumber + 7).Talent_icon, CurrentTalentsSpread[2, 1], 1, "r21", new Vector2(-154, 5), 100);
+        r30 = new TalentsButton(StartTalentNumber + 8, DB.GetTalentByNumber(StartTalentNumber + 8).Talent_icon, CurrentTalentsSpread[3, 0], 2, "r30", new Vector2(-35, 146), 100);
+        r31 = new TalentsButton(StartTalentNumber + 9, DB.GetTalentByNumber(StartTalentNumber + 9).Talent_icon, CurrentTalentsSpread[3, 1], 2, "r31", new Vector2(-35, 5), 100);
+        r32 = new TalentsButton(StartTalentNumber + 10, DB.GetTalentByNumber(StartTalentNumber + 10).Talent_icon, CurrentTalentsSpread[3, 2], 2, "r32", new Vector2(-35, -139), 100);
+        r40 = new TalentsButton(StartTalentNumber + 11, DB.GetTalentByNumber(StartTalentNumber + 11).Talent_icon, CurrentTalentsSpread[4, 0], 3, "r40", new Vector2(98, 146), 100);
+        r41 = new TalentsButton(StartTalentNumber + 12, DB.GetTalentByNumber(StartTalentNumber + 12).Talent_icon, CurrentTalentsSpread[4, 1], 3, "r41", new Vector2(98, 5), 100);
+        r42 = new TalentsButton(StartTalentNumber + 13, DB.GetTalentByNumber(StartTalentNumber + 13).Talent_icon, CurrentTalentsSpread[4, 2], 3, "r42", new Vector2(98, -139), 100);
+        r50 = new TalentsButton(StartTalentNumber + 14, DB.GetTalentByNumber(StartTalentNumber + 14).Talent_icon, CurrentTalentsSpread[5, 0], 1, "r50", new Vector2(223, 146), 100);
+        r51 = new TalentsButton(StartTalentNumber + 15, DB.GetTalentByNumber(StartTalentNumber + 15).Talent_icon, CurrentTalentsSpread[5, 1], 1, "r51", new Vector2(223, 5), 100);
+        r60 = new TalentsButton(StartTalentNumber + 16, DB.GetTalentByNumber(StartTalentNumber + 16).Talent_icon, CurrentTalentsSpread[6, 0], 2, "r60", new Vector2(345, 146), 100);
+        r61 = new TalentsButton(StartTalentNumber + 17, DB.GetTalentByNumber(StartTalentNumber + 17).Talent_icon, CurrentTalentsSpread[6, 1], 2, "r61", new Vector2(345, 5), 100);
+        r62 = new TalentsButton(StartTalentNumber + 18, DB.GetTalentByNumber(StartTalentNumber + 18).Talent_icon, CurrentTalentsSpread[6, 2], 2, "r62", new Vector2(345, -139), 100);
+        r70 = new TalentsButton(StartTalentNumber + 19, DB.GetTalentByNumber(StartTalentNumber + 19).Talent_icon, CurrentTalentsSpread[7, 0], 1, "r70", new Vector2(479, 146), 100);
+        r71 = new TalentsButton(StartTalentNumber + 20, DB.GetTalentByNumber(StartTalentNumber + 20).Talent_icon, CurrentTalentsSpread[7, 1], 1, "r71", new Vector2(479, 5), 100);
+        r72 = new TalentsButton(StartTalentNumber + 21, DB.GetTalentByNumber(StartTalentNumber + 21).Talent_icon, CurrentTalentsSpread[7, 2], 1, "r72", new Vector2(479, -139), 100);
 
         TalentBottonsList.AddRange(new TalentsButton[] { r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72 });
 
-        
-
-        Talents.gameObject.SetActive(false);
+        CheckNormalTalentDisp();       
 
         BackToLogin.onClick.AddListener(BackToLogChoose);
         pvp11.onClick.AddListener(pvp1vs1);
         pvp22.onClick.AddListener(pvp2vs2);
         pvp33.onClick.AddListener(pvp5vs5);
         testing_but.onClick.AddListener(testing_regime);
+        ResetTalentsButton.onClick.AddListener(ResetAllTalents);
 
         sending_talent_info.onClick.AddListener(send_talents);
 
+        Hero.gameObject.SetActive(true);
+        Talents.gameObject.SetActive(false);
+        PVP.gameObject.SetActive(false);
+        options.gameObject.SetActive(false);
+
     }
 
+    
     private void CheckNormalTalentDisp()
     {
-        /*r20.MakeInactive(); r21.MakeInactive();
-        r30.MakeInactive(); r31.MakeInactive(); r32.MakeInactive();
-        r40.MakeInactive();
-        r50.MakeInactive();
-        r60.MakeInactive();
-        r70.MakeInactive();*/
-        /*
-        int sum = 0;
-
-        for (int i=0; i<TalentBottonsList.Count; i++)
+        //only one talent per row==================
+        if (r20.GetCurrentTalentPoint() == 1)
         {
-            sum = sum + TalentBottonsList[i].GetCurrentTalentPoint();
+            r21.NonAvailable();
         }
-
-        UsedTalentsInfo.text = sum.ToString() + "/16";
-
-        if (sum>=16)
-        {
-            isNoTalentPointAvailable = true;
-        } 
         else
         {
-            isNoTalentPointAvailable = false;
+            r21.Available();
         }
-        */
-        //TalentBottonsList.AddRange(new TalentsButton[] { r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72 });
+
+        if (r21.GetCurrentTalentPoint() == 1)
+        {
+            r20.NonAvailable();
+        }
+        else
+        {
+            r20.Available();
+        }
+
+        if (r50.GetCurrentTalentPoint() == 1)
+        {
+            r51.NonAvailable();
+        }
+        else
+        {
+            r51.Available();
+        }
+        if (r51.GetCurrentTalentPoint() == 1)
+        {
+            r50.NonAvailable();
+        }
+        else
+        {
+            r50.Available();
+        }
+
+        //first row==========================
+
         if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint())<3)
         {
             r20.MakeInactive();
@@ -390,9 +404,28 @@ public class player_setup : MonoBehaviour
 
         }
 
-        
+        //counts
+        int line1 = r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint() + r50.GetCurrentTalentPoint() + r60.GetCurrentTalentPoint() + r70.GetCurrentTalentPoint();
+        Line1Talents.text = line1.ToString();
+
+        int line2 = r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint() + r31.GetCurrentTalentPoint() + r41.GetCurrentTalentPoint() + r51.GetCurrentTalentPoint() + r61.GetCurrentTalentPoint() + r71.GetCurrentTalentPoint();
+        Line2Talents.text = line2.ToString();
+
+        int line3 = r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint() + r62.GetCurrentTalentPoint() + r72.GetCurrentTalentPoint();
+        Line3Talents.text = line3.ToString();
+
 
     }
+
+   
+    private void ResetAllTalents()
+    {
+        for (int i=0; i<TalentBottonsList.Count; i++)
+        {
+            TalentBottonsList[i].ResetTalents();
+        }
+    }
+
 
     private void send_talents()
     {
@@ -409,6 +442,8 @@ public class player_setup : MonoBehaviour
 
         string result = sr.SendAndGetOnlySetup("3~4~" + general.CurrentTicket + "~" + general.CharacterName + "~" + TalentsToSend);
         print(result);
+
+        GetCharDataToView();
     }
 
 
@@ -948,21 +983,18 @@ public class player_setup : MonoBehaviour
 
 
 
-
-
-
-
-
     public class TalentsButton : MonoBehaviour
     {
         public GameObject WholeButtonImage;
         private Button MainThemeImage;
         private TextMeshProUGUI TalentsNumbers;
         private int MaxTalents;
+        private int TalentNumber;
         private int CurrentTalents;
         private bool isActive;
+        private Image nonavailable;
 
-        public TalentsButton(Sprite MainTheme, int CurrTalents, int MTalents, string TalentName, Vector2 coords)
+        public TalentsButton(int TalentNumb, Sprite MainTheme, int CurrTalents, int MTalents, string TalentName, Vector2 coords, float sizef)
         {
             WholeButtonImage = Instantiate(Resources.Load<GameObject>("prefabs/point"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("talents").transform);
             WholeButtonImage.gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(coords.x, coords.y, 0);
@@ -971,11 +1003,15 @@ public class player_setup : MonoBehaviour
             MainThemeImage.image.sprite = MainTheme;
             WholeButtonImage.name = TalentName;
             MainThemeImage.name = TalentName;
+            nonavailable = WholeButtonImage.transform.GetChild(3).GetComponent<Image>();
+            MainThemeImage.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(sizef, sizef);
 
             CurrentTalents = CurrTalents;
+            TalentNumber = TalentNumb;
             MaxTalents = MTalents;
 
             isActive = true;
+            nonavailable.gameObject.SetActive(false);
 
             TalentsNumbers = WholeButtonImage.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
 
@@ -1010,10 +1046,34 @@ public class player_setup : MonoBehaviour
             isActive = true;
         }
 
+        public int GetTalentNumber()
+        {
+            return TalentNumber;
+        }
+
+        public void ResetTalents()
+        {
+            CurrentTalents = 0;
+            GetCurrTalents();
+        }
+
+        public void NonAvailable()
+        {
+            MakeInactive();
+            //MainThemeImage.interactable = false;
+            nonavailable.gameObject.SetActive(true);
+        }
+
+        public void Available()
+        {
+            MakeActive();
+            //MainThemeImage.interactable = false;
+            nonavailable.gameObject.SetActive(false);
+        }
 
         public void AddTalentPoint()
         {
-            if (isActive)
+            if (isActive && !nonavailable.gameObject.activeSelf)
             {
                 if (CurrentTalents == MaxTalents)
                 {
@@ -1030,7 +1090,7 @@ public class player_setup : MonoBehaviour
 
         public void RemoveTalentPoint()
         {
-            if (isActive)
+            if (isActive && !nonavailable.gameObject.activeSelf)
             {
                 if (CurrentTalents == 0)
                 {
