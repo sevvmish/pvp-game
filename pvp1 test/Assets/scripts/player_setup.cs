@@ -6,13 +6,13 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Globalization;
 using UnityEngine.EventSystems;
-
+using System;
 
 public class player_setup : MonoBehaviour
 {
     public GameObject ConnectionError, 
         PlayerType1, PlayerType2, PlayerType3, PlayerType4, PlayerType5,
-        MeleeDataPanel, MagicDataPanel, podskazka, AllPlayersTypes;
+        MeleeDataPanel, MagicDataPanel, podskazka, AllPlayersTypes, SpellBook;
 
     public character_data CurrentCharacterData;
 
@@ -27,11 +27,11 @@ public class player_setup : MonoBehaviour
         Line1Talents, Line2Talents, Line3Talents, UsedTalentsInfo;
 
     public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
-        pvp11, pvp22, pvp33, testing_but, sending_talent_info, ResetTalentsButton;
+        pvp11, pvp22, pvp33, testing_but, sending_talent_info, ResetTalentsButton, SpellBookButton;
 
     public Canvas Hero, Talents, PVP, options;
 
-    private bool isStartWaitingPVP, isNoTalentPointAvailable;
+    private bool isStartWaitingPVP, isNoTalentPointAvailable, isSpellBookOpened;
     private float WaitingTimeForPing = 1f, cur_time, cur_time_check_talents;
     private int CurrentTalentsCount;
     
@@ -42,11 +42,23 @@ public class player_setup : MonoBehaviour
 
     TalentsButton r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72;
     List<TalentsButton> TalentBottonsList = new List<TalentsButton>();
+    List<SpellsButton> SpellButtonList = new List<SpellsButton>();
+    List<Button> SpellNumbers = new List<Button>();
+
+    public RectTransform SpaceForSpellBookRectTr;
 
     private void GetCharDataToView()
     {
-        string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);        
-        CurrentCharacterData = new character_data(result);
+        string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        
+        try
+        {
+            CurrentCharacterData = new character_data(result);
+        } 
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
 
         FromStringToArrTalents(out CurrentTalentsSpread, CurrentCharacterData.talents);
 
@@ -70,14 +82,46 @@ public class player_setup : MonoBehaviour
         MagicCritText.text = CurrentCharacterData.magic_crit.ToString("f1");
         SpellPowerText.text = CurrentCharacterData.spell_power.ToString("f1");
 
-        SpellButton1.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell1).Spell1_icon;
-        SpellButton2.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell2).Spell1_icon;
-        SpellButton3.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell3).Spell1_icon;
-        SpellButton4.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell4).Spell1_icon;
-        SpellButton5.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell5).Spell1_icon;
-        SpellButton6.image.sprite = DB.GetSpellByNumber(CurrentCharacterData.spell6).Spell1_icon;
+        if (Hero.gameObject.activeSelf)
+        {
+            SpellButtonList.Add(new SpellsButton(1, SpellButton1.gameObject.GetComponent<RectTransform>().position, "forbasespells"));
+            SpellButtonList.Add(new SpellsButton(2, SpellButton2.gameObject.GetComponent<RectTransform>().position, "forbasespells"));
+            SpellButtonList.Add(new SpellsButton(3, SpellButton3.gameObject.GetComponent<RectTransform>().position, "forbasespells"));
+            SpellButtonList.Add(new SpellsButton(4, SpellButton4.gameObject.GetComponent<RectTransform>().position, "forbasespells"));
+            SpellButtonList.Add(new SpellsButton(5, SpellButton5.gameObject.GetComponent<RectTransform>().position, "forbasespells"));
+            SpellButtonList.Add(new SpellsButton(6, SpellButton6.gameObject.GetComponent<RectTransform>().position, "forbasespells"));
+
+            string[] SpellsInSpellBook = CurrentCharacterData.spell_book.Split(',');
+
+            int row = Mathf.CeilToInt((SpellsInSpellBook.Length + 1) / 3);
+
+            SpaceForSpellBookRectTr.sizeDelta = new Vector2(0, row * 110 + row * 10 + 10);
+                        
+            int ii = 0, r = 0;
 
 
+            for (int u = 0; u < SpellsInSpellBook.Length - 1; u++)
+            {
+                SpellButtonList.Add(new SpellsButton(int.Parse(SpellsInSpellBook[u]), new Vector2(60 + ii * 110, -60 - r * 110), "SpaceForSpellBook"));
+                print(SpellsInSpellBook[u] + " - " + u.ToString());
+                SpellButtonList[SpellButtonList.Count - 1].WholeButton.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+                SpellButtonList[SpellButtonList.Count - 1].WholeButton.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                SpellButtonList[SpellButtonList.Count - 1].WholeButton.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
+                print(SpellsInSpellBook[u].ToString() + "========= " + u.ToString());
+
+                ii++;
+                if (ii == 3)
+                {
+                    ii = 0;
+                    r++;
+                }
+
+
+            }
+        }
+
+
+        //SpellsButton sp1 = new SpellsButton(1, new Vector2(0, 0), "butt11111");
 
         switch (general.CharacterType)
         {
@@ -137,9 +181,9 @@ public class player_setup : MonoBehaviour
 
                 break;
 
-
-
         }
+
+
     }
 
 
@@ -149,10 +193,19 @@ public class player_setup : MonoBehaviour
     {
         sr.isConnectionError = false;
 
+        print(langu.kkk + "===========================================================");
+        SpellNumbers.Add(SpellButton1);
+        SpellNumbers.Add(SpellButton2);
+        SpellNumbers.Add(SpellButton3);
+        SpellNumbers.Add(SpellButton4);
+        SpellNumbers.Add(SpellButton5);
+        SpellNumbers.Add(SpellButton6);
+
+        //print(SpellButton1.GetComponent<RectTransform>().rect.x.ToString() + " - " + SpellButton1.GetComponent<Rect>().y.ToString() + "==========");
 
         //toDELETE
         general.CharacterType = 1;
-        general.CurrentTicket = "EymWc316Q6";
+        general.CurrentTicket = "WcF7OkCt1h";
         general.CharacterName = "warWARmain";
         //===================
 
@@ -208,7 +261,7 @@ public class player_setup : MonoBehaviour
 
         }
 
-        
+        Talents.gameObject.SetActive(true);
         r00 = new TalentsButton(StartTalentNumber, DB.GetTalentByNumber(StartTalentNumber).Talent_icon, CurrentTalentsSpread[0, 0], 3, "r00", new Vector2(-424, 146), 80);
         r01 = new TalentsButton(StartTalentNumber + 1, DB.GetTalentByNumber(StartTalentNumber + 1).Talent_icon, CurrentTalentsSpread[0, 1], 3, "r01", new Vector2(-424, 5),70);
         r02 = new TalentsButton(StartTalentNumber + 2, DB.GetTalentByNumber(StartTalentNumber + 2).Talent_icon, CurrentTalentsSpread[0, 2], 3, "r02", new Vector2(-424, -139), 100);
@@ -249,9 +302,26 @@ public class player_setup : MonoBehaviour
         Talents.gameObject.SetActive(false);
         PVP.gameObject.SetActive(false);
         options.gameObject.SetActive(false);
+        SpellBook.gameObject.SetActive(false);
+
+        SpellBookButton.onClick.AddListener(OpenSpellBook);
 
     }
 
+
+    private void OpenSpellBook()
+    {
+        if (!isSpellBookOpened)
+        {
+            SpellBook.SetActive(true);
+            isSpellBookOpened = true;
+        } 
+        else
+        {
+            SpellBook.SetActive(false);
+            isSpellBookOpened = false;
+        }
+    }
     
     private void CheckNormalTalentDisp()
     {
@@ -558,6 +628,9 @@ public class player_setup : MonoBehaviour
 
     private bool CheckIfNameEqual(string TestName)
     {
+
+        
+
         bool result = false;
 
         for (int i=0; i<TalentBottonsList.Count; i++)
@@ -600,6 +673,8 @@ public class player_setup : MonoBehaviour
             StartCoroutine(ConnectionErr());
         }
 
+        
+
         //=================================================
         if (Talents.gameObject.activeSelf)
         {
@@ -640,6 +715,24 @@ public class player_setup : MonoBehaviour
 
         //=================================================
 
+        if (Input.GetMouseButton(0))
+        {
+            //print(Input.mousePosition.ToString());
+
+            
+
+            for (int i=0; i<SpellNumbers.Count; i++)
+            {
+                //Vector2 localMousePosition = SpellButton1.transform.InverseTransformPoint(Input.mousePosition);
+
+                if (SpellNumbers[i].GetComponent<RectTransform>().rect.Contains(SpellNumbers[i].transform.InverseTransformPoint(Input.mousePosition)))
+                {
+                    print(SpellNumbers[i].name  + "=-=-=-=-=-");
+                }
+            }
+
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             
@@ -652,14 +745,10 @@ public class player_setup : MonoBehaviour
                 {
                     
                     bool result = CheckIfNameEqual(EventSystem.current.currentSelectedGameObject.name);
-
-
                     
-
                 }
 
-
-
+                
 
                 switch (EventSystem.current.currentSelectedGameObject.name)
                 {
@@ -668,7 +757,9 @@ public class player_setup : MonoBehaviour
                         Talents.gameObject.SetActive(false);
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(false);
-                        
+
+                        GetCharDataToView();
+
                         ChangeCanvasButton(true, false, false, false);
                         break;
 
@@ -702,9 +793,13 @@ public class player_setup : MonoBehaviour
                         break;
                 }
 
-                if (EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.tag == "hints")
+                if (EventSystem.current.currentSelectedGameObject != null && (EventSystem.current.currentSelectedGameObject.tag == "hints" || EventSystem.current.currentSelectedGameObject.tag == "spells"))
                 {
-                    StartCoroutine(GetHintOver(EventSystem.current.currentSelectedGameObject.name, new Vector2(EventSystem.current.currentSelectedGameObject.transform.position.x, EventSystem.current.currentSelectedGameObject.transform.position.y)));
+                    if (EventSystem.current.currentSelectedGameObject.tag == "hints")
+                        StartCoroutine(GetHintOver(EventSystem.current.currentSelectedGameObject.name, new Vector2(EventSystem.current.currentSelectedGameObject.transform.position.x, EventSystem.current.currentSelectedGameObject.transform.position.y), "hints"));
+
+                    if (EventSystem.current.currentSelectedGameObject.tag == "spells")
+                        StartCoroutine(GetHintOver(EventSystem.current.currentSelectedGameObject.name, new Vector2(EventSystem.current.currentSelectedGameObject.transform.position.x, EventSystem.current.currentSelectedGameObject.transform.position.y), "spells"));
                 } 
                 else
                 {
@@ -892,6 +987,7 @@ public class player_setup : MonoBehaviour
     }
 
 
+
     IEnumerator ConnectionErr()
     {
         ConnectionError.gameObject.SetActive(true);
@@ -899,70 +995,88 @@ public class player_setup : MonoBehaviour
         SceneManager.LoadScene("player_setup");
     }
 
-    IEnumerator GetHintOver(string HintLog, Vector2 coords)
+    IEnumerator GetHintOver(string HintLog, Vector2 coords, string tagg)
     {
         podskazka.SetActive(true);
-        podskazka.transform.position = new Vector3(coords.x, coords.y);
-            
 
-        switch(HintLog)
+        switch (tagg) {
+            case "hints":
+                podskazka.transform.position = new Vector3(coords.x - 50, coords.y + 10);
+                break;
+            case "spells":
+                podskazka.transform.position = new Vector3(coords.x - 100, coords.y + 30);
+                break;
+
+        }
+
+        print(tagg + "===================------------------!!!!!!!!!!!!!!!!!!!!!!");
+
+        if (tagg == "spells")
         {
-            case "sp":
-                HintText.text = lang.SpeedTextHint;
-                break;
+            //HintText.text = DB.GetSpellByNumber(int.Parse(HintLog)).Spell1_full_description;
+            HintText.text = "<b>" + DB.GetSpellByNumber(int.Parse(HintLog)).Spell1_name + "</b>\n<size=40%>    <size=100%>\n" + DB.GetSpellByNumber(int.Parse(HintLog)).Spell1_full_description + "\n<size=40%>    <size=100%>\nenergy: " + DB.GetSpellByNumber(int.Parse(HintLog)).Spell_manacost.ToString("f0");
+        } 
+        else if (tagg == "hints")
+        {
+            switch (HintLog)
+            {
+                case "sp":
+                    HintText.text = lang.SpeedTextHint;
+                    break;
 
-            case "h":
-                HintText.text = lang.HealthTextHint;
-                break;
+                case "h":
+                    HintText.text = lang.HealthTextHint;
+                    break;
 
-            case "hr":
-                HintText.text = lang.HealthRegenTextHint;
-                break;
+                case "hr":
+                    HintText.text = lang.HealthRegenTextHint;
+                    break;
 
-            case "er":
-                HintText.text = lang.EnergyRegenTextHint;
-                break;
+                case "er":
+                    HintText.text = lang.EnergyRegenTextHint;
+                    break;
 
-            case "ar":
-                HintText.text = lang.ArmorTextHint;
-                break;
+                case "ar":
+                    HintText.text = lang.ArmorTextHint;
+                    break;
 
-            case "do":
-                HintText.text = lang.DodgeTextHint;
-                break;
+                case "do":
+                    HintText.text = lang.DodgeTextHint;
+                    break;
 
-            case "mr":
-                HintText.text = lang.MagicResistanceTextHint;
-                break;
+                case "mr":
+                    HintText.text = lang.MagicResistanceTextHint;
+                    break;
 
-            case "sb":
-                HintText.text = lang.ShieldBlockTextHint;
-                break;
+                case "sb":
+                    HintText.text = lang.ShieldBlockTextHint;
+                    break;
 
-            case "cs":
-                HintText.text = lang.CastSpeedTextHint;
-                break;
+                case "cs":
+                    HintText.text = lang.CastSpeedTextHint;
+                    break;
 
-            case "spw":
-                HintText.text = lang.SpellPowerTextHint;
-                break;
+                case "spw":
+                    HintText.text = lang.SpellPowerTextHint;
+                    break;
 
-            case "mc":
-                HintText.text = lang.MagicCritTextHint;
-                break;
+                case "mc":
+                    HintText.text = lang.MagicCritTextHint;
+                    break;
 
-            case "wa":
-                HintText.text = lang.WeaponAttackTextHint;
-                break;
+                case "wa":
+                    HintText.text = lang.WeaponAttackTextHint;
+                    break;
 
-            case "hp":
-                HintText.text = lang.HitPowerTextHint;
-                break;
+                case "hp":
+                    HintText.text = lang.HitPowerTextHint;
+                    break;
 
-            case "melc":
-                HintText.text = lang.MeleeCritTextHint;
-                break;
+                case "melc":
+                    HintText.text = lang.MeleeCritTextHint;
+                    break;
 
+            }
         }
 
         string BaseHintText = HintText.text;
@@ -983,153 +1097,7 @@ public class player_setup : MonoBehaviour
 
 
 
-    public class TalentsButton : MonoBehaviour
-    {
-        public GameObject WholeButtonImage;
-        private Button MainThemeImage;
-        private TextMeshProUGUI TalentsNumbers;
-        private int MaxTalents;
-        private int TalentNumber;
-        private int CurrentTalents;
-        private bool isActive;
-        private Image nonavailable;
-
-        public TalentsButton(int TalentNumb, Sprite MainTheme, int CurrTalents, int MTalents, string TalentName, Vector2 coords, float sizef)
-        {
-            WholeButtonImage = Instantiate(Resources.Load<GameObject>("prefabs/point"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("talents").transform);
-            WholeButtonImage.gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(coords.x, coords.y, 0);
-
-            MainThemeImage = WholeButtonImage.transform.GetChild(0).GetComponent<Button>();
-            MainThemeImage.image.sprite = MainTheme;
-            WholeButtonImage.name = TalentName;
-            MainThemeImage.name = TalentName;
-            nonavailable = WholeButtonImage.transform.GetChild(3).GetComponent<Image>();
-            MainThemeImage.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(sizef, sizef);
-
-            CurrentTalents = CurrTalents;
-            TalentNumber = TalentNumb;
-            MaxTalents = MTalents;
-
-            isActive = true;
-            nonavailable.gameObject.SetActive(false);
-
-            TalentsNumbers = WholeButtonImage.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-
-            GetCurrTalents();
-
-
-        }
-
-        public string GetName()
-        {
-            return MainThemeImage.name;
-        }
-
-        public void MakeInactive()
-        {
-            CurrentTalents = 0;
-            GetCurrTalents();
-            //MainThemeImage.interactable = false;
-            Color curcolor = MainThemeImage.image.color;
-            curcolor.a = 0.4f;
-            MainThemeImage.image.color = curcolor;
-
-            isActive = false;
-        }
-
-        public void MakeActive()
-        {
-            //MainThemeImage.interactable = true;
-            Color curcolor = MainThemeImage.image.color;
-            curcolor.a = 1f;
-            MainThemeImage.image.color = curcolor;
-            isActive = true;
-        }
-
-        public int GetTalentNumber()
-        {
-            return TalentNumber;
-        }
-
-        public void ResetTalents()
-        {
-            CurrentTalents = 0;
-            GetCurrTalents();
-        }
-
-        public void NonAvailable()
-        {
-            MakeInactive();
-            //MainThemeImage.interactable = false;
-            nonavailable.gameObject.SetActive(true);
-        }
-
-        public void Available()
-        {
-            MakeActive();
-            //MainThemeImage.interactable = false;
-            nonavailable.gameObject.SetActive(false);
-        }
-
-        public void AddTalentPoint()
-        {
-            if (isActive && !nonavailable.gameObject.activeSelf)
-            {
-                if (CurrentTalents == MaxTalents)
-                {
-                    CurrentTalents = 0;
-                    GetCurrTalents();
-                }
-                else
-                {
-                    CurrentTalents++;
-                    GetCurrTalents();
-                }
-            }
-        }
-
-        public void RemoveTalentPoint()
-        {
-            if (isActive && !nonavailable.gameObject.activeSelf)
-            {
-                if (CurrentTalents == 0)
-                {
-                    CurrentTalents = 0;
-                    GetCurrTalents();
-                }
-                else
-                {
-                    CurrentTalents--;
-                    GetCurrTalents();
-                }
-            }
-        }
-
-        public string GetCurrentTalentPointString()
-        {
-            return CurrentTalents.ToString();
-        }
-
-        public int GetCurrentTalentPoint()
-        {
-            return CurrentTalents;
-        }
-
-        private void GetCurrTalents()
-        {
-            TalentsNumbers.text = CurrentTalents + "/" + MaxTalents;
-        }
-
-
-    }
-
-
-
-
-
-
-
-
+    
 
 
 }
@@ -1194,8 +1162,222 @@ public struct character_data
     }
 
 
+}
 
 
+public class SpellsButton : MonoBehaviour
+{
+    public GameObject WholeButton;
+    private Button MainSpellButton;
+    
+    private int SpellNumber;
+    private Image hint;
+    
+
+    public SpellsButton(int Spell, Vector2 coords, string Place)
+    {
+        WholeButton = Instantiate(Resources.Load<GameObject>("prefabs/SpellButton"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find(Place).transform);
+        WholeButton.gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(coords.x, coords.y, 0);
+        WholeButton.name = Spell.ToString();
+
+        MainSpellButton = WholeButton.transform.GetChild(0).GetComponent<Button>();
+        MainSpellButton.name = Spell.ToString();
+        MainSpellButton.image.sprite = DB.GetSpellByNumber(Spell).Spell1_icon;
+        
+
+        //hint = WholeButton.transform.GetChild(1).GetComponent<Image>();
+        //HintText = WholeButton.gameObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        //manacost = WholeButton.gameObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        //HintText.text = "<b>" + DB.GetSpellByNumber(Spell).Spell1_name + "</b>\n<size=40%>    <size=100%>\n" + DB.GetSpellByNumber(Spell).Spell1_full_description;
+        //manacost.text = "energy: " + DB.GetSpellByNumber(Spell).Spell_manacost.ToString();
+
+        SpellNumber = Spell;
+        //HideDescription();
+    }
+
+    /*
+    public bool isHintShowing()
+    {
+        return isHintShow;
+    }
+    */
+
+    public string GetName()
+    {
+        return MainSpellButton.name;
+    }
+
+    /*
+    public void ShowDescription()
+    {
+        isHintShow = true;
+        hint.gameObject.SetActive(true);
+        HintText.gameObject.SetActive(true);
+        manacost.gameObject.SetActive(true);
+    }
+
+    public void HideDescription()
+    {
+        isHintShow = false;
+        hint.gameObject.SetActive(false);
+        HintText.gameObject.SetActive(false);
+        manacost.gameObject.SetActive(false);
+    }
+    */
+
+    public int GetSpellNumber()
+    {
+        return SpellNumber;
+    }
+
+    public Sprite SpellImage()
+    {
+        return MainSpellButton.image.sprite;
+    }
+
+}
+
+
+
+public class TalentsButton : MonoBehaviour
+{
+    public GameObject WholeButtonImage;
+    private Button MainThemeImage;
+    private TextMeshProUGUI TalentsNumbers;
+    private int MaxTalents;
+    private int TalentNumber;
+    private int CurrentTalents;
+    private bool isActive;
+    private Image nonavailable;
+
+    public TalentsButton(int TalentNumb, Sprite MainTheme, int CurrTalents, int MTalents, string TalentName, Vector2 coords, float sizef)
+    {
+        WholeButtonImage = Instantiate(Resources.Load<GameObject>("prefabs/point"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("talents").transform);
+        WholeButtonImage.gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(coords.x, coords.y, 0);
+
+        MainThemeImage = WholeButtonImage.transform.GetChild(0).GetComponent<Button>();
+        MainThemeImage.image.sprite = MainTheme;
+        WholeButtonImage.name = TalentName;
+        MainThemeImage.name = TalentName;
+        nonavailable = WholeButtonImage.transform.GetChild(3).GetComponent<Image>();
+        MainThemeImage.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(sizef, sizef);
+
+        
+
+        CurrentTalents = CurrTalents;
+        TalentNumber = TalentNumb;
+        MaxTalents = MTalents;
+
+        isActive = true;
+        nonavailable.gameObject.SetActive(false);
+
+        TalentsNumbers = WholeButtonImage.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+
+        GetCurrTalents();
+
+    }
+
+
+
+    public string GetName()
+    {
+        return MainThemeImage.name;
+    }
+
+    public void MakeInactive()
+    {
+        CurrentTalents = 0;
+        GetCurrTalents();
+        //MainThemeImage.interactable = false;
+        Color curcolor = MainThemeImage.image.color;
+        curcolor.a = 0.4f;
+        MainThemeImage.image.color = curcolor;
+
+        isActive = false;
+    }
+
+    public void MakeActive()
+    {
+        //MainThemeImage.interactable = true;
+        Color curcolor = MainThemeImage.image.color;
+        curcolor.a = 1f;
+        MainThemeImage.image.color = curcolor;
+        isActive = true;
+    }
+
+    public int GetTalentNumber()
+    {
+        return TalentNumber;
+    }
+
+    public void ResetTalents()
+    {
+        CurrentTalents = 0;
+        GetCurrTalents();
+    }
+
+    public void NonAvailable()
+    {
+        MakeInactive();
+        //MainThemeImage.interactable = false;
+        nonavailable.gameObject.SetActive(true);
+    }
+
+    public void Available()
+    {
+        MakeActive();
+        //MainThemeImage.interactable = false;
+        nonavailable.gameObject.SetActive(false);
+    }
+
+    public void AddTalentPoint()
+    {
+        if (isActive && !nonavailable.gameObject.activeSelf)
+        {
+            if (CurrentTalents == MaxTalents)
+            {
+                CurrentTalents = 0;
+                GetCurrTalents();
+            }
+            else
+            {
+                CurrentTalents++;
+                GetCurrTalents();
+            }
+        }
+    }
+
+    public void RemoveTalentPoint()
+    {
+        if (isActive && !nonavailable.gameObject.activeSelf)
+        {
+            if (CurrentTalents == 0)
+            {
+                CurrentTalents = 0;
+                GetCurrTalents();
+            }
+            else
+            {
+                CurrentTalents--;
+                GetCurrTalents();
+            }
+        }
+    }
+
+    public string GetCurrentTalentPointString()
+    {
+        return CurrentTalents.ToString();
+    }
+
+    public int GetCurrentTalentPoint()
+    {
+        return CurrentTalents;
+    }
+
+    private void GetCurrTalents()
+    {
+        TalentsNumbers.text = CurrentTalents + "/" + MaxTalents;
+    }
 
 
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FxTemporaire
   - hints
+  - spells
   layers:
   - Default
   - TransparentFX

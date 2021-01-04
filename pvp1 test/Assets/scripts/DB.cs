@@ -233,6 +233,24 @@ public struct spellsIDs
 }
 
 
+public static class langu
+{
+    public static string kkk;
+
+    public static void SetLangu(string whichh)
+    {
+        if (whichh == "ru")
+        {
+            kkk = "на русском";
+        }
+
+        if (whichh == "eng")
+        {
+            kkk = "in english";
+        }
+    }
+}
+
 
 public static class lang
 {

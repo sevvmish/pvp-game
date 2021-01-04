@@ -24,6 +24,8 @@ public class login_setup : MonoBehaviour
     {
         sr.isConnectionError = false;
 
+        //langu.SetLangu("eng");
+
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
         NewLogOrGuest.gameObject.SetActive(false);
