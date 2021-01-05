@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DB : MonoBehaviour
 {
+    public static spellsIDs spell0 = new spellsIDs("", 0, Resources.Load<Sprite>("sprites/spell0"), "", "", spellsIDs.spell_types.direct_melee, 0);
     //WARRIOR
     public static spellsIDs spell1 = new spellsIDs(lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Spell1ShortDescri, lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee, 10);
     public static spellsIDs spell2 = new spellsIDs(lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), lang.Spell2ShortDescri, lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee, 20);
@@ -29,7 +30,10 @@ public class DB : MonoBehaviour
     {
         spellsIDs result = spell1;
         switch(SpellNumber)
-        {         
+        {
+            case 0:
+                result = spell0;
+                break;
             case 1:
                 result = spell1;
                 break;
@@ -76,6 +80,7 @@ public class DB : MonoBehaviour
         talentsIDs result = talent1;
         switch (TalentNumber)
         {
+            
             case 1:
                 result = talent1;
                 break;
