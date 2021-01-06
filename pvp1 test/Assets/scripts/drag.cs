@@ -12,6 +12,7 @@ public class drag : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     {
         player_setup.SpellButtonDraged = int.Parse(eventData.selectedObject.name);
         player_setup.isSpellDragedFromSpellBook = true;
+
         /*
         canvasgroup.blocksRaycasts = false;
         canvasgroup.alpha = 0.5f;
@@ -25,7 +26,9 @@ public class drag : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     public void OnEndDrag(PointerEventData eventData)
     {
         print(eventData.selectedObject.name + "w here to...");
+        //player_setup.SpellButtonDraged = -999;
         player_setup.isSpellDragedFromSpellBook = false;
+        player_setup.isEndDragAndDrop = true;
         /*
         print(eventData.selectedObject.name + "w here to...");
         
