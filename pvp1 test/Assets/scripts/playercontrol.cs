@@ -179,7 +179,6 @@ public class playercontrol : MonoBehaviour
     {
 
         
-
         if (RawPackets.Count > 0)
         {
             SendAndReceive.TranslateDataFromServer(RawPackets[0]);
@@ -240,21 +239,21 @@ public class playercontrol : MonoBehaviour
         MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool, SendAndReceive.MyPlayerData.max_health_pool);
         MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
 
+        
 
 
-
-        /*
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            for (int i=0; i<MyConds.curr_conds.Count; i++)
+            /*
+            if (Input.GetKeyDown(KeyCode.U))
             {
-                print(MyConds.curr_conds[i].cond_id + " - " + MyConds.curr_conds[i].cond_bulk);
+                for (int i=0; i<MyConds.curr_conds.Count; i++)
+                {
+                    print(MyConds.curr_conds[i].cond_id + " - " + MyConds.curr_conds[i].cond_bulk);
+                }
             }
-        }
-        */
+            */
 
-            
-        if (Input.GetKeyDown(KeyCode.H))
+
+            if (Input.GetKeyDown(KeyCode.H))
         {
             for (int i = 0; i < OtherGamers.Count; i++)
             {
@@ -413,6 +412,11 @@ public class playercontrol : MonoBehaviour
         AgregateHoriz += MyJoystick.Horizontal;
         AgregateVertic += MyJoystick.Vertical;
 
+        if (CheckTouchForStrafe.isNowhereTouched)
+        {
+            AgregateVertic += 10f;
+        }
+
         PredictionMachine(MyJoystick.Horizontal,
             MyJoystick.Vertical, PlayerTransform.position, PlayerTransform.rotation.eulerAngles,
             out Player2NewPos, out Player2NewRot);
@@ -432,6 +436,8 @@ public class playercontrol : MonoBehaviour
         {
             DeltaForLerpMovingNRotation = 0.07f;
         }
+
+
 
 
         if (AverageCountForDeltaForLerp == 0) AverageCountForDeltaForLerp = 1;

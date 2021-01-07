@@ -8,6 +8,7 @@ using System.Globalization;
 using UnityEngine.EventSystems;
 using System;
 
+
 public class player_setup : MonoBehaviour
 {
     public GameObject ConnectionError, 
@@ -222,7 +223,7 @@ public class player_setup : MonoBehaviour
 
         sr.isConnectionError = false;
 
-        print(langu.kkk + "===========================================================");
+        print("dfm,sjvnsjdfbnvjkfbv sdhvkjsdfvksdfvbsv sdvkjsdh vkjsd hvksdv skdvksd vksd vsjvk");
 
         
         BaseSpellsRects.Add(SpellButton1.GetComponent<RectTransform>());

@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class plchoose : MonoBehaviour
 {
     public Button pl1, pl2, pl2_3, pl2_4, pl2_5, pl3, pl4, pl5, pl6, pl7, pl8;
+
+    private int HowManyPlayers = 5;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +36,7 @@ public class plchoose : MonoBehaviour
         general.SessionPlayerID = "player1";
         general.SessionTicket = "session";
         general.GameServerIP = general.HUB1_ip;
-        general.SessionNumberOfPlayers=7;
+        general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
         
     }
@@ -44,7 +46,7 @@ public class plchoose : MonoBehaviour
         general.SessionPlayerID = "player2";
         general.SessionTicket = "session";
         general.GameServerIP = general.HUB1_ip;
-        general.SessionNumberOfPlayers = 7;
+        general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
 
     }
@@ -54,7 +56,7 @@ public class plchoose : MonoBehaviour
         general.SessionPlayerID = "player3";
         general.SessionTicket = "session";
         general.GameServerIP = general.HUB1_ip;
-        general.SessionNumberOfPlayers = 7;
+        general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
 
     }
@@ -64,7 +66,7 @@ public class plchoose : MonoBehaviour
         general.SessionPlayerID = "player4";
         general.SessionTicket = "session";
         general.GameServerIP = general.HUB1_ip;
-        general.SessionNumberOfPlayers = 7;
+        general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
 
     }
@@ -74,7 +76,7 @@ public class plchoose : MonoBehaviour
         general.SessionPlayerID = "player5";
         general.SessionTicket = "session";
         general.GameServerIP = general.HUB1_ip;
-        general.SessionNumberOfPlayers = 7;
+        general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
 
     }
