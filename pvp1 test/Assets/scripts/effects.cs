@@ -315,7 +315,7 @@ public class effects : MonoBehaviour
             }
 
                                 
-            if (SomeConds.cond_type == "dt" && SomeConds.spell_index == 2 && SomeConds.damage_or_heal > 0)
+            if (SomeConds.cond_type == "dt" && (SomeConds.spell_index == 2 || SomeConds.spell_index == 7 || SomeConds.spell_index == 8) && SomeConds.damage_or_heal > 0)
             {
                 StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f, 0));
                 StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
