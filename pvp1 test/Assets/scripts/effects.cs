@@ -211,9 +211,19 @@ public class effects : MonoBehaviour
 
         if (!SomeConds.isChecked)
         {
+            /*
+            //spells with conditions with STOP movement
+            if (SomeConds.cond_type == "co" && (SomeConds.spell_index == 1001 || SomeConds.spell_index == 1002 || SomeConds.spell_index == 1006))
+            {
+                playercontrol.isStopMovement = true;
+            } 
+            else
+            {
+                playercontrol.isStopMovement = false;
+            }
+            */
 
-
-            if (SomeConds.cond_type == "cs")
+                if (SomeConds.cond_type == "cs")
             {
                 bool isOK = true;
 

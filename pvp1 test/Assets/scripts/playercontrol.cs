@@ -82,7 +82,7 @@ public class playercontrol : MonoBehaviour
     List<string> PoolOfMessages = new List<string>();
 
     //regulating send and receive
-    public static bool isSendingOK = true;
+    public static bool isSendingOK = true, isStopMovement;
 
 
     //button sending MODE
@@ -285,7 +285,12 @@ public class playercontrol : MonoBehaviour
             //print("me - " + SendAndReceive.MyPlayerData.conditions + " = " + SendAndReceive.OrderReceived + "   him - " + SendAndReceive.OtherPlayerData[0].conditions + " = " + SendAndReceive.OrderReceived);
         }
 
-
+        /*
+        if (MyConds.curr_conds.Count > 0)
+        {
+            print(MyConds.curr_conds[MyConds.curr_conds.Count - 1].cond_bulk + " ========== " + MyConds.curr_conds[MyConds.curr_conds.Count - 1].cond_id);
+        }
+        */
 
         //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         CheckMessagesAndConditions();
@@ -409,13 +414,18 @@ public class playercontrol : MonoBehaviour
 
         //==================================================================
 
-        AgregateHoriz += MyJoystick.Horizontal;
-        AgregateVertic += MyJoystick.Vertical;
-
-        if (CheckTouchForStrafe.isNowhereTouched)
+        if (!isStopMovement)
         {
-            AgregateVertic += 10f;
+            AgregateHoriz += MyJoystick.Horizontal;
+            AgregateVertic += MyJoystick.Vertical;
+
+            if (CheckTouchForStrafe.isNowhereTouched)
+            {
+                AgregateVertic += 10f;
+            }
         }
+
+        
 
         PredictionMachine(MyJoystick.Horizontal,
             MyJoystick.Vertical, PlayerTransform.position, PlayerTransform.rotation.eulerAngles,

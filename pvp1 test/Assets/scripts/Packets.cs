@@ -187,7 +187,7 @@ public struct AnimationsForPlayers
     public void RefreshAnimations(int state)
     {
         
-        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15) && (/*state==1 || state==0*/ state < 2) )
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18) && (/*state==1 || state==0*/ state < 2) )
         {
             Idle();
         }
@@ -390,6 +390,24 @@ public struct AnimationsForPlayers
                         heroicleap();
                     }
                     break;
+                case 17:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("fall down"))
+                    {
+                        falldown();
+                    }
+                    break;
+                case 18:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("lying"))
+                    {
+                        lying();
+                    }
+                    break;
+                case 19:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("get up"))
+                    {
+                        getup();
+                    }
+                    break;
             }
         }
 
@@ -529,7 +547,23 @@ public struct AnimationsForPlayers
         CurrentAnimationState = 16;
     }
 
+    void falldown()
+    {
+        animator.Play("fall down");
+        CurrentAnimationState = 17;
+    }
 
+    void lying()
+    {
+        animator.Play("lying");
+        CurrentAnimationState = 18;
+    }
+
+    void getup()
+    {
+        animator.Play("get up");
+        CurrentAnimationState = 19;
+    }
 }
 
 
@@ -775,6 +809,9 @@ public static class SendAndReceive
                 break;
             case 13:
                 ReturnMess = "you allready on this spell";
+                break;
+            case 14:
+                ReturnMess = "you are knocked down";
                 break;
 
         }
