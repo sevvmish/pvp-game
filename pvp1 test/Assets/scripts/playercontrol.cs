@@ -218,7 +218,14 @@ public class playercontrol : MonoBehaviour
             }
         } else
         {
-            if (CheckTouchForStrafe.isNowhereTouched) CheckTouchForStrafe.isNowhereTouched = false;
+            if (CheckTouchForStrafe.isNowhereTouched)
+            {
+                CheckTouchForStrafe.isNowhereTouched = false;
+                AgregateHoriz = 0;
+                AgregateVertic = 0;
+            }
+            
+
         }
 
 

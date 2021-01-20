@@ -17,7 +17,7 @@ public class effects : MonoBehaviour
 
     private List<GameObject> Cancels = new List<GameObject>();
 
-    private ObjectPooling FireSteps;
+    
 
     public bool isStunned, isShieldSlam, isCasting, isChanneling, isSpellShooting;
 
@@ -32,9 +32,14 @@ public class effects : MonoBehaviour
 
     //mage 1 effects
     public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff;
+    private ObjectPooling FireSteps;
 
     //barbarian 1 effects
     public GameObject SplashEffSimpleHit;
+
+    //wizard 1 effects
+    private ObjectPooling DeathBeamsList;
+    public GameObject DeathBeamExample;
 
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
@@ -105,6 +110,18 @@ public class effects : MonoBehaviour
         {
             SplashEffSimpleHit.SetActive(false);
             
+        }
+
+        if (MyPlayerClass == 4)
+        {
+            
+
+        }
+
+        if (MyPlayerClass == 5)
+        {
+            DeathBeamsList = new ObjectPooling(40, DeathBeamExample, VFXRespPlace);
+
         }
 
     }
@@ -223,7 +240,7 @@ public class effects : MonoBehaviour
             }
             */
 
-                if (SomeConds.cond_type == "cs")
+            if (SomeConds.cond_type == "cs")
             {
                 bool isOK = true;
 
@@ -241,7 +258,7 @@ public class effects : MonoBehaviour
                 {
                     CurrentConds.Add(SomeConds);
                     int CurrCondIndex = CurrentConds.Count - 1;
-
+                    
                     switch (SomeConds.spell_index)
                     {
                         case 51:
@@ -252,6 +269,12 @@ public class effects : MonoBehaviour
                             break;
                         case 54:
                             StartCoroutine(SpellShooting54(CurrentConds[CurrCondIndex]));
+                            break;
+
+
+
+                        case 201:
+                            StartCoroutine(SpellShooting201(CurrentConds[CurrCondIndex]));
                             break;
                     }
 
@@ -428,11 +451,11 @@ public class effects : MonoBehaviour
     {
         GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.SetActive(true);
-        for (float i=0; i<2; i+=0.04f)
+        for (float i=0; i<2; i+=general.Tick)
         {            
             SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z);
             //print(isSpellShooting + "=============================");
-            yield return new WaitForSeconds(0.04f);
+            yield return new WaitForSeconds(general.Tick);
         }
         while (isSpellShooting);
         SpellSource.SetActive(false);
@@ -464,6 +487,19 @@ public class effects : MonoBehaviour
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
         isSpellShooting = false;
         yield return new WaitForSeconds(0.1f);
+        CurrentConds.Remove(CurrConditions);
+        yield return new WaitForSeconds(3f);
+        SpellSource.SetActive(false);
+
+    }
+
+    IEnumerator SpellShooting201(Conds CurrConditions)
+    {
+
+        GameObject SpellSource = DeathBeamsList.GetObject();
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z);
+        isSpellShooting = false;
+        //yield return new WaitForSeconds(0.1f);
         CurrentConds.Remove(CurrConditions);
         yield return new WaitForSeconds(3f);
         SpellSource.SetActive(false);

@@ -641,6 +641,10 @@ public struct ToSend
     public int Butt4;
     public int Butt5;
     public int Butt6;
+    private float limit;
+
+    public static int counter;
+    public static int counter_ts;
 
     private void MakeClean()
     {
@@ -672,17 +676,59 @@ public struct ToSend
         MakeClean();
         PlayerID = general.SessionPlayerID;
         TemporaryTable = general.SessionTicket;
+        
+        if (Horiz > 5) Horiz = 5;
+        if (Horiz <-5) Horiz = -5;
+
+        limit = 4.9f;
+
         HorizontalTouch = Horiz;
         VerticalTouch = Vert;
-       
+        
+
+        if (Horiz>= limit && counter>=0)
+        {
+            if (counter<15) counter++;
+        } 
+        else if (Horiz >= limit && counter < 0)
+        {
+            counter = 0;
+            if (counter < 15) counter++;
+        }
+        else if (Horiz <= -limit && counter <= 0)
+        {
+            if (counter > -15) counter--;
+        }
+        else if (Horiz <= -limit && counter > 0)
+        {
+            counter = 0;
+            if (counter > -15) counter--;
+        } else if (Horiz < limit || Horiz > -limit)
+        {
+            counter = 0;
+        }
+
+        //Debug.Log(counter + " -=======");
+
+        //Debug.Log(Horiz + "-horiz -=======     vert-" + Vert);
+
+        if (counter != 0)
+        {
+            HorizontalTouch = HorizontalTouch * (1 + (Math.Abs(counter) / 15f * 0.5f));
+        }
+
+        //Debug.Log(HorizontalTouch + " -=======");
+
         StringBuilder Result = new StringBuilder(70);
         OrderToSend++;
 
         if (!CheckTouchForStrafe.isNowhereTouched)
         {
             Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
-        } else
+        } 
+        else
         {
+            
             Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
         }
 
