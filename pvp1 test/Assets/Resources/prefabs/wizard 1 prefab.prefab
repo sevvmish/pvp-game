@@ -2676,7 +2676,6 @@ GameObject:
   - component: {fileID: 5383960941358492645}
   - component: {fileID: 6729841475876284596}
   - component: {fileID: 8346335581385007457}
-  - component: {fileID: 2007071547741616033}
   m_Layer: 0
   m_Name: wizard 1 prefab
   m_TagString: Untagged
@@ -2872,20 +2871,6 @@ MonoBehaviour:
   PlayerEffects: {fileID: 0}
   OtherPlayerUI: {fileID: 0}
   OtherPlayerName: 
---- !u!136 &2007071547741616033
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9014184918215587936}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 1.72
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.91, z: 0}
 --- !u!1 &9141383799178631995
 GameObject:
   m_ObjectHideFlags: 0
@@ -3374,9 +3359,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b021339ad0d36ec4480d0ff1c3f5c382, type: 3}
---- !u!1 &6427580383857953897 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3502002005098157036, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+--- !u!4 &1246961191287721561 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}
@@ -3386,9 +3371,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1246961191287721561 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+--- !u!1 &6427580383857953897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3502002005098157036, guid: b021339ad0d36ec4480d0ff1c3f5c382,
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}

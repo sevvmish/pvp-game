@@ -276,6 +276,9 @@ public class effects : MonoBehaviour
                         case 201:
                             StartCoroutine(SpellShooting201(CurrentConds[CurrCondIndex]));
                             break;
+                        case 202:
+                            StartCoroutine(SpellShooting202(CurrentConds[CurrCondIndex]));
+                            break;
                     }
 
                 }
@@ -501,9 +504,23 @@ public class effects : MonoBehaviour
         isSpellShooting = false;
         //yield return new WaitForSeconds(0.1f);
         CurrentConds.Remove(CurrConditions);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.1f);
         SpellSource.SetActive(false);
 
+    }
+
+    IEnumerator SpellShooting202(Conds CurrConditions)
+    {
+
+        GameObject SpellSource = Instantiate(DeathBeamExample, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.1f, CurrConditions.coord_z);
+        SpellSource.SetActive(true);
+        isSpellShooting = false;
+        //yield return new WaitForSeconds(0.1f);
+        CurrentConds.Remove(CurrConditions);
+        yield return new WaitForSeconds(5f);
+        SpellSource.SetActive(false);
+        Destroy(SpellSource);
     }
 
 

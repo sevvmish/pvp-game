@@ -610,6 +610,11 @@ public class playercontrol : MonoBehaviour
                         MakeSign("RESISTED", PlayerTransform.position, Color.white, false);
                         MyConds.curr_conds[i].isChecked = true;
                     }
+                    else if (MyConds.curr_conds[i].cond_message == "i")
+                    {
+                        MakeSign("IMMUNE", PlayerTransform.position, Color.white, false);
+                        MyConds.curr_conds[i].isChecked = true;
+                    }
 
                 }
 
@@ -620,6 +625,10 @@ public class playercontrol : MonoBehaviour
                     if (MyConds.curr_conds[i].cond_message == "r")
                     {
                         MakeSign("RESISTED", PlayerTransform.position, Color.white, false);
+                        MyConds.curr_conds[i].isChecked = true;
+                    } else if (MyConds.curr_conds[i].cond_message == "i")
+                    {
+                        MakeSign("IMMUNE", PlayerTransform.position, Color.white, false);
                         MyConds.curr_conds[i].isChecked = true;
                     }
 
