@@ -545,7 +545,7 @@ public class playercontrol : MonoBehaviour
 
                 if (MyConds.curr_conds[i].cond_type == "dt" && MyConds.curr_conds[i].damage_or_heal > 0)
                 {
-                    MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), PlayerTransform.position + new Vector3(0, 2, 0), Color.red, MyConds.curr_conds[i].isCrit);
+                    MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), PlayerTransform.position + new Vector3(0, 2, 0), Color.red, MyConds.curr_conds[i].isCrit, true);
                     MyConds.curr_conds[i].isChecked = true;
                 }
                 else if (MyConds.curr_conds[i].cond_type == "dg" && MyConds.curr_conds[i].damage_or_heal > 0)
@@ -556,7 +556,7 @@ public class playercontrol : MonoBehaviour
                         {
                             if (OtherGamers[ii].Conds.curr_conds[iii].cond_id == MyConds.curr_conds[i].cond_id)
                             {
-                                MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.yellow, MyConds.curr_conds[i].isCrit);
+                                MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.yellow, MyConds.curr_conds[i].isCrit, true);
                                 //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
                                 MyConds.curr_conds[i].isChecked = true;
                             }
@@ -597,22 +597,22 @@ public class playercontrol : MonoBehaviour
                 {
                     if (MyConds.curr_conds[i].cond_message == "d")
                     {
-                        MakeSign("DODGE", PlayerTransform.position, Color.white, false);
+                        MakeSign("DODGE", PlayerTransform.position, Color.white, false, true);
                         MyConds.curr_conds[i].isChecked = true;
                     }
                     else if (MyConds.curr_conds[i].cond_message == "b")
                     {
-                        MakeSign("BLOCKED", PlayerTransform.position, Color.white, false);
+                        MakeSign("BLOCKED", PlayerTransform.position, Color.white, false, true);
                         MyConds.curr_conds[i].isChecked = true;
                     }
                     else if (MyConds.curr_conds[i].cond_message == "r")
                     {
-                        MakeSign("RESISTED", PlayerTransform.position, Color.white, false);
+                        MakeSign("RESISTED", PlayerTransform.position, Color.white, false, true);
                         MyConds.curr_conds[i].isChecked = true;
                     }
                     else if (MyConds.curr_conds[i].cond_message == "i")
                     {
-                        MakeSign("IMMUNE", PlayerTransform.position, Color.white, false);
+                        MakeSign("IMMUNE", PlayerTransform.position, Color.white, false, true);
                         MyConds.curr_conds[i].isChecked = true;
                     }
 
@@ -624,17 +624,38 @@ public class playercontrol : MonoBehaviour
                 {
                     if (MyConds.curr_conds[i].cond_message == "r")
                     {
-                        MakeSign("RESISTED", PlayerTransform.position, Color.white, false);
+                        MakeSign("RESISTED", PlayerTransform.position, Color.white, false, true);
                         MyConds.curr_conds[i].isChecked = true;
                     } else if (MyConds.curr_conds[i].cond_message == "i")
                     {
-                        MakeSign("IMMUNE", PlayerTransform.position, Color.white, false);
+                        MakeSign("IMMUNE", PlayerTransform.position, Color.white, false, true);
                         MyConds.curr_conds[i].isChecked = true;
                     }
 
                 }
 
+                else if (MyConds.curr_conds[i].cond_type == "ht" && MyConds.curr_conds[i].damage_or_heal > 0)
+                {
+                    MakeSign("+" + MyConds.curr_conds[i].damage_or_heal.ToString("f0"), PlayerTransform.position + new Vector3(0, 2, 0), Color.green, MyConds.curr_conds[i].isCrit, false);
+                    MyConds.curr_conds[i].isChecked = true;
+                }
 
+                else if (MyConds.curr_conds[i].cond_type == "hg" && MyConds.curr_conds[i].damage_or_heal > 0)
+                {
+                    for (int ii = 0; ii < OtherGamers.Count; ii++)
+                    {
+                        for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
+                        {
+                            if (OtherGamers[ii].Conds.curr_conds[iii].cond_id == MyConds.curr_conds[i].cond_id)
+                            {
+                                MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.green, MyConds.curr_conds[i].isCrit, false);
+                                //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
+                                MyConds.curr_conds[i].isChecked = true;
+                            }
+                        }
+                    }
+
+                }
 
             }
 
@@ -671,13 +692,13 @@ public class playercontrol : MonoBehaviour
                     {
                         if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "d")
                         {
-                            MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
+                            MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
                             OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
 
                         }
                         else if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "b")
                         {
-                            MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false);
+                            MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
                             OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
                         }
                     }
@@ -730,7 +751,7 @@ public class playercontrol : MonoBehaviour
 
 
 
-    public void MakeSign(string message_text, Vector3 position, Color color, bool isBigger)
+    public void MakeSign(string message_text, Vector3 position, Color color, bool isBigger, bool isUP)
     {
         //Vector3 RightPos = CurrentCamera.WorldToScreenPoint(position);
         
@@ -763,13 +784,13 @@ public class playercontrol : MonoBehaviour
             TakenObject.rectTransform.localScale = new Vector3(1f, 1f, 1f);
         }
 
-        StartCoroutine(ShowMessage(TakenObject, position));
+        StartCoroutine(ShowMessage(TakenObject, position, isUP));
         
     }
 
 
 
-    IEnumerator ShowMessage(TextMeshProUGUI mess_window, Vector3 position)
+    IEnumerator ShowMessage(TextMeshProUGUI mess_window, Vector3 position, bool isUP)
     {
         if (isMessageShowing)
         {
@@ -807,8 +828,16 @@ public class playercontrol : MonoBehaviour
             {
                 deltaX = i;
             }
-            //mess_window.rectTransform.anchoredPosition = new Vector2(position.x - 150, position.y + i * 10f-25);
-            mess_window.transform.position = new Vector3(CurrentCamera.WorldToScreenPoint(position).x-150 + coordX + deltaX * 2f , CurrentCamera.WorldToScreenPoint(position).y-25 + i*0.4f*i, CurrentCamera.WorldToScreenPoint(position).z);
+
+            if (isUP)
+            {
+                mess_window.transform.position = new Vector3(CurrentCamera.WorldToScreenPoint(position).x - 150 + coordX + deltaX * 2f, CurrentCamera.WorldToScreenPoint(position).y - 25 + i * 0.4f * i, CurrentCamera.WorldToScreenPoint(position).z);
+            }
+            else
+            {
+                mess_window.transform.position = new Vector3(CurrentCamera.WorldToScreenPoint(position).x - 150 + coordX + deltaX * 2f, CurrentCamera.WorldToScreenPoint(position).y - 200 - i * 0.4f * i, CurrentCamera.WorldToScreenPoint(position).z);
+            }
+
             yield return new WaitForSeconds(0.05f);
             
             if (i > 0.5f)

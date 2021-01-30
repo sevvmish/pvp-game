@@ -138,8 +138,7 @@ public class ConditionsAnalys
 
             
 
-        } else if (curr_conds[Index].cond_type.Contains("="))
-        {
+        } else if (curr_conds[Index].cond_type.Contains("=")) {
             string[] anothergetstrcond = getstrcond1[1].Split('=');
             curr_conds[Index].cond_type = anothergetstrcond[0];
             if (curr_conds[Index].cond_type == "cs") //spell bolt flying around
@@ -149,6 +148,20 @@ public class ConditionsAnalys
                 curr_conds[Index].coord_z = float.Parse(anothergetstrcond[3], CultureInfo.InvariantCulture);
 
             }
+        } else if (curr_conds[Index].cond_type == "hg" || curr_conds[Index].cond_type == "ht") //damage taken or given
+        {
+            curr_conds[Index].damage_or_heal = float.Parse(getstrcond[1], CultureInfo.InvariantCulture);
+
+            if (getstrcond[2] == "s")
+            {
+                curr_conds[Index].isCrit = false;
+            }
+            else if (getstrcond[2] == "c")
+            {
+                curr_conds[Index].isCrit = true;
+            }
+
+            curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
         }
 
 
