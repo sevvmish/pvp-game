@@ -607,8 +607,8 @@ public struct ReceivePlayersData
         try
         {
             getstr = ReceivedPacket.Split('~');
-            position_x = float.Parse(getstr[0], CultureInfo.InvariantCulture);
-            position_y = float.Parse(getstr[1], CultureInfo.InvariantCulture);
+            position_x = float.Parse(getstr[0]);//float.Parse(getstr[0], CultureInfo.InvariantCulture);
+            position_y = float.Parse(getstr[1], CultureInfo.InvariantCulture);//
             position_z = float.Parse(getstr[2], CultureInfo.InvariantCulture);
             rotation_x = float.Parse(getstr[3], CultureInfo.InvariantCulture);
             rotation_y = float.Parse(getstr[4], CultureInfo.InvariantCulture);
