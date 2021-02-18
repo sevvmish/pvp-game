@@ -608,20 +608,20 @@ public struct ReceivePlayersData
         {
             getstr = ReceivedPacket.Split('~');
             position_x = float.Parse(getstr[0]);//float.Parse(getstr[0], CultureInfo.InvariantCulture);
-            position_y = float.Parse(getstr[1], CultureInfo.InvariantCulture);//
-            position_z = float.Parse(getstr[2], CultureInfo.InvariantCulture);
-            rotation_x = float.Parse(getstr[3], CultureInfo.InvariantCulture);
-            rotation_y = float.Parse(getstr[4], CultureInfo.InvariantCulture);
-            rotation_z = float.Parse(getstr[5], CultureInfo.InvariantCulture);
-            speed = float.Parse(getstr[6], CultureInfo.InvariantCulture);
+            position_y = float.Parse(getstr[1]);//
+            position_z = float.Parse(getstr[2]);
+            rotation_x = float.Parse(getstr[3]);
+            rotation_y = float.Parse(getstr[4]);
+            rotation_z = float.Parse(getstr[5]);
+            speed = float.Parse(getstr[6]);
             animation_id = int.Parse(getstr[7]);
             conditions = getstr[8];
             
             all_health = getstr[9].Split('=');
-            health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
-            max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
+            health_pool = float.Parse(all_health[0]);
+            max_health_pool = float.Parse(all_health[1]);
             
-            energy = float.Parse(getstr[10], CultureInfo.InvariantCulture);
+            energy = float.Parse(getstr[10]);
             position = new Vector3(position_x, position_y, position_z);
             rotation = new Vector3(rotation_x, rotation_y, rotation_z);
 
@@ -737,12 +737,12 @@ public struct ToSend
 
         if (!CheckTouchForStrafe.isNowhereTouched)
         {
-            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + VerticalTouch.ToString("f2")); //+  + "~0~0~0~0~0~0|"
         } 
         else
         {
             
-            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
         }
 
         return Result.ToString();

@@ -16,8 +16,8 @@ public class connection : MonoBehaviour
     private static IPEndPoint ipendpoint_udp;
     private static EndPoint endpoint_udp;
     private static StringBuilder raw_data_received = new StringBuilder(1024);
-    private static byte[] buffer_received_udp = new byte[1024];
-    private static byte[] buffer_send_udp = new byte[64];
+    private static byte[] buffer_received_udp;
+    
 
 
     public static connection connector;
@@ -28,8 +28,7 @@ public class connection : MonoBehaviour
     EndPoint remoteIp;
     public string DataFromServer1;
     static string LastReceivedPacket;
-    float cur_time, cur_time2, howmany;
-    bool isstart, isBrokenPacket;
+    
 
     public static string DataForCheck;
 
@@ -57,38 +56,15 @@ public class connection : MonoBehaviour
         cts = new CancellationTokenSource();
         token = cts.Token;
 
-        isstart = true;
+        buffer_received_udp = new byte[256*general.SessionNumberOfPlayers];
+
+        
         connector = this;
         //Reconnect();
         Reconnect2();
         //ListenToServer();
     }
 
-
-    private void Update()
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            ListenToServer();
-        }
-
-        if (DataForCheck !=(SendAndReceive.DataForSending.OrderToSend + " - to send|   " + SendAndReceive.OrderReceived + " - to rece| == " + (SendAndReceive.DataForSending.OrderToSend- SendAndReceive.OrderReceived) +  "  - over:" + howmany + " == " + cur_time + " - timer\n"))
-        {
-            DataForCheck = SendAndReceive.DataForSending.OrderToSend + " - to send|   " + SendAndReceive.OrderReceived + " - to rece| == " + (SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) + "  - over:" + howmany + " == " + cur_time + " - timer\n";
-            //print(DataForCheck);
-        }
-
-
-        if ((SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) < 4)
-        {
-            ListenToServer();
-        } else if ((SendAndReceive.DataForSending.OrderToSend - SendAndReceive.OrderReceived) > 8)
-        {
-            Reconnect();
-        }
-        */
-    }
 
     /*
     public void Reconnect()
@@ -188,14 +164,14 @@ public class connection : MonoBehaviour
     {
         
 
-        await Task.Run(() => ReceiveData(token));
+        //await Task.Run(() => ReceiveData(token));
         //await Task.Run(() => TryStreamReceive());
         //await Task.Run(() => TalkToServer(Data));
 
     }
 
 
-
+    /*
     public void ReceiveData(CancellationToken token)
     {
 
@@ -228,12 +204,7 @@ public class connection : MonoBehaviour
 
             if (messrec.ToString() != "" && messrec.ToString() != null)
             {
-                /*
-                if (bytes > 200)
-                {
-                    print(messrec.ToString());
-                }
-                */
+                
                 print(messrec.ToString());
 
                 howmany--;
@@ -253,6 +224,8 @@ public class connection : MonoBehaviour
 
         //}
     }
+    */
+
 
     public static void RawPacketsProcess(string RawData)
     {
