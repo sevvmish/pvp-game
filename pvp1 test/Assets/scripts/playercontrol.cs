@@ -396,7 +396,7 @@ public class playercontrol : MonoBehaviour
                 print(ex);
 
                 //connection.connector.AnotherReconnect();
-                connection.connector.Reconnect();
+                connection.connector.Reconnect2();
             }
 
 

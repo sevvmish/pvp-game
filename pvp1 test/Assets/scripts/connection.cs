@@ -11,6 +11,14 @@ using System.Threading.Tasks;
 
 public class connection : MonoBehaviour
 {
+    private static Socket socket_udp;
+    private int port_udp = general.GameServerUDPPort;
+    private static IPEndPoint ipendpoint_udp;
+    private static EndPoint endpoint_udp;
+    private static StringBuilder raw_data_received = new StringBuilder(1024);
+    private static byte[] buffer_received_udp = new byte[1024];
+    private static byte[] buffer_send_udp = new byte[64];
+
 
     public static connection connector;
     private Socket sck;
@@ -51,13 +59,15 @@ public class connection : MonoBehaviour
 
         isstart = true;
         connector = this;
-        Reconnect();
+        //Reconnect();
+        Reconnect2();
         //ListenToServer();
     }
 
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Z))
         {
             ListenToServer();
@@ -77,9 +87,10 @@ public class connection : MonoBehaviour
         {
             Reconnect();
         }
-
+        */
     }
 
+    /*
     public void Reconnect()
     {
 
@@ -100,6 +111,45 @@ public class connection : MonoBehaviour
             Debug.Log(ex);
         }
     }
+    */
+
+    public void Reconnect2()
+    {        
+        socket_udp = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        endpoint = new IPEndPoint(IPAddress.Parse(CurrentIP), CurrentPort);
+        ipendpoint_udp = new IPEndPoint(IPAddress.Any, port_udp);
+        endpoint_udp = (EndPoint)ipendpoint_udp;
+
+        //socket_udp.Bind(endpoint_udp);
+        socket_udp.BeginReceiveFrom(buffer_received_udp, 0, buffer_received_udp.Length, SocketFlags.None, ref endpoint_udp, new AsyncCallback(ReceiveCallbackUDP), socket_udp);
+    }
+
+    private static void ReceiveCallbackUDP(IAsyncResult ar)
+    {
+        try
+        {
+            raw_data_received.Clear();
+
+            int n = socket_udp.EndReceiveFrom(ar, ref endpoint_udp);
+            raw_data_received.Append(Encoding.UTF8.GetString(buffer_received_udp, 0, n));
+            //Console.WriteLine(raw_data_received);
+
+            if (raw_data_received.ToString() != "" && raw_data_received.ToString() != null)
+            {                
+                print(raw_data_received.ToString());
+                RawPacketsProcess(raw_data_received.ToString());
+            }
+
+            socket_udp.BeginReceiveFrom(buffer_received_udp, 0, buffer_received_udp.Length, SocketFlags.None, ref endpoint_udp, new AsyncCallback(ReceiveCallbackUDP), socket_udp);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+    }
+
+
 
 
     public void TalkToServer(string DataForServer)
@@ -109,7 +159,7 @@ public class connection : MonoBehaviour
         {
             //sck.Send(Encoding.UTF8.GetBytes(DataForServer));
             //print("-----=====----- " + DataForServer);
-            sck.SendTo(Encoding.UTF8.GetBytes(DataForServer), endpoint);
+            socket_udp.SendTo(Encoding.UTF8.GetBytes(DataForServer), endpoint);
             
         }
         catch (Exception ex)
@@ -317,6 +367,7 @@ public class connection : MonoBehaviour
     
     void OnApplicationQuit()
     {
+        /*
         cts.Cancel();
 
         int CurrentPort_tcp = general.GameServerTCPPort;
@@ -343,9 +394,9 @@ public class connection : MonoBehaviour
             Debug.Log(ex);
 
         }
-
-        sck.Shutdown(SocketShutdown.Both);
-        sck.Close();
+        */
+        socket_udp.Shutdown(SocketShutdown.Both);
+        socket_udp.Close();
     }
     
 

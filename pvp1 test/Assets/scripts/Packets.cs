@@ -628,7 +628,7 @@ public struct ReceivePlayersData
             
             
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             Debug.Log("wrong packet format - " + ReceivedPacket);
             //if (ReceivedPacket!=null) playercontrol.OtherLatency1.text = playercontrol.OtherLatency1.text + "wrong packet format - " + ReceivedPacket;
