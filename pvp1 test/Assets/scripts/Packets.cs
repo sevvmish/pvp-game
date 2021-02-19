@@ -604,35 +604,36 @@ public struct ReceivePlayersData
     {
         string[] getstr = new string[13];
         
-        try
-        {
+        //try
+        //{
             getstr = ReceivedPacket.Split('~');
-            position_x = float.Parse(getstr[0]);//float.Parse(getstr[0], CultureInfo.InvariantCulture);
-            position_y = float.Parse(getstr[1]);//
-            position_z = float.Parse(getstr[2]);
-            rotation_x = float.Parse(getstr[3]);
-            rotation_y = float.Parse(getstr[4]);
-            rotation_z = float.Parse(getstr[5]);
-            speed = float.Parse(getstr[6]);
+            position_x = float.Parse(getstr[0].Replace('.',','));//float.Parse(getstr[0], CultureInfo.InvariantCulture);
+            position_y = float.Parse(getstr[1].Replace('.', ','));//
+            position_z = float.Parse(getstr[2].Replace('.', ','));
+            rotation_x = float.Parse(getstr[3].Replace('.', ','));
+            rotation_y = float.Parse(getstr[4].Replace('.', ','));
+            rotation_z = float.Parse(getstr[5].Replace('.', ','));
+            speed = float.Parse(getstr[6], CultureInfo.InvariantCulture);
             animation_id = int.Parse(getstr[7]);
             conditions = getstr[8];
             
             all_health = getstr[9].Split('=');
-            health_pool = float.Parse(all_health[0]);
-            max_health_pool = float.Parse(all_health[1]);
+            health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
+            max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
             
-            energy = float.Parse(getstr[10]);
+            energy = float.Parse(getstr[10], CultureInfo.InvariantCulture);
             position = new Vector3(position_x, position_y, position_z);
             rotation = new Vector3(rotation_x, rotation_y, rotation_z);
 
-            
-            
-        }
-        catch (Exception)
-        {
-            Debug.Log("wrong packet format - " + ReceivedPacket);
+            //1.1~0~1~0~0~0~1.2~0~~200 = 200~100
+
+
+        //}
+        //catch (Exception)
+        //{
+           // Debug.Log("wrong packet format - " + ReceivedPacket);
             //if (ReceivedPacket!=null) playercontrol.OtherLatency1.text = playercontrol.OtherLatency1.text + "wrong packet format - " + ReceivedPacket;
-        }
+        //}
 
         
     }
@@ -737,12 +738,23 @@ public struct ToSend
 
         if (!CheckTouchForStrafe.isNowhereTouched)
         {
-            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + VerticalTouch.ToString("f2")); //+  + "~0~0~0~0~0~0|"
+            if (general.HUB1_ip != "127.0.0.1")
+            {
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+            } else
+            {
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + VerticalTouch.ToString("f2")); //+  + "~0~0~0~0~0~0|"
+            }
         } 
         else
         {
-            
-            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+            if (general.HUB1_ip != "127.0.0.1")
+            {
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+            } else
+            {
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+            }
         }
 
         return Result.ToString();

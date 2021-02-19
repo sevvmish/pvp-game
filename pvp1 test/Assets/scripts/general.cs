@@ -13,7 +13,7 @@ public class general
 
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string HUB1_ip = "127.0.0.1";
+    public static string HUB1_ip = "127.0.0.1"; 
     public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170
 
     public static int SetupServerTCPPort = 2326;

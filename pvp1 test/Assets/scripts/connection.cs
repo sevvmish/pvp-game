@@ -16,8 +16,8 @@ public class connection : MonoBehaviour
     private static IPEndPoint ipendpoint_udp;
     private static EndPoint endpoint_udp;
     private static StringBuilder raw_data_received = new StringBuilder(1024);
-    private static byte[] buffer_received_udp;
-    
+    private static byte[] buffer_received_udp = new byte[256 * general.SessionNumberOfPlayers];
+
 
 
     public static connection connector;
@@ -56,8 +56,7 @@ public class connection : MonoBehaviour
         cts = new CancellationTokenSource();
         token = cts.Token;
 
-        buffer_received_udp = new byte[256*general.SessionNumberOfPlayers];
-
+        
         
         connector = this;
         //Reconnect();
@@ -112,7 +111,7 @@ public class connection : MonoBehaviour
 
             if (raw_data_received.ToString() != "" && raw_data_received.ToString() != null)
             {                
-                print(raw_data_received.ToString());
+                //print(raw_data_received.ToString());
                 RawPacketsProcess(raw_data_received.ToString());
             }
 
@@ -232,11 +231,20 @@ public class connection : MonoBehaviour
         string[] getstr;
         getstr = RawData.Split('|');
 
+        /*
+        for (int i=0; i< getstr.Length; i++)
+        {
+            print(i + "->" + getstr[i]);
+        }
+        print("///////////////////////////////////////////////////////////////////////////");
+        */
+
         if (getstr[0] != "")
         {
             playercontrol.RawPackets.Add((LastReceivedPacket + getstr[0]));
             //print("CORRECTION MADE - " + playercontrol.RawPackets[playercontrol.RawPackets.Count - 1]);
         }
+        
         else
         {
 
@@ -257,6 +265,8 @@ public class connection : MonoBehaviour
         }
 
         LastReceivedPacket = playercontrol.RawPackets[playercontrol.RawPackets.Count - 1];
+
+
 
     }
 
