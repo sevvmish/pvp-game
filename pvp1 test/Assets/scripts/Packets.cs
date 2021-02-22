@@ -804,7 +804,7 @@ public static class SendAndReceive
         {
             ButtonState = int.Parse(getstr[2]);
             MessageType = MessageTypeDecode(int.Parse(getstr[3]));
-            SpellCooldown = float.Parse(getstr[4], CultureInfo.InvariantCulture);            
+            SpellCooldown = float.Parse(getstr[4].Replace('.', ','));            
         }
     }
 

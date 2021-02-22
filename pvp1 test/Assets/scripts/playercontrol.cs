@@ -48,7 +48,7 @@ public class playercontrol : MonoBehaviour
     //other players data    
     public static List<players> OtherGamers;
     
-    float cur_time, cur_time_2, cur_speed;
+    float cur_time, cur_time_2, cur_speed, cur_time_lat;
 
     Vector3 PrevPos, Player2NewPos, Player2NewRot, CorrectionForPosition, CorrectionForRotation, little_pos, little_rot;
 
@@ -89,6 +89,9 @@ public class playercontrol : MonoBehaviour
     public static bool isButtonSend;
     public static string ButtonMessToSend;
 
+
+    private float summofbadlat;
+    private bool isBadLat;
 
     void Start()
     {
@@ -310,7 +313,16 @@ public class playercontrol : MonoBehaviour
         if (latency_check == SendAndReceive.OrderReceived && isLatency)
         {
             LatencyMain.Add(latency_timer * 1000f);
-            TempText1.text = AverageLatency().ToString("f0");
+
+            if (LatencyMain[LatencyMain.Count-1] > 100)
+            {
+                isBadLat = true;
+                StartCoroutine(BadLatency());
+            }
+            //TempText1.text = AverageLatency().ToString("f0");
+            //TempText1.text = "current - " + (latency_timer * 1000f).ToString("f0") + "   average - " + AverageLatency().ToString("f0");
+
+            //print("current - " + (latency_timer * 1000f).ToString("f0") + "   average - " + AverageLatency().ToString("f0"));
 
             latency_timer = 0;
             isLatency = false;
@@ -324,6 +336,15 @@ public class playercontrol : MonoBehaviour
                 latency_timer = 0;
                 isLatency = false;
             }
+        }
+
+        if (cur_time_lat>0.1f)
+        {
+            cur_time_lat = 0;
+            TempText1.text = "current - " + LatencyMain[LatencyMain.Count-1].ToString("f0") + "   average - " + AverageLatency().ToString("f0");
+        } else
+        {
+            cur_time_lat += Time.deltaTime;
         }
 
 
@@ -454,7 +475,7 @@ public class playercontrol : MonoBehaviour
             DeltaForLerpMovingNRotation = 0.07f;
         }
 
-
+        //print(DeltaForLerpMovingNRotation.ToString("f2") + " - <=");
 
 
         if (AverageCountForDeltaForLerp == 0) AverageCountForDeltaForLerp = 1;
@@ -855,6 +876,23 @@ public class playercontrol : MonoBehaviour
         PlayerTransform.position = SendAndReceive.MyPlayerData.position;
         PlayerTransform.rotation = Quaternion.Euler(SendAndReceive.MyPlayerData.rotation);
         isStart = true;
+    }
+
+    IEnumerator BadLatency()
+    {
+        isBadLat = true;
+
+        for (int i = 0; i < 100; i++)
+        {
+            yield return new WaitForSeconds(0.02f);
+            if (LatencyMain[LatencyMain.Count-1] > 100)
+            {
+                summofbadlat += LatencyMain[LatencyMain.Count - 1];
+            }
+        }
+        print("sum of lat - " + summofbadlat);
+        summofbadlat = 0;
+        isBadLat = false;
     }
 
 

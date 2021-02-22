@@ -28,7 +28,7 @@ public class testplayermov : MonoBehaviour
     Button buttswitch;
     private static Joysticks MyJoystick;
     private string ButtonDataToSend;
-    public static List<players> OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
+    //public static List<players> OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
     private float AgregateHoriz, AgregateVertic;
     Vector3 speed = Vector3.zero;
 
