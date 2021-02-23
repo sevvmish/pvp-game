@@ -133,7 +133,7 @@ public class connection : MonoBehaviour
         try
         {
             //sck.Send(Encoding.UTF8.GetBytes(DataForServer));
-            //print("-----=====----- " + DataForServer);
+            print("-----=====----- " + DataForServer);
             socket_udp.SendTo(Encoding.UTF8.GetBytes(DataForServer), endpoint);
             
         }
