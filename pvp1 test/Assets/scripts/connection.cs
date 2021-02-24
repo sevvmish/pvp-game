@@ -24,7 +24,7 @@ public class connection : MonoBehaviour
     private Socket sck;
     private int CurrentPort = general.GameServerUDPPort;
     private string CurrentIP = general.GameServerIP;
-    IPEndPoint endpoint;
+    private static IPEndPoint endpoint;
     EndPoint remoteIp;
     public string DataFromServer1;
     static string LastReceivedPacket;
@@ -103,6 +103,7 @@ public class connection : MonoBehaviour
     {
         try
         {
+            //print(Thread.CurrentThread.ManagedThreadId + " - from playercontorl");
             raw_data_received.Clear();
 
             int n = socket_udp.EndReceiveFrom(ar, ref endpoint_udp);
@@ -111,7 +112,7 @@ public class connection : MonoBehaviour
 
             if (raw_data_received.ToString() != "" && raw_data_received.ToString() != null)
             {                
-                print(raw_data_received.ToString());
+                //print(raw_data_received.ToString());
                 RawPacketsProcess(raw_data_received.ToString());
             }
 
@@ -125,7 +126,26 @@ public class connection : MonoBehaviour
     }
 
 
+    public static Task TalkToServer(string DataForServer)
+    {
+        try
+        {
+            //print(Thread.CurrentThread.ManagedThreadId + " - from sender");
+            byte[] buffer_send_udp = new byte[150];
+            buffer_send_udp = Encoding.UTF8.GetBytes(DataForServer);
 
+            socket_udp.SendTo(buffer_send_udp, buffer_send_udp.Length, SocketFlags.None, endpoint);
+            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine(ex);
+        }
+        return Task.CompletedTask;
+    }
+
+    /*
 
     public void TalkToServer(string DataForServer)
     {
@@ -143,10 +163,10 @@ public class connection : MonoBehaviour
         }
 
         //==================================================================================
-
-        
+               
 
     }
+    */
 
 
     public async void SendToServer(string Data)

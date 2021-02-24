@@ -6,6 +6,7 @@ using System;
 using TMPro;
 using System.Globalization;
 using UnityEngine.EventSystems;
+using System.Threading;
 //using UnityEngine.UIElements;
 
 public class playercontrol : MonoBehaviour
@@ -391,12 +392,13 @@ public class playercontrol : MonoBehaviour
                 if (isButtonSend)
                 {
                     isButtonSend = false;
-                    connection.connector.TalkToServer(ButtonMessToSend);
+                    //print(Thread.CurrentThread.ManagedThreadId + " - from playercontorl");
+                    connection.TalkToServer(ButtonMessToSend);
                 }
                 else
                 {
-                    connection.connector.TalkToServer(SendAndReceive.DataForSending.ToSendMovement(AgregateHoriz, AgregateVertic));
-
+                    connection.TalkToServer(SendAndReceive.DataForSending.ToSendMovement(AgregateHoriz, AgregateVertic));
+                    //print(Thread.CurrentThread.ManagedThreadId + " - from playercontorl");
                     AgregateHoriz = 0;
                     AgregateVertic = 0;
 
