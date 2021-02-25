@@ -17,6 +17,7 @@ public class connection : MonoBehaviour
     private static EndPoint endpoint_udp;
     private static StringBuilder raw_data_received = new StringBuilder(1024);
     private static byte[] buffer_received_udp = new byte[256 * general.SessionNumberOfPlayers];
+    private static byte[] buffer_send_udp = new byte[128];
 
 
 
@@ -130,8 +131,9 @@ public class connection : MonoBehaviour
     {
         try
         {
+            print(DataForServer);
             //print(Thread.CurrentThread.ManagedThreadId + " - from sender");
-            byte[] buffer_send_udp = new byte[150];
+            
             buffer_send_udp = Encoding.UTF8.GetBytes(DataForServer);
 
             socket_udp.SendTo(buffer_send_udp, buffer_send_udp.Length, SocketFlags.None, endpoint);

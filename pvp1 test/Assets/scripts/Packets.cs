@@ -738,22 +738,22 @@ public struct ToSend
 
         if (!CheckTouchForStrafe.isNowhereTouched)
         {
-            if (general.HUB1_ip != "127.0.0.1")
+            if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
             {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
             } else
             {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + VerticalTouch.ToString("f2")); //+  + "~0~0~0~0~0~0|"
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1")); //+  + "~0~0~0~0~0~0|"
             }
         } 
         else
         {
-            if (general.HUB1_ip != "127.0.0.1")
+            if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
             {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
             } else
             {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
+                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
             }
         }
 
@@ -773,12 +773,12 @@ public struct ToSend
         Butt6 = But6;
         StringBuilder Result = new StringBuilder(70);
         OrderToSend++;
-        if (general.HUB1_ip != "127.0.0.1")
+        if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
         {
-            Result.Append(OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2").Replace(',', '.') + "~" + VerticalTouch.ToString("f2").Replace(',', '.') + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString() + "|");
+            Result.Append(OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.') + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString() );
         } else
         {
-            Result.Append(OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f2") + "~" + VerticalTouch.ToString("f2") + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString() + "|");
+            Result.Append(OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1") + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString());
         }
         
         return Result.ToString();
