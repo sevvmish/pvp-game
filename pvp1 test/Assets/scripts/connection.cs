@@ -131,7 +131,7 @@ public class connection : MonoBehaviour
     {
         try
         {
-            print(DataForServer);
+            //print(DataForServer);
             //print(Thread.CurrentThread.ManagedThreadId + " - from sender");
             
             buffer_send_udp = Encoding.UTF8.GetBytes(DataForServer);

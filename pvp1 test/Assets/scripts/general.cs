@@ -13,8 +13,8 @@ public class general
 
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string HUB1_ip = "127.0.0.1"; 
-    public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92
+    public static string HUB1_ip = "91.228.155.57";
+    public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57
 
     public static int SetupServerTCPPort = 2326;
     public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
@@ -35,7 +35,7 @@ public class general
     public static string MainPlayerName;
     public static int MainPlayerOrder;
     public static int MainPlayerTeam;
-    public const float Tick = 0.05f;
+    public const float Tick = 0.035f;
 
 
     public static void SetSessionData()
