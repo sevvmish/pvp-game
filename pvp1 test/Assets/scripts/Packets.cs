@@ -125,7 +125,7 @@ public class ConditionsAnalys
         }
         else if (curr_conds[Index].cond_type == "ca") //condition type in conditions
         {
-
+            
             if (getstrcond[1] == "cncld")
             {
                 curr_conds[Index].cond_message = "CANCELED";                    
@@ -133,7 +133,7 @@ public class ConditionsAnalys
             else
             {
                 curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-                curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+                curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture); 
             }
 
             
