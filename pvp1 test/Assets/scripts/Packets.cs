@@ -736,26 +736,16 @@ public struct ToSend
         StringBuilder Result = new StringBuilder(70);
         OrderToSend++;
 
-        if (!CheckTouchForStrafe.isNowhereTouched)
+        
+        if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
         {
-            if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
-            {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
-            } else
-            {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1")); //+  + "~0~0~0~0~0~0|"
-            }
-        } 
-        else
+            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+        } else
         {
-            if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
-            {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
-            } else
-            {
-                Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + "ts"); //+  + "~0~0~0~0~0~0|"
-            }
+            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1")); //+  + "~0~0~0~0~0~0|"
         }
+         
+        
 
         return Result.ToString();
     }
@@ -1486,7 +1476,9 @@ public class ObjectPooling : MonoBehaviour
     }
 }
 
+/*
 public static class CheckTouchForStrafe
 {    
     public static bool isNowhereTouched;
 }
+*/

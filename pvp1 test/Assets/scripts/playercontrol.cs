@@ -205,7 +205,7 @@ public class playercontrol : MonoBehaviour
 
         MyJoystick.CheckTouches(MyJoystickTemp.Vertical, MyJoystickTemp.Horizontal);
 
-
+        /*
         if (Input.touchCount > 0)
         {
             for (int i = 0; i < Input.touchCount; i++)
@@ -231,10 +231,10 @@ public class playercontrol : MonoBehaviour
             
 
         }
-
+        */
 
         
-
+        /*
         if (CheckTouchForStrafe.isNowhereTouched)
         {
             Temporary.text = "TTTOOOUUUCCCHHHED NOWHERE";
@@ -243,13 +243,14 @@ public class playercontrol : MonoBehaviour
         {
             Temporary.text = " ";
         }
-
+        */
         //print(PlayerTransform.rotation.eulerAngles.y + " - from me: " + SendAndReceive.MyPlayerData.rotation.y + " - from server");
 
 
         MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool, SendAndReceive.MyPlayerData.max_health_pool);
         MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
 
+        //print(SendAndReceive.MyPlayerData.health_pool + " - "  + SendAndReceive.MyPlayerData.energy);
         
 
 
@@ -444,6 +445,7 @@ public class playercontrol : MonoBehaviour
 
         //==================================================================
 
+        /*
         if (!isStopMovement)
         {
             AgregateHoriz += MyJoystick.Horizontal;
@@ -454,8 +456,10 @@ public class playercontrol : MonoBehaviour
                 AgregateVertic += 10f;
             }
         }
+        */
 
-        
+        AgregateHoriz += MyJoystick.Horizontal;
+        AgregateVertic += MyJoystick.Vertical;
 
         PredictionMachine(MyJoystick.Horizontal,
             MyJoystick.Vertical, PlayerTransform.position, PlayerTransform.rotation.eulerAngles,
@@ -659,12 +663,14 @@ public class playercontrol : MonoBehaviour
 
                 else if (MyConds.curr_conds[i].cond_type == "ht" && MyConds.curr_conds[i].damage_or_heal > 0)
                 {
+                    print(MyConds.curr_conds[i].cond_bulk);
                     MakeSign("+" + MyConds.curr_conds[i].damage_or_heal.ToString("f0"), PlayerTransform.position + new Vector3(0, 2, 0), Color.green, MyConds.curr_conds[i].isCrit, false);
                     MyConds.curr_conds[i].isChecked = true;
                 }
 
                 else if (MyConds.curr_conds[i].cond_type == "hg" && MyConds.curr_conds[i].damage_or_heal > 0)
                 {
+                    print(MyConds.curr_conds[i].cond_bulk);
                     for (int ii = 0; ii < OtherGamers.Count; ii++)
                     {
                         for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
