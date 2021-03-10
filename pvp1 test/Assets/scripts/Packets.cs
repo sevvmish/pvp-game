@@ -608,20 +608,20 @@ public struct ReceivePlayersData
         //{
             getstr = ReceivedPacket.Split('~');
             position_x = float.Parse(getstr[0].Replace('.',','));//float.Parse(getstr[0], CultureInfo.InvariantCulture);
-            position_y = float.Parse(getstr[1].Replace('.', ','));//
-            position_z = float.Parse(getstr[2].Replace('.', ','));
-            rotation_x = float.Parse(getstr[3].Replace('.', ','));
-            rotation_y = float.Parse(getstr[4].Replace('.', ','));
-            rotation_z = float.Parse(getstr[5].Replace('.', ','));
-            speed = float.Parse(getstr[6], CultureInfo.InvariantCulture);
-            animation_id = int.Parse(getstr[7]);
-            conditions = getstr[8];
+            position_y = 0;
+            position_z = float.Parse(getstr[1].Replace('.', ','));
+            rotation_x = 0;
+            rotation_y = float.Parse(getstr[2].Replace('.', ','));
+            rotation_z = 0;
+            speed = float.Parse(getstr[3], CultureInfo.InvariantCulture);
+            animation_id = int.Parse(getstr[4]);
+            conditions = getstr[5];
             
-            all_health = getstr[9].Split('=');
+            all_health = getstr[6].Split('=');
             health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
             max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
             
-            energy = float.Parse(getstr[10], CultureInfo.InvariantCulture);
+            energy = float.Parse(getstr[7], CultureInfo.InvariantCulture);
             position = new Vector3(position_x, position_y, position_z);
             rotation = new Vector3(rotation_x, rotation_y, rotation_z);
 
@@ -750,11 +750,57 @@ public struct ToSend
         return Result.ToString();
     }
 
-    public string ToSendButtons(int But1, int But2, int But3, int But4, int But5, int But6)
+    public string ToSendButtons(float Horiz, float Vert, int But1, int But2, int But3, int But4, int But5, int But6)
     {
         MakeClean();
         PlayerID = general.SessionPlayerID;
         TemporaryTable = general.SessionTicket;
+
+
+
+        if (Horiz > 5) Horiz = 5;
+        if (Horiz < -5) Horiz = -5;
+
+        limit = 4.9f;
+
+        HorizontalTouch = Horiz;
+        VerticalTouch = Vert;
+
+
+        if (Horiz >= limit && counter >= 0)
+        {
+            if (counter < 15) counter++;
+        }
+        else if (Horiz >= limit && counter < 0)
+        {
+            counter = 0;
+            if (counter < 15) counter++;
+        }
+        else if (Horiz <= -limit && counter <= 0)
+        {
+            if (counter > -15) counter--;
+        }
+        else if (Horiz <= -limit && counter > 0)
+        {
+            counter = 0;
+            if (counter > -15) counter--;
+        }
+        else if (Horiz < limit || Horiz > -limit)
+        {
+            counter = 0;
+        }
+
+        //Debug.Log(counter + " -=======");
+
+        //Debug.Log(Horiz + "-horiz -=======     vert-" + Vert);
+
+        if (counter != 0)
+        {
+            HorizontalTouch = HorizontalTouch * (1 + (Math.Abs(counter) / 15f * 0.5f));
+        }
+
+
+
         Butt1 = But1;
         Butt2 = But2;
         Butt3 = But3;
@@ -1284,22 +1330,22 @@ public class Buttons
     public  void Init()
     {
         SpellButton1 = GameObject.Find("spell1").GetComponent<Button>();
-        SpellButton1.onClick.AddListener(Button1Pressed);
+        //SpellButton1.onClick.AddListener(Button1Pressed);
 
         SpellButton2 = GameObject.Find("spell2").GetComponent<Button>();
-        SpellButton2.onClick.AddListener(Button2Pressed);
-
+        //SpellButton2.onClick.AddListener(Button2Pressed);
+        
         SpellButton3 = GameObject.Find("spell3").GetComponent<Button>();
-        SpellButton3.onClick.AddListener(Button3Pressed);
+        //SpellButton3.onClick.AddListener(Button3Pressed);
 
         SpellButton4 = GameObject.Find("spell4").GetComponent<Button>();
-        SpellButton4.onClick.AddListener(Button4Pressed);
+        //SpellButton4.onClick.AddListener(Button4Pressed);
 
         SpellButton5 = GameObject.Find("spell5").GetComponent<Button>();
-        SpellButton5.onClick.AddListener(Button5Pressed);
+        //SpellButton5.onClick.AddListener(Button5Pressed);
 
         SpellButton6 = GameObject.Find("spell6").GetComponent<Button>();
-        SpellButton6.onClick.AddListener(Button6Pressed);
+        //SpellButton6.onClick.AddListener(Button6Pressed);
 
                 
         SpellButton1.image.sprite = DB.GetSpellByNumber(general.DataForSession[0].Spell1).Spell1_icon;
@@ -1311,68 +1357,68 @@ public class Buttons
     }
 
 
-    private void Button1Pressed()
+    public void Button1Pressed()
     {
         if (GetButton(1).interactable)
         {
             //CheckTouchForStrafe.isButtonTouched = true;
             playercontrol.isButtonSend = true;
-            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(1, 0, 0, 0, 0, 0);
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(playercontrol.AgregateHoriz, playercontrol.AgregateVertic, 1, 0, 0, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 1);
         }
     }
 
-    private  void Button2Pressed()
+    public  void Button2Pressed()
     {
         if (GetButton(2).interactable)
         {
             
             playercontrol.isButtonSend = true;
-            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 1, 0, 0, 0, 0);
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(playercontrol.AgregateHoriz, playercontrol.AgregateVertic, 0, 1, 0, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 2);
         }
     }
 
-    private  void Button3Pressed()
+    public  void Button3Pressed()
     {
         if (GetButton(3).interactable)
         {
             
             playercontrol.isButtonSend = true;
-            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 1, 0, 0, 0);
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(playercontrol.AgregateHoriz, playercontrol.AgregateVertic, 0, 0, 1, 0, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 3);
         }
     }
 
-    private  void Button4Pressed()
+    public  void Button4Pressed()
     {
         if (GetButton(4).interactable)
         {
             
             playercontrol.isButtonSend = true;
-            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 1, 0, 0);
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(playercontrol.AgregateHoriz, playercontrol.AgregateVertic, 0, 0, 0, 1, 0, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 4);
         }
     }
 
-    private void Button5Pressed()
+    public void Button5Pressed()
     {
         if (GetButton(5).interactable)
         {
             
             playercontrol.isButtonSend = true;
-            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 0, 1, 0);
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(playercontrol.AgregateHoriz, playercontrol.AgregateVertic, 0, 0, 0, 0, 1, 0);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 5);
         }
     }
 
-    private void Button6Pressed()
+    public void Button6Pressed()
     {
         if (GetButton(6).interactable)
         {
 
             playercontrol.isButtonSend = true;
-            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(0, 0, 0, 0, 0, 1);
+            playercontrol.ButtonMessToSend = SendAndReceive.DataForSending.ToSendButtons(playercontrol.AgregateHoriz, playercontrol.AgregateVertic, 0, 0, 0, 0, 0, 1);
             WhatButtonPressed.set(SendAndReceive.DataForSending.OrderToSend, 6);
         }
     }

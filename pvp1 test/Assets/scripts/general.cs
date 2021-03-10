@@ -13,7 +13,7 @@ public class general
 
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string HUB1_ip = "127.0.0.1";
+    public static string HUB1_ip = "192.168.0.103";
     public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57   //192.168.0.103
 
     public static int SetupServerTCPPort = 2326;
@@ -133,9 +133,9 @@ public struct SessionData
         int order = int.Parse(getData[0]);
         int specification = int.Parse(getData[1]);
         general.SessionNumberOfPlayers = int.Parse(getData[2]);
-        general.DataForSession.Add(new SessionData(int.Parse(getData[3]), getData[4], int.Parse(getData[5]), int.Parse(getData[6]), int.Parse(getData[7]), int.Parse(getData[8]), int.Parse(getData[9]), int.Parse(getData[10]), int.Parse(getData[11]), int.Parse(getData[12])));
+        general.DataForSession.Add(new SessionData(int.Parse(getData[3]), getData[4], int.Parse(getData[5]), int.Parse(getData[6]), int.Parse(getData[7]), int.Parse(getData[8]), int.Parse(getData[9]), int.Parse(getData[10]), int.Parse(getData[11]), 997));
 
-        int ort = 13;
+        int ort = 12;
         for (int i = 0; i < (general.SessionNumberOfPlayers - 1); i++)
         {
             general.DataForSession.Add(new SessionData(int.Parse(getData[ort]), getData[ort + 1], int.Parse(getData[ort + 2]), int.Parse(getData[ort + 3]), 0, 0, 0, 0, 0, 0));

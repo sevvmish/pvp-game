@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEngine.EventSystems;
 using System.Globalization;
 using UnityEngine.EventSystems;
 using System.Threading;
@@ -41,7 +42,7 @@ public class playercontrol : MonoBehaviour
 
     //main player transform
     private Transform PlayerTransform;
-    private float AgregateHoriz, AgregateVertic;
+    public static float AgregateHoriz, AgregateVertic;
 
     //private Animator PlayerAnimator;
     AnimationsForPlayers myanimator;
@@ -77,7 +78,7 @@ public class playercontrol : MonoBehaviour
 
     //
     private bool isMessageShowing;
-    Buttons ButtonsManagement = new Buttons();
+    public static Buttons ButtonsManagement = new Buttons();
 
     private TextMeshProUGUI ButtonMessage;
     List<string> PoolOfMessages = new List<string>();
@@ -394,7 +395,11 @@ public class playercontrol : MonoBehaviour
                 {
                     isButtonSend = false;
                     //print(Thread.CurrentThread.ManagedThreadId + " - from playercontorl");
+                    SendAndReceive.DataForSending.HorizontalTouch = AgregateHoriz;
+                    SendAndReceive.DataForSending.VerticalTouch = AgregateVertic;
                     connection.TalkToServer(ButtonMessToSend);
+                    AgregateHoriz = 0;
+                    AgregateVertic = 0;
                 }
                 else
                 {
@@ -938,5 +943,5 @@ public class playercontrol : MonoBehaviour
         ButtonMessage.text = allmess;
     }
 
-
+    
 }
