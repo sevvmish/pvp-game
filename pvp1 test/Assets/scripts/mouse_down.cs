@@ -5,20 +5,21 @@ using UnityEngine.EventSystems;
 
 public class mouse_down : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private bool isStartSpell6;
+    public static bool isStartSpell6;
     float cur_time;
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        
-    }
+    
 
     private void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            isStartSpell6 = true;
+        }
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            isStartSpell6 = false;
+        }
 
         if (cur_time>=general.Tick && isStartSpell6)
         {

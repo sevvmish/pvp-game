@@ -690,7 +690,7 @@ public struct ToSend
         MakeClean();
         PlayerID = general.SessionPlayerID;
         TemporaryTable = general.SessionTicket;
-        
+        /*
         if (Horiz > 5) Horiz = 5;
         if (Horiz <-5) Horiz = -5;
 
@@ -730,6 +730,9 @@ public struct ToSend
         {
             HorizontalTouch = HorizontalTouch * (1 + (Math.Abs(counter) / 15f * 0.5f));
         }
+        */
+        HorizontalTouch = Horiz;
+        VerticalTouch = Vert;
 
         //Debug.Log(HorizontalTouch + " -=======");
 
@@ -756,7 +759,7 @@ public struct ToSend
         PlayerID = general.SessionPlayerID;
         TemporaryTable = general.SessionTicket;
 
-
+        /*
 
         if (Horiz > 5) Horiz = 5;
         if (Horiz < -5) Horiz = -5;
@@ -798,8 +801,9 @@ public struct ToSend
         {
             HorizontalTouch = HorizontalTouch * (1 + (Math.Abs(counter) / 15f * 0.5f));
         }
-
-
+        */
+        HorizontalTouch = Horiz;
+        VerticalTouch = Vert;
 
         Butt1 = But1;
         Butt2 = But2;
