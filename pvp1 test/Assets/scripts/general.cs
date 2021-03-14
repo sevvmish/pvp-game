@@ -86,6 +86,7 @@ public class general
 public struct SessionData
 {
     public int PlayerOrder;
+    public int Zone_Type;
     public string PlayerName;
     public int PlayerClass;
     public int PlayerTeam;
@@ -96,9 +97,10 @@ public struct SessionData
     public int Spell5;
     public int Spell6;
 
-    public SessionData(int Order, string Name, int Class, int Team, int Spel1, int Spel2, int Spel3, int Spel4, int Spel5, int Spel6)
+    public SessionData(int Order, int Zone, string Name, int Class, int Team, int Spel1, int Spel2, int Spel3, int Spel4, int Spel5, int Spel6)
     {
         PlayerOrder = Order;
+        Zone_Type = Zone;
         PlayerName = Name;
         PlayerClass = Class;
         PlayerTeam = Team;
@@ -133,12 +135,12 @@ public struct SessionData
         int order = int.Parse(getData[0]);
         int specification = int.Parse(getData[1]);
         general.SessionNumberOfPlayers = int.Parse(getData[2]);
-        general.DataForSession.Add(new SessionData(int.Parse(getData[3]), getData[4], int.Parse(getData[5]), int.Parse(getData[6]), int.Parse(getData[7]), int.Parse(getData[8]), int.Parse(getData[9]), int.Parse(getData[10]), int.Parse(getData[11]), 997));
+        general.DataForSession.Add(new SessionData(int.Parse(getData[3]), int.Parse(getData[4]), getData[5], int.Parse(getData[6]), int.Parse(getData[7]), int.Parse(getData[8]), int.Parse(getData[9]), int.Parse(getData[10]), int.Parse(getData[11]), int.Parse(getData[12]), 997));
 
-        int ort = 12;
+        int ort = 13;
         for (int i = 0; i < (general.SessionNumberOfPlayers - 1); i++)
         {
-            general.DataForSession.Add(new SessionData(int.Parse(getData[ort]), getData[ort + 1], int.Parse(getData[ort + 2]), int.Parse(getData[ort + 3]), 0, 0, 0, 0, 0, 0));
+            general.DataForSession.Add(new SessionData(int.Parse(getData[ort]), 0, getData[ort + 2], int.Parse(getData[ort + 2]), int.Parse(getData[ort + 3]), 0, 0, 0, 0, 0, 0));
             ort += 4;
         }
     }

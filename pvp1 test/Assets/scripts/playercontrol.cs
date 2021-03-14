@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEditor;
 using UnityEngine.EventSystems;
 using System.Globalization;
 using UnityEngine.EventSystems;
@@ -104,6 +105,30 @@ public class playercontrol : MonoBehaviour
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
         SessionData.GetDataSessionPlayers(SessionResult);
         general.SetSessionData();
+
+        
+               
+        switch(general.DataForSession[0].Zone_Type)
+        {
+            case 0:
+                break;
+
+            case 1:
+                GameObject zone = Instantiate(Resources.Load<GameObject>("prefabs/location2"), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+                //StaticBatchingUtility.Combine(zone);
+                //var flags = StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic;
+                //GameObjectUtility.SetStaticEditorFlags(zone, flags);
+                //zone.isStatic = true;
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                break;
+
+        }
+        
         
         if (general.DataForSession.Count > 0)
         {

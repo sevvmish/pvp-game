@@ -39,7 +39,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 10913748548216592}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
@@ -3669,19 +3669,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -3855,17 +3856,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -4910,7 +4914,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177817869369141498}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -8468,19 +8472,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -8654,17 +8659,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -9744,8 +9752,8 @@ SkinnedMeshRenderer:
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
@@ -10277,6 +10285,8 @@ MonoBehaviour:
   Meteor: {fileID: 0}
   FireHandEff: {fileID: 0}
   FireStepEff: {fileID: 0}
+  SplashEffSimpleHit: {fileID: 0}
+  DeathBeamExample: {fileID: 0}
 --- !u!114 &5836247613011876970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10431,7 +10441,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1737861899013231456}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -13989,19 +13999,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -14175,17 +14186,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -15291,7 +15305,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096561754358279451}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
@@ -18809,19 +18823,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -18995,17 +19010,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -20367,7 +20385,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3004326023905612028}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -23925,19 +23943,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -24111,17 +24130,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -25537,7 +25559,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3793604343667644539}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -29010,19 +29032,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -29196,17 +29219,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -30311,7 +30337,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4095301402319578583}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
@@ -33941,19 +33967,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -34127,17 +34154,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -35182,7 +35212,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4255698746289480145}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 2
   simulationSpeed: 0.6
   stopAction: 0
@@ -38758,19 +38788,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -38944,17 +38975,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -40166,7 +40200,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5161545446875697773}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 2
   simulationSpeed: 0.6
   stopAction: 0
@@ -43742,19 +43776,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -43928,17 +43963,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -45014,7 +45052,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5506661515984377213}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
@@ -48550,19 +48588,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -48736,17 +48775,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -49790,7 +49832,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5522153057282433421}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
@@ -53420,19 +53462,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -53606,17 +53649,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -54661,7 +54707,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5559606151149206229}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 100
   simulationSpeed: 1
   stopAction: 0
@@ -58224,19 +58270,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -58410,17 +58457,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -59588,7 +59638,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6057127459667757607}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -63196,19 +63246,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -63382,17 +63433,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -64501,7 +64555,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6210659417691480672}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 100
   simulationSpeed: 1
   stopAction: 0
@@ -68064,19 +68118,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -68250,17 +68305,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -69395,7 +69453,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6708829485582911700}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 2
   simulationSpeed: 0.6
   stopAction: 0
@@ -72971,19 +73029,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -73157,17 +73216,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -74492,7 +74554,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7360334772662442640}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -78001,19 +78063,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -78187,17 +78250,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -79272,7 +79338,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7372567245087886810}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 0.75
   simulationSpeed: 1
   stopAction: 0
@@ -82817,19 +82883,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -83003,17 +83070,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -84057,7 +84127,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7434450326123786767}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 2
   simulationSpeed: 0.6
   stopAction: 0
@@ -87633,19 +87703,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -87819,17 +87890,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -88904,7 +88978,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7497980657732318981}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -92462,19 +92536,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -92648,17 +92723,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -93702,7 +93780,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7677301789339777701}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 100
   simulationSpeed: 1
   stopAction: 0
@@ -97265,19 +97343,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -97451,17 +97530,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -98505,7 +98587,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7853007941141354981}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 0.7
   stopAction: 0
@@ -102063,19 +102145,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -102249,17 +102332,20 @@ ParticleSystem:
     interiorCollisions: 1
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -103334,7 +103420,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7988936638270352056}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 0.5
   stopAction: 0
@@ -106915,19 +107001,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -107101,17 +107188,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -108431,7 +108521,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8803939135327742123}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
@@ -112061,19 +112151,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -112247,17 +112338,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -113339,6 +113433,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -113354,6 +113453,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -113366,16 +113470,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
         type: 3}
@@ -113421,58 +113515,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.0080437
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.059251
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.043825
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.6702165
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.73963773
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.039220594
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.04698566
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
       propertyPath: m_RootOrder
       value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -81.424
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
         type: 3}
@@ -113488,6 +113532,56 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 3.1986477
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.003
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.096
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.014
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.10473955
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.6385516
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7363057
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.19782655
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -154.844
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 6.2409973
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 87f18869f3d5c6143888da9820c60441,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 96.74
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 87f18869f3d5c6143888da9820c60441,
         type: 3}
@@ -113516,6 +113610,26 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.95434713
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9943265
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1376915
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.105
       objectReference: {fileID: 0}
@@ -113528,6 +113642,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.021
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.47937846
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
         type: 3}
@@ -113546,16 +113665,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.47937846
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
-        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -113568,21 +113677,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.95434713
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.9943265
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4f2059e882fd68845965cdc8f27d61f8,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.1376915
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 4f2059e882fd68845965cdc8f27d61f8,
         type: 3}
@@ -113618,6 +113712,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.83333325
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.83333325
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.83333343
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -113628,6 +113738,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9999999
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: m_LocalRotation.x
@@ -113642,14 +113756,6 @@ PrefabInstance:
       value: 0.00048289777
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -113661,66 +113767,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.83333325
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.83333325
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.83333343
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.minMaxState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.96811295
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.minColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.minColor.g
-      value: 0.37465727
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startColor.minColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: ColorModule.gradient.minMaxState
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: startDelay.scalar
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: lengthInSec
       value: 1
@@ -113730,28 +113776,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: InitialModule.startSpeed.scalar
-      value: 0.01
+      propertyPath: startDelay.scalar
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: RotationModule.enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: RotationModule.curve.scalar
-      value: 6.283185
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
-      propertyPath: RotationModule.separateAxes
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: RotationModule.x.scalar
@@ -113762,8 +113792,72 @@ PrefabInstance:
       value: 6.283185
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: RotationModule.curve.scalar
+      value: 6.283185
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: RotationModule.separateAxes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: ColorModule.gradient.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: InitialModule.startRotation.scalar
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.96811295
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.minColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.minColor.g
+      value: 0.37465727
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.minColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startColor.minMaxState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 19900000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
       propertyPath: m_Materials.Array.size
@@ -113795,47 +113889,7 @@ PrefabInstance:
       value: StunnedCirclingStarsSimple
       objectReference: {fileID: 0}
     - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.268
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -2.4285762e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -1.7068767e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90.00001
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
@@ -113850,10 +113904,55 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.35
       objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.268
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -2.4285762e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -1.7068767e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378000130136788, guid: 20980e90dd2e73b419275714d5c124c4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114510185510616088, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
       propertyPath: rotateVector.z
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 198589858561560966, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: prewarm
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 198589858561560966, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
@@ -113872,11 +113971,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198589858561560966, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: prewarm
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 198589858561560966, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
       propertyPath: startDelay.maxCurve.m_Curve.Array.data[0].value
       value: 0
       objectReference: {fileID: 0}
@@ -113887,8 +113981,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 0.4
+      propertyPath: prewarm
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: ShapeModule.arc.mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
@@ -113902,8 +114001,48 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: ColorModule.gradient.minGradient.key2.a
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.97654533
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.minColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.minColor.g
+      value: 0.51828855
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.minColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
+        type: 3}
+      propertyPath: InitialModule.startColor.minMaxState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
@@ -113917,16 +114056,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: ColorModule.gradient.minGradient.m_NumAlphaKeys
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: ColorModule.gradient.minGradient.key3.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
       propertyPath: ColorModule.gradient.minGradient.atime3
       value: 65535
       objectReference: {fileID: 0}
@@ -113937,8 +114066,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: ColorModule.gradient.minGradient.key0.r
-      value: 1
+      propertyPath: ColorModule.gradient.minGradient.key0.b
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
@@ -113947,18 +114076,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: ColorModule.gradient.minGradient.key0.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: ColorModule.gradient.minGradient.key1.r
+      propertyPath: ColorModule.gradient.minGradient.key0.r
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: ColorModule.gradient.minGradient.key1.g
-      value: 0.718277
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
@@ -113967,43 +114086,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: InitialModule.startColor.minMaxState
-      value: 2
+      propertyPath: ColorModule.gradient.minGradient.key1.g
+      value: 0.718277
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
+      propertyPath: ColorModule.gradient.minGradient.key1.r
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.97654533
+      propertyPath: ColorModule.gradient.minGradient.key2.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
+      propertyPath: ColorModule.gradient.minGradient.key3.a
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
-      propertyPath: InitialModule.startColor.minColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: InitialModule.startColor.minColor.g
-      value: 0.51828855
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: InitialModule.startColor.minColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: prewarm
-      value: 1
+      propertyPath: ColorModule.gradient.minGradient.m_NumAlphaKeys
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
@@ -114013,16 +114117,6 @@ PrefabInstance:
     - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
         type: 3}
       propertyPath: startDelay.maxCurve.m_Curve.Array.data[1].value
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 198827744949309976, guid: 20980e90dd2e73b419275714d5c124c4,
-        type: 3}
-      propertyPath: ShapeModule.arc.mode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 199186812846072186, guid: 20980e90dd2e73b419275714d5c124c4,
@@ -114059,6 +114153,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -114069,6 +114179,10 @@ PrefabInstance:
     - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.199
+      objectReference: {fileID: 0}
+    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99709207
       objectReference: {fileID: 0}
     - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: m_LocalRotation.x
@@ -114083,14 +114197,6 @@ PrefabInstance:
       value: 0.00000005046603
       objectReference: {fileID: 0}
     - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.99709207
-      objectReference: {fileID: 0}
-    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 8.741
       objectReference: {fileID: 0}
@@ -114102,17 +114208,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.7
+    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: looping
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.7
+    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 434256, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.7
+    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.18614274
+      objectReference: {fileID: 0}
+    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.25490198
+      objectReference: {fileID: 0}
+    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.8396226
       objectReference: {fileID: 0}
     - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: InitialModule.startRotationX.minMaxState
@@ -114122,25 +114236,29 @@ PrefabInstance:
       propertyPath: InitialModule.startRotationY.minMaxState
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.8396226
-      objectReference: {fileID: 0}
-    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.25490198
-      objectReference: {fileID: 0}
-    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.18614274
-      objectReference: {fileID: 0}
-    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 19849126, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: moveWithTransform
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.13616945
+      objectReference: {fileID: 0}
+    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.33942243
+      objectReference: {fileID: 0}
+    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.5660378
       objectReference: {fileID: 0}
     - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: InitialModule.startSizeY.minMaxState
@@ -114150,53 +114268,29 @@ PrefabInstance:
       propertyPath: InitialModule.startSizeZ.minMaxState
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.5660378
-      objectReference: {fileID: 0}
-    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.33942243
-      objectReference: {fileID: 0}
-    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.13616945
-      objectReference: {fileID: 0}
-    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19859836, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: playOnAwake
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: looping
+      propertyPath: moveWithTransform
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.1779548
+      objectReference: {fileID: 0}
+    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.1779548
       objectReference: {fileID: 0}
     - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.8773585
-      objectReference: {fileID: 0}
-    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.1779548
-      objectReference: {fileID: 0}
-    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.1779548
-      objectReference: {fileID: 0}
-    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19873388, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
-      propertyPath: moveWithTransform
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19911198, guid: 185035e4680c4b344b62bf5ace4674b8, type: 3}
       propertyPath: m_Materials.Array.size

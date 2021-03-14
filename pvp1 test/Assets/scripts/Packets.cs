@@ -313,7 +313,7 @@ public struct AnimationsForPlayers
                     break;
                 case 2:
                     
-                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("HitWith1H"))
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("HitWith1H2"))
                     {
                         HitWith1H();
                     }
@@ -456,7 +456,8 @@ public struct AnimationsForPlayers
 
     void HitWith1H()
     {
-        animator.Play("HitWith1H");
+        
+        animator.Play("HitWith1H2");
         CurrentAnimationState = 2;
         MyAudioSource.loop = false;
         MyAudioSource.clip = BasicWeaponHit;
