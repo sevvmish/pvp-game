@@ -199,16 +199,35 @@ public struct AnimationsForPlayers
 
     public void RefreshAnimations(int state)
     {
-        
+       
+
+        //Debug.Log(state + " - " + CurrentAnimationState + " - " + animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"));
+
         if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18) && (/*state==1 || state==0*/ state < 2) )
         {
             Idle();
         }
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && CurrentAnimationState != 0)
+        
+        
+        if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || animator.GetCurrentAnimatorStateInfo(1).IsName("Idle")) && CurrentAnimationState != 0)
         {
             CurrentAnimationState = 0;
         }
+        else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && CurrentAnimationState != 1)
+        {
+            CurrentAnimationState = 1;
+        }
+        else if (animator.GetCurrentAnimatorStateInfo(0).IsName("turning") && CurrentAnimationState != -1)
+        {
+            CurrentAnimationState = -1;
+        }
+        else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") && CurrentAnimationState != -2)
+        {
+            CurrentAnimationState = -2;
+        }
+        
+
         /*
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") && CurrentAnimationState != -2)
         {
@@ -313,7 +332,7 @@ public struct AnimationsForPlayers
                     break;
                 case 2:
                     
-                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("HitWith1H2"))
+                    if (!animator.GetCurrentAnimatorStateInfo(1).IsName("HitWith1H2"))
                     {
                         HitWith1H();
                     }
@@ -362,7 +381,7 @@ public struct AnimationsForPlayers
                     }
                     break;
                 case 10:
-                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShieldOn"))
+                    if (!animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn"))
                     {
                         ShieldOn();
                     }
@@ -443,6 +462,7 @@ public struct AnimationsForPlayers
     {
         
         animator.Play("Idle");
+        animator.Play("Idle1");
         CurrentAnimationState = 0;
                 
     }
@@ -517,6 +537,7 @@ public struct AnimationsForPlayers
     void ShieldOn()
     {
         animator.Play("ShieldOn");
+       
         CurrentAnimationState = 10;
 
     }

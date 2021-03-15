@@ -34,6 +34,12 @@ public class mouse_down : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
 
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            playercontrol.ButtonsManagement.Button2Pressed();
+        }
+
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             isCheckForSpell6 = true;
@@ -95,7 +101,7 @@ public class mouse_down : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         catch (System.Exception)
         {
 
-            throw;
+            
         }
         
     }
