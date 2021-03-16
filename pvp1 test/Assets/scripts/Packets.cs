@@ -28,7 +28,7 @@ public class Conds
 public class ConditionsAnalys
 {
     
-    int Limit = general.SessionNumberOfPlayers * 10;
+    int Limit = general.SessionNumberOfPlayers * 30;
 
     public List<Conds> curr_conds = new List<Conds>();
 
@@ -64,12 +64,16 @@ public class ConditionsAnalys
                         if (curr_conds[ii].cond_id == IDForCheck)
                         {
                             isNegative = true;
+                            if (curr_conds[ii].cond_bulk != BulkData)
+                            {
+                                Decode(getstrcond1[i], ii);
+                            }
                         }
                     }
 
                     if (!isNegative)
                     {
-                        Decode(getstrcond1[i]);
+                        Decode(getstrcond1[i], -1);
 
                     }
                 }
@@ -78,11 +82,21 @@ public class ConditionsAnalys
     }
 
   
-    public void Decode(string Data)
+    public void Decode(string Data, int index_for_existing_conds)
     {
+        int Index = 0;
+
+        if (index_for_existing_conds == -1)
+        {
+            curr_conds.Add(new Conds());
+            Index = curr_conds.Count - 1;
+
+        } else
+        {
+            Index = index_for_existing_conds;
+        }
+
         
-        curr_conds.Add(new Conds());
-        int Index = curr_conds.Count - 1;
         string[] getstrcond1 = Data.Split(':');
         
         curr_conds[Index].cond_id = getstrcond1[0];
@@ -643,7 +657,7 @@ public struct ReceivePlayersData
             health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
             max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
             
-            energy = float.Parse(getstr[7], CultureInfo.InvariantCulture);
+            energy = int.Parse(getstr[7], CultureInfo.InvariantCulture);
             position = new Vector3(position_x, position_y, position_z);
             rotation = new Vector3(rotation_x, rotation_y, rotation_z);
 
@@ -1169,8 +1183,14 @@ public class PlayerUI : MonoBehaviour
     }
 
 
-    public IEnumerator AddCondition(string condID, int spell_ind, float spell_time)
+    public IEnumerator AddCondition(Conds data)
     {
+        string condID = data.cond_id;
+        int spell_ind = data.spell_index;
+        float spell_time = data.cond_time;
+        
+
+
         print(condID + ": " + spell_ind + " - ");
         bool isOK = true;
 
@@ -1251,11 +1271,14 @@ public class PlayerUI : MonoBehaviour
 
                 do
                 {
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.2f);
                     
-                    CondObjects[index].spell_timer -= 0.1f;
+                    CondObjects[index].spell_timer -= 0.2f;
                     CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString("f0");
-                    
+                    if (data.cond_time == 9999)
+                    {
+                        break;
+                    }
                 } while (CondObjects[index].spell_timer > 0);
 
                 //string texter = CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;

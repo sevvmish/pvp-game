@@ -20,7 +20,6 @@ public class playercontrol : MonoBehaviour
     public static Joysticks MyJoystick;
 
     public TextMeshProUGUI TempText1, TempText2, MyHPText, OtherLatency, DataAnalys, Temporary;
-    //public static TextMeshProUGUI OtherLatency1;
     public static string ToOtherLatency;    
     
     //main packets for geting data to player from connection
@@ -37,9 +36,6 @@ public class playercontrol : MonoBehaviour
 
     //conditions of myPlayer
     private ConditionsAnalys MyConds = new ConditionsAnalys();
-
-    //private ConditionsAnalys OtherPlayerConds = new ConditionsAnalys();
-    
 
     //main player transform
     private Transform PlayerTransform;
@@ -63,8 +59,7 @@ public class playercontrol : MonoBehaviour
 
     float koeffpos = 3f; //1.6
     float koeffrot = 1f; //1.6
-    //float ticker_hor, ticker_ver, previous_hor, previous_ver, how_many;
-
+    
     
     //latency
     float latency_timer;
@@ -115,10 +110,7 @@ public class playercontrol : MonoBehaviour
 
             case 1:
                 GameObject zone = Instantiate(Resources.Load<GameObject>("prefabs/location2"), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
-                //StaticBatchingUtility.Combine(zone);
-                //var flags = StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic;
-                //GameObjectUtility.SetStaticEditorFlags(zone, flags);
-                //zone.isStatic = true;
+                
                 break;
 
             case 2:
@@ -187,7 +179,7 @@ public class playercontrol : MonoBehaviour
 
     void AddPlayer(Vector3 pos, Vector3 rot, int order)
     {
-        //print(general.DataForSession[order].PlayerClass + "================================");
+        
         int WhatPlayersClass = general.DataForSession[order].PlayerClass;
         GameObject ggg = Instantiate(general.GetPlayerByClass(WhatPlayersClass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
         ggg.GetComponent<effects>().MyPlayerClass = WhatPlayersClass;
@@ -195,9 +187,7 @@ public class playercontrol : MonoBehaviour
         ggg.GetComponent<players>().OtherPlayerName = general.DataForSession[order].PlayerName;
         ggg.GetComponent<effects>().PlayerSessionData = general.DataForSession[order];
         ggg.GetComponent<players>().CreateUI();
-        OtherGamers.Add(ggg.GetComponent<players>());
-
-        
+        OtherGamers.Add(ggg.GetComponent<players>());       
 
     }
 
@@ -207,18 +197,14 @@ public class playercontrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        
         if (RawPackets.Count > 0)
         {
             SendAndReceive.TranslateDataFromServer(RawPackets[0]);
             RawPackets.Remove(RawPackets[0]);
         }
 
-
         MyConds.Check(SendAndReceive.MyPlayerData.conditions);
-        //OtherPlayerConds.Check(SendAndReceive.OtherPlayerData[0].conditions);
-
+        
         for (int i = 0; i < OtherGamers.Count; i++)
         {
             OtherGamers[i].Conds.Check(SendAndReceive.OtherPlayerData[i].conditions);
@@ -226,91 +212,26 @@ public class playercontrol : MonoBehaviour
             OtherGamers[i].OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[0].energy);
         }
 
-
-        //print(SendAndReceive.OrderReceived + "---------------============ \n");
-
         MyJoystick.CheckTouches(MyJoystickTemp.Vertical, MyJoystickTemp.Horizontal);
-
-        /*
-        if (Input.touchCount > 0)
-        {
-            for (int i = 0; i < Input.touchCount; i++)
-            {
-                if (Input.touchCount > 0 && (Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Moved || Input.GetTouch(i).phase == TouchPhase.Stationary))
-                {
-
-                    if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId))
-                    {
-                        if (!CheckTouchForStrafe.isNowhereTouched) CheckTouchForStrafe.isNowhereTouched = true;
-                    }
-                }
-
-            }
-        } else
-        {
-            if (CheckTouchForStrafe.isNowhereTouched)
-            {
-                CheckTouchForStrafe.isNowhereTouched = false;
-                AgregateHoriz = 0;
-                AgregateVertic = 0;
-            }
-            
-
-        }
-        */
-
-        
-        /*
-        if (CheckTouchForStrafe.isNowhereTouched)
-        {
-            Temporary.text = "TTTOOOUUUCCCHHHED NOWHERE";
-        } 
-        else
-        {
-            Temporary.text = " ";
-        }
-        */
-        //print(PlayerTransform.rotation.eulerAngles.y + " - from me: " + SendAndReceive.MyPlayerData.rotation.y + " - from server");
-
 
         MyUI.HealthInput(SendAndReceive.MyPlayerData.health_pool, SendAndReceive.MyPlayerData.max_health_pool);
         MyUI.EnergyInput(SendAndReceive.MyPlayerData.energy);
 
-        //print(SendAndReceive.MyPlayerData.health_pool + " - "  + SendAndReceive.MyPlayerData.energy);
-        
-
-
-            /*
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                for (int i=0; i<MyConds.curr_conds.Count; i++)
-                {
-                    print(MyConds.curr_conds[i].cond_id + " - " + MyConds.curr_conds[i].cond_bulk);
-                }
-            }
-            */
-
-
-            if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H))
         {
             for (int i = 0; i < OtherGamers.Count; i++)
             {
                 print(i + " - " + OtherGamers[i].OtherPlayerUI.HealthCurrentAmount + " : " + OtherGamers[i].OtherPlayerName);
             }
 
-        print("0 - " + SendAndReceive.OtherPlayerData[0].health_pool);
-        print("1 - " + SendAndReceive.OtherPlayerData[1].health_pool);
+            print("0 - " + SendAndReceive.OtherPlayerData[0].health_pool);
+            print("1 - " + SendAndReceive.OtherPlayerData[1].health_pool);
 
         }
-            
-
 
         if (SendAndReceive.SpecificationReceived == 1)
         {
-
             StartCoroutine(killmess(SendAndReceive.MessageType));
-
-            //ButtonsManagement.CheckResponse();
             StartCoroutine(ButtonsManagement.buttoncooldown());
         }
 
@@ -319,16 +240,8 @@ public class playercontrol : MonoBehaviour
 
             button_order = SendAndReceive.OrderReceived;
             print(SendAndReceive.ButtonState + " - " + SendAndReceive.MessageType + " - " + SendAndReceive.SpellCooldown + SendAndReceive.SwButtonCond + " : -" + RawPackets[0]);
-
-            //print("me - " + SendAndReceive.MyPlayerData.conditions + " = " + SendAndReceive.OrderReceived + "   him - " + SendAndReceive.OtherPlayerData[0].conditions + " = " + SendAndReceive.OrderReceived);
+            
         }
-
-        /*
-        if (MyConds.curr_conds.Count > 0)
-        {
-            print(MyConds.curr_conds[MyConds.curr_conds.Count - 1].cond_bulk + " ========== " + MyConds.curr_conds[MyConds.curr_conds.Count - 1].cond_id);
-        }
-        */
 
         //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         CheckMessagesAndConditions();
@@ -347,10 +260,7 @@ public class playercontrol : MonoBehaviour
                 isBadLat = true;
                 StartCoroutine(BadLatency());
             }
-            //TempText1.text = AverageLatency().ToString("f0");
-            //TempText1.text = "current - " + (latency_timer * 1000f).ToString("f0") + "   average - " + AverageLatency().ToString("f0");
-
-            //print("current - " + (latency_timer * 1000f).ToString("f0") + "   average - " + AverageLatency().ToString("f0"));
+            
 
             latency_timer = 0;
             isLatency = false;
@@ -412,8 +322,6 @@ public class playercontrol : MonoBehaviour
 
             MyHPText.text = SendAndReceive.MyPlayerData.health_pool.ToString();
 
-
-
             try
             {
                 if (isButtonSend)
@@ -432,11 +340,7 @@ public class playercontrol : MonoBehaviour
                     //print(Thread.CurrentThread.ManagedThreadId + " - from playercontorl");
                     AgregateHoriz = 0;
                     AgregateVertic = 0;
-
-
                 }
-
-
 
                 if (!isLatency)
                 {
@@ -448,12 +352,9 @@ public class playercontrol : MonoBehaviour
             catch (Exception ex)
             {
                 print(ex);
-
-                //connection.connector.AnotherReconnect();
+                                
                 connection.connector.Reconnect2();
             }
-
-
 
 
             //CORRECTIONS
@@ -475,19 +376,7 @@ public class playercontrol : MonoBehaviour
 
         //==================================================================
 
-        /*
-        if (!isStopMovement)
-        {
-            AgregateHoriz += MyJoystick.Horizontal;
-            AgregateVertic += MyJoystick.Vertical;
-
-            if (CheckTouchForStrafe.isNowhereTouched)
-            {
-                AgregateVertic += 10f;
-            }
-        }
-        */
-
+       
         AgregateHoriz += MyJoystick.Horizontal;
         AgregateVertic += MyJoystick.Vertical;
 
@@ -502,8 +391,7 @@ public class playercontrol : MonoBehaviour
 
         if (AgregateVertic == 0)
         {
-            //ResultDelta*=0.7f;
-            //DeltaForLerpMovingNRotation *= ResultDelta;
+            
             DeltaForLerpMovingNRotation *= 0.7f;
         }
         else
@@ -627,9 +515,8 @@ public class playercontrol : MonoBehaviour
                 }
                 else if (MyConds.curr_conds[i].cond_type == "co")
                 {
-                    //MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time);
-                    StartCoroutine(MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
-                    //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
+                    
+                    StartCoroutine(MyUI.AddCondition(MyConds.curr_conds[i]));                    
                     MyConds.curr_conds[i].isChecked = true;
                 }
 
@@ -708,7 +595,7 @@ public class playercontrol : MonoBehaviour
                             if (OtherGamers[ii].Conds.curr_conds[iii].cond_id == MyConds.curr_conds[i].cond_id)
                             {
                                 MakeSign(MyConds.curr_conds[i].damage_or_heal.ToString("f0"), OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.green, MyConds.curr_conds[i].isCrit, false);
-                                //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
+                                
                                 MyConds.curr_conds[i].isChecked = true;
                             }
                         }
@@ -738,11 +625,9 @@ public class playercontrol : MonoBehaviour
 
                     
                     if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "co")
-                    {
-                        //MyUI.AddCondition(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time);
-                        StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii].cond_id, OtherGamers[ii].Conds.curr_conds[iii].spell_index, OtherGamers[ii].Conds.curr_conds[iii].cond_time));
-
-                        //MyConds.curr_conds.Remove(MyConds.curr_conds[i]);
+                    {                        
+                        StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii]));
+                                                
                         OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
                     }
 
