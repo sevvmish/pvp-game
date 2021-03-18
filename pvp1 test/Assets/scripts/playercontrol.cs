@@ -109,7 +109,7 @@ public class playercontrol : MonoBehaviour
                 break;
 
             case 1:
-                GameObject zone = Instantiate(Resources.Load<GameObject>("prefabs/location2"), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+                GameObject zone = Instantiate(Resources.Load<GameObject>("prefabs/location1"), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
                 
                 break;
 
