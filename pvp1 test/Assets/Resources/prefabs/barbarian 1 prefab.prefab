@@ -17191,7 +17191,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8741374876143050476}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -17919,7 +17919,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 82c24f0e40936ca47bcfd6c0a67e989a,
         type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 82c24f0e40936ca47bcfd6c0a67e989a,
         type: 3}

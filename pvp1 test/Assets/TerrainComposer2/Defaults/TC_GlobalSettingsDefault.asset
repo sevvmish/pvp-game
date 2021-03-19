@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0755e5a20f6a9c64bb0a3db3a7074e8a, type: 3}
+  m_Name: TC_GlobalSettingsDefault
+  m_EditorClassIdentifier: 
+  tooltip: 1
+  defaultTerrainSize: {x: 2048, y: 1000, z: 2048}
+  SavePreviewTextures: 1
+  previewColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  - {r: 1, g: 0.59999996, b: 0, a: 1}
+  - {r: 0.4068966, g: 0, b: 1, a: 1}
+  - {r: 0.3897059, g: 0.15319473, b: 0, a: 1}
+  - {r: 0.16663294, g: 0.45588237, b: 0, a: 1}
+  - {r: 0.5, g: 0.09310344, b: 0, a: 1}
+  - {r: 0.9559838, g: 1, b: 0.5441177, a: 1}
+  - {r: 0.44852942, g: 0.6805273, b: 1, a: 1}
+  - {r: 1, g: 0.5808823, b: 0.5808823, a: 1}
+  colLayerGroup: {r: 0.58431375, g: 0.1764706, b: 0.25490198, a: 1}
+  colLayer: {r: 0.42693198, g: 0.647, b: 0.20686391, a: 1}
+  colMaskNodeGroup: {r: 0.13333334, g: 0.3137255, b: 0.4156863, a: 1}
+  colMaskNode: {r: 0.26666668, g: 0.627451, b: 0.8352942, a: 1}
+  colSelectNodeGroup: {r: 0.52156866, g: 0.5019608, b: 0.16078432, a: 1}
+  colSelectNode: {r: 0.77647066, g: 0.75294125, b: 0.24705884, a: 1}
+  colSelectItemGroup: {r: 0.13725491, g: 0.22352943, b: 0.13333334, a: 1}
+  colSelectItem: {r: 0.27450982, g: 0.4431373, b: 0.2627451, a: 1}
+  shelveHeight: 428
+  shelveRightWidth: 16
+  outputVSpace: -234.3
+  groupVSpace: 80
+  layerVSpace: 50
+  layerHSpace: 160
+  nodeHSpace: 8
+  bracketHSpace: 7
+  showResolutionWarnings: 1
+  linkScaleToMaskDefault: 1
+  documentationClicked: 0
+  rect:
+    serializedVersion: 2
+    x: 52
+    y: -94
+    width: 0.6
+    height: 0
+  rect2:
+    serializedVersion: 2
+    x: 126
+    y: 351
+    width: 20
+    height: 20
+  rect3:
+    serializedVersion: 2
+    x: 923.08
+    y: 220.2
+    width: -5
+    height: -5
+  rect4:
+    serializedVersion: 2
+    x: -7
+    y: -5
+    width: 40
+    height: 0
+  rect5:
+    serializedVersion: 2
+    x: 211.1
+    y: 147
+    width: 99
+    height: 30
+  rect6:
+    serializedVersion: 2
+    x: 58.79
+    y: 192
+    width: 0
+    height: 21.86
+  rect7:
+    serializedVersion: 2
+    x: 88
+    y: -44
+    width: 0
+    height: 14.78
+  rect8:
+    serializedVersion: 2
+    x: 88
+    y: 427.8
+    width: 300
+    height: 0
+  keyZoomIn: 61
+  keyZoomOut: 45

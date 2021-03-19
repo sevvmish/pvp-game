@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class effects : MonoBehaviour
 {
-    public SessionData PlayerSessionData;
+    //public SessionData PlayerSessionData;
+    public int PlayerSessionDataOrder;
 
     //private SessionData[] OtherPlayers = new SessionData[general.SessionNumberOfPlayers - 1];
 
@@ -53,9 +54,9 @@ public class effects : MonoBehaviour
 
         for (int i = 0; i < source.childCount; i++)
         {
-            if (OrderNumber == source.GetChild(i).gameObject.GetComponent<effects>().PlayerSessionData.PlayerOrder)
+            if (OrderNumber == PlayerSessionDataOrder)
             {
-                return source.GetChild(i).position ;
+                return source.GetChild(i).position;
             }
         }
 

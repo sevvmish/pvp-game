@@ -98,6 +98,7 @@ public class playercontrol : MonoBehaviour
         Application.targetFrameRate = 60;
 
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
+        print(SessionResult);
         SessionData.GetDataSessionPlayers(SessionResult);
         general.SetSessionData();
 
@@ -156,7 +157,7 @@ public class playercontrol : MonoBehaviour
 
         //=====================
 
-        OtherGamers = new List<players>(general.SessionNumberOfPlayers - 1);
+        OtherGamers = new List<players>();
         for (int i = 1; i <= general.SessionNumberOfPlayers-1; i++)
         {
             AddPlayer(Vector3.zero, Vector3.zero, i);
@@ -174,25 +175,37 @@ public class playercontrol : MonoBehaviour
         
         ButtonMessage = GameObject.Find("ButtonMessages").GetComponent<TextMeshProUGUI>();
 
+
+
     }
 
 
-    void AddPlayer(Vector3 pos, Vector3 rot, int order)
-    {
-        
+    public void AddPlayer(Vector3 pos, Vector3 rot, int order)
+    {        
         int WhatPlayersClass = general.DataForSession[order].PlayerClass;
         GameObject ggg = Instantiate(general.GetPlayerByClass(WhatPlayersClass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
         ggg.GetComponent<effects>().MyPlayerClass = WhatPlayersClass;
         ggg.GetComponent<players>().NumberInSendAndReceive = (order-1);
         ggg.GetComponent<players>().OtherPlayerName = general.DataForSession[order].PlayerName;
-        ggg.GetComponent<effects>().PlayerSessionData = general.DataForSession[order];
+        //ggg.GetComponent<effects>().PlayerSessionData = general.DataForSession[order];
+        ggg.GetComponent<effects>().PlayerSessionDataOrder = general.DataForSession[order].PlayerOrder;
         ggg.GetComponent<players>().CreateUI();
         OtherGamers.Add(ggg.GetComponent<players>());       
-
     }
 
 
-    
+    public static void AddNonPlayer(Vector3 pos, Vector3 rot, int order, int whatclass, string name)
+    {
+        
+        GameObject ggg = Instantiate(general.GetPlayerByClass(whatclass), Vector3.zero, Quaternion.identity, GameObject.Find("OtherPlayers").transform);
+        ggg.GetComponent<effects>().MyPlayerClass = whatclass;
+
+        ggg.GetComponent<players>().NumberInSendAndReceive = (order-2);
+        ggg.GetComponent<players>().OtherPlayerName = name;
+        //ggg.GetComponent<effects>().PlayerSessionData = general.DataForSession[order];
+       
+        OtherGamers.Add(ggg.GetComponent<players>());
+    }
 
     // Update is called once per frame
     void Update()
@@ -204,12 +217,19 @@ public class playercontrol : MonoBehaviour
         }
 
         MyConds.Check(SendAndReceive.MyPlayerData.conditions);
-        
-        for (int i = 0; i < OtherGamers.Count; i++)
+
+        if (SendAndReceive.OtherPlayerData.Length > 0)
         {
-            OtherGamers[i].Conds.Check(SendAndReceive.OtherPlayerData[i].conditions);
-            OtherGamers[i].OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[0].health_pool, SendAndReceive.OtherPlayerData[0].max_health_pool);
-            OtherGamers[i].OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[0].energy);
+            for (int i = 0; i < OtherGamers.Count; i++)
+            {
+                //print(OtherGamers.Count + " - KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+                OtherGamers[i].Conds.Check(SendAndReceive.OtherPlayerData[i].conditions);
+                if (OtherGamers[i].isUIadded)
+                {
+                    OtherGamers[i].OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[0].health_pool, SendAndReceive.OtherPlayerData[0].max_health_pool);
+                    OtherGamers[i].OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[0].energy);
+                }
+            }
         }
 
         MyJoystick.CheckTouches(MyJoystickTemp.Vertical, MyJoystickTemp.Horizontal);
@@ -243,8 +263,17 @@ public class playercontrol : MonoBehaviour
             
         }
 
-        //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        CheckMessagesAndConditions();
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            for (int i = 0; i < OtherGamers.Count; i++)
+            {
+                print(i + " - " + OtherGamers[i].OtherPlayerName + " lllllllllllllllll");
+            }
+        }
+
+            //working with conditions!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            CheckMessagesAndConditions();
         CheckMessagesAndConditionsForOther();
 
         //MY ANIMATIONS===========================================================        
@@ -279,7 +308,10 @@ public class playercontrol : MonoBehaviour
         if (cur_time_lat>0.1f)
         {
             cur_time_lat = 0;
-            TempText1.text = "current - " + LatencyMain[LatencyMain.Count-1].ToString("f0") + "   average - " + AverageLatency().ToString("f0");
+            if (LatencyMain.Count > 1)
+            {
+                TempText1.text = "current - " + LatencyMain[LatencyMain.Count - 1].ToString("f0") + "   average - " + AverageLatency().ToString("f0");
+            }
         } else
         {
             cur_time_lat += Time.deltaTime;
@@ -427,9 +459,12 @@ public class playercontrol : MonoBehaviour
 
         PlayerTransform.rotation = Quaternion.AngleAxis((PlayerTransform.rotation.eulerAngles.y + rotAngle * sighAngle / AverageCountForDeltaForLerp), Vector3.up);
 
-        for (int i = 0; i < OtherGamers.Count; i++)
+        if (SendAndReceive.OtherPlayerData.Length > 0)
         {
-            OtherGamers[i].SyncPosNRot(DeltaForLerpMovingNRotation, AverageCountForDeltaForLerp);
+            for (int i = 0; i < OtherGamers.Count; i++)
+            {
+                OtherGamers[i].SyncPosNRot(DeltaForLerpMovingNRotation, AverageCountForDeltaForLerp);
+            }
         }
 
        
@@ -612,7 +647,7 @@ public class playercontrol : MonoBehaviour
 
     private void CheckMessagesAndConditionsForOther()
     {
-        
+       
         for (int ii = 0; ii < OtherGamers.Count ; ii++)
         {
             for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
@@ -625,10 +660,13 @@ public class playercontrol : MonoBehaviour
 
                     
                     if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "co")
-                    {                        
-                        StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii]));
-                                                
+                    {
+                        if (OtherGamers[ii].isUIadded) {
+                            StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii]));
+                            
+                        }
                         OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+
                     }
 
 

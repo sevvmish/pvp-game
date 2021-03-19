@@ -1,0 +1,3687 @@
+﻿struct SplatCustom
+{
+	float4 select;
+	float4 map0;
+	float4 map1;
+	float4 map2;
+	float4 map3;
+};
+
+struct ColorItem
+{
+	float3 select;
+	float4 color;
+};
+
+struct ItemMap
+{
+	uint index;
+	float density;
+	float maskValue; 
+	float3 pos;
+}; 
+
+struct ItemSettings
+{
+	int index;
+	float randomPosition;
+	float2 range;
+	float opacity;
+};
+
+static const uint heightOutput = 0;
+
+RWStructuredBuffer<float> resultBuffer; 
+RWStructuredBuffer<ItemMap> itemMapBuffer;
+RWStructuredBuffer<float4> itemColorBuffer;
+
+StructuredBuffer<ItemSettings> itemIndexBuffer; 
+StructuredBuffer<float> rightBuffer;
+StructuredBuffer<float> maskBuffer; 
+StructuredBuffer<ItemMap> rightItemMapBuffer;
+
+RWTexture2D<float> resultTex;
+
+RWTexture2D<float4> terrainTex;   
+RWTexture2D<float4> splatmap0;   
+RWTexture2D<float4> splatmap1;   
+RWTexture2D<float4> splatmap2;   
+RWTexture2D<float4> splatmap3;   
+RWTexture2D<float4> splatPreviewTexClone;
+RWTexture2D<float4> splatPreviewTex;
+
+RWTexture2D<float4> previewTex;
+RWTexture2D<float4> previewTex2;
+
+Texture2D<float> resultTexRead;
+Texture2D<float4> terrainTexRead; 
+Texture2D<float4> leftPreviewTex;
+Texture2D<float4> rightPreviewTex;   
+Texture2D<float4> rightSplatmap0;   
+Texture2D<float4> rightSplatmap1;   
+Texture2D<float4> rightSplatmap2;   
+Texture2D<float4> rightSplatmap3;   
+Texture2D<float4> leftSplatmap;
+Texture2D<float4> leftSplatmap0;   
+Texture2D<float4> leftSplatmap1;    
+Texture2D<float4> leftSplatmap2;
+Texture2D<float4> leftSplatmap3;
+Texture2D<float> tex1;
+Texture2D<float4> tex1b;
+Texture2D<float4> tex2b;
+
+StructuredBuffer<SplatCustom> splatMixBuffer; 
+StructuredBuffer<ColorItem> colorMixBuffer; 
+
+StructuredBuffer<float> localCurveKeys; 
+StructuredBuffer<float4> localCurveCalc;
+
+float _Seed; 
+float _Frequency;
+float _Lacunarity;
+float _Persistence;
+
+float _Amplitude;
+float _Warp0;
+float _Warp;
+float _Damp0;
+float _Damp;
+float _DampScale;
+
+uint _CellType;
+uint _DistanceFunction;
+uint _Octaves;
+
+uint localCurveKeysLength; 
+float3 localGroupCurveRange;  
+float3 worldCurveRange;
+float3 localCurveRange; 
+
+StructuredBuffer<float> localGroupCurveKeys;
+StructuredBuffer<float4> localGroupCurveCalc;
+uint localGroupCurveKeysLength; 
+
+StructuredBuffer<float> worldCurveKeys;
+StructuredBuffer<float4> worldCurveCalc;   
+uint worldCurveKeysLength;
+
+uint outputId;
+uint splatIndex;
+
+float terrainTexReadResolution;
+float terrainTexReadNormalResolution;
+int resolutionX; 
+int resolutionY;
+float resExpandBorder;
+float2 topResolution;
+float2 bottomResolution;
+float shapeSize;
+float2 range;
+float defaultTerrainHeight;
+
+float2 texResolution; 
+float2 resolutionPM;
+float2 resToPreview;
+
+float2 uv;
+float2 uvOffset;
+float2 uvScale;
+float2 terrainSize;
+float terrainHeight;
+
+uint doNormalize;
+uint preview;
+uint isClamp;
+uint isMirror;
+uint previewResolution;
+uint method; // 0 - none, 1 - add, 2 - subtract, 3 - overlay, 4 - Multiply, 4 - Divide, 5 - Difference, 6 - Average, 7 - Max, 8 - Min
+int mask;
+
+float mixValue;
+float overlay;
+uint itemCount;
+float3 offset, scale; 
+float4 rot;
+float2 texID;
+
+SamplerState _LinearRepeat;
+SamplerState _LinearClamp;
+SamplerState _PointClamp;
+
+float4 colLayer;
+float4 colLayer2;
+float3 pos;
+float2 pos2;
+float3 posOffset;
+float2 areaPos;
+float2 totalAreaPos;
+float h;
+float2 snapOffset;
+
+float3 redChannel;
+float3 greenChannel;
+float3 blueChannel;
+float3 alphaChannel;
+  
+#include "TC_Noise.cginc"  
+#include "TC_NoisesAdvanced.cginc"
+  
+float Evaluate(float t, uint curveKeysLength, StructuredBuffer<float> curveKeys, StructuredBuffer<float4> curveCalc) 
+{
+	// if (t > curveKeys[curveKeysLength - 1]) t = curveKeys[curveKeysLength - 1]; 
+	// if (t < curveKeys[0]) t = curveKeys[0];  
+
+	t = clamp(t, curveKeys[0], curveKeys[curveKeysLength - 1]);
+
+	uint i = 0;
+	for (uint j = 1; j < curveKeysLength; j++) if (curveKeys[j] >= t) { i = j - 1; break; }
+	
+	return curveCalc[i].x * t * t * t + curveCalc[i].y * t * t + curveCalc[i].z * t + curveCalc[i].w;
+}
+
+void GetPos3(uint id)
+{
+	pos2.y = (id / resolutionX);
+	pos2.x = (id - (pos2.y * resolutionX)); 
+
+	pos.y = 0;
+	pos.xz = pos2.xy * resolutionPM.xy;
+	
+	texID = float2((pos.x + areaPos.x - totalAreaPos.x) * resToPreview.x, (pos.z + areaPos.y - totalAreaPos.y) * resToPreview.y);
+	
+	// texID = float2((pos.x / resolutionX) * previewResolution, (pos.z / resolutionY) * previewResolution);
+}
+void GetPos(uint id)
+{
+	pos.z = (id / resolutionX);
+	pos.y = 0;
+	pos.x = (id - (pos.z * resolutionX)); 
+
+	pos.xz *= resolutionPM.xy;
+	
+	texID = float2((pos.x + areaPos.x - totalAreaPos.x) * resToPreview.x, (pos.z + areaPos.y - totalAreaPos.y) * resToPreview.y);
+	
+	// texID = float2((pos.x / resolutionX) * previewResolution, (pos.z / resolutionY) * previewResolution);
+}
+
+void GetPosUV(uint id)
+{
+	pos.z = id / resolutionX;
+	pos.y = 0;
+	pos.x = id - (pos.z * resolutionX); 
+
+	uv = float2(pos.x / (resolutionX - 1), pos.z / (resolutionY - 1)) + uvOffset;
+	// uv += 1 / (resolutionX - 1);
+
+	pos.xz *= resolutionPM.xy;
+	
+	texID = float2((pos.x + areaPos.x - totalAreaPos.x) * resToPreview.x, (pos.z + areaPos.y - totalAreaPos.y) * resToPreview.y);
+	
+	// texID = float2((pos.x / resolutionX) * previewResolution, (pos.z / resolutionY) * previewResolution);
+}
+
+void GetPos2(uint id)
+{
+	pos2.y = (id / resolutionX);
+	pos2.x = (id - (pos2.y * resolutionX)); 
+
+	texID = float2(((pos2.x * resolutionPM.x) + areaPos.x - totalAreaPos.x) * resToPreview.x, ((pos2.y * resolutionPM.y) + areaPos.y - totalAreaPos.y) * resToPreview.y);
+}
+
+void GetWorldPos2(uint id)
+{
+	pos2.y = (id / resolutionX);
+	pos2.x = (id - (pos2.y * resolutionX)); 
+
+	pos2 = (pos2 * resolutionPM) + areaPos;
+	texID = (pos2 - totalAreaPos) * resToPreview;
+}
+
+void GetWorldPosUV2(uint id)
+{
+	pos2.y = (id / resolutionX);
+	pos2.x = (id - (pos2.y * resolutionX)); 
+
+	uv = (pos2.xy / (resolutionX - 1)) + uvOffset;
+
+	pos2 = (pos2 * resolutionPM) + areaPos;
+	texID = (pos2 - totalAreaPos) * resToPreview;
+}
+
+void GetTexID(uint2 id)
+{
+	texID = float2(((id.x * resolutionPM.x) + areaPos.x - totalAreaPos.x) * resToPreview.x, ((id.y * resolutionPM.y) + areaPos.y - totalAreaPos.y) * resToPreview.y);
+}
+
+void GetUV(uint id)
+{
+	uv.y = (id / resolutionX);
+	uv.x = (id - (uv.y * resolutionX)); 
+
+	uv.x /= (resolutionX - 1);
+	uv.y /= (resolutionY - 1);
+
+	uv += uvOffset;
+
+}
+
+// TODO: If curve is default don't use it, but do clamp01.
+void ApplyLocalCurve()
+{
+	h = clamp(h, localCurveRange.x, localCurveRange.y);
+	h = (h - localCurveRange.x) / localCurveRange.z;
+	h = Evaluate(h, localCurveKeysLength, localCurveKeys, localCurveCalc);
+}
+
+void ApplyLocalGroupCurve() 
+{
+	h = clamp(h, localGroupCurveRange.x, localGroupCurveRange.y);
+	h = (h - localGroupCurveRange.x) / localGroupCurveRange.z;
+	h = Evaluate(h, localGroupCurveKeysLength, localGroupCurveKeys, localGroupCurveCalc);
+}
+
+void ApplyWorldCurve()
+{
+	h = clamp(h, worldCurveRange.x, worldCurveRange.y);
+	h = (h - worldCurveRange.x) / worldCurveRange.z;
+	h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+}
+
+void ApplyVertical() 
+{
+	if (localCurveKeysLength > 0) ApplyLocalCurve();
+	if (localGroupCurveKeysLength > 0) ApplyLocalGroupCurve();
+	
+	if (mask == 0 && outputId == heightOutput) 
+	{
+		h *= (defaultTerrainHeight / terrainHeight) * scale.y;
+		h += offset.y / terrainHeight;
+	}
+	else 
+	{
+		h *= scale.y;
+		h += offset.y / defaultTerrainHeight;
+	}
+	
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+}
+
+void ApplySplatVertical()
+{
+	if (localCurveKeysLength > 0) ApplyLocalCurve();
+	if (localGroupCurveKeysLength > 0) ApplyLocalGroupCurve();
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+}
+
+void GetUV()
+{
+	pos.xz -= offset.xz;
+	pos = pos + 2.0 * cross(cross(pos, rot.xyz) + rot.w * pos, rot.xyz);
+	pos.xz /= scale.xz;
+	
+	pos.xz += posOffset.xz;
+	
+	uv = pos.xz / (texResolution.xy - 1);
+	uv += 0.5f;
+	
+	uv = lerp(uv, 0.9999 - uv, ceil(frac(floor(uv) * 0.5)) * isMirror);
+	uv = lerp(frac(uv), uv, isClamp);
+}
+
+void GetUvShape()
+{
+	pos.xz -= offset.xz;
+	pos = pos + 2.0 * cross(cross(pos, rot.xyz) + rot.w * pos, rot.xyz);
+	pos.xz /= scale.xz;
+	
+	uv = pos.xz / (texResolution.xy - 1);
+	uv += 0.5f;
+	uv = lerp(frac(uv), uv, isClamp);
+}
+
+void SetPreviewTex()
+{
+	float4 color = float4(h, h, h, 1);
+	if (h > 1.0001) color = lerp(float4(1, 0, 0, 1), float4(1, 0, 1, 1), saturate(h - 1));
+	else if (h < -0.0001) color = lerp(float4(0, 1, 1, 1), float4(0, 0, 1, 1), saturate(-h));
+
+	previewTex[texID] = color;
+}
+
+void SetPreviewTex2()
+{
+	float4 color = float4(h, h, h, 1);
+	if (h > 1.0001) color = lerp(float4(1, 0, 0, 1), float4(1, 0, 1, 1), saturate(h - 1));
+	else if (h < -0.0001) color = lerp(float4(0, 1, 1, 1), float4(0, 0, 1, 1), saturate(-h));
+
+	previewTex2[texID] = color;
+}
+
+void SetPreviewTexBoth()
+{
+	float4 color = float4(h, h, h, 1);
+	if (h > 1.0001) color = lerp(float4(1, 0, 0, 1), float4(1, 0, 1, 1), saturate(h - 1));
+	else if (h < -0.0001) color = lerp(float4(0, 1, 1, 1), float4(0, 0, 1, 1), saturate(-h));
+
+	previewTex[texID] = color;
+	previewTex2[texID] = color;
+}
+
+float random(float p) {
+  return frac(sin(p) * 10000.0);
+}
+
+float noise(float2 p) {
+  return random(p.x + p.y * 10000.0);
+}
+
+float2 sw(float2 p) {return float2( floor(p.x) , floor(p.y) );}
+float2 se(float2 p) {return float2( ceil(p.x)  , floor(p.y) );}
+float2 nw(float2 p) {return float2( floor(p.x) , ceil(p.y)  );}
+float2 ne(float2 p) {return float2( ceil(p.x)  , ceil(p.y)  );}
+
+float smoothNoise(float2 p) {
+  float2 inter = smoothstep(0., 1., frac(p));
+  float s = lerp(noise(sw(p)), noise(se(p)), inter.x);
+  float n = lerp(noise(nw(p)), noise(ne(p)), inter.x);
+  return lerp(s, n, inter.y);
+  return noise(nw(p));  
+}
+
+float movingNoise(float2 p, float time) {
+  float total = 0.0;
+  total += smoothNoise(p     - time);
+  total += smoothNoise(p*2.  + time) / 2.;
+  total += smoothNoise(p*4.  - time) / 4.;
+  total += smoothNoise(p*8.  + time) / 8.;
+  total += smoothNoise(p*16. - time) / 16.;
+  total /= 1. + 1./2. + 1./4. + 1./8. + 1./16.;
+  return total;
+}
+
+float nestedNoise(float2 p, float time) {
+  float x = movingNoise(p, time);
+  float y = movingNoise(p + 100, time);
+  return movingNoise(p + float2(x, y), time);
+}
+
+float Random(float2 co)
+{ 
+	// co.x *= 4503.54332;
+	// co.y *= 4794.23588; 
+
+	return frac(sin(dot(co.xy,float2(12.9898,78.233)))*43758.5453123);
+						 
+	// float2 p = floor(co);
+	// float2 f = frac(co);
+	// f = f * f * (3.0 - 2.0 * f);
+	// float n = p.x + p.y * 57.0;
+	// float4 noise = float4(n, n + 1, n + 57.0, n + 58.0);
+	// noise = frac(sin(noise)*437.585453);
+	// return lerp(lerp(noise.x, noise.y, f.x), lerp(noise.z, noise.w, f.x), f.y); 
+}
+
+// ==================================================================
+// ResultBuffer to tex
+
+#pragma kernel ResultBufferToTex
+[numthreads(8,8,1)]
+void ResultBufferToTex (uint2 id : SV_DispatchThreadID)
+{
+	uint i = id.x + (id.y * resolutionX);   
+	
+	h = saturate(resultBuffer[i]);
+	resultTex[id] = h;  
+	resultBuffer[i] = h;
+}
+
+// ==================================================================
+// Terrain tex normal & height 
+
+#pragma kernel TerrainTex
+[numthreads(8,8,1)] 
+void TerrainTex (uint2 id : SV_DispatchThreadID)  
+{ 
+	// uint i = id.x + (id.y * resolutionX);  
+
+	float4 h;
+	
+	float2 s = float2(1.0 / (resolutionX * 1.0), 1.0 / (resolutionY * 1.0)); 
+	
+	float2 uv = float2(id.x / ((resolutionX - 1) * 1.0), id.y / ((resolutionY - 1) * 1.0));
+
+	h[0] = resultTexRead.SampleLevel(_LinearClamp, uv + float2(0, -s.y), 0).r; 
+	h[1] = resultTexRead.SampleLevel(_LinearClamp, uv + float2(-s.x, 0), 0).r;
+	h[2] = resultTexRead.SampleLevel(_LinearClamp, uv + float2(s.x, 0), 0).r;
+	h[3] = resultTexRead.SampleLevel(_LinearClamp, uv + float2(0, s.y), 0).r;   
+				
+	float3 n;
+	n.z = ((h[0] - h[3]) * 4000) / resolutionPM.x;
+	n.x = ((h[1] - h[2]) * 4000) / resolutionPM.y;
+	n.y = 2 * (defaultTerrainHeight / terrainHeight);
+	n = normalize(n) * 0.5 + 0.5;
+	// n.xz = (n.xz + 1) * 0.5;
+	
+	float height = resultTexRead.SampleLevel(_PointClamp, uv, 0).r;
+	height *= 65535;
+	float h1 = floor(height / 256);
+	float h2 = height - (h1 * 256);
+
+	terrainTex[id] = float4(h1 / 255.0, h2 / 255.0, n.x, n.z);  // idOffset
+	// terrainTex[id] = float4(n.x, n.z, 0,0);  
+}
+
+// ==================================================================
+// Terrain
+ 
+#pragma kernel TerrainHeight
+[numthreads(512,1,1)] 
+void TerrainHeight (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+
+	uv *= (terrainTexReadNormalResolution - 2);
+	uv += resExpandBorder;
+	uv /= (terrainTexReadResolution);
+
+	uv += float2(1 / terrainTexReadResolution, 1 / terrainTexReadResolution);
+
+	float2 h0 = terrainTexRead.SampleLevel(_LinearClamp, uv, 0).rg * 255;  
+	// float2 h0 = terrainTexRead[uint2(x, z)].rg * 255;
+
+	h = ((h0.x * 256.0) + h0.y) / 65535.0;   
+	h /= (defaultTerrainHeight / terrainHeight);
+
+	ApplySplatVertical(); 
+
+	resultBuffer[id] = h;
+
+	SetPreviewTex(); 
+}
+
+#pragma kernel TerrainAngle
+[numthreads(512,1,1)] 
+void TerrainAngle (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+
+	uv *= (terrainTexReadNormalResolution - 2);
+	uv += resExpandBorder;
+	uv /= (terrainTexReadResolution);
+
+	uv += float2(1 / terrainTexReadResolution, 1 / terrainTexReadResolution);
+
+	// h = 1 - ((terrainTexRead.SampleLevel(_LinearClamp, uv, 0).a - 0.5) * 2);
+
+	float2 n = (terrainTexRead.SampleLevel(_LinearClamp, uv, 0).ba - 0.5) * 2;
+	h = 1 - (sqrt(1 - dot(n, n)));// - 0.5) * 2);
+	h = saturate(h + 0.00001);
+	
+	ApplySplatVertical();
+
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+} 
+
+#pragma kernel TerrainConvexity
+[numthreads(512,1,1)] 
+void TerrainConvexity (uint id : SV_DispatchThreadID) 
+{  
+	GetPosUV(id);
+
+	uv *= (terrainTexReadNormalResolution - 2);
+	uv += resExpandBorder;
+	uv /= (terrainTexReadResolution);
+	
+	uv += float2(1 / terrainTexReadResolution, 1 / terrainTexReadResolution);
+
+	float2 h0 = terrainTexRead.SampleLevel(_LinearClamp, uv, 0).rg * 255;   
+	h = ((h0.x * 256.0) + h0.y) / 65535.0;   
+	h /= (defaultTerrainHeight / terrainHeight);
+	
+	h0 = terrainTexRead.SampleLevel(_LinearClamp, uv, itemCount).rg * 255;  
+	float ha = ((h0.x * 256.0) + h0.y) / 65535.0;   
+	ha /= (defaultTerrainHeight / terrainHeight);
+	   
+	h = (h - ha) * (overlay * 10);
+
+	ApplySplatVertical(); 
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel TerrainSplatmap 
+[numthreads(512,1,1)] 
+void TerrainSplatmap (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+
+	h = leftSplatmap.SampleLevel(_LinearClamp, uv, 0)[splatIndex];  
+	ApplySplatVertical();
+
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+} 
+
+#pragma kernel TerrainCollisionHeight
+[numthreads(512,1,1)] 
+void TerrainCollisionHeight (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+	
+	float h0 = tex1.SampleLevel(_PointClamp, float2(uv.x, 1 - uv.y), 0).r;
+	
+	h0 *= 1 - step(1, h0);
+	h0 -= 1 / terrainHeight;
+	
+	if (h0 >= range.x && h0 <= range.y) h = h0;
+
+	// if (h == 1) h = rightBuffer[id];
+	// h = min(h, rightBuffer[id]);
+	 
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+}
+
+#pragma kernel TerrainCollisionHeightInverted
+[numthreads(512,1,1)] 
+void TerrainCollisionHeightInverted (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+	
+	float h0 = 1 - tex1.SampleLevel(_PointClamp, float2(uv.x, 1 - uv.y), 0).r;
+	
+	h0 *= 1 - step(1, h0);
+	h0 -= 1 / terrainHeight;
+	
+	if (h0 >= range.x && h0 <= range.y) h = h0;
+
+	// if (h == 1) h = rightBuffer[id];
+	// h = min(h, rightBuffer[id]);
+	 
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+}
+
+
+#pragma kernel TerrainCollisionHeightInclude
+[numthreads(512,1,1)] 
+void TerrainCollisionHeightInclude (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+
+	float h0 = tex1.SampleLevel(_PointClamp, float2(uv.x, 1 - uv.y), 0).r;
+
+	h0 *= 1 - step(1, h0);
+	h0 -= 1 / terrainHeight;
+
+	uv *= (terrainTexReadNormalResolution - 2);
+	uv += resExpandBorder;
+	uv /= (terrainTexReadResolution);
+	
+	uv += float2(1 / terrainTexReadResolution, 1 / terrainTexReadResolution);
+
+	// float2 h0 = terrainTexRead.SampleLevel(_LinearClamp, uv, 0).rg * 255;  
+	// float height = ((h0.x * 256.0) + h0.y) / 65535.0;   
+	// height /= (defaultTerrainHeight / terrainHeight);
+
+	h = rightBuffer[id];
+
+	
+	float deltaH = h0 - h;
+
+	if (deltaH >= range.x && deltaH <= range.y) h = h0;
+
+	// if (h == 1) h = rightBuffer[id];
+	// h = min(h, rightBuffer[id]);
+	
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+}
+
+#pragma kernel TerrainCollisionHeightIncludeInverted
+[numthreads(512,1,1)] 
+void TerrainCollisionHeightIncludeInverted (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+
+	float h0 = 1 - tex1.SampleLevel(_PointClamp, float2(uv.x, 1 - uv.y), 0).r;
+
+	h0 *= 1 - step(1, h0);
+	h0 -= 1 / terrainHeight;
+
+	uv *= (terrainTexReadNormalResolution - 2);
+	uv += resExpandBorder;
+	uv /= (terrainTexReadResolution);
+
+	uv += float2(1 / terrainTexReadResolution, 1 / terrainTexReadResolution);
+	
+	// float2 h0 = terrainTexRead.SampleLevel(_LinearClamp, uv, 0).rg * 255;  
+	// float height = ((h0.x * 256.0) + h0.y) / 65535.0;   
+	// height /= (defaultTerrainHeight / terrainHeight);
+
+	h = rightBuffer[id];
+
+	
+	float deltaH = h0 - h;
+
+	if (deltaH >= range.x && deltaH <= range.y) h = h0;
+
+	// if (h == 1) h = rightBuffer[id];
+	// h = min(h, rightBuffer[id]);
+	
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+}
+
+
+#pragma kernel TerrainCollisionMask
+[numthreads(512,1,1)] 
+void TerrainCollisionMask (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+	
+	h = tex1.SampleLevel(_PointClamp, float2(uv.x, 1 - uv.y), 0).r;
+	
+	h *= step(1, h);
+	
+	ApplySplatVertical();  
+	
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+}
+
+#pragma kernel TerrainCollisionMaskInverted
+[numthreads(512,1,1)] 
+void TerrainCollisionMaskInverted (uint id : SV_DispatchThreadID)
+{ 
+	GetPosUV(id);
+	
+	h = 1 - tex1.SampleLevel(_PointClamp, float2(uv.x, 1 - uv.y), 0).r;
+	
+	h *= step(1, h);
+	
+	ApplySplatVertical();  
+	
+	resultBuffer[id] = h;
+
+	SetPreviewTex();
+}
+
+
+// ==================================================================
+// File
+
+#pragma kernel RawImage
+[numthreads(512,1,1)] 
+void RawImage (uint id : SV_DispatchThreadID)
+{ 
+	GetPos(id);
+	GetUV(); 
+
+	h = 0;
+	uv.y = 1 - uv.y;
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) 
+	{ 
+		// h = ((tex2.SampleLevel(_LinearClamp, uv, 0).r * 65280.0) + tex1.SampleLevel(_LinearClamp, uv, 0).a * 255) / 65535.0;
+
+		h = tex1.SampleLevel(_LinearClamp, uv, 0).r;
+		
+		ApplyVertical(); 
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel RawImageOSX
+[numthreads(512,1,1)] 
+void RawImageOSX (uint id : SV_DispatchThreadID)
+{ 
+	GetPos(id);
+	GetUV(); 
+
+	h = 0;
+	uv.y = 1 - uv.y;
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) 
+	{ 
+		// h = ((tex2.SampleLevel(_LinearClamp, uv, 0).r * 65280.0) + tex1.SampleLevel(_LinearClamp, uv, 0).a * 255) / 65535.0;
+
+		h = tex1b.SampleLevel(_LinearClamp, uv, 0).a / 255.0;
+		h += tex2b.SampleLevel(_LinearClamp, uv, 0).a;
+		
+		ApplyVertical(); 
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel ImageColor
+[numthreads(512,1,1)] 
+void ImageColor (uint id : SV_DispatchThreadID)
+{ 
+	GetPos(id);
+	GetUV(); 
+
+	h = 0;
+	
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) 
+	{ 
+		float4 col = leftSplatmap0.SampleLevel(_PointClamp, uv, 0);
+
+		if (col.r == redChannel.y && redChannel.x == 1) h = 1;
+		if (col.g == greenChannel.y && greenChannel.x == 1) h = 1;
+		if (col.b == blueChannel.y && blueChannel.x == 1) h = 1;
+		if (col.a == alphaChannel.y && alphaChannel.x == 1) h = 1;
+
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+
+#pragma kernel ImageColorRange
+[numthreads(512,1,1)] 
+void ImageColorRange (uint id : SV_DispatchThreadID)
+{ 
+	GetPos(id);
+	GetUV(); 
+
+	h = 0;
+	
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) 
+	{ 
+		float4 col = leftSplatmap0.SampleLevel(_LinearClamp, uv, 0);
+
+		if (col.r >= redChannel.y && col.r <= redChannel.z && redChannel.x == 1) h = col.r;
+		if (col.g >= greenChannel.y && col.g <= greenChannel.z && greenChannel.x == 1) h = max(h, col.g);
+		if (col.b >= blueChannel.y && col.b <= blueChannel.z && blueChannel.x == 1) h = max(h, col.b);
+		if (col.a >= alphaChannel.y && col.a <= alphaChannel.z && alphaChannel.x == 1) h = max(h, col.a);
+
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+// =================================================================
+// Shapes
+
+#pragma kernel ShapeGradient 
+[numthreads(512, 1, 1)]
+void ShapeGradient(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUvShape();
+
+	h = 0;
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		h = pos.x / shapeSize;
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel ShapeCircle
+[numthreads(512, 1, 1)]
+void ShapeCircle(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUvShape();
+
+	h = 0;
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		float2 p = float2(pos.x, pos.z);
+		p = lerp((frac((p / terrainSize) + 0.5) - 0.5) * terrainSize, p, isClamp);
+		
+		h = saturate(1 - (length(p) / shapeSize));  
+		
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel ShapeSquare
+[numthreads(512, 1, 1)]
+void ShapeSquare(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUvShape();
+
+	h = 0;
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		float2 p = float2(pos.x, pos.z);
+		p = lerp((frac((p / terrainSize) + 0.5) - 0.5) * terrainSize, p, isClamp);
+		
+		float2 p2 = p;
+		p2 = ((bottomResolution * 0.5) - abs(p2));
+		p2 = p2 / ((bottomResolution - topResolution) * 0.5);
+		
+		if (abs(p.x / bottomResolution.x) > abs(p.y / bottomResolution.y)) h = p2.x; else h = p2.y;
+
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+} 
+
+#pragma kernel ShapeConstant
+[numthreads(512, 1, 1)] 
+void ShapeConstant(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUvShape();
+
+	h = 0;
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		// h = 1;
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+} 
+
+#pragma kernel CurrentExpand
+[numthreads(512, 1, 1)]
+void CurrentExpand(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		h = rightBuffer[id];
+		float hOld = h;
+		
+		int y = id / resolutionX;
+		int x = id - (resolutionX * y);
+
+		if (x < resolutionX - 1) h = max(h, rightBuffer[id + 1]);
+		if (x > 1) h = max(h, rightBuffer[id - 1]);
+		if (y < resolutionX - 1)h = max(h, rightBuffer[id + resolutionX]);
+		if (y > 1) h = max(h, rightBuffer[id - resolutionX]);
+
+		h = lerp(hOld, h, saturate(scale.y));
+
+		if (x < resolutionX - 1 && y > 1) h = max(h, rightBuffer[(id + 1) - resolutionX] / 2);
+		if (x > 1 && y > 1) h = max(h, rightBuffer[(id - 1) - resolutionX] / 2);
+		if (x < resolutionX - 1 && y < resolutionX - 1) h = max(h, rightBuffer[(id + 1) + resolutionX] / 2);
+		if (x > 1 && y < resolutionX - 1) h = max(h, rightBuffer[(id - 1) + resolutionX] / 2);
+		
+		// ApplyVertical();
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h;
+	SetPreviewTexBoth();
+}
+
+#pragma kernel CurrentShrink
+[numthreads(512, 1, 1)]
+void CurrentShrink(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		h = rightBuffer[id];
+		float hOld = h;
+
+		int y = id / resolutionX;
+		int x = id - (resolutionX * y);
+		
+		if (x < resolutionX - 1) h = min(h, rightBuffer[id + 1]);
+		if (x > 1) h = min(h, rightBuffer[id - 1]);
+		if (y < resolutionX - 1) h = min(h, rightBuffer[id + resolutionX]);
+		if (y > 1) h = min(h, rightBuffer[id - resolutionX]);
+
+		h = lerp(hOld, h, saturate(scale.y));
+		
+		// h = min(h, rightBuffer[(id + 1) - resolutionX]);
+		// h = min(h, rightBuffer[(id - 1) - resolutionX]);
+		// h = min(h, rightBuffer[(id + 1) + resolutionX]);
+		// h = min(h, rightBuffer[(id - 1) + resolutionX]);
+	
+		// ApplyVertical();
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h; 
+	SetPreviewTexBoth();
+}
+
+#pragma kernel CurrentEdgeDetect
+[numthreads(512, 1, 1)]
+void CurrentEdgeDetect(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		h = rightBuffer[id];
+		
+		if (h < range.x || h > range.y) h = 0;
+		else 
+		{
+			int y = id / resolutionX;
+			int x = id - (resolutionX * y);
+
+			if (x < resolutionX - 1) h = max(h, rightBuffer[id + 1]);
+			if (x > 1) h = max(h, rightBuffer[id - 1]);
+			if (y < resolutionX - 1) h = max(h, rightBuffer[id + resolutionX]);
+			if (y > 1) h = max(h, rightBuffer[id - resolutionX]);
+
+			if (x < resolutionX - 1 && y > 1) h = max(h, rightBuffer[(id + 1) - resolutionX]);
+			if (x > 1 && y > 1) h = max(h, rightBuffer[(id - 1) - resolutionX]);
+			if (x < resolutionX - 1 && y < resolutionX - 1) h = max(h, rightBuffer[(id + 1) + resolutionX]);
+			if (x > 1 && y < resolutionX - 1) h = max(h, rightBuffer[(id - 1) + resolutionX]);
+		}
+
+		if (h > 0) h = 1;
+		
+		// ApplyVertical();
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h;
+	SetPreviewTexBoth();
+}
+
+#pragma kernel CurrentDistortion
+[numthreads(512, 1, 1)]
+void CurrentDistortion(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		pos.y += _Seed;
+		float x = fBm(float3(pos.x, pos.y, 0), 6);
+		
+		x = x * shapeSize * 1;
+		
+		pos.y += 10;
+		float y = fBm(float3(0, pos.y, pos.z), 6);
+		
+		y = y * shapeSize * 1;
+		// y = 0;
+
+		uint p1 = id + floor(x) + (floor(y) * resolutionX);
+		uint p2 = p1 + 1;
+
+		float h1 = rightBuffer[p1]; 
+		float h2 = rightBuffer[p2];
+
+		h1 = lerp(h1, h2, frac(x));
+
+		p1 += resolutionX;
+		p2 += resolutionX;
+
+		float h3 = rightBuffer[p1];
+		float h4 = rightBuffer[p2];
+
+		h3 = lerp(h3, h4, frac(x));
+
+		h3 = lerp(h1, h3, frac(y));
+
+		h = h3;  
+
+		// ApplyVertical(); 
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h;
+	SetPreviewTexBoth();
+}
+
+// =============================================================================================
+// Portal
+
+RWTexture2D<float> rtOutput;
+StructuredBuffer<float> inputBuffer;
+
+#pragma kernel CopyComputeBufferToRenderTexture
+[numthreads(8, 8, 1)] 
+void CopyComputeBufferToRenderTexture(uint2 id : SV_DispatchThreadID)
+{
+	uint index = (id.y * resolutionX) + id.x;
+
+	rtOutput[id] = inputBuffer[index];
+}
+
+#pragma kernel CopyComputeMaskBufferToRenderTexture
+[numthreads(8, 8, 1)]
+void CopyComputeMaskBufferToRenderTexture(uint2 id : SV_DispatchThreadID)
+{
+	uint index = (id.y * resolutionX) + id.x;
+
+	rtOutput[id] = inputBuffer[index] * maskBuffer[index];
+}
+
+int portalResolution;
+
+#pragma kernel Portal
+[numthreads(512,1,1)] 
+void Portal (uint id : SV_DispatchThreadID)
+{ 
+	GetPos(id);
+	 
+	uv.y = floor(id / resolutionX);
+	uv.x = floor(id - (uv.y * resolutionX));
+	uv /= resolutionX;
+	uv *= (portalResolution - (resExpandBorder * 2));
+	uv += resExpandBorder;
+	uv /= (portalResolution - 1);
+	
+	h = tex1.SampleLevel(_PointClamp, uv, 0).r * overlay;
+	ApplySplatVertical();
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel CopyRenderTexture
+[numthreads(8,8,1)] 
+void CopyRenderTexture (uint2 id : SV_DispatchThreadID)
+{ 
+	splatmap1[id] = rightSplatmap1[id];	
+}
+
+// =============================================================================================
+// Splat
+
+float4 map0;
+float4 map1;
+float4 map2;
+float4 map3;
+float4 previewColor;
+float total;
+
+float GetSplatValue(float v, uint i)
+{
+	if (v < splatMixBuffer[i].select.y) return lerp(0, 1, saturate((v - splatMixBuffer[i].select.x) * splatMixBuffer[i].select.z));
+	else return lerp(1, 0, saturate((v - splatMixBuffer[i].select.y) * splatMixBuffer[i].select.z)); 
+}
+
+void GetSplatCustomValue4(float v, uint i)
+{
+	uint j = 0;
+	float s = GetSplatValue(v, i);
+	float n;  
+
+	n = splatMixBuffer[i].map0[0] * s; map0[0] += n; total += n;
+	n = splatMixBuffer[i].map0[1] * s; map0[1] += n; total += n;
+	n = splatMixBuffer[i].map0[2] * s; map0[2] += n; total += n;
+	n = splatMixBuffer[i].map0[3] * s; map0[3] += n; total += n;
+}
+
+void GetSplatCustomValue8(float v, uint i)
+{
+	uint j = 0;
+	float s = GetSplatValue(v, i);
+	float n;  
+
+	n = splatMixBuffer[i].map0[0] * s; map0[0] += n; total += n;
+	n = splatMixBuffer[i].map0[1] * s; map0[1] += n; total += n;
+	n = splatMixBuffer[i].map0[2] * s; map0[2] += n; total += n;
+	n = splatMixBuffer[i].map0[3] * s; map0[3] += n; total += n;
+	n = splatMixBuffer[i].map1[0] * s; map1[0] += n; total += n;
+	n = splatMixBuffer[i].map1[1] * s; map1[1] += n; total += n;
+	n = splatMixBuffer[i].map1[2] * s; map1[2] += n; total += n;
+	n = splatMixBuffer[i].map1[3] * s; map1[3] += n; total += n;
+}
+
+void GetSplatCustomValue12(float v, uint i)
+{
+	uint j = 0;
+	float s = GetSplatValue(v, i);
+	float n;  
+
+	n = splatMixBuffer[i].map0[0] * s; map0[0] += n; total += n;
+	n = splatMixBuffer[i].map0[1] * s; map0[1] += n; total += n;
+	n = splatMixBuffer[i].map0[2] * s; map0[2] += n; total += n;
+	n = splatMixBuffer[i].map0[3] * s; map0[3] += n; total += n;
+	n = splatMixBuffer[i].map1[0] * s; map1[0] += n; total += n;
+	n = splatMixBuffer[i].map1[1] * s; map1[1] += n; total += n;
+	n = splatMixBuffer[i].map1[2] * s; map1[2] += n; total += n;
+	n = splatMixBuffer[i].map1[3] * s; map1[3] += n; total += n;
+	n = splatMixBuffer[i].map2[0] * s; map2[0] += n; total += n;
+	n = splatMixBuffer[i].map2[1] * s; map2[1] += n; total += n;
+	n = splatMixBuffer[i].map2[2] * s; map2[2] += n; total += n;
+	n = splatMixBuffer[i].map2[3] * s; map2[3] += n; total += n;
+}
+
+void GetSplatCustomValue16(float v, uint i)
+{
+	uint j = 0;
+	float s = GetSplatValue(v, i);
+	float n;  
+
+	n = splatMixBuffer[i].map0[0] * s; map0[0] += n; total += n;
+	n = splatMixBuffer[i].map0[1] * s; map0[1] += n; total += n;
+	n = splatMixBuffer[i].map0[2] * s; map0[2] += n; total += n;
+	n = splatMixBuffer[i].map0[3] * s; map0[3] += n; total += n;
+	n = splatMixBuffer[i].map1[0] * s; map1[0] += n; total += n;
+	n = splatMixBuffer[i].map1[1] * s; map1[1] += n; total += n;
+	n = splatMixBuffer[i].map1[2] * s; map1[2] += n; total += n;
+	n = splatMixBuffer[i].map1[3] * s; map1[3] += n; total += n;
+	n = splatMixBuffer[i].map2[0] * s; map2[0] += n; total += n;
+	n = splatMixBuffer[i].map2[1] * s; map2[1] += n; total += n;
+	n = splatMixBuffer[i].map2[2] * s; map2[2] += n; total += n;
+	n = splatMixBuffer[i].map2[3] * s; map2[3] += n; total += n;
+	n = splatMixBuffer[i].map3[0] * s; map3[0] += n; total += n;
+	n = splatMixBuffer[i].map3[1] * s; map3[1] += n; total += n;
+	n = splatMixBuffer[i].map3[2] * s; map3[2] += n; total += n;
+	n = splatMixBuffer[i].map3[3] * s; map3[3] += n; total += n;
+}
+
+#pragma kernel CalcSplat4
+[numthreads(512,1,1)]
+void CalcSplat4 (uint id : SV_DispatchThreadID)  
+{ 
+	GetPos2(id);
+
+	float s = 0;
+	map0 = float4(0, 0, 0, 0);
+	
+	int i = 0; 
+	total = 0;
+	
+	h = saturate(resultBuffer[id]);
+	
+	for (uint j = 0; j < itemCount; j++) 
+	{
+		i = splatMixBuffer[j].select.w;
+
+		s = GetSplatValue(h, j);
+
+		if (i >= 0) 
+		{
+			if (i < 2)
+			{
+				if (i == 0) { map0.x += s; total += s; }
+				else { map0.y += s; total += s; }
+			}
+			else if (i == 2) { map0.z += s; total += s; }
+			else { map0.w += s; total += s; }
+		}
+		else 
+		{
+			GetSplatCustomValue4(h, j);
+		}
+	}
+
+	map0 /= total;
+
+	splatmap0[pos2] = map0;
+	 
+	splatPreviewTex[texID] = (map0.x * itemColorBuffer[0]) + (map0.y * itemColorBuffer[1]) + (map0.z * itemColorBuffer[2]) + (map0.w * itemColorBuffer[3]);
+}
+
+
+#pragma kernel CalcSplat8
+[numthreads(512,1,1)]
+void CalcSplat8 (uint id : SV_DispatchThreadID)  
+{ 
+	GetPos2(id);
+
+	float s = 0;
+	map0 = float4(0, 0, 0, 0);
+	map1 = float4(0, 0, 0, 0);
+	
+	int i = 0; 
+	total = 0;
+	// total1 = 0;   
+	// float4 map2 = float4(0,0,0,0);
+	// float4 map3 = float4(0,0,0,0);
+
+	h = saturate(resultBuffer[id]);
+	
+	for (uint j = 0; j < itemCount; j++) 
+	{
+		i = splatMixBuffer[j].select.w;
+
+		s = GetSplatValue(h, j);
+
+		if (i >= 0) 
+		{
+			if (i < 4)
+			{
+				if (i < 2)
+				{
+					if (i == 0) { map0.x += s; total += s; }
+					else { map0.y += s; total += s; }
+				}
+				else if (i == 2) { map0.z += s; total += s; }
+				else { map0.w += s; total += s; }
+			}
+			else
+			{
+				if (i < 6)
+				{
+					if (i == 4) { map1.x += s; total += s; }
+					else { map1.y += s; total += s; }
+				}
+				else if (i == 6) { map1.z += s; total += s; }
+				else { map1.w += s; total += s; }
+			}
+		}
+		else 
+		{
+			GetSplatCustomValue8(h, j);
+		}
+	}
+
+	map0 /= total;
+	map1 /= total; 
+
+	splatmap0[pos2] = map0;
+	splatmap1[pos2] = map1; 
+	 
+	splatPreviewTex[texID] = (map0.x * itemColorBuffer[0]) + (map0.y * itemColorBuffer[1]) + (map0.z * itemColorBuffer[2]) + (map0.w * itemColorBuffer[3]) + (map1.x * itemColorBuffer[4]) + (map1.y * itemColorBuffer[5]) + (map1.z * itemColorBuffer[6]) + (map1.w * itemColorBuffer[7]);
+	
+	// previewTex[texID] = float4(splatmap0.x, splatmap0.y, splatmap0.z, 1);
+}
+
+#pragma kernel CalcSplat12
+[numthreads(512,1,1)]
+void CalcSplat12 (uint id : SV_DispatchThreadID)   
+{ 
+	GetPos2(id);
+
+	float s = 0;
+	map0 = float4(0, 0, 0, 0);
+	map1 = float4(0, 0, 0, 0);
+	map2 = float4(0, 0, 0, 0);
+	
+	int i = 0; 
+	total = 0;
+	
+	h = saturate(resultBuffer[id]);
+	
+	for (uint j = 0; j < itemCount; j++) 
+	{
+		i = splatMixBuffer[j].select.w;
+
+		s = GetSplatValue(h, j);
+
+		if (i >= 0) 
+		{
+			if (i < 4)
+			{
+				if (i < 2)
+				{
+					if (i == 0) { map0.x += s; total += s; }
+					else { s = map0.y += s; total += s; }
+				}
+				else if (i == 2) { s = map0.z += s; total += s; }
+				else { s = map0.w += s; total += s; }
+			}
+			else if (i < 8)
+			{
+				if (i < 6)
+				{
+					if (i == 4) { s = map1.x += s; total += s; }
+					else { s = map1.y += s; total += s; }
+				}
+				else if (i == 6) { s = map1.z += s; total += s; }
+				else { s = map1.w += s; total += s; }
+			}
+			else if (i < 12)
+			{
+				if (i < 10)
+				{
+					if (i == 8) { s = map2.x += s; total += s; }
+					else { s = map2.y += s; total += s; }
+				}
+				else if (i == 10) { s = map2.z += s; total += s; }
+				else { s = map2.w += s; total += s; }
+			}
+		}
+		else 
+		{
+			GetSplatCustomValue12(h, j);
+		}
+	}
+
+	map0 /= total;
+	map1 /= total; 
+	map2 /= total;
+
+	splatmap0[pos2] = map0;
+	splatmap1[pos2] = map1; 
+	splatmap2[pos2] = map2;
+ 
+	splatPreviewTex[texID] = (map0.x * itemColorBuffer[0]) + (map0.y * itemColorBuffer[1]) + (map0.z * itemColorBuffer[2]) + (map0.w * itemColorBuffer[3]) + 
+						     (map1.x * itemColorBuffer[4]) + (map1.y * itemColorBuffer[5]) + (map1.z * itemColorBuffer[6]) + (map1.w * itemColorBuffer[7]) +
+							 (map2.x * itemColorBuffer[8]) + (map2.y * itemColorBuffer[9]) + (map2.z * itemColorBuffer[10]) + (map2.w * itemColorBuffer[11]);
+	
+	// previewTex[texID] = float4(splatmap0.x, splatmap0.y, splatmap0.z, 1);
+}
+
+#pragma kernel CalcSplat16
+[numthreads(512,1,1)]
+void CalcSplat16 (uint id : SV_DispatchThreadID)   
+{ 
+	GetPos2(id);
+
+	float s = 0;
+	map0 = float4(0, 0, 0, 0);
+	map1 = float4(0, 0, 0, 0);
+	map2 = float4(0, 0, 0, 0);
+	map3 = float4(0, 0, 0, 0);
+	
+	int i = 0; 
+	total = 0;
+	
+	h = saturate(resultBuffer[id]);
+	
+	for (uint j = 0; j < itemCount; j++) 
+	{
+		i = splatMixBuffer[j].select.w;
+
+		if (i >= 0) 
+		{
+			if (i < 8) 
+			{
+				if (i < 4)
+				{
+					if (i < 2)
+					{
+						if (i == 0) { s = GetSplatValue(h, j); map0.x += s; total += s; }
+						else { s = GetSplatValue(h, j); map0.y += s; total += s; }
+					}
+					else if (i == 2) { s = GetSplatValue(h, j); map0.z += s; total += s; }
+					else { s = GetSplatValue(h, j); map0.w += s; total += s; }
+				}
+				else if (i < 6)
+				{
+					if (i == 4) { s = GetSplatValue(h, j); map1.x += s; total += s; }
+					else { s = GetSplatValue(h, j); map1.y += s; total += s; }
+				}
+				else if (i == 6) { s = GetSplatValue(h, j); map1.z += s; total += s; }
+				else { s = GetSplatValue(h, j); map1.w += s; total += s; }
+			}
+			else 
+			{
+				if (i < 12)
+				{
+					if (i < 10)
+					{
+						if (i == 8) { s = GetSplatValue(h, j); map2.x += s; total += s; }
+						else { s = GetSplatValue(h, j); map2.y += s; total += s; }
+					}
+					else if (i == 10) { s = GetSplatValue(h, j); map2.z += s; total += s; }
+					else { s = GetSplatValue(h, j); map2.w += s; total += s; }
+				}
+				else if (i < 14)
+				{
+					if (i == 12) { s = GetSplatValue(h, j); map3.x += s; total += s; }
+					else { s = GetSplatValue(h, j); map3.y += s; total += s; }
+				}
+				else if (i == 14) { s = GetSplatValue(h, j); map3.z += s; total += s; }
+				else { s = GetSplatValue(h, j); map3.w += s; total += s; }
+			}
+		}
+		else 
+		{
+			GetSplatCustomValue16(h, j);
+		}
+	}
+
+	map0 /= total;
+	map1 /= total; 
+	map2 /= total;
+	map3 /= total;
+
+	splatmap0[pos2] = map0;
+	splatmap1[pos2] = map1; 
+	splatmap2[pos2] = map2;
+	splatmap3[pos2] = map3;
+ 
+	splatPreviewTex[texID] = (map0.x * itemColorBuffer[0]) + (map0.y * itemColorBuffer[1]) + (map0.z * itemColorBuffer[2]) + (map0.w * itemColorBuffer[3]) + 
+						     (map1.x * itemColorBuffer[4]) + (map1.y * itemColorBuffer[5]) + (map1.z * itemColorBuffer[6]) + (map1.w * itemColorBuffer[7]) +
+							 (map2.x * itemColorBuffer[8]) + (map2.y * itemColorBuffer[9]) + (map2.z * itemColorBuffer[10]) + (map2.w * itemColorBuffer[11]) +
+							 (map3.x * itemColorBuffer[12]) + (map3.y * itemColorBuffer[13]) + (map3.z * itemColorBuffer[14]) + (map3.w * itemColorBuffer[15]);
+	
+	// previewTex[texID] = float4(splatmap0.x, splatmap0.y, splatmap0.z, 1);
+}
+
+float GetColorValue(float v, uint i)
+{
+	float3 select = colorMixBuffer[i].select; 
+
+	if (v < select.y) return lerp(0, 1, saturate((v - select.x) * select.z));
+	else return lerp(1, 0, saturate((v - select.y) * select.z)); 
+}
+
+#pragma kernel CalcColor
+[numthreads(512,1,1)]
+void CalcColor (uint id : SV_DispatchThreadID)  
+{ 
+	GetPos2(id);
+	
+	float s = 0;
+	total = 0;
+	float4 color;
+		
+	h = saturate(resultBuffer[id]);
+	
+	for (uint i = 0; i < itemCount; i++)
+	{
+		s = GetColorValue(h, i); 
+		color += colorMixBuffer[i].color * s;
+		total += s;
+	}
+
+	color /= total; 
+	
+	splatmap0[pos2] = color;
+	 
+	// Do tex id
+	splatPreviewTex[texID] = color;
+}
+
+#pragma kernel CalcColorTex
+[numthreads(512,1,1)]
+void CalcColorTex (uint id : SV_DispatchThreadID)  
+{ 
+	GetPos3(id);
+	GetUV();   
+		
+	h = saturate(resultBuffer[id]);
+	
+	float4 color = float4(0,0,0,1);
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) 
+	{ 
+		color = leftSplatmap0.SampleLevel(_LinearClamp, uv, 0) * overlay * colLayer;
+		float greyColor = color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
+		color = lerp(float4(greyColor, greyColor, greyColor, 1), color, mixValue); // Saturation 
+	}
+	
+	previewTex[texID] = color;
+	color.a *= h;
+
+	splatmap0[pos2] = color; 
+	 
+	// Do tex id
+	splatPreviewTex[texID] = color;
+}
+
+#pragma kernel NormalizeSplat4
+[numthreads(8,8,1)]
+void NormalizeSplat4(uint2 id : SV_DispatchThreadID)     
+{ 
+	// uint pos1d = (id.y * resolutionX) + id.x;
+	GetTexID(id);
+
+	float4 s0 = leftSplatmap0[id];
+	float4 previewColor = leftPreviewTex[texID];
+
+	float total = s0.x + s0.y + s0.z + s0.w;
+
+	s0 /= total;
+	previewColor /= total;
+	
+	splatmap0[id] = s0;
+	
+	splatPreviewTex[texID] = previewColor; 
+}
+
+#pragma kernel NormalizeSplat8
+[numthreads(8,8,1)] 
+void NormalizeSplat8 (uint2 id : SV_DispatchThreadID)     
+{ 
+	// uint pos1d = (id.y * resolutionX) + id.x;
+	GetTexID(id);
+
+	float4 s0 = leftSplatmap0[id];
+	float4 s1 = leftSplatmap1[id];
+	float4 previewColor = leftPreviewTex[texID];
+
+	float total = s0.x + s0.y + s0.z + s0.w + s1.x + s1.y + s1.z + s1.w; 
+
+	s0 /= total;
+	s1 /= total;
+	previewColor /= total;
+	
+	splatmap0[id] = s0;
+	splatmap1[id] = s1;
+
+	splatPreviewTex[texID] = previewColor; 
+}
+
+#pragma kernel NormalizeSplat12
+[numthreads(8,8,1)]
+void NormalizeSplat12 (uint2 id : SV_DispatchThreadID)     
+{ 
+	// uint pos1d = (id.y * resolutionX) + id.x;
+	GetTexID(id);
+
+	float4 s0 = leftSplatmap0[id];
+	float4 s1 = leftSplatmap1[id];
+	float4 s2 = leftSplatmap2[id];
+	float4 previewColor = leftPreviewTex[texID];
+
+	float total = s0.x + s0.y + s0.z + s0.w + s1.x + s1.y + s1.z + s1.w + s2.x + s2.y + s2.z + s2.w; 
+
+	s0 /= total;
+	s1 /= total;
+	s2 /= total;
+	previewColor /= total;
+	
+	splatmap0[id] = s0;
+	splatmap1[id] = s1;
+	splatmap2[id] = s2;
+
+	splatPreviewTex[texID] = previewColor; 
+}
+
+#pragma kernel NormalizeSplat16
+[numthreads(8,8,1)]
+void NormalizeSplat16 (uint2 id : SV_DispatchThreadID)     
+{ 
+	// uint pos1d = (id.y * resolutionX) + id.x;
+	GetTexID(id);
+
+	float4 s0 = leftSplatmap0[id];
+	float4 s1 = leftSplatmap1[id];
+	float4 s2 = leftSplatmap2[id];
+	float4 s3 = leftSplatmap3[id];
+	float4 previewColor = leftPreviewTex[texID];
+
+	float total = s0.x + s0.y + s0.z + s0.w + s1.x + s1.y + s1.z + s1.w + s2.x + s2.y + s2.z + s2.w + s3.x + s3.y + s3.z + s3.w; 
+
+	s0 /= total;
+	s1 /= total;
+	s2 /= total;
+	s3 /= total;
+	previewColor /= total;
+	
+	splatmap0[id] = s0;
+	splatmap1[id] = s1;
+	splatmap2[id] = s2;
+	splatmap3[id] = s3;
+
+	splatPreviewTex[texID] = previewColor; 
+}
+ 
+#pragma kernel CalcObject
+[numthreads(512,1,1)]  
+void CalcObject (uint id : SV_DispatchThreadID)  
+{ 
+	GetWorldPosUV2(id);
+
+	float v = resultBuffer[id]; 
+	uint index = 0;
+	float density = 0;
+
+	float random = Random(pos2);
+	
+	bool found = false;
+
+	for (uint i = 0; i < itemCount; i++)
+	{
+		if (v <= (itemIndexBuffer[i].range.y + ((random - 0.5) * mixValue))) { found = true; break;}
+		index++;   
+	}
+
+	if (!found) index--;
+
+	density = itemIndexBuffer[index].opacity;
+
+	float place = step(random + 0.00001, density);
+
+	itemMapBuffer[id].index = itemIndexBuffer[index].index; 
+	itemMapBuffer[id].density = density * place;
+	itemMapBuffer[id].maskValue = 1;
+
+	splatPreviewTex[texID] = itemColorBuffer[index] * place;
+	previewTex[texID] = colLayer * saturate(density + 0.5) * place;
+
+	float random2 = Random(pos2 + float2(997.5, 0));  
+	float2 uvPos = (saturate(float2(random, random2)) / resolutionX) * itemIndexBuffer[index].randomPosition;
+	uvPos += 0.5 / resolutionX;
+
+
+	float2 uv2 = (uv + uvPos) * (terrainTexReadNormalResolution - 1);
+	uv2 += resExpandBorder;
+	uv2 /= (terrainTexReadResolution - 1);
+		
+	float2 h0 = terrainTexRead.SampleLevel(_LinearClamp, uv2, 0).rg * 255.0; 
+	h0.x *= 256.0;
+	h = (h0.x + h0.y) / 65535.0;
+		
+	itemMapBuffer[id].pos = float3(uvPos.x, h, uvPos.y); 
+}
+
+#pragma kernel CalcObjectPosition
+[numthreads(512,1,1)]  
+void CalcObjectPosition (uint id : SV_DispatchThreadID)  
+{ 
+	GetWorldPosUV2(id);
+
+	float random = Random(pos2);
+	
+	float density = itemMapBuffer[id].maskValue * itemMapBuffer[id].density;
+	itemMapBuffer[id].density = density;
+
+	if (density > 0)  
+	{
+		int index = itemMapBuffer[id].index;
+
+		float random2 = Random(pos2 + float2(997.5, 0));  
+		float randomPositionValue = resultBuffer[index];
+		
+		float halfPixel = 0.5 / resolutionX;
+
+		// uv += halfPixel;
+		// uv -= snapOffset; 
+		float2 uvPos = ((saturate(float2(random, random2)) - 0.5) / (resolutionX)) * randomPositionValue;
+
+		float2 uv2 = (uv + uvPos) * (terrainTexReadNormalResolution - 1);
+		uv2 += resExpandBorder;
+		uv2 /= (terrainTexReadResolution - 1);
+		
+
+		float2 h0 = terrainTexRead.SampleLevel(_LinearClamp, uv2, 0).rg * 255.0; 
+		h0.x *= 256.0;
+		h = (h0.x + h0.y) / 65535.0;
+		
+		itemMapBuffer[id].pos = float3(uvPos.x, h, uvPos.y); 
+	}
+}
+
+// =============================================================================================
+// Item Tex Methods
+
+#pragma kernel MethodItemTexMask
+[numthreads(512,1,1)]
+void MethodItemTexMask (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos2(id);
+	
+	float random = Random(pos2) + 0.00001;
+
+	uint id2 = (itemMapBuffer[id].pos.x * resolutionX) + (itemMapBuffer[id].pos.z * resolutionY * resolutionX);
+
+	float maskValue = maskBuffer[id];
+
+	h = itemMapBuffer[id].maskValue * maskValue;
+	float place = step(random, h * itemMapBuffer[id].density);
+
+	itemMapBuffer[id].maskValue = h * place;
+	
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	
+	splatPreviewTex[texID] = colLayer * saturate(h + 0.5) * place; 
+} 
+
+#pragma kernel MethodItemTex0Mask
+[numthreads(512,1,1)]
+void MethodItemTex0Mask (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos2(id);
+	
+	float random = Random(pos2) + 0.00001;
+
+	uint id2 = (itemMapBuffer[id].pos.x * resolutionX) + (itemMapBuffer[id].pos.z * resolutionY * resolutionX);
+
+	float maskValue = maskBuffer[id];
+
+	h = itemMapBuffer[id].maskValue * maskValue;
+	float place = step(random, h * itemMapBuffer[id].density);
+
+	itemMapBuffer[id].maskValue = h * place;
+	
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	// resultBuffer[id] = h;
+	
+	splatPreviewTex[texID] = leftPreviewTex[texID] * saturate(maskValue + 0.5) * place;
+} 
+
+#pragma kernel MethodItemTexLerp
+[numthreads(512,1,1)]
+void MethodItemTexLerp (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos2(id);
+	
+	float v = 0;
+
+	if (overlay < 1 && overlay != 0) v = Random(pos2) + 0.00001;
+
+	float maskValue;
+
+	if (v <= overlay && overlay != 0)
+	{
+		float density = rightItemMapBuffer[id].density;
+		maskValue = rightItemMapBuffer[id].maskValue;
+
+		itemMapBuffer[id].index = rightItemMapBuffer[id].index;
+		itemMapBuffer[id].pos = rightItemMapBuffer[id].pos;
+		itemMapBuffer[id].density = density;
+		itemMapBuffer[id].maskValue = maskValue;
+		previewColor = rightPreviewTex[texID]; 
+		splatmap0[texID] = colLayer2 * saturate(maskValue + 0.5f) * (1 - step(density, 0));
+	}
+	else 
+	{
+		previewColor = leftPreviewTex[texID]; 
+		maskValue = itemMapBuffer[id].maskValue;
+		splatmap0[texID] = colLayer2 * saturate(maskValue + 0.5f) * (1 - step(itemMapBuffer[id].density * maskValue, 0));
+	}
+		
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MethodItemTexLerpMask
+[numthreads(512,1,1)]
+void MethodItemTexLerpMask (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos2(id);
+
+	float maskValue = maskBuffer[id];
+	overlay *= maskValue;
+	
+	float v = 0;
+
+	if (overlay < 1 && overlay != 0) v = Random(pos2);
+
+	if (v <= overlay && overlay != 0)
+	{
+		float rightMaskValue = rightItemMapBuffer[id].maskValue * maskValue;
+		float density = rightItemMapBuffer[id].density;
+		itemMapBuffer[id].index = rightItemMapBuffer[id].index;
+		itemMapBuffer[id].pos = rightItemMapBuffer[id].pos;
+		itemMapBuffer[id].density = density;
+		itemMapBuffer[id].maskValue = rightMaskValue;
+
+		previewColor = colLayer * colLayer * saturate(maskValue + 0.5) * itemMapBuffer[id].maskValue;
+		previewTex2[texID] = previewColor;
+		splatmap0[texID] = colLayer2 * saturate(rightMaskValue + 0.5f) * (1 - step(density, 0)); 
+	}
+	else 
+	{
+		previewColor = leftPreviewTex[texID]; 
+		previewTex2[texID] = float4(0, 0, 0, 0);
+		float leftMaskValue = itemMapBuffer[id].maskValue;
+		splatmap0[texID] = colLayer2 * saturate(leftMaskValue + 0.5f) * (1 - step(itemMapBuffer[id].density * leftMaskValue, 0));
+	}
+		
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+} 
+
+#pragma kernel MethodItemTexMax 
+[numthreads(512,1,1)]
+void MethodItemTexMax (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos2(id);
+	
+	float maskValue = itemMapBuffer[id].maskValue;
+	float rightMaskValue = rightItemMapBuffer[id].maskValue;
+
+	if (maskValue < rightMaskValue)
+	{
+		float density = rightItemMapBuffer[id].density;
+		itemMapBuffer[id].index = rightItemMapBuffer[id].index;
+		itemMapBuffer[id].pos = rightItemMapBuffer[id].pos;
+		itemMapBuffer[id].density = density;
+		itemMapBuffer[id].maskValue = rightMaskValue; 
+		previewColor = rightPreviewTex[texID];  
+		splatmap0[texID] = colLayer2 * saturate(rightMaskValue + 0.5f) * (1 - step(density, 0));
+	}
+	else  
+	{
+		previewColor = leftPreviewTex[texID]; 
+		splatmap0[texID] = colLayer2 * saturate(maskValue + 0.5f) * (1 - step(itemMapBuffer[id].density * maskValue, 0));
+	}
+
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+
+	// splatPreviewTex[texID] = float4(0,1,0,1);
+}
+
+#pragma kernel MethodItemTexMin
+[numthreads(512,1,1)]
+void MethodItemTexMin (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos2(id); 
+	
+	float maskValue = itemMapBuffer[id].maskValue;
+	float rightMaskValue = rightItemMapBuffer[id].maskValue;
+
+	if (maskValue < rightMaskValue && maskValue == 0)
+	{
+		float density = rightItemMapBuffer[id].density;
+		itemMapBuffer[id].index = rightItemMapBuffer[id].index;
+		itemMapBuffer[id].pos = rightItemMapBuffer[id].pos;
+		itemMapBuffer[id].density = density;
+		itemMapBuffer[id].maskValue = rightMaskValue;
+		previewColor = rightPreviewTex[texID]; 
+		splatmap0[texID] = colLayer2 * saturate(maskValue + 0.5f) * (1 - step(density, 0));
+	}
+	else 
+	{
+		previewColor = leftPreviewTex[texID]; 
+		splatmap0[texID] = colLayer2 * saturate(maskValue + 0.5f) * (1 - step(itemMapBuffer[id].density * maskValue, 0));
+	}
+
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+// =============================================================================================
+// Tex Methods
+
+#pragma kernel MethodTexAdd
+[numthreads(512,1,1)]
+void MethodTexAdd (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = resultBuffer[id] + rightBuffer[id];
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexSubtract
+[numthreads(512,1,1)]
+void MethodTexSubtract (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	// h = lerp(resultBuffer[id], resultBuffer[id] - rightBuffer[id], saturate(1 - resultBuffer[id]));
+	h = resultBuffer[id] - rightBuffer[id];
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexLerp
+[numthreads(512,1,1)]
+void MethodTexLerp (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = lerp(resultBuffer[id], rightBuffer[id], overlay);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexLerpMask
+[numthreads(512, 1, 1)]
+void MethodTexLerpMask (uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	float maskValue = maskBuffer[id];
+	float rightBufferValue = rightBuffer[id];
+
+	h = lerp(resultBuffer[id], rightBufferValue, overlay * maskValue);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h;
+	SetPreviewTex();
+
+	h = rightBufferValue * maskValue;
+}
+ 
+#pragma kernel MethodTexLerpMask2
+[numthreads(512,1,1)]
+void MethodTexLerpMask2 (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	float maskValue = maskBuffer[id];
+	float rightBufferValue = rightBuffer[id];
+
+	h = lerp(resultBuffer[id], rightBufferValue, overlay * maskValue);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h;
+	SetPreviewTex(); 
+
+	h = rightBufferValue * maskValue;
+	SetPreviewTex2();
+} 
+
+#pragma kernel MethodTexMultiply
+[numthreads(512,1,1)]
+void MethodTexMultiply (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = resultBuffer[id] * rightBuffer[id];
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexDivide
+[numthreads(512,1,1)]
+void MethodTexDivide (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h =  resultBuffer[id] / rightBuffer[id];
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexDifference
+[numthreads(512,1,1)]
+void MethodTexDifference (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = abs(resultBuffer[id] - rightBuffer[id]);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexAverage
+[numthreads(512,1,1)]
+void MethodTexAverage (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = resultBuffer[id] + (rightBuffer[id] / itemCount);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexMax
+[numthreads(512,1,1)]
+void MethodTexMax (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = max(resultBuffer[id], rightBuffer[id]);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+#pragma kernel MethodTexMin
+[numthreads(512,1,1)]
+void MethodTexMin (uint id : SV_DispatchThreadID) 
+{ 
+	GetPos(id);
+	h = min(resultBuffer[id], rightBuffer[id]);
+	if (worldCurveKeysLength > 0) ApplyWorldCurve();
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+	SetPreviewTex();
+}
+
+
+// =============================================================================================
+// Multi Methods
+
+int splatmapLength = 2;
+
+void Normalize4()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	map0 /= total;
+}
+
+void Normalize8()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	total += map1.x + map1.y + map1.z + map1.w;
+	map0 /= total;
+	map1 /= total;
+}
+
+void Normalize12()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	total += map1.x + map1.y + map1.z + map1.w;
+	total += map2.x + map2.y + map2.z + map2.w;
+	map0 /= total;
+	map1 /= total;
+	map2 /= total;
+}
+
+void Normalize16()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	total += map1.x + map1.y + map1.z + map1.w;
+	total += map2.x + map2.y + map2.z + map2.w;
+	total += map3.x + map3.y + map3.z + map3.w;
+	map0 /= total;
+	map1 /= total;
+	map2 /= total;
+	map3 /= total;
+}
+
+void NormalizeTex4()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	map0 /= total;
+	
+	previewColor /= total;
+}
+
+void NormalizeTex8()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	total += map1.x + map1.y + map1.z + map1.w;
+	map0 /= total;
+	map1 /= total;
+	
+	previewColor /= total;
+}
+
+void NormalizeTex12()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	total += map1.x + map1.y + map1.z + map1.w;
+	total += map2.x + map2.y + map2.z + map2.w;
+	map0 /= total;
+	map1 /= total;
+	map2 /= total;
+	
+	previewColor /= total;
+}
+
+void NormalizeTex16()
+{
+	total = map0.x + map0.y + map0.z + map0.w;
+	total += map1.x + map1.y + map1.z + map1.w;
+	total += map2.x + map2.y + map2.z + map2.w;
+	total += map3.x + map3.y + map3.z + map3.w;
+	map0 /= total;
+	map1 /= total;
+	map2 /= total;
+	map3 /= total;
+
+	previewColor /= total;
+}
+
+
+#pragma kernel MultiMethodAdd4
+[numthreads(8,8,1)]
+void MultiMethodAdd4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = leftSplatmap0[id] + rightSplatmap0[id];
+	
+	if (doNormalize == 1) Normalize4(); 
+	
+	splatmap0[id] = map0;
+}
+
+#pragma kernel MultiMethodAdd8
+[numthreads(8, 8, 1)]
+void MultiMethodAdd8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; map1 = leftSplatmap1[id] + rightSplatmap1[id];
+	
+	if (doNormalize == 1) Normalize8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+}
+
+#pragma kernel MultiMethodAdd12
+[numthreads(8, 8, 1)]
+void MultiMethodAdd12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; 	map1 = leftSplatmap1[id] + rightSplatmap1[id]; 
+
+	if (doNormalize == 1) Normalize12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+}
+
+#pragma kernel MultiMethodAdd16
+[numthreads(8, 8, 1)]
+void MultiMethodAdd16 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; 	map1 = leftSplatmap1[id] + rightSplatmap1[id]; 	map2 = leftSplatmap2[id] + rightSplatmap2[id]; 	map3 = leftSplatmap3[id] + rightSplatmap3[id];
+
+	if (doNormalize == 1) Normalize16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;	
+}
+
+#pragma kernel MultiMethodMultiplyBuffer4
+[numthreads(8, 8, 1)]
+void MultiMethodMultiplyBuffer4 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+
+	GetTexID(id);
+
+	map0 = leftSplatmap0[id] * rightBuffer[pos1d];
+
+	previewColor = leftPreviewTex[texID] * rightBuffer[pos1d];
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0; 
+
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodMultiplyBuffer8
+[numthreads(8, 8, 1)]
+void MultiMethodMultiplyBuffer8 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+
+	GetTexID(id);
+
+	map0 = leftSplatmap0[id] * rightBuffer[pos1d]; map1 = leftSplatmap1[id] * rightBuffer[pos1d]; 
+
+	previewColor = leftPreviewTex[texID] * rightBuffer[pos1d];
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodMultiplyBuffer12
+[numthreads(8, 8, 1)]
+void MultiMethodMultiplyBuffer12 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+
+	GetTexID(id);
+
+	map0 = leftSplatmap0[id] * rightBuffer[pos1d]; map1 = leftSplatmap1[id] * rightBuffer[pos1d]; map2 = leftSplatmap2[id] * rightBuffer[pos1d];
+
+	previewColor = leftPreviewTex[texID] * rightBuffer[pos1d];
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; 
+
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodMultiplyBuffer16
+[numthreads(8, 8, 1)]
+void MultiMethodMultiplyBuffer16 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+
+	GetTexID(id);
+
+	map0 = leftSplatmap0[id] * rightBuffer[pos1d]; map1 = leftSplatmap1[id] * rightBuffer[pos1d]; map2 = leftSplatmap2[id] * rightBuffer[pos1d]; map3 = leftSplatmap3[id] * rightBuffer[pos1d];
+
+	previewColor = leftPreviewTex[texID] * rightBuffer[pos1d];
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAdd4
+[numthreads(8, 8, 1)]
+void MultiMethodTexAdd4 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; 
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAdd8
+[numthreads(8, 8, 1)]
+void MultiMethodTexAdd8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; map1 = leftSplatmap1[id] + rightSplatmap1[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAdd12
+[numthreads(8, 8, 1)]
+void MultiMethodTexAdd12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; map1 = leftSplatmap1[id] + rightSplatmap1[id]; map2 = leftSplatmap2[id] + rightSplatmap2[id]; 
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAdd16
+[numthreads(8, 8, 1)]
+void MultiMethodTexAdd16 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + rightSplatmap0[id]; map1 = leftSplatmap1[id] + rightSplatmap1[id]; map2 = leftSplatmap2[id] + rightSplatmap2[id]; map3 = leftSplatmap3[id] + rightSplatmap3[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexSubtract4
+[numthreads(8,8,1)]
+void MultiMethodTexSubtract4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = leftSplatmap0[id] - rightSplatmap0[id];
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] - rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0; 
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexSubtract8
+[numthreads(8, 8, 1)]
+void MultiMethodTexSubtract8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] - rightSplatmap0[id]; map1 = leftSplatmap1[id] - rightSplatmap1[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] - rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexSubtract12
+[numthreads(8, 8, 1)]
+void MultiMethodTexSubtract12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] - rightSplatmap0[id]; map1 = leftSplatmap1[id] - rightSplatmap1[id]; map2 = leftSplatmap2[id] - rightSplatmap2[id]; 
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] - rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexSubtract16
+[numthreads(8, 8, 1)]
+void MultiMethodTexSubtract16 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] - rightSplatmap0[id]; map1 = leftSplatmap1[id] - rightSplatmap1[id]; map2 = leftSplatmap2[id] - rightSplatmap2[id]; map3 = leftSplatmap3[id] - rightSplatmap3[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] - rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+
+#pragma kernel MultiMethodTexLerp4
+[numthreads(8, 8, 1)]
+void MultiMethodTexLerp4 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], overlay); 
+
+	GetTexID(id);
+	previewColor = lerp(leftPreviewTex[texID], rightPreviewTex[texID], overlay);
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexLerp8
+[numthreads(8, 8, 1)]
+void MultiMethodTexLerp8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], overlay); map1 = lerp(leftSplatmap1[id], rightSplatmap1[id], overlay);
+
+	GetTexID(id);
+	previewColor = lerp(leftPreviewTex[texID], rightPreviewTex[texID], overlay);
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexLerp12
+[numthreads(8, 8, 1)]
+void MultiMethodTexLerp12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], overlay); map1 = lerp(leftSplatmap1[id], rightSplatmap1[id], overlay); map2 = lerp(leftSplatmap2[id], rightSplatmap2[id], overlay);
+
+	GetTexID(id);
+	previewColor = lerp(leftPreviewTex[texID], rightPreviewTex[texID], overlay);
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexLerp16
+[numthreads(8,8,1)]
+void MultiMethodTexLerp16 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], overlay); map1 = lerp(leftSplatmap1[id], rightSplatmap1[id], overlay); map2 = lerp(leftSplatmap2[id], rightSplatmap2[id], overlay); map3 = lerp(leftSplatmap3[id], rightSplatmap3[id], overlay);
+		
+	GetTexID(id);
+	previewColor = lerp(leftPreviewTex[texID], rightPreviewTex[texID], overlay);
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+		
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexLerpMask4
+[numthreads(8,8,1)]
+void MultiMethodTexLerpMask4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	uint pos1d = (id.y * resolutionX) + id.x; 
+	float maskValue = maskBuffer[pos1d]; 
+	float lerpValue = maskValue * overlay;
+	
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], lerpValue);
+	
+	GetTexID(id);
+	float4 colRightPreview = rightPreviewTex[texID];
+	previewColor = lerp(leftPreviewTex[texID], colRightPreview, lerpValue);
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0; 
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+
+	previewTex2[texID] = colRightPreview * maskValue;
+}
+
+#pragma kernel MultiMethodTexLerpMask8
+[numthreads(8, 8, 1)]
+void MultiMethodTexLerpMask8 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+	float maskValue = maskBuffer[pos1d];
+	float lerpValue = maskValue * overlay;
+
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], lerpValue); map1 = lerp(leftSplatmap1[id], rightSplatmap1[id], lerpValue); 
+
+	GetTexID(id);
+	float4 colRightPreview = rightPreviewTex[texID];
+	previewColor = lerp(leftPreviewTex[texID], colRightPreview, lerpValue);
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+
+	previewTex2[texID] = colRightPreview * maskValue;
+}
+
+#pragma kernel MultiMethodTexLerpMask12
+[numthreads(8, 8, 1)]
+void MultiMethodTexLerpMask12 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+	float maskValue = maskBuffer[pos1d];
+	float lerpValue = maskValue * overlay;
+
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], lerpValue); map1 = lerp(leftSplatmap1[id], rightSplatmap1[id], lerpValue); map2 = lerp(leftSplatmap2[id], rightSplatmap2[id], lerpValue); 
+
+	GetTexID(id);
+	float4 colRightPreview = rightPreviewTex[texID];
+	previewColor = lerp(leftPreviewTex[texID], colRightPreview, lerpValue);
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+
+	previewTex2[texID] = colRightPreview * maskValue;
+}
+
+#pragma kernel MultiMethodTexLerpMask16
+[numthreads(8, 8, 1)]
+void MultiMethodTexLerpMask16 (uint2 id : SV_DispatchThreadID)
+{
+	uint pos1d = (id.y * resolutionX) + id.x;
+	float maskValue = maskBuffer[pos1d];
+	float lerpValue = maskValue * overlay;
+
+	map0 = lerp(leftSplatmap0[id], rightSplatmap0[id], lerpValue); map1 = lerp(leftSplatmap1[id], rightSplatmap1[id], lerpValue); map2 = lerp(leftSplatmap2[id], rightSplatmap2[id], lerpValue); map3 = lerp(leftSplatmap3[id], rightSplatmap3[id], lerpValue);
+
+	GetTexID(id);
+	float4 colRightPreview = rightPreviewTex[texID];
+	previewColor = lerp(leftPreviewTex[texID], colRightPreview, lerpValue);
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+
+	previewTex2[texID] = colRightPreview * maskValue;
+}
+
+#pragma kernel MultiMethodTexMultiply4
+[numthreads(8, 8, 1)]
+void MultiMethodTexMultiply4 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] * rightSplatmap0[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] * rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMultiply8
+[numthreads(8, 8, 1)]
+void MultiMethodTexMultiply8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] * rightSplatmap0[id]; map1 = leftSplatmap1[id] * rightSplatmap1[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] * rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMultiply12
+[numthreads(8, 8, 1)]
+void MultiMethodTexMultiply12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] * rightSplatmap0[id]; map1 = leftSplatmap1[id] * rightSplatmap1[id]; map2 = leftSplatmap2[id] * rightSplatmap2[id]; 
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] * rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMultiply16
+[numthreads(8, 8, 1)]
+void MultiMethodTexMultiply16 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] * rightSplatmap0[id]; map1 = leftSplatmap1[id] * rightSplatmap1[id]; map2 = leftSplatmap2[id] * rightSplatmap2[id]; map3 = leftSplatmap3[id] * rightSplatmap3[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] * rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexDivide4
+[numthreads(8,8,1)]
+void MultiMethodTexDivide4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = leftSplatmap0[id] / rightSplatmap0[id]; 
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] / rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0;
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;  
+}
+
+#pragma kernel MultiMethodTexDivide8
+[numthreads(8, 8, 1)]
+void MultiMethodTexDivide8(uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] / rightSplatmap0[id]; map1 = leftSplatmap1[id] / rightSplatmap1[id]; 
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] / rightPreviewTex[texID]; 
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexDivide12
+[numthreads(8, 8, 1)]
+void MultiMethodTexDivide12(uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] / rightSplatmap0[id]; map1 = leftSplatmap1[id] / rightSplatmap1[id]; map2 = leftSplatmap2[id] / rightSplatmap2[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] / rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexDivide16
+[numthreads(8, 8, 1)]
+void MultiMethodTexDivide16(uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] / rightSplatmap0[id]; map1 = leftSplatmap1[id] / rightSplatmap1[id]; map2 = leftSplatmap2[id] / rightSplatmap2[id]; map3 = leftSplatmap3[id] / rightSplatmap3[id];
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] / rightPreviewTex[texID];
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+
+#pragma kernel MultiMethodTexDifference4
+[numthreads(8,8,1)]
+void MultiMethodTexDifference4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = abs(leftSplatmap0[id] - rightSplatmap0[id]);
+	
+	GetTexID(id);
+	previewColor = abs(leftPreviewTex[texID] - rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0;
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;  
+}
+
+#pragma kernel MultiMethodTexDifference8
+[numthreads(8, 8, 1)]
+void MultiMethodTexDifference8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = abs(leftSplatmap0[id] - rightSplatmap0[id]); map1 = abs(leftSplatmap1[id] - rightSplatmap1[id]);
+
+	GetTexID(id);
+	previewColor = abs(leftPreviewTex[texID] - rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexDifference12
+[numthreads(8, 8, 1)]
+void MultiMethodTexDifference12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = abs(leftSplatmap0[id] - rightSplatmap0[id]); map1 = abs(leftSplatmap1[id] - rightSplatmap1[id]); map2 = abs(leftSplatmap2[id] - rightSplatmap2[id]);
+
+	GetTexID(id);
+	previewColor = abs(leftPreviewTex[texID] - rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexDifference16
+[numthreads(8, 8, 1)]
+void MultiMethodTexDifference16 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = abs(leftSplatmap0[id] - rightSplatmap0[id]); map1 = abs(leftSplatmap1[id] - rightSplatmap1[id]); map2 = abs(leftSplatmap2[id] - rightSplatmap2[id]); map3 = abs(leftSplatmap3[id] - rightSplatmap3[id]);
+
+	GetTexID(id);
+	previewColor = abs(leftPreviewTex[texID] - rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAverage4
+[numthreads(8,8,1)]
+void MultiMethodTexAverage4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = leftSplatmap0[id] + (rightSplatmap0[id] / itemCount);
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + (rightPreviewTex[texID] / itemCount);
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0; 
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;  
+}
+
+#pragma kernel MultiMethodTexAverage8
+[numthreads(8, 8, 1)]
+void MultiMethodTexAverage8(uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + (rightSplatmap0[id] / itemCount); map1 = leftSplatmap1[id] + (rightSplatmap1[id] / itemCount);
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + (rightPreviewTex[texID] / itemCount);
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; 
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAverage12
+[numthreads(8, 8, 1)]
+void MultiMethodTexAverage12(uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + (rightSplatmap0[id] / itemCount); map1 = leftSplatmap1[id] + (rightSplatmap1[id] / itemCount); map2 = leftSplatmap2[id] + (rightSplatmap2[id] / itemCount);
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + (rightPreviewTex[texID] / itemCount);
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexAverage16
+[numthreads(8, 8, 1)]
+void MultiMethodTexAverage16(uint2 id : SV_DispatchThreadID)
+{
+	map0 = leftSplatmap0[id] + (rightSplatmap0[id] / itemCount); map1 = leftSplatmap1[id] + (rightSplatmap1[id] / itemCount); map2 = leftSplatmap2[id] + (rightSplatmap2[id] / itemCount); map3 = leftSplatmap3[id] + (rightSplatmap3[id] / itemCount);
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + (rightPreviewTex[texID] / itemCount);
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMax4
+[numthreads(8,8,1)]
+void MultiMethodTexMax4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = max(leftSplatmap0[id], rightSplatmap0[id]);
+	
+	GetTexID(id);
+	previewColor = max(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex4();
+
+	splatmap0[id] = map0;
+	
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;  
+} 
+
+#pragma kernel MultiMethodTexMax8
+[numthreads(8, 8, 1)]
+void MultiMethodTexMax8(uint2 id : SV_DispatchThreadID)
+{
+	map0 = max(leftSplatmap0[id], rightSplatmap0[id]); map1 = max(leftSplatmap1[id], rightSplatmap1[id]);
+
+	GetTexID(id);
+	previewColor = max(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMax12
+[numthreads(8, 8, 1)]
+void MultiMethodTexMax12(uint2 id : SV_DispatchThreadID)
+{
+	map0 = max(leftSplatmap0[id], rightSplatmap0[id]); map1 = max(leftSplatmap1[id], rightSplatmap1[id]); map2 = max(leftSplatmap2[id], rightSplatmap2[id]); 
+
+	GetTexID(id);
+	previewColor = max(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMax16
+[numthreads(8, 8, 1)]
+void MultiMethodTexMax16(uint2 id : SV_DispatchThreadID)
+{
+	map0 = max(leftSplatmap0[id], rightSplatmap0[id]); map1 = max(leftSplatmap1[id], rightSplatmap1[id]); map2 = max(leftSplatmap2[id], rightSplatmap2[id]); map3 = max(leftSplatmap3[id], rightSplatmap3[id]);
+
+	GetTexID(id);
+	previewColor = max(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMin4
+[numthreads(8,8,1)]
+void MultiMethodTexMin4 (uint2 id : SV_DispatchThreadID)    
+{ 
+	map0 = min(leftSplatmap0[id], rightSplatmap0[id]);
+	
+	GetTexID(id);
+	previewColor = min(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex4();   
+
+	splatmap0[id] = map0;
+	
+	splatPreviewTex[texID] = previewColor;  
+	splatPreviewTexClone[texID] = previewColor;  
+}
+
+#pragma kernel MultiMethodTexMin8
+[numthreads(8, 8, 1)]
+void MultiMethodTexMin8 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = min(leftSplatmap0[id], rightSplatmap0[id]); map1 = min(leftSplatmap1[id], rightSplatmap1[id]);
+
+	GetTexID(id);
+	previewColor = min(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex8();
+
+	splatmap0[id] = map0; splatmap1[id] = map1;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMin12
+[numthreads(8, 8, 1)]
+void MultiMethodTexMin12 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = min(leftSplatmap0[id], rightSplatmap0[id]); map1 = min(leftSplatmap1[id], rightSplatmap1[id]); map2 = min(leftSplatmap2[id], rightSplatmap2[id]);
+
+	GetTexID(id);
+	previewColor = min(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex12();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel MultiMethodTexMin16
+[numthreads(8, 8, 1)]
+void MultiMethodTexMin16 (uint2 id : SV_DispatchThreadID)
+{
+	map0 = min(leftSplatmap0[id], rightSplatmap0[id]); map1 = min(leftSplatmap1[id], rightSplatmap1[id]); map2 = min(leftSplatmap2[id], rightSplatmap2[id]); map3 = min(leftSplatmap3[id], rightSplatmap3[id]);
+
+	GetTexID(id);
+	previewColor = min(leftPreviewTex[texID], rightPreviewTex[texID]);
+
+	if (doNormalize == 1) NormalizeTex16();
+
+	splatmap0[id] = map0; splatmap1[id] = map1; splatmap2[id] = map2; splatmap3[id] = map3;
+
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+
+// =============================================================================================
+// Color Methods
+
+#pragma kernel ColorMethodMultiplyBuffer
+[numthreads(8,8,1)]
+void ColorMethodMultiplyBuffer (uint2 id : SV_DispatchThreadID)     
+{ 
+	uint pos1d = (id.y * resolutionX) + id.x;
+
+	float rightBufferValue = rightBuffer[pos1d];
+
+	splatmap0[id] = leftSplatmap0[id] * rightBufferValue;
+
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] * rightBufferValue;
+
+	splatPreviewTex[texID] = previewColor; 
+	 
+	// if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc); 
+	// h = lerp(h, saturate(h), mask);
+	
+	// splatmap0[id] *= h;
+	// splatmap1[id] *= h;
+}
+
+#pragma kernel ColorMethodTexAdd
+[numthreads(8,8,1)]
+void ColorMethodTexAdd (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = leftSplatmap0[id] + rightSplatmap0[id]; 
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + rightPreviewTex[texID];
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexSubtract
+[numthreads(8,8,1)]
+void ColorMethodTexSubtract (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = leftSplatmap0[id] - rightSplatmap0[id];
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] - rightPreviewTex[texID];
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexLerp
+[numthreads(8,8,1)]
+void ColorMethodTexLerp (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = lerp(leftSplatmap0[id], rightSplatmap0[id], overlay);
+	
+	GetTexID(id);
+	previewColor = lerp(leftPreviewTex[texID], rightPreviewTex[texID], overlay);
+	splatPreviewTex[texID] = previewColor;
+	splatPreviewTexClone[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexLerpMask
+[numthreads(8,8,1)]
+void ColorMethodTexLerpMask (uint2 id : SV_DispatchThreadID)    
+{ 
+	uint pos1d = (id.y * resolutionX) + id.x; 
+
+	float maskBufferValue = maskBuffer[pos1d];
+	float m = maskBufferValue * overlay;
+	
+	splatmap0[id] = lerp(leftSplatmap0[id], rightSplatmap0[id], m);;
+	
+	GetTexID(id);
+	float4 colRightPreview = rightPreviewTex[texID];
+	previewColor = lerp(leftPreviewTex[texID], colRightPreview, m);
+
+	previewTex2[texID] = colRightPreview * maskBufferValue;
+	splatPreviewTex[texID] = previewColor; 
+	splatPreviewTexClone[texID] = previewColor;  
+}
+
+#pragma kernel ColorMethodTexMultiply
+[numthreads(8,8,1)]
+void ColorMethodTexMultiply (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = leftSplatmap0[id] * rightSplatmap0[id];
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] * rightPreviewTex[texID];
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexDivide
+[numthreads(8,8,1)]
+void ColorMethodTexDivide (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = leftSplatmap0[id] / rightSplatmap0[id];
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] / rightPreviewTex[texID];
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexDifference
+[numthreads(8,8,1)]
+void ColorMethodTexDifference (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = abs(leftSplatmap0[id] - rightSplatmap0[id]);
+	
+	GetTexID(id);
+	previewColor = abs(leftPreviewTex[texID] - rightPreviewTex[texID]);
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexAverage
+[numthreads(8,8,1)]
+void ColorMethodTexAverage (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = leftSplatmap0[id] + (rightSplatmap0[id] / itemCount);
+	
+	GetTexID(id);
+	previewColor = leftPreviewTex[texID] + (rightPreviewTex[texID] / itemCount);
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexMax
+[numthreads(8,8,1)]
+void ColorMethodTexMax (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = max(leftSplatmap0[id], rightSplatmap0[id]);
+	
+	GetTexID(id);
+	previewColor = max(leftPreviewTex[texID], rightPreviewTex[texID]);
+	splatPreviewTex[texID] = previewColor;
+}
+
+#pragma kernel ColorMethodTexMin
+[numthreads(8,8,1)]
+void ColorMethodTexMin (uint2 id : SV_DispatchThreadID)    
+{ 
+	splatmap0[id] = min(leftSplatmap0[id], rightSplatmap0[id]);
+	
+	GetTexID(id);
+	previewColor = min(leftPreviewTex[texID], rightPreviewTex[texID]);
+	splatPreviewTex[texID] = previewColor;  
+}
+
+// =============================================================================================
+// Methods
+
+#pragma kernel MethodAdd
+[numthreads(512,1,1)]
+void MethodAdd (uint id : SV_DispatchThreadID) 
+{ 
+	h = resultBuffer[id] + rightBuffer[id];
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc); 
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodSubtract
+[numthreads(512,1,1)]
+void MethodSubtract (uint id : SV_DispatchThreadID) 
+{ 
+	h = resultBuffer[id] - rightBuffer[id]; 
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodLerp
+[numthreads(512,1,1)]
+void MethodLerp (uint id : SV_DispatchThreadID) 
+{ 
+	h = lerp(resultBuffer[id], rightBuffer[id], overlay);
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodLerpMask
+[numthreads(512,1,1)]
+void MethodLerpMask (uint id : SV_DispatchThreadID) 
+{ 
+	h = lerp(resultBuffer[id], rightBuffer[id], overlay * maskBuffer[id]);
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodMultiply
+[numthreads(512,1,1)]
+void MethodMultiply (uint id : SV_DispatchThreadID) 
+{ 
+	h = resultBuffer[id] * rightBuffer[id];
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodDivide
+[numthreads(512,1,1)]
+void MethodDivide (uint id : SV_DispatchThreadID) 
+{ 
+	h = resultBuffer[id] / rightBuffer[id];
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodDifference
+[numthreads(512,1,1)]
+void MethodDifference (uint id : SV_DispatchThreadID) 
+{ 
+	h = abs(resultBuffer[id] - rightBuffer[id]);
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodAverage
+[numthreads(512,1,1)]
+void MethodAverage (uint id : SV_DispatchThreadID) 
+{
+	h = resultBuffer[id] + (rightBuffer[id] / itemCount);
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodMax
+[numthreads(512,1,1)]
+void MethodMax (uint id : SV_DispatchThreadID) 
+{ 
+	h = max(resultBuffer[id], rightBuffer[id]);
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+}
+
+#pragma kernel MethodMin
+[numthreads(512,1,1)]
+void MethodMin (uint id : SV_DispatchThreadID) 
+{ 
+	h = min(resultBuffer[id], rightBuffer[id]);
+	if (worldCurveKeysLength > 0) h = Evaluate(h, worldCurveKeysLength, worldCurveKeys, worldCurveCalc);
+	// h = lerp(h, saturate(h), mask);
+	resultBuffer[id] = h; 
+} 
+
+
+
+
+// =================================================================
+// Noise
+
+#pragma kernel NoiseRandom
+[numthreads(512, 1, 1)]
+void NoiseRandom(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV();
+
+	h = 0;
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		pos.xz += _Seed;
+		pos.xz *= _Frequency;
+		h = Random(pos.xz);
+		ApplyVertical();
+	}
+
+	resultBuffer[id] = h;
+	SetPreviewTex();
+}
+
+#pragma kernel CurrentBlurNormal
+[numthreads(512, 1, 1)]
+void CurrentBlurNormal(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		float h1;
+		int y = id / resolutionX;
+		int x = id - (resolutionX * y);
+
+		if (x < resolutionX - 1) h1 = rightBuffer[id + 1];
+		if (x > 1) h1 += rightBuffer[id - 1];
+		if (y < resolutionX - 1) h1 += rightBuffer[id + resolutionX];
+		if (y > 1) h1 += rightBuffer[id - resolutionX];
+		
+		// h += rightBuffer[id];
+		h1 /= 4;
+
+		float h2 = rightBuffer[id];
+
+		if (localCurveKeysLength > 0) h = Evaluate(1 - h2, localCurveKeysLength, localCurveKeys, localCurveCalc); 
+
+		h = lerp(h1, h2, saturate(h));
+
+		// ApplyVertical();
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h;
+	SetPreviewTexBoth();
+}
+
+#pragma kernel CurrentBlurOutward
+[numthreads(512, 1, 1)]
+void CurrentBlurOutward(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		float h1;
+		int y = id / resolutionX;
+		int x = id - (resolutionX * y);
+
+		if (x < resolutionX - 1) h1 = rightBuffer[id + 1];
+		if (x > 1) h1 += rightBuffer[id - 1];
+		if (y < resolutionX - 1) h1 += rightBuffer[id + resolutionX];
+		if (y > 1) h1 += rightBuffer[id - resolutionX];
+		
+		// h += rightBuffer[id];
+		h1 /= 4;
+
+		float h2 = rightBuffer[id];
+
+		h1 = max(h1, h2);
+
+		if (localCurveKeysLength > 0) h = Evaluate(1 - h2, localCurveKeysLength, localCurveKeys, localCurveCalc); 
+
+		h = lerp(h1, h2, saturate(h));
+
+		// ApplyVertical();
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h;
+	SetPreviewTexBoth();
+}
+
+#pragma kernel CurrentBlurInward
+[numthreads(512, 1, 1)]
+void CurrentBlurInward(uint id : SV_DispatchThreadID)
+{
+	GetPos(id);
+	GetUV(); 
+
+	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1)
+	{
+		float h1;
+
+		int y = id / resolutionX;
+		int x = id - (resolutionX * y);
+		
+		if (x < resolutionX - 1) h1 = rightBuffer[id + 1];
+		if (x > 1) h1 += rightBuffer[id - 1];
+		if (y < resolutionX - 1) h1 += rightBuffer[id + resolutionX];
+		if (y > 1) h1 += rightBuffer[id - resolutionX];
+		
+		// h += rightBuffer[id];
+		h1 /= 4;
+
+		float h2 = rightBuffer[id];
+
+		h1 = min(h1, h2);
+
+		if (localCurveKeysLength > 0) h = Evaluate(1 - h2, localCurveKeysLength, localCurveKeys, localCurveCalc); 
+
+		h = lerp(h1, h2, saturate(h));
+
+		// ApplyVertical();
+	}
+	else h = rightBuffer[id];
+
+	resultBuffer[id] = h;
+	SetPreviewTexBoth();
+}
+
+// Perlin TextureLookup
+// =================================================================
+
+#pragma kernel NoisePerlin1
+[numthreads(512, 1, 1)]  
+void NoisePerlin1(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin2
+[numthreads(512, 1, 1)]  
+void NoisePerlin2(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 2); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin3
+[numthreads(512, 1, 1)]     
+void NoisePerlin3(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 3); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin4
+[numthreads(512, 1, 1)]  
+void NoisePerlin4(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 4); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin5
+[numthreads(512, 1, 1)]  
+void NoisePerlin5(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 5); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin6
+[numthreads(512, 1, 1)]  
+void NoisePerlin6(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 6); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin7
+[numthreads(512, 1, 1)]  
+void NoisePerlin7(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 7); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin8
+[numthreads(512, 1, 1)]  
+void NoisePerlin8(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 8); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin9
+[numthreads(512, 1, 1)]  
+void NoisePerlin9(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 9); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin10
+[numthreads(512, 1, 1)]  
+void NoisePerlin10(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 10); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin11
+[numthreads(512, 1, 1)]  
+void NoisePerlin11(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 11); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlin12
+[numthreads(512, 1, 1)]  
+void NoisePerlin12(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = fBm(pos, 12); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+// Billow TextureLookup
+// ================================================================= 
+
+#pragma kernel NoiseBillow1
+[numthreads(512, 1, 1)]
+void NoiseBillow1(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow2
+[numthreads(512, 1, 1)]
+void NoiseBillow2(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 2); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow3
+[numthreads(512, 1, 1)]
+void NoiseBillow3(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 3); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow4
+[numthreads(512, 1, 1)]
+void NoiseBillow4(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 4); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow5
+[numthreads(512, 1, 1)]
+void NoiseBillow5(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 5); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow6
+[numthreads(512, 1, 1)]
+void NoiseBillow6(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 6); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow7
+[numthreads(512, 1, 1)]
+void NoiseBillow7(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 7); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow8
+[numthreads(512, 1, 1)]
+void NoiseBillow8(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 8); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow9
+[numthreads(512, 1, 1)]
+void NoiseBillow9(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 9); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow10
+[numthreads(512, 1, 1)]
+void NoiseBillow10(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 10); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow11
+[numthreads(512, 1, 1)]
+void NoiseBillow11(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 11); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillow12
+[numthreads(512, 1, 1)]
+void NoiseBillow12(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = turbulence(pos, 12); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+// MultiFractal TextureLookup
+// ================================================================= 
+
+
+#pragma kernel NoiseMultiFractal1
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal1(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal2
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal2(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 2, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal3
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal3(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 3, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal4
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal4(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 4, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal5
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal5(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 5, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal6
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal6(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 6, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal7
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal7(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 7, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal8
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal8(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 8, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal9
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal9(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 9, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal10
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal10(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 10, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal11
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal11(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 11, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseMultiFractal12
+[numthreads(512, 1, 1)]
+void NoiseMultiFractal12(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = ridgedmf(pos, 12, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+// Noise IQ
+// ================================================================= 
+
+#pragma kernel NoiseIQNormal
+[numthreads(512, 1, 1)]    
+void NoiseIQNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = IQNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseIQSimplex
+[numthreads(512, 1, 1)]    
+void NoiseIQSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = IQSimplex(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseIQValue
+[numthreads(512, 1, 1)]    
+void NoiseIQValue(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = IQValue(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+// Noise Swiss
+// ================================================================= 
+
+#pragma kernel NoiseSwissNormal
+[numthreads(512, 1, 1)]    
+void NoiseSwissNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = SwissNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseSwissSimplex
+[numthreads(512, 1, 1)]    
+void NoiseSwissSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = SwissSimplex(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseSwissValue
+[numthreads(512, 1, 1)]    
+void NoiseSwissValue(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = SwissValue(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+// Noise Jordan 
+// ================================================================= 
+
+#pragma kernel NoiseJordanNormal
+[numthreads(512, 1, 1)]    
+void NoiseJordanNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = JordanNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseJordanSimplex
+[numthreads(512, 1, 1)]    
+void NoiseJordanSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = JordanSimplex(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+// void NoiseJordanSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = jordanTurbulence(pos.xz, pos.y, _Octaves, _Lacunarity, _Frequency, 0.8, 0.5, 0.4, 0.35, 1.0, 0.8, 1.0); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseJordanValue
+[numthreads(512, 1, 1)]    
+void NoiseJordanValue(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = JordanValue(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+// Noise Perlin
+// ================================================================= 
+
+#pragma kernel NoisePerlinNormal
+[numthreads(512, 1, 1)]    
+void NoisePerlinNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = PerlinNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlinSimplex
+[numthreads(512, 1, 1)]    
+void NoisePerlinSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = PerlinSimplex(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoisePerlinValue
+[numthreads(512, 1, 1)]    
+void NoisePerlinValue(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = PerlinValue(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+// Noise Billow
+// ================================================================= 
+
+#pragma kernel NoiseBillowNormal
+[numthreads(512, 1, 1)]    
+void NoiseBillowNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = BillowNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillowSimplex
+[numthreads(512, 1, 1)]    
+void NoiseBillowSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = BillowSimplex(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseBillowValue
+[numthreads(512, 1, 1)]    
+void NoiseBillowValue(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = BillowValue(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+// Noise Ridged
+// ================================================================= 
+
+#pragma kernel NoiseRidgedNormal
+[numthreads(512, 1, 1)]    
+void NoiseRidgedNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = RidgedNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseRidgedSimplex
+[numthreads(512, 1, 1)]    
+void NoiseRidgedSimplex(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = RidgedSimplex(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseRidgedValue
+[numthreads(512, 1, 1)]    
+void NoiseRidgedValue(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0; if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = RidgedValue(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+
+
+
+// Noise Cell
+// ================================================================= 
+
+#pragma kernel NoiseCellNormal
+[numthreads(512, 1, 1)]    
+void NoiseCellNormal(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = CellNormal(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+#pragma kernel NoiseCellFast
+[numthreads(512, 1, 1)]    
+void NoiseCellFast(uint id : SV_DispatchThreadID) { GetPos(id); GetUV(); h = 0;	if (uv.x >= 0 && uv.x <= 1 && uv.y >= 0 && uv.y <= 1) { pos.y += _Seed; h = CellFast(); ApplyVertical(); } resultBuffer[id] = h; SetPreviewTex(); }
+
+//float4 GetHeightNormal()
+//{
+//	uv *= (terrainTexReadNormalResolution);
+//	uv += resExpandBorder;
+//	uv /= (terrainTexReadResolution);
+//
+//	float4 s = terrainTexRead.SampleLevel(_LinearClamp, uv, 0);
+//
+//	float2 h0 = s.rg * 255;
+//	float height = ((h0.x * 256.0) + h0.y) / 65535.0;
+//	height /= (defaultTerrainHeight / terrainHeight);
+//	 
+//	float2 n = (s.ba - 0.5) * 2;
+//	float nY = 1 - (sqrt(1 - dot(n, n)) * 1);
+//	
+//	return float4(height, n.x, nY, n.y);
+//}
+
+//uint PosToId(float3 pos)
+//{
+//	pos.xz /= resolutionPM.xy;
+//
+//	return round(pos.x) + (round(pos.z) * resolutionX);
+//} 
+//
+//#pragma kernel Erosion
+//[numthreads(512, 1, 1)]
+//void Erosion(uint id : SV_DispatchThreadID) 
+//{ 
+//	GetPosUV(id);
+//	
+//	float4 hn = GetHeightNormal();
+//
+//	pos.y = hn[0];
+//
+//	float strength = 0.01f;
+//	float sink = 0;
+//
+//	for (int i = 0; i < 100; i++) 
+//	{
+//		strength += (hn.z - 0.5) * 0.01f;
+//		id = PosToId(pos);
+//		sink += strength;
+//		resultBuffer[id] = sink;
+//
+//		pos.xz += hn.yw;
+//		hn = GetHeightNormal();
+//	}
+//}
+ 

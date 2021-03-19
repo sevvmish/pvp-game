@@ -1,0 +1,358 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &110572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 450286}
+  - component: {fileID: 11468688}
+  - component: {fileID: 11444184}
+  m_Layer: 0
+  m_Name: Terrain Area
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &450286
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110572}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &11444184
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 672d68bd7ef374d4c8298a08b248e9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rtSplatmaps:
+  - {fileID: 0}
+  - {fileID: 0}
+  rtColormap: {fileID: 0}
+  loaded: 1
+  applyChanges: 1
+  totalHeightmapResolution:
+    x: 0
+    y: 0
+  heightTexResolution:
+    x: 0
+    y: 0
+  terrains:
+  - t: {fileID: 0}
+    newPosition: {x: 0, y: 0, z: 0}
+    tasks: 0
+    nodes: []
+    rtpMat: {fileID: 0}
+    rtHeight: {fileID: 0}
+    texHeight: {fileID: 0}
+    texColormap: {fileID: 0}
+    texNormalmap: {fileID: 0}
+    active: 1
+    index: 0
+    index_old: 0
+    on_row: 0
+    color_terrain: {r: 2, g: 2, b: 2, a: 1}
+    copy_terrain: 0
+    copy_terrain_settings: 1
+    generateStatus: 0
+    objectsParent: {fileID: 0}
+    newPos: {x: 0, y: 0, z: 0}
+    updateTerrainPos: 0
+    detailSettingsFoldout: 0
+    splatSettingsFoldout: 0
+    treeSettingsFoldout: 0
+    terrain: {fileID: 0}
+    splatColors:
+    - {r: 0.6117647, g: 0.5176471, b: 0.39607844, a: 1}
+    - {r: 0.34117648, g: 0.3137255, b: 0.25490198, a: 1}
+    - {r: 0.19215687, g: 0.1882353, b: 0.09411765, a: 1}
+    - {r: 0.3647059, g: 0.34509805, b: 0.1254902, a: 1}
+    - {r: 0.16078432, g: 0.09411765, b: 0.03137255, a: 1}
+    - {r: 0.3882353, g: 0.3372549, b: 0.25882354, a: 1}
+    - {r: 0.32156864, g: 0.30588236, b: 0.23529412, a: 1}
+    - {r: 0.5686275, g: 0.5686275, b: 0.5372549, a: 1}
+    splatPrototypes:
+    - texture: {fileID: 2800000, guid: bfd675cc0db1d4656b75dc6d6ba91142, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 15, y: 15}
+    - texture: {fileID: 2800000, guid: 7c6442a1108e8714da08ba13ba0d0c89, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 15, y: 15}
+    - texture: {fileID: 2800000, guid: 87417352c06c3fd489064da0fc9cb54c, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 15, y: 15}
+    - texture: {fileID: 2800000, guid: c6e0767b1f8c34890ac245217f4b9731, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 15, y: 15}
+    - texture: {fileID: 2800000, guid: b6a5b4571804e7f4a86c2391953490b7, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 15, y: 15}
+    - texture: {fileID: 2800000, guid: 440eb36db91ca410f800ff3cfe43572f, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 15, y: 15}
+    - texture: {fileID: 2800000, guid: 25c6c8c747fbba1459a95ec6e0225f3c, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 40, y: 40}
+    - texture: {fileID: 2800000, guid: 18214e9d6af6248559d501391856f1c7, type: 3}
+      normalMap: {fileID: 0}
+      metallic: 0
+      smoothness: 0
+      tileOffset: {x: 0, y: 0}
+      tileSize: {x: 40, y: 40}
+    treePrototypes: []
+    detailPrototypes:
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: 68c9a859ebefdc04586d6d98d2aee14a,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: 4e08dee1e3810d54ba33088968af97d4,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: d6cdc79ec19714fcd980ca3f6ac01a0a,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: 2c528fec5d95e4ac28cf46399b887662,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: 07584cea722c4a64c83aefda269fc807,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: e4ce70700c0addc41b39e21dcd7594fd,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: 3a485fd7c9a94ee4097690a5bc4917fa,
+        type: 3}
+      renderMode: 2
+    - usePrototypeMesh: 0
+      bendFactor: 0.1
+      dryColor: {r: 0.8039216, g: 0.7372549, b: 0.101960786, a: 1}
+      healthyColor: {r: 1, g: 1, b: 1, a: 1}
+      maxHeight: 2
+      maxWidth: 2
+      minHeight: 1
+      minWidth: 1
+      noiseSpread: 0.1
+      prototype: {fileID: 0}
+      prototypeTexture: {fileID: 2800000, guid: a8ce61d7887379348997e845141b7d5a,
+        type: 3}
+      renderMode: 2
+    heightmapResolutionList: 3
+    splatmapResolutionList: 2
+    basemapResolutionList: 4
+    detailResolutionPerPatchList: 1
+    size: {x: 2048, y: 15, z: 2048}
+    tileX: 0
+    tileZ: 0
+    heightmapResolution: 513
+    splatmapResolution: 512
+    basemapResolution: 128
+    detailResolution: 512
+    detailResolutionPerPatch: 8
+    appliedResolutionPerPatch: 0
+    grassScaleMulti: 1
+    heightmapPixelError: 5
+    heightmapMaximumLOD: 0
+    castShadows: 1
+    basemapDistance: 20000000
+    treeDistance: 2000
+    detailObjectDistance: 80
+    detailObjectDensity: 1
+    treeMaximumFullLODCount: 50
+    treeBillboardDistance: 50
+    treeCrossFadeLength: 5
+    drawTreesAndFoliage: 1
+    reflectionProbeUsage: 0
+    bakeLightProbesForTrees: 1
+    thickness: 1
+    legacyShininess: 0.7812
+    legacySpecular: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    terrainSettingsScript: {fileID: 0}
+    materialType: 1
+    materialTemplate: {fileID: 0}
+    drawHeightmap: 1
+    collectDetailPatches: 1
+    wavingGrassSpeed: 0.5
+    wavingGrassAmount: 0.138
+    wavingGrassStrength: 0.504
+    wavingGrassTint: {r: 1, g: 1, b: 1, a: 1}
+  createTerrainTab: 1
+  active: 1
+  color: {r: 1.5, g: 1.5, b: 1.5, a: 1}
+  index: 0
+  terrains_active: 1
+  terrains_scene_active: 1
+  terrains_foldout: 1
+  sizeTab: 1
+  resolutionsTab: 0
+  settingsTab: 0
+  splatTab: 0
+  treeTab: 0
+  grassTab: 0
+  resetTab: 0
+  tiles:
+    x: 1
+    y: 1
+  selectTiles:
+    x: 1
+    y: 1
+  tileLink: 1
+  area:
+    serializedVersion: 2
+    x: -1024
+    y: -1024
+    width: 1024
+    height: 1024
+  terrainSize: {x: 2048, y: 750, z: 2048}
+  center: {x: 0, y: 0, z: 0}
+  menuRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  display_short: 0
+  terrainDataPath: C:/Unity Projects/TerrainComposer2/Assets
+  parent: {fileID: 0}
+  terrainName: Terrain
+  copy_settings: 1
+  copy_terrain: 0
+  terrainSelect: 0
+  settingsEditor: 1
+--- !u!114 &11468688
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8b539838210e0d42948ad8a430cab38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cT:
+    position: {x: 0, y: 0, z: 0}
+    posOffset: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 0.6303145, z: 1}
+    positionYOld: 0
+  generateOnEnable: 1
+  generateOnDisable: 1
+  instantGenerate: 0
+  waitForEndOfFrame: 0
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 110572}
+  m_IsPrefabParent: 1

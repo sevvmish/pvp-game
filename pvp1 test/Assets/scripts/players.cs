@@ -22,6 +22,7 @@ public class players : MonoBehaviour
     public PlayerUI OtherPlayerUI;
 
     public string OtherPlayerName;
+    public bool isUIadded;
 
     float rotAngle, sighAngle;
 
@@ -44,16 +45,21 @@ public class players : MonoBehaviour
         temp2.GetComponent<RectTransform>().anchoredPosition = new Vector2(970, -50 * (NumberInSendAndReceive+1) * 1.5f);
         temp2.SetActive(true);
         OtherPlayerUI = new PlayerUI(temp2, false);
+        isUIadded = true;
     }
 
     public void SyncPosNRot(float DeltaForLerp, float AverageCount)
     {
         
         TempText1.text = SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool.ToString();
-        OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].max_health_pool);
-        OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].energy);
+        if (isUIadded)
+        {
+            OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].max_health_pool);
+            OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].energy);
+        }
         pos_n_rot(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].position, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].rotation, DeltaForLerp, AverageCount);
         PlayerAnimator.RefreshAnimations(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].animation_id);
+        //print(NumberInSendAndReceive + " er");
 
         if (SendAndReceive.OtherPlayerData[NumberInSendAndReceive].conditions != previouscondition)
         {

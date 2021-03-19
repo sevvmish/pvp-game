@@ -618,6 +618,9 @@ public struct AnimationsForPlayers
 
 public struct ReceivePlayersData
 {
+    public string player_id;
+    public int player_class;
+    public string player_name;
     private float position_x;
     private float position_y;
     private float position_z;
@@ -642,36 +645,55 @@ public struct ReceivePlayersData
         
         //try
         //{
-            getstr = ReceivedPacket.Split('~');
-            position_x = float.Parse(getstr[0].Replace('.',','));//float.Parse(getstr[0], CultureInfo.InvariantCulture);
-            position_y = 0;
-            position_z = float.Parse(getstr[1].Replace('.', ','));
-            rotation_x = 0;
-            rotation_y = float.Parse(getstr[2].Replace('.', ','));
-            rotation_z = 0;
-            speed = float.Parse(getstr[3], CultureInfo.InvariantCulture);
-            animation_id = int.Parse(getstr[4]);
-            conditions = getstr[5];
+        getstr = ReceivedPacket.Split('~');
+        position_x = float.Parse(getstr[0].Replace('.',','));//float.Parse(getstr[0], CultureInfo.InvariantCulture);
+        position_y = 0;
+        position_z = float.Parse(getstr[1].Replace('.', ','));
+        rotation_x = 0;
+        rotation_y = float.Parse(getstr[2].Replace('.', ','));
+        rotation_z = 0;
+        //speed = float.Parse(getstr[3], CultureInfo.InvariantCulture);
+        animation_id = int.Parse(getstr[3], CultureInfo.InvariantCulture);
+        conditions = getstr[4];
             
-            all_health = getstr[6].Split('=');
-            health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
-            max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
+        all_health = getstr[5].Split('=');
+        health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
+        max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
             
-            energy = int.Parse(getstr[7], CultureInfo.InvariantCulture);
-            position = new Vector3(position_x, position_y, position_z);
-            rotation = new Vector3(rotation_x, rotation_y, rotation_z);
+        energy = int.Parse(getstr[6], CultureInfo.InvariantCulture);
+        position = new Vector3(position_x, position_y, position_z);
+        rotation = new Vector3(rotation_x, rotation_y, rotation_z);
+                
+    }
 
-            //1.1~0~1~0~0~0~1.2~0~~200 = 200~100
+    public void ReceiveForNonPlayers(string ReceivedPacket)
+    {
+        string[] getstr = new string[13];
 
-
-        //}
-        //catch (Exception)
+        //try
         //{
-           // Debug.Log("wrong packet format - " + ReceivedPacket);
-            //if (ReceivedPacket!=null) playercontrol.OtherLatency1.text = playercontrol.OtherLatency1.text + "wrong packet format - " + ReceivedPacket;
-        //}
+        getstr = ReceivedPacket.Split('~');
+        player_id = getstr[0];
+        player_class = int.Parse(getstr[1], CultureInfo.InvariantCulture);
+        player_name = getstr[2];
+        position_x = float.Parse(getstr[3].Replace('.', ','));//float.Parse(getstr[0], CultureInfo.InvariantCulture);
+        position_y = 0;
+        position_z = float.Parse(getstr[4].Replace('.', ','));
+        rotation_x = 0;
+        rotation_y = float.Parse(getstr[5].Replace('.', ','));
+        rotation_z = 0;
+        //speed = float.Parse(getstr[3], CultureInfo.InvariantCulture);
+        animation_id = int.Parse(getstr[6], CultureInfo.InvariantCulture);
+        conditions = getstr[7];
 
-        
+        all_health = getstr[8].Split('=');
+        health_pool = float.Parse(all_health[0], CultureInfo.InvariantCulture);
+        max_health_pool = float.Parse(all_health[1], CultureInfo.InvariantCulture);
+
+        energy = int.Parse(getstr[9], CultureInfo.InvariantCulture);
+        position = new Vector3(position_x, position_y, position_z);
+        rotation = new Vector3(rotation_x, rotation_y, rotation_z);
+
     }
 }
 
@@ -866,7 +888,9 @@ public static class SendAndReceive
 {
     public static ToSend DataForSending;
     public static ReceivePlayersData MyPlayerData;
-    public static ReceivePlayersData[] OtherPlayerData = new ReceivePlayersData[general.SessionNumberOfPlayers - 1];
+    //public static ReceivePlayersData[] OtherPlayerData = new ReceivePlayersData[general.SessionNumberOfPlayers - 1];
+    public static ReceivePlayersData[] OtherPlayerData = new ReceivePlayersData[100];
+    private static List<string> non_players_ui = new List<string>();
     public static int OrderReceived;
     public static int SpecificationReceived;
     public static int ButtonState;
@@ -892,8 +916,8 @@ public static class SendAndReceive
 
     public static void TranslateDataFromServer(string ReceivedData)
     {
-        string[] getstr = new string[general.SessionNumberOfPlayers + 1];
-
+        //string[] getstr = new string[general.SessionNumberOfPlayers + 1];
+        string[] getstr;
 
         try
         {
@@ -902,14 +926,42 @@ public static class SendAndReceive
             GetHeader(getstr[0]);
             if (SpecificationReceived == 0)
             {
+                int index = 0;
                 //2
                 MyPlayerData.ReceiveForPlayers(getstr[1]);
                 //... ...
                 for (int i = 0; i < (general.SessionNumberOfPlayers - 1); i++)
+                //for (int i = 0; i < (playercontrol.OtherGamers.Count); i++)
                 {
-                    OtherPlayerData[i].ReceiveForPlayers(getstr[2 + i]);
+                    OtherPlayerData[index].ReceiveForPlayers(getstr[2 + i]);
+                    index++;
+                }
+
+                if ((getstr.Length-1) > (general.SessionNumberOfPlayers + 1))
+                {                    
+                   
+                    int MaxMany = general.SessionNumberOfPlayers+1;
+                    Debug.Log((getstr.Length-1) + " - maxL     maxmenu - " + (general.SessionNumberOfPlayers + 1));
+
+
+                    for (int i = (general.SessionNumberOfPlayers + 1); i < (getstr.Length-1); i++)
+                    {
+                        
+                        OtherPlayerData[index].ReceiveForNonPlayers(getstr[i]);
+                        Debug.Log(i + "ddddddddddddddd");
+
+                        if (!non_players_ui.Contains(OtherPlayerData[index].player_id))
+                        {                            
+                            non_players_ui.Add(OtherPlayerData[index].player_id);
+                            playercontrol.AddNonPlayer(OtherPlayerData[index].position, OtherPlayerData[index].rotation, i, OtherPlayerData[index].player_class, OtherPlayerData[index].player_name);
+                        }
+                        index++;
+                    }
                 }
             }
+
+            
+            
         }
         catch (Exception ex)
         {
