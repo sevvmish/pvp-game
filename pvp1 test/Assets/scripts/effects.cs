@@ -37,6 +37,17 @@ public class effects : MonoBehaviour
 
     //barbarian 1 effects
     public GameObject SplashEffSimpleHit;
+    public GameObject WhirlWind;
+
+    //rogue effects
+    public GameObject MainMesh;
+    public GameObject SkeletonMesh;
+    public GameObject FogEffect;
+    public GameObject UnFogEffect;
+    public SkinnedMeshRenderer RogSkin;
+    public Material NormalRogue;
+    public Material InvisibleRogue;
+    public GameObject FogWith;
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
@@ -110,13 +121,16 @@ public class effects : MonoBehaviour
         if (MyPlayerClass == 3)
         {
             SplashEffSimpleHit.SetActive(false);
-            
+            WhirlWind.SetActive(false);
         }
 
         if (MyPlayerClass == 4)
         {
-            
-
+            FogEffect.SetActive(false);
+            UnFogEffect.SetActive(false);
+            SkeletonMesh.SetActive(true);
+            MainMesh.SetActive(true);
+            FogWith.SetActive(false);
         }
 
         if (MyPlayerClass == 5)
@@ -236,7 +250,7 @@ public class effects : MonoBehaviour
 
                 for (int i = 0; i < CurrentConds.Count; i++)
                 {
-                    if (CurrentConds[i].spell_index == SomeConds.spell_index)
+                    if (CurrentConds[i].spell_index == SomeConds.spell_index && CurrentConds[i].cond_id == SomeConds.cond_id)
                     {
                         CurrentConds[i].coord_x = SomeConds.coord_x;
                         CurrentConds[i].coord_z = SomeConds.coord_z;
@@ -261,6 +275,11 @@ public class effects : MonoBehaviour
                             StartCoroutine(SpellShooting54(CurrentConds[CurrCondIndex]));
                             break;
 
+
+                        case 153:
+                            
+                            StartCoroutine(SpellShooting153(CurrentConds[CurrCondIndex]));
+                            break;
 
 
                         case 201:
@@ -372,6 +391,41 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));                
             }
 
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 102)
+            {
+                StartCoroutine(TurnOnSomeEffect(WhirlWind, 3f, 0));
+            }
+            //=============================
+
+            //ROGUE==========================
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 153)
+            {
+                                
+                if (PlayerSessionDataOrder != 0)
+                {
+                    StartCoroutine(TurnOffAfterDelay(SkeletonMesh, 0.1f));
+                    StartCoroutine(TurnOffAfterDelay(MainMesh, 0.1f));
+                } else
+                {
+                    RogSkin.material = InvisibleRogue;
+                    FogWith.SetActive(true);
+                }
+            }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 157)
+            {
+                StartCoroutine(TurnOnSomeEffect(UnFogEffect, 2, 0.5f));
+                if (PlayerSessionDataOrder != 0)
+                {
+                    StartCoroutine(TurnOnAfterDelay(MainMesh, 1));
+                    StartCoroutine(TurnOnAfterDelay(SkeletonMesh, 1));
+                } else
+                {
+                    StartCoroutine(StartVisible());
+                }
+            }
+            //=================================
+
 
         }
 
@@ -411,6 +465,7 @@ public class effects : MonoBehaviour
         if (!SomeEffect.activeSelf)
         {
             SomeEffect.SetActive(true);
+            
 
             //yield return new WaitForSeconds(HowLongTimer);
             float delta = HowLongTimer / 0.04f;
@@ -427,6 +482,26 @@ public class effects : MonoBehaviour
             }
             
             SomeEffect.SetActive(false);
+        }
+    }
+
+    IEnumerator TurnOnAfterDelay(GameObject SomeObject, float DelayBeforStart)
+    {
+        yield return new WaitForSeconds(DelayBeforStart);
+
+        if (!SomeObject.activeSelf)
+        {
+            SomeObject.SetActive(true);                       
+        }
+    }
+
+    IEnumerator TurnOffAfterDelay(GameObject SomeObject, float DelayBeforStart)
+    {
+        yield return new WaitForSeconds(DelayBeforStart);
+
+        if (SomeObject.activeSelf)
+        {
+            SomeObject.SetActive(false);
         }
     }
 
@@ -485,6 +560,26 @@ public class effects : MonoBehaviour
         SpellSource.SetActive(false);
 
     }
+
+    IEnumerator SpellShooting153(Conds CurrConditions)
+    {
+        
+        GameObject SpellSource = Instantiate(FogEffect, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
+        SpellSource.transform.localEulerAngles = new Vector3(-90,0,0);
+        SpellSource.SetActive(true);
+
+        yield return new WaitForSeconds(2f);
+        Destroy(SpellSource);
+    }
+
+    IEnumerator StartVisible()
+    {
+        yield return new WaitForSeconds(1f);
+        RogSkin.material = NormalRogue;
+        FogWith.SetActive(false);
+    }
+
 
     IEnumerator SpellShooting201(Conds CurrConditions)
     {
