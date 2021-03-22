@@ -38,6 +38,7 @@ public class effects : MonoBehaviour
     //barbarian 1 effects
     public GameObject SplashEffSimpleHit;
     public GameObject WhirlWind;
+    public GameObject SlamPlace;
 
     //rogue effects
     public GameObject MainMesh;
@@ -48,6 +49,7 @@ public class effects : MonoBehaviour
     public Material NormalRogue;
     public Material InvisibleRogue;
     public GameObject FogWith;
+    public GameObject BackStabEffect;
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
@@ -122,6 +124,7 @@ public class effects : MonoBehaviour
         {
             SplashEffSimpleHit.SetActive(false);
             WhirlWind.SetActive(false);
+            SlamPlace.SetActive(false);
         }
 
         if (MyPlayerClass == 4)
@@ -131,6 +134,7 @@ public class effects : MonoBehaviour
             SkeletonMesh.SetActive(true);
             MainMesh.SetActive(true);
             FogWith.SetActive(false);
+            BackStabEffect.SetActive(false);
         }
 
         if (MyPlayerClass == 5)
@@ -391,6 +395,11 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));                
             }
 
+            if (SomeConds.cond_type == "dg" && SomeConds.spell_index == 103)
+            {
+                StartCoroutine(TurnOnSomeEffect(SlamPlace, 6f, 0));
+            }
+
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 102)
             {
                 StartCoroutine(TurnOnSomeEffect(WhirlWind, 3f, 0));
@@ -423,6 +432,11 @@ public class effects : MonoBehaviour
                 {
                     StartCoroutine(StartVisible());
                 }
+            }
+
+            if (SomeConds.cond_type == "dg" && SomeConds.spell_index == 152)
+            {
+                StartCoroutine(TurnOnSomeEffect(BackStabEffect, 1f, 0));
             }
             //=================================
 
