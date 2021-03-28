@@ -12339,6 +12339,7 @@ MonoBehaviour:
   StunEffect: {fileID: 7920971433547556472}
   BloodLossEff: {fileID: 2985416903111645072}
   ExplosionFireBall: {fileID: 6427580383857953897}
+  FrozenSpikes: {fileID: 887724018700870464}
   BlockWithShield: {fileID: 0}
   WeaponTrail: {fileID: 0}
   ShieldSlam: {fileID: 0}
@@ -12353,6 +12354,7 @@ MonoBehaviour:
   Meteor: {fileID: 0}
   FireHandEff: {fileID: 0}
   FireStepEff: {fileID: 0}
+  IceNova: {fileID: 0}
   SplashEffSimpleHit: {fileID: 0}
   WhirlWind: {fileID: 0}
   SlamPlace: {fileID: 0}
@@ -12984,6 +12986,12 @@ GameObject:
 --- !u!1 &2985416903111645072 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4667016545138968597, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &887724018700870464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7348487298854747333, guid: b021339ad0d36ec4480d0ff1c3f5c382,
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}

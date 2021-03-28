@@ -63,7 +63,7 @@ public class general
                 result = Resources.Load<GameObject>("prefabs/warr 1 prefab");
                 break;
             case 2:
-                result = Resources.Load<GameObject>("prefabs/mage 1 prefab");
+                result = Resources.Load<GameObject>("prefabs/elementalist 1 prefab");
                 break;
             case 3:
                 result = Resources.Load<GameObject>("prefabs/barbarian 1 prefab");

@@ -26,14 +26,15 @@ public class effects : MonoBehaviour
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff, ExplosionFireBall;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes;
 
     //warr 1 effects
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
 
     //mage 1 effects
-    public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff;
+    public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff, IceNova;
     private ObjectPooling FireSteps;
+
 
     //barbarian 1 effects
     public GameObject SplashEffSimpleHit;
@@ -87,6 +88,7 @@ public class effects : MonoBehaviour
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
         ExplosionFireBall.SetActive(false);
+        FrozenSpikes.SetActive(false);
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
@@ -118,6 +120,7 @@ public class effects : MonoBehaviour
             FireHandEff.SetActive(false);
             FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
             FireStepEff.SetActive(false);
+            IceNova.SetActive(false);
         }
 
         if (MyPlayerClass == 3)
@@ -278,6 +281,9 @@ public class effects : MonoBehaviour
                         case 54:
                             StartCoroutine(SpellShooting54(CurrentConds[CurrCondIndex]));
                             break;
+                        case 55:
+                            StartCoroutine(SpellShooting55(CurrentConds[CurrCondIndex]));
+                            break;
 
 
                         case 153:
@@ -325,6 +331,12 @@ public class effects : MonoBehaviour
                     StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
                 }
 
+            }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58)
+            {                
+                StartCoroutine(TurnOnSomeEffect(FrozenSpikes, 5f, 0));
+                //StartCoroutine(PlaySomeSound(BuffSound, 0, false));
             }
 
 
@@ -573,6 +585,17 @@ public class effects : MonoBehaviour
         yield return new WaitForSeconds(3f);
         SpellSource.SetActive(false);
 
+    }
+
+    IEnumerator SpellShooting55(Conds CurrConditions)
+    {
+        GameObject SpellSource = Instantiate(IceNova, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.05f, CurrConditions.coord_z);
+        SpellSource.SetActive(true);
+        isSpellShooting = false;
+        yield return new WaitForSeconds(4f);        
+        SpellSource.SetActive(false);
+        Destroy(SpellSource);
     }
 
     IEnumerator SpellShooting153(Conds CurrConditions)

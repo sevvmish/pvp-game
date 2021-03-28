@@ -14649,6 +14649,7 @@ MonoBehaviour:
   StunEffect: {fileID: 2172646141017034045}
   BloodLossEff: {fileID: 1031842600531269572}
   ExplosionFireBall: {fileID: 9082874199583607869}
+  FrozenSpikes: {fileID: 3129535485238436628}
   BlockWithShield: {fileID: 0}
   WeaponTrail: {fileID: 0}
   ShieldSlam: {fileID: 0}
@@ -14663,6 +14664,7 @@ MonoBehaviour:
   Meteor: {fileID: 0}
   FireHandEff: {fileID: 0}
   FireStepEff: {fileID: 0}
+  IceNova: {fileID: 0}
   SplashEffSimpleHit: {fileID: 0}
   WhirlWind: {fileID: 0}
   SlamPlace: {fileID: 0}
@@ -45928,7 +45930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1341155985902797198
 Transform:
   m_ObjectHideFlags: 0
@@ -51341,6 +51343,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b021339ad0d36ec4480d0ff1c3f5c382, type: 3}
+--- !u!1 &3129535485238436628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7348487298854747333, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 5662508741340766161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1031842600531269572 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4667016545138968597, guid: b021339ad0d36ec4480d0ff1c3f5c382,
