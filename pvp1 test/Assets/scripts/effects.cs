@@ -51,6 +51,9 @@ public class effects : MonoBehaviour
     public Material InvisibleRogue;
     public GameObject FogWith;
     public GameObject BackStabEffect;
+    public GameObject PistolOnBelt;
+    public GameObject PistolRightHand;
+    public GameObject DaggerRightHand;
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
@@ -59,6 +62,8 @@ public class effects : MonoBehaviour
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
 
+
+    public GameObject RedTestingBall;
 
     private Vector3 GetPlayerCoordsByOrderNumber(int OrderNumber)
     {
@@ -138,6 +143,11 @@ public class effects : MonoBehaviour
             MainMesh.SetActive(true);
             FogWith.SetActive(false);
             BackStabEffect.SetActive(false);
+            PistolOnBelt.SetActive(true);
+            PistolRightHand.SetActive(false);
+            DaggerRightHand.SetActive(true);
+
+            RedTestingBall.SetActive(false);
         }
 
         if (MyPlayerClass == 5)
@@ -286,9 +296,11 @@ public class effects : MonoBehaviour
                             break;
 
 
-                        case 153:
-                            
+                        case 153:                            
                             StartCoroutine(SpellShooting153(CurrentConds[CurrCondIndex]));
+                            break;
+                        case 156:
+                            StartCoroutine(SpellShooting156(CurrentConds[CurrCondIndex]));
                             break;
 
 
@@ -431,6 +443,14 @@ public class effects : MonoBehaviour
                     RogSkin.material = InvisibleRogue;
                     FogWith.SetActive(true);
                 }
+            }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 156)
+            {
+                PistolOnBelt.SetActive(false);
+                PistolRightHand.SetActive(true);
+                DaggerRightHand.SetActive(false);
+                
             }
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 157)
@@ -607,6 +627,23 @@ public class effects : MonoBehaviour
         SpellSource.SetActive(true);
 
         yield return new WaitForSeconds(2f);
+        Destroy(SpellSource);
+    }
+
+    IEnumerator SpellShooting156(Conds CurrConditions)
+    {
+
+        GameObject SpellSource = Instantiate(RedTestingBall, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
+        SpellSource.transform.localEulerAngles = new Vector3(0, 0, 0);
+        SpellSource.SetActive(true);
+
+        StartCoroutine(TurnOnAfterDelay(PistolOnBelt, 1f));
+        StartCoroutine(TurnOffAfterDelay(PistolRightHand, 1f));
+        StartCoroutine(TurnOnAfterDelay(DaggerRightHand, 1f));
+
+
+        yield return new WaitForSeconds(4f);
         Destroy(SpellSource);
     }
 

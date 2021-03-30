@@ -142,7 +142,8 @@ public class ConditionsAnalys
             
             if (getstrcond[1] == "cncld")
             {
-                curr_conds[Index].cond_message = "CANCELED";                    
+                curr_conds[Index].cond_message = "CANCELED";
+                curr_conds[Index].spell_index = int.Parse(getstrcond[2]);
             }
             else
             {
@@ -454,6 +455,18 @@ public struct AnimationsForPlayers
                         getup();
                     }
                     break;
+                case 20:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("raise gun"))
+                    {
+                        raise_gun();
+                    }
+                    break;
+                case 21:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shot gun"))
+                    {
+                        shot_gun();
+                    }
+                    break;
             }
         }
 
@@ -612,6 +625,18 @@ public struct AnimationsForPlayers
     {
         animator.Play("get up");
         CurrentAnimationState = 19;
+    }
+
+    void raise_gun()
+    {
+        animator.Play("raise gun");
+        CurrentAnimationState = 20;
+    }
+
+    void shot_gun()
+    {
+        animator.Play("shot gun");
+        CurrentAnimationState = 21;
     }
 }
 
