@@ -1,0 +1,851 @@
+fileFormatVersion: 2
+guid: f9c0c188b23550649ba537554d5c7282
+timeCreated: 1545201526
+licenseType: Store
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: _geo_bakery_UV
+    100002: _geo_bakery_UV.001
+    100004: _geo_house1_UV
+    100006: _geo_house1_UV.001
+    100008: _geo_house1_UV.002
+    100010: _geo_house1_UV.003
+    100012: _geo_house1_UV.004
+    100014: _geo_house1_UV.005
+    100016: _geo_house2_UV
+    100018: _geo_house2_UV.001
+    100020: _geo_house2_UV.002
+    100022: _geo_house2_UV.003
+    100024: _geo_house2_UV.004
+    100026: _geo_house2_UV.005
+    100028: _geo_house3_UV
+    100030: _geo_house3_UV.001
+    100032: _geo_house3_UV.002
+    100034: _geo_house3_UV.003
+    100036: _geo_house3_UV.004
+    100038: _geo_house3_UV.005
+    100040: _geo_road_1
+    100042: _geo_road_2
+    100044: _geo_road_3
+    100046: _geo_tavern_UV
+    100048: _geo_tavern_UV.001
+    100050: _geo_tower2
+    100052: _geo_tower2.001
+    100054: _geo_tower_UV
+    100056: _geo_tower_UV.001
+    100058: _geo_tower_UV.002
+    100060: _geo_tower_UV.003
+    100062: arm_IK_L
+    100064: arm_IK_R
+    100066: arm_L
+    100068: arm_L 1
+    100070: arm_L 10
+    100072: arm_L 11
+    100074: arm_L 12
+    100076: arm_L 13
+    100078: arm_L 14
+    100080: arm_L 15
+    100082: arm_L 2
+    100084: arm_L 3
+    100086: arm_L 4
+    100088: arm_L 5
+    100090: arm_L 6
+    100092: arm_L 7
+    100094: arm_L 8
+    100096: arm_L 9
+    100098: arm_R
+    100100: arm_R 1
+    100102: arm_R 10
+    100104: arm_R 11
+    100106: arm_R 12
+    100108: arm_R 13
+    100110: arm_R 14
+    100112: arm_R 15
+    100114: arm_R 2
+    100116: arm_R 3
+    100118: arm_R 4
+    100120: arm_R 5
+    100122: arm_R 6
+    100124: arm_R 7
+    100126: arm_R 8
+    100128: arm_R 9
+    100130: arma_baker
+    100132: arma_baker.001
+    100134: arma_baker.003
+    100136: arma_drunk1
+    100138: arma_drunk2
+    100140: arma_farmer
+    100142: arma_girl
+    100144: arma_miner
+    100146: arma_smith
+    100148: arma_soldier1
+    100150: arma_soldier1.001
+    100152: arma_soldier2
+    100154: arma_soldier2.001
+    100156: arma_soldier2.002
+    100158: arma_soldier2.003
+    100160: arma_z
+    100162: Armature.001
+    100164: armature_flags
+    100166: armature_smoke
+    100168: armature_smoke.002
+    100170: armature_smoke.003
+    100172: armature_smoke.005
+    100174: armature_smoke.007
+    100176: armature_trees
+    100178: body
+    100180: body 1
+    100182: body 10
+    100184: body 11
+    100186: body 12
+    100188: body 13
+    100190: body 14
+    100192: body 2
+    100194: body 3
+    100196: body 4
+    100198: body 5
+    100200: body 6
+    100202: body 7
+    100204: body 8
+    100206: body 9
+    100208: Circle
+    100210: claw_1_L
+    100212: claw_1_R
+    100214: claw_2_L
+    100216: claw_2_R
+    100218: claw_3_L
+    100220: claw_3_R
+    100222: Cube.001
+    100224: Cube.002
+    100226: Cube.004
+    100228: Cube.006
+    100230: Cube.007
+    100232: Cube.044
+    100234: female_baker
+    100236: female_baker.001
+    100238: female_cook
+    100240: female_girl
+    100242: flag_1
+    100244: flag_2
+    100246: flag_3
+    100248: flag_4
+    100250: foot_L
+    100252: foot_R
+    100254: geo_blacksmith_Plane.000
+    100256: geo_castle_Plane
+    100258: geo_column
+    100260: geo_column.001
+    100262: geo_column.002
+    100264: geo_column.003
+    100266: geo_fan
+    100268: geo_farm_Plane.001
+    100270: geo_flag_Circle.001
+    100272: geo_grass_Plane.007
+    100274: geo_lines_Plane.002
+    100276: geo_mill
+    100278: geo_mine
+    100280: geo_mountain
+    100282: geo_pine
+    100284: geo_pine_static
+    100286: geo_pole
+    100288: geo_rocks_1
+    100290: geo_rocks_2
+    100292: head
+    100294: head 1
+    100296: head 10
+    100298: head 11
+    100300: head 12
+    100302: head 13
+    100304: head 14
+    100306: head 15
+    100308: head 2
+    100310: head 3
+    100312: head 4
+    100314: head 5
+    100316: head 6
+    100318: head 7
+    100320: head 8
+    100322: head 9
+    100324: jaw
+    100326: leg_L
+    100328: leg_L 1
+    100330: leg_L 10
+    100332: leg_L 2
+    100334: leg_L 3
+    100336: leg_L 4
+    100338: leg_L 5
+    100340: leg_L 6
+    100342: leg_L 7
+    100344: leg_L 8
+    100346: leg_L 9
+    100348: leg_R
+    100350: leg_R 1
+    100352: leg_R 10
+    100354: leg_R 2
+    100356: leg_R 3
+    100358: leg_R 4
+    100360: leg_R 5
+    100362: leg_R 6
+    100364: leg_R 7
+    100366: leg_R 8
+    100368: leg_R 9
+    100370: model_drunk1
+    100372: model_drunk2
+    100374: model_farmer
+    100376: model_miner
+    100378: model_smith
+    100380: model_soldier1
+    100382: model_soldier1.001
+    100384: model_soldier2
+    100386: model_soldier2.001
+    100388: model_soldier2.002
+    100390: model_soldier2.003
+    100392: model_table
+    100394: model_table.001
+    100396: model_z
+    100398: neck1
+    100400: neck2
+    100402: Plane
+    100404: root
+    100406: root 1
+    100408: root 10
+    100410: root 11
+    100412: root 12
+    100414: root 13
+    100416: root 14
+    100418: root 15
+    100420: root 16
+    100422: root 17
+    100424: root 2
+    100426: root 3
+    100428: root 4
+    100430: root 5
+    100432: root 6
+    100434: root 7
+    100436: root 8
+    100438: root 9
+    100440: root.001
+    100442: //RootNode
+    100444: shin_L
+    100446: shin_R
+    100448: shoulder_L
+    100450: shoulder_R
+    100452: smoke1
+    100454: smoke1 1
+    100456: smoke1 2
+    100458: smoke1 3
+    100460: smoke1 4
+    100462: smoke2
+    100464: smoke2 1
+    100466: smoke2 2
+    100468: smoke2 3
+    100470: smoke2 4
+    100472: smoke3
+    100474: smoke3 1
+    100476: smoke3 2
+    100478: smoke3 3
+    100480: smoke3 4
+    100482: smoke4
+    100484: smoke4 1
+    100486: smoke4 2
+    100488: smoke4 3
+    100490: smoke4 4
+    100492: smoke5
+    100494: smoke5 1
+    100496: smoke5 2
+    100498: smoke5 3
+    100500: smoke5 4
+    100502: smoke6
+    100504: smoke6 1
+    100506: smoke6 2
+    100508: smoke6 3
+    100510: smoke6 4
+    100512: smoke7
+    100514: smoke7 1
+    100516: smoke7 2
+    100518: smoke7 3
+    100520: smoke7 4
+    100522: smoke8
+    100524: smoke8 1
+    100526: smoke8 2
+    100528: smoke8 3
+    100530: smoke8 4
+    100532: tail1
+    100534: tail2
+    100536: tail3
+    100538: tail4
+    100540: tail5
+    100542: thigh_L
+    100544: thigh_R
+    100546: tip
+    100548: toe_L
+    100550: toe_R
+    100552: torso
+    100554: z1
+    100556: z2
+    100558: z3
+    400000: _geo_bakery_UV
+    400002: _geo_bakery_UV.001
+    400004: _geo_house1_UV
+    400006: _geo_house1_UV.001
+    400008: _geo_house1_UV.002
+    400010: _geo_house1_UV.003
+    400012: _geo_house1_UV.004
+    400014: _geo_house1_UV.005
+    400016: _geo_house2_UV
+    400018: _geo_house2_UV.001
+    400020: _geo_house2_UV.002
+    400022: _geo_house2_UV.003
+    400024: _geo_house2_UV.004
+    400026: _geo_house2_UV.005
+    400028: _geo_house3_UV
+    400030: _geo_house3_UV.001
+    400032: _geo_house3_UV.002
+    400034: _geo_house3_UV.003
+    400036: _geo_house3_UV.004
+    400038: _geo_house3_UV.005
+    400040: _geo_road_1
+    400042: _geo_road_2
+    400044: _geo_road_3
+    400046: _geo_tavern_UV
+    400048: _geo_tavern_UV.001
+    400050: _geo_tower2
+    400052: _geo_tower2.001
+    400054: _geo_tower_UV
+    400056: _geo_tower_UV.001
+    400058: _geo_tower_UV.002
+    400060: _geo_tower_UV.003
+    400062: arm_IK_L
+    400064: arm_IK_R
+    400066: arm_L
+    400068: arm_L 1
+    400070: arm_L 10
+    400072: arm_L 11
+    400074: arm_L 12
+    400076: arm_L 13
+    400078: arm_L 14
+    400080: arm_L 15
+    400082: arm_L 2
+    400084: arm_L 3
+    400086: arm_L 4
+    400088: arm_L 5
+    400090: arm_L 6
+    400092: arm_L 7
+    400094: arm_L 8
+    400096: arm_L 9
+    400098: arm_R
+    400100: arm_R 1
+    400102: arm_R 10
+    400104: arm_R 11
+    400106: arm_R 12
+    400108: arm_R 13
+    400110: arm_R 14
+    400112: arm_R 15
+    400114: arm_R 2
+    400116: arm_R 3
+    400118: arm_R 4
+    400120: arm_R 5
+    400122: arm_R 6
+    400124: arm_R 7
+    400126: arm_R 8
+    400128: arm_R 9
+    400130: arma_baker
+    400132: arma_baker.001
+    400134: arma_baker.003
+    400136: arma_drunk1
+    400138: arma_drunk2
+    400140: arma_farmer
+    400142: arma_girl
+    400144: arma_miner
+    400146: arma_smith
+    400148: arma_soldier1
+    400150: arma_soldier1.001
+    400152: arma_soldier2
+    400154: arma_soldier2.001
+    400156: arma_soldier2.002
+    400158: arma_soldier2.003
+    400160: arma_z
+    400162: Armature.001
+    400164: armature_flags
+    400166: armature_smoke
+    400168: armature_smoke.002
+    400170: armature_smoke.003
+    400172: armature_smoke.005
+    400174: armature_smoke.007
+    400176: armature_trees
+    400178: body
+    400180: body 1
+    400182: body 10
+    400184: body 11
+    400186: body 12
+    400188: body 13
+    400190: body 14
+    400192: body 2
+    400194: body 3
+    400196: body 4
+    400198: body 5
+    400200: body 6
+    400202: body 7
+    400204: body 8
+    400206: body 9
+    400208: Circle
+    400210: claw_1_L
+    400212: claw_1_R
+    400214: claw_2_L
+    400216: claw_2_R
+    400218: claw_3_L
+    400220: claw_3_R
+    400222: Cube.001
+    400224: Cube.002
+    400226: Cube.004
+    400228: Cube.006
+    400230: Cube.007
+    400232: Cube.044
+    400234: female_baker
+    400236: female_baker.001
+    400238: female_cook
+    400240: female_girl
+    400242: flag_1
+    400244: flag_2
+    400246: flag_3
+    400248: flag_4
+    400250: foot_L
+    400252: foot_R
+    400254: geo_blacksmith_Plane.000
+    400256: geo_castle_Plane
+    400258: geo_column
+    400260: geo_column.001
+    400262: geo_column.002
+    400264: geo_column.003
+    400266: geo_fan
+    400268: geo_farm_Plane.001
+    400270: geo_flag_Circle.001
+    400272: geo_grass_Plane.007
+    400274: geo_lines_Plane.002
+    400276: geo_mill
+    400278: geo_mine
+    400280: geo_mountain
+    400282: geo_pine
+    400284: geo_pine_static
+    400286: geo_pole
+    400288: geo_rocks_1
+    400290: geo_rocks_2
+    400292: head
+    400294: head 1
+    400296: head 10
+    400298: head 11
+    400300: head 12
+    400302: head 13
+    400304: head 14
+    400306: head 15
+    400308: head 2
+    400310: head 3
+    400312: head 4
+    400314: head 5
+    400316: head 6
+    400318: head 7
+    400320: head 8
+    400322: head 9
+    400324: jaw
+    400326: leg_L
+    400328: leg_L 1
+    400330: leg_L 10
+    400332: leg_L 2
+    400334: leg_L 3
+    400336: leg_L 4
+    400338: leg_L 5
+    400340: leg_L 6
+    400342: leg_L 7
+    400344: leg_L 8
+    400346: leg_L 9
+    400348: leg_R
+    400350: leg_R 1
+    400352: leg_R 10
+    400354: leg_R 2
+    400356: leg_R 3
+    400358: leg_R 4
+    400360: leg_R 5
+    400362: leg_R 6
+    400364: leg_R 7
+    400366: leg_R 8
+    400368: leg_R 9
+    400370: model_drunk1
+    400372: model_drunk2
+    400374: model_farmer
+    400376: model_miner
+    400378: model_smith
+    400380: model_soldier1
+    400382: model_soldier1.001
+    400384: model_soldier2
+    400386: model_soldier2.001
+    400388: model_soldier2.002
+    400390: model_soldier2.003
+    400392: model_table
+    400394: model_table.001
+    400396: model_z
+    400398: neck1
+    400400: neck2
+    400402: Plane
+    400404: root
+    400406: root 1
+    400408: root 10
+    400410: root 11
+    400412: root 12
+    400414: root 13
+    400416: root 14
+    400418: root 15
+    400420: root 16
+    400422: root 17
+    400424: root 2
+    400426: root 3
+    400428: root 4
+    400430: root 5
+    400432: root 6
+    400434: root 7
+    400436: root 8
+    400438: root 9
+    400440: root.001
+    400442: //RootNode
+    400444: shin_L
+    400446: shin_R
+    400448: shoulder_L
+    400450: shoulder_R
+    400452: smoke1
+    400454: smoke1 1
+    400456: smoke1 2
+    400458: smoke1 3
+    400460: smoke1 4
+    400462: smoke2
+    400464: smoke2 1
+    400466: smoke2 2
+    400468: smoke2 3
+    400470: smoke2 4
+    400472: smoke3
+    400474: smoke3 1
+    400476: smoke3 2
+    400478: smoke3 3
+    400480: smoke3 4
+    400482: smoke4
+    400484: smoke4 1
+    400486: smoke4 2
+    400488: smoke4 3
+    400490: smoke4 4
+    400492: smoke5
+    400494: smoke5 1
+    400496: smoke5 2
+    400498: smoke5 3
+    400500: smoke5 4
+    400502: smoke6
+    400504: smoke6 1
+    400506: smoke6 2
+    400508: smoke6 3
+    400510: smoke6 4
+    400512: smoke7
+    400514: smoke7 1
+    400516: smoke7 2
+    400518: smoke7 3
+    400520: smoke7 4
+    400522: smoke8
+    400524: smoke8 1
+    400526: smoke8 2
+    400528: smoke8 3
+    400530: smoke8 4
+    400532: tail1
+    400534: tail2
+    400536: tail3
+    400538: tail4
+    400540: tail5
+    400542: thigh_L
+    400544: thigh_R
+    400546: tip
+    400548: toe_L
+    400550: toe_R
+    400552: torso
+    400554: z1
+    400556: z2
+    400558: z3
+    2300000: _geo_bakery_UV
+    2300002: _geo_bakery_UV.001
+    2300004: _geo_house1_UV
+    2300006: _geo_house1_UV.001
+    2300008: _geo_house1_UV.002
+    2300010: _geo_house1_UV.003
+    2300012: _geo_house1_UV.004
+    2300014: _geo_house1_UV.005
+    2300016: _geo_house2_UV
+    2300018: _geo_house2_UV.001
+    2300020: _geo_house2_UV.002
+    2300022: _geo_house2_UV.003
+    2300024: _geo_house2_UV.004
+    2300026: _geo_house2_UV.005
+    2300028: _geo_house3_UV
+    2300030: _geo_house3_UV.001
+    2300032: _geo_house3_UV.002
+    2300034: _geo_house3_UV.003
+    2300036: _geo_house3_UV.004
+    2300038: _geo_house3_UV.005
+    2300040: _geo_road_1
+    2300042: _geo_road_2
+    2300044: _geo_road_3
+    2300046: _geo_tavern_UV
+    2300048: _geo_tavern_UV.001
+    2300050: _geo_tower2
+    2300052: _geo_tower2.001
+    2300054: _geo_tower_UV
+    2300056: _geo_tower_UV.001
+    2300058: _geo_tower_UV.002
+    2300060: _geo_tower_UV.003
+    2300062: Circle
+    2300064: Cube.044
+    2300066: geo_blacksmith_Plane.000
+    2300068: geo_castle_Plane
+    2300070: geo_column
+    2300072: geo_column.001
+    2300074: geo_column.002
+    2300076: geo_column.003
+    2300078: geo_fan
+    2300080: geo_farm_Plane.001
+    2300082: geo_grass_Plane.007
+    2300084: geo_lines_Plane.002
+    2300086: geo_mill
+    2300088: geo_mine
+    2300090: geo_mountain
+    2300092: geo_pine_static
+    2300094: geo_pole
+    2300096: geo_rocks_1
+    2300098: geo_rocks_2
+    2300100: model_table
+    2300102: model_table.001
+    3300000: _geo_bakery_UV
+    3300002: _geo_bakery_UV.001
+    3300004: _geo_house1_UV
+    3300006: _geo_house1_UV.001
+    3300008: _geo_house1_UV.002
+    3300010: _geo_house1_UV.003
+    3300012: _geo_house1_UV.004
+    3300014: _geo_house1_UV.005
+    3300016: _geo_house2_UV
+    3300018: _geo_house2_UV.001
+    3300020: _geo_house2_UV.002
+    3300022: _geo_house2_UV.003
+    3300024: _geo_house2_UV.004
+    3300026: _geo_house2_UV.005
+    3300028: _geo_house3_UV
+    3300030: _geo_house3_UV.001
+    3300032: _geo_house3_UV.002
+    3300034: _geo_house3_UV.003
+    3300036: _geo_house3_UV.004
+    3300038: _geo_house3_UV.005
+    3300040: _geo_road_1
+    3300042: _geo_road_2
+    3300044: _geo_road_3
+    3300046: _geo_tavern_UV
+    3300048: _geo_tavern_UV.001
+    3300050: _geo_tower2
+    3300052: _geo_tower2.001
+    3300054: _geo_tower_UV
+    3300056: _geo_tower_UV.001
+    3300058: _geo_tower_UV.002
+    3300060: _geo_tower_UV.003
+    3300062: Circle
+    3300064: Cube.044
+    3300066: geo_blacksmith_Plane.000
+    3300068: geo_castle_Plane
+    3300070: geo_column
+    3300072: geo_column.001
+    3300074: geo_column.002
+    3300076: geo_column.003
+    3300078: geo_fan
+    3300080: geo_farm_Plane.001
+    3300082: geo_grass_Plane.007
+    3300084: geo_lines_Plane.002
+    3300086: geo_mill
+    3300088: geo_mine
+    3300090: geo_mountain
+    3300092: geo_pine_static
+    3300094: geo_pole
+    3300096: geo_rocks_1
+    3300098: geo_rocks_2
+    3300100: model_table
+    3300102: model_table.001
+    4300000: geo_rocks_1
+    4300002: model_table.001
+    4300004: geo_column.003
+    4300006: geo_pole
+    4300008: _geo_tower2.001
+    4300010: _geo_tower_UV.003
+    4300012: _geo_tavern_UV.001
+    4300014: _geo_bakery_UV.001
+    4300016: _geo_house1_UV.005
+    4300018: _geo_house3_UV.005
+    4300020: _geo_house2_UV.005
+    4300022: _geo_road_2
+    4300024: _geo_road_3
+    4300026: Cube.044
+    4300028: _geo_road_1
+    4300030: model_soldier2.001
+    4300032: model_soldier1.001
+    4300034: female_baker.001
+    4300036: geo_fan
+    4300038: Cube.007
+    4300040: geo_pine_static
+    4300042: Cube.004
+    4300044: Cube.002
+    4300046: Cube.001
+    4300048: Cube.006
+    4300050: geo_pine
+    4300052: Circle
+    4300054: geo_mine
+    4300056: geo_blacksmith_Plane.000
+    4300058: geo_flag_Circle.001
+    4300060: geo_mill
+    4300062: geo_lines_Plane.002
+    4300064: geo_mountain
+    4300066: geo_castle_Plane
+    4300068: geo_farm_Plane.001
+    4300070: geo_rocks_2
+    4300072: geo_grass_Plane.007
+    4300074: Plane
+    4300076: female_cook
+    4300078: female_baker
+    4300080: female_girl
+    4300082: model_smith
+    4300084: model_z
+    4300086: model_farmer
+    4300088: model_miner
+    4300090: model_soldier2
+    4300092: model_soldier1
+    4300094: model_drunk1
+    4300096: model_drunk2
+    4300098: model_soldier2.003
+    4300100: model_soldier2.002
+    7400000: Scene
+    9500000: //RootNode
+    13700000: Cube.001
+    13700002: Cube.002
+    13700004: Cube.004
+    13700006: Cube.006
+    13700008: Cube.007
+    13700010: female_baker
+    13700012: female_baker.001
+    13700014: female_cook
+    13700016: female_girl
+    13700018: geo_flag_Circle.001
+    13700020: geo_pine
+    13700022: model_drunk1
+    13700024: model_drunk2
+    13700026: model_farmer
+    13700028: model_miner
+    13700030: model_smith
+    13700032: model_soldier1
+    13700034: model_soldier1.001
+    13700036: model_soldier2
+    13700038: model_soldier2.001
+    13700040: model_soldier2.002
+    13700042: model_soldier2.003
+    13700044: model_z
+    13700046: Plane
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Scene
+      takeName: Scene
+      firstFrame: 0
+      lastFrame: 960
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,155 @@
+fileFormatVersion: 2
+guid: 0330828c4bd05a447aacb869c2ec2d42
+timeCreated: 1549740635
+licenseType: Store
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: polySurface933
+    100002: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface938
+    100004: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface939
+    100006: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface940
+    100008: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface941
+    100010: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface942
+    100012: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface943
+    100014: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface944
+    100016: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface945
+    100018: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface946
+    100020: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface947
+    100022: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface948
+    100024: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface949
+    100026: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface950
+    100028: //RootNode
+    400000: polySurface933
+    400002: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface938
+    400004: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface939
+    400006: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface940
+    400008: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface941
+    400010: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface942
+    400012: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface943
+    400014: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface944
+    400016: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface945
+    400018: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface946
+    400020: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface947
+    400022: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface948
+    400024: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface949
+    400026: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface950
+    400028: //RootNode
+    2300000: polySurface933
+    2300002: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface938
+    2300004: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface939
+    2300006: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface940
+    2300008: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface941
+    2300010: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface942
+    2300012: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface943
+    2300014: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface944
+    2300016: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface945
+    2300018: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface946
+    2300020: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface947
+    2300022: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface948
+    2300024: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface949
+    2300026: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface950
+    3300000: polySurface933
+    3300002: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface938
+    3300004: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface939
+    3300006: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface940
+    3300008: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface941
+    3300010: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface942
+    3300012: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface943
+    3300014: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface944
+    3300016: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface945
+    3300018: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface946
+    3300020: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface947
+    3300022: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface948
+    3300024: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface949
+    3300026: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface950
+    4300000: polySurface933
+    4300002: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface938
+    4300004: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface939
+    4300006: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface940
+    4300008: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface941
+    4300010: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface942
+    4300012: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface943
+    4300014: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface944
+    4300016: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface945
+    4300018: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface946
+    4300020: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface947
+    4300022: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface948
+    4300024: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface949
+    4300026: sands_location_group1_sands_location_polySurface938_sands_location_polySurface1157_sands_location_polySurface1503_polySurface950
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
