@@ -26,7 +26,7 @@ public class effects : MonoBehaviour
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, StrafeEff;
 
     //warr 1 effects
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
@@ -94,6 +94,7 @@ public class effects : MonoBehaviour
         BloodLossEff.SetActive(false);
         ExplosionFireBall.SetActive(false);
         FrozenSpikes.SetActive(false);
+        StrafeEff.SetActive(false);
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
@@ -295,6 +296,10 @@ public class effects : MonoBehaviour
                             StartCoroutine(SpellShooting55(CurrentConds[CurrCondIndex]));
                             break;
 
+                        case 103:
+                            StartCoroutine(SpellShooting103(CurrentConds[CurrCondIndex]));
+                            break;
+
 
                         case 153:                            
                             StartCoroutine(SpellShooting153(CurrentConds[CurrCondIndex]));
@@ -349,6 +354,12 @@ public class effects : MonoBehaviour
             {                
                 StartCoroutine(TurnOnSomeEffect(FrozenSpikes, 5f, 0));
                 //StartCoroutine(PlaySomeSound(BuffSound, 0, false));
+            }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 997)
+            {
+                StartCoroutine(TurnOnSomeEffect(StrafeEff, 0.5f, 0));
+                
             }
 
 
@@ -419,15 +430,23 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));                
             }
 
+            /*
             if (SomeConds.cond_type == "dg" && SomeConds.spell_index == 103)
             {
                 StartCoroutine(TurnOnSomeEffect(SlamPlace, 6f, 0));
             }
+            */
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 102)
             {
                 StartCoroutine(TurnOnSomeEffect(WhirlWind, 3f, 0));
             }
+
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index==102 && WhirlWind.activeSelf)
+            {
+                StartCoroutine(TurnOFFSomeEffect(WhirlWind, 0));
+            }
+
             //=============================
 
             //ROGUE==========================
@@ -615,6 +634,16 @@ public class effects : MonoBehaviour
         isSpellShooting = false;
         yield return new WaitForSeconds(4f);        
         SpellSource.SetActive(false);
+        Destroy(SpellSource);
+    }
+
+    IEnumerator SpellShooting103(Conds CurrConditions)
+    {
+        GameObject SpellSource = Instantiate(SlamPlace, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.transform.localEulerAngles = new Vector3(-90, 0, 0);
+        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.02f, CurrConditions.coord_z);
+        SpellSource.SetActive(true);        
+        yield return new WaitForSeconds(1f);        
         Destroy(SpellSource);
     }
 

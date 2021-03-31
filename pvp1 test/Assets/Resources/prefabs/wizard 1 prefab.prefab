@@ -12340,6 +12340,7 @@ MonoBehaviour:
   BloodLossEff: {fileID: 2985416903111645072}
   ExplosionFireBall: {fileID: 6427580383857953897}
   FrozenSpikes: {fileID: 887724018700870464}
+  StrafeEff: {fileID: 5123965852691697486}
   BlockWithShield: {fileID: 0}
   WeaponTrail: {fileID: 0}
   ShieldSlam: {fileID: 0}
@@ -12367,7 +12368,11 @@ MonoBehaviour:
   InvisibleRogue: {fileID: 0}
   FogWith: {fileID: 0}
   BackStabEffect: {fileID: 0}
+  PistolOnBelt: {fileID: 0}
+  PistolRightHand: {fileID: 0}
+  DaggerRightHand: {fileID: 0}
   DeathBeamExample: {fileID: 2354222424376678610}
+  RedTestingBall: {fileID: 0}
 --- !u!82 &6729841475876284596
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12992,6 +12997,12 @@ GameObject:
 --- !u!1 &887724018700870464 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7348487298854747333, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5123965852691697486 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3364538302460858571, guid: b021339ad0d36ec4480d0ff1c3f5c382,
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}
