@@ -54,6 +54,10 @@ public class effects : MonoBehaviour
     public GameObject PistolOnBelt;
     public GameObject PistolRightHand;
     public GameObject DaggerRightHand;
+    public GameObject BulletTrail;
+    public GameObject ButcheryEff;
+    public GameObject SmokePuff;
+    public GameObject Fuseeff;
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
@@ -63,7 +67,6 @@ public class effects : MonoBehaviour
     private Vector2 CastingPos;
 
 
-    public GameObject RedTestingBall;
 
     private Vector3 GetPlayerCoordsByOrderNumber(int OrderNumber)
     {
@@ -147,8 +150,10 @@ public class effects : MonoBehaviour
             PistolOnBelt.SetActive(true);
             PistolRightHand.SetActive(false);
             DaggerRightHand.SetActive(true);
-
-            RedTestingBall.SetActive(false);
+            ButcheryEff.SetActive(false);
+            BulletTrail.SetActive(false);
+            SmokePuff.SetActive(false);
+            Fuseeff.SetActive(false);
         }
 
         if (MyPlayerClass == 5)
@@ -467,10 +472,29 @@ public class effects : MonoBehaviour
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 156)
             {
                 PistolOnBelt.SetActive(false);
+                Fuseeff.SetActive(true);
                 PistolRightHand.SetActive(true);
-                DaggerRightHand.SetActive(false);
-                
+                DaggerRightHand.SetActive(false);                
             }
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 156 && PistolRightHand.activeSelf)
+            {
+                StartCoroutine(TurnOnAfterDelay(PistolOnBelt, 0));
+                Fuseeff.SetActive(false);
+                StartCoroutine(TurnOffAfterDelay(PistolRightHand, 0));
+                StartCoroutine(TurnOnAfterDelay(DaggerRightHand, 0));
+            }
+
+
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 154)
+            {
+                StartCoroutine(TurnOnSomeEffect(ButcheryEff, 1.2f, 0));
+            }
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 154 && ButcheryEff.activeSelf)
+            {
+                StartCoroutine(TurnOFFSomeEffect(ButcheryEff, 0));
+            }
+
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 157)
             {
@@ -661,18 +685,22 @@ public class effects : MonoBehaviour
 
     IEnumerator SpellShooting156(Conds CurrConditions)
     {
-
-        GameObject SpellSource = Instantiate(RedTestingBall, Vector3.zero, Quaternion.identity, VFXRespPlace);
-        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
-        SpellSource.transform.localEulerAngles = new Vector3(0, 0, 0);
+        GameObject SpellSource = Instantiate(BulletTrail, new Vector3(this.gameObject.transform.position.x, 1, this.gameObject.transform.position.z), Quaternion.identity, VFXRespPlace);        
         SpellSource.SetActive(true);
+        SmokePuff.SetActive(true);
+        
+        yield return new WaitForSeconds(0.05f);
+        SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z), 0.5f);
+        yield return new WaitForSeconds(0.05f);
+        SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z), 1);
+        Fuseeff.SetActive(false);
 
         StartCoroutine(TurnOnAfterDelay(PistolOnBelt, 1f));
         StartCoroutine(TurnOffAfterDelay(PistolRightHand, 1f));
         StartCoroutine(TurnOnAfterDelay(DaggerRightHand, 1f));
 
-
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1.2f);
+        SmokePuff.SetActive(false);        
         Destroy(SpellSource);
     }
 
