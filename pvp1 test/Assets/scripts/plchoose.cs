@@ -27,6 +27,7 @@ public class plchoose : MonoBehaviour
         pl7.onClick.AddListener(play7);
         pl8.onClick.AddListener(play8);
 
+
     }
 
     
