@@ -63,7 +63,7 @@ public class encryption: IDisposable
 
         CreateOpenKeys(int.Parse(string_data[3]), int.Parse(string_data[4]));
         general.SecretKey = GetSecretKey(int.Parse(string_data[5]), int.Parse(string_data[6]), int.Parse(string_data[7]));
-        
+        general.PacketID = string_data[8];
     }
 
 

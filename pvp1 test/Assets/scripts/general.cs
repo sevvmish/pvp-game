@@ -30,6 +30,7 @@ public class general
 
     public static encryption PlayerEncryption = new encryption();
     public static byte[] SecretKey;
+    public static string PacketID;
 
     public static string CharacterName;
     public static int CharacterType;
