@@ -773,47 +773,7 @@ public struct ToSend
         MakeClean();
         PlayerID = general.SessionPlayerID;
         TemporaryTable = general.SessionTicket;
-        /*
-        if (Horiz > 5) Horiz = 5;
-        if (Horiz <-5) Horiz = -5;
-
-        limit = 4.9f;
-
-        HorizontalTouch = Horiz;
-        VerticalTouch = Vert;
-        
-
-        if (Horiz>= limit && counter>=0)
-        {
-            if (counter<15) counter++;
-        } 
-        else if (Horiz >= limit && counter < 0)
-        {
-            counter = 0;
-            if (counter < 15) counter++;
-        }
-        else if (Horiz <= -limit && counter <= 0)
-        {
-            if (counter > -15) counter--;
-        }
-        else if (Horiz <= -limit && counter > 0)
-        {
-            counter = 0;
-            if (counter > -15) counter--;
-        } else if (Horiz < limit || Horiz > -limit)
-        {
-            counter = 0;
-        }
-
-        //Debug.Log(counter + " -=======");
-
-        //Debug.Log(Horiz + "-horiz -=======     vert-" + Vert);
-
-        if (counter != 0)
-        {
-            HorizontalTouch = HorizontalTouch * (1 + (Math.Abs(counter) / 15f * 0.5f));
-        }
-        */
+       
         HorizontalTouch = Horiz;
         VerticalTouch = Vert;
 
@@ -825,10 +785,10 @@ public struct ToSend
         
         if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
         {
-            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
+            Result.Append(general.PacketID + "~" + OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.')); //+  + "~0~0~0~0~0~0|"
         } else
         {
-            Result.Append(OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1")); //+  + "~0~0~0~0~0~0|"
+            Result.Append(general.PacketID + "~" + OrderToSend.ToString() + "~0~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1")); //+  + "~0~0~0~0~0~0|"
         }
          
         
@@ -842,49 +802,7 @@ public struct ToSend
         PlayerID = general.SessionPlayerID;
         TemporaryTable = general.SessionTicket;
 
-        /*
-
-        if (Horiz > 5) Horiz = 5;
-        if (Horiz < -5) Horiz = -5;
-
-        limit = 4.9f;
-
-        HorizontalTouch = Horiz;
-        VerticalTouch = Vert;
-
-
-        if (Horiz >= limit && counter >= 0)
-        {
-            if (counter < 15) counter++;
-        }
-        else if (Horiz >= limit && counter < 0)
-        {
-            counter = 0;
-            if (counter < 15) counter++;
-        }
-        else if (Horiz <= -limit && counter <= 0)
-        {
-            if (counter > -15) counter--;
-        }
-        else if (Horiz <= -limit && counter > 0)
-        {
-            counter = 0;
-            if (counter > -15) counter--;
-        }
-        else if (Horiz < limit || Horiz > -limit)
-        {
-            counter = 0;
-        }
-
-        //Debug.Log(counter + " -=======");
-
-        //Debug.Log(Horiz + "-horiz -=======     vert-" + Vert);
-
-        if (counter != 0)
-        {
-            HorizontalTouch = HorizontalTouch * (1 + (Math.Abs(counter) / 15f * 0.5f));
-        }
-        */
+        
         HorizontalTouch = Horiz;
         VerticalTouch = Vert;
 
@@ -898,10 +816,10 @@ public struct ToSend
         OrderToSend++;
         if (general.HUB1_ip != "127.0.0.1" && general.HUB1_ip != "192.168.0.103")
         {
-            Result.Append(OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.') + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString() );
+            Result.Append(general.PacketID + "~"+ OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1").Replace(',', '.') + "~" + VerticalTouch.ToString("f1").Replace(',', '.') + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString() );
         } else
         {
-            Result.Append(OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1") + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString());
+            Result.Append(general.PacketID + "~" + OrderToSend.ToString() + "~1~" + PlayerID + "~" + TemporaryTable + "~" + HorizontalTouch.ToString("f1") + "~" + VerticalTouch.ToString("f1") + "~" + Butt1.ToString() + "~" + Butt2.ToString() + "~" + Butt3.ToString() + "~" + Butt4.ToString() + "~" + Butt5.ToString() + "~" + Butt6.ToString());
         }
         
         return Result.ToString();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Numerics;
 using System;
+using System.Text;
 
 public class encryption: IDisposable
 {
@@ -53,7 +54,8 @@ public class encryption: IDisposable
         presecret_key[2] = (int)result;
         string preres = $"{presecret_key[0]}{presecret_key[1]}{presecret_key[2]}";
         Debug.Log(preres + " - secret key");
-        return GetByteArrFromCharByChar(preres);
+        //return GetByteArrFromCharByChar(preres);
+        return Encoding.UTF8.GetBytes(preres);
     }
 
     public void ProcessInitDataFromServer(string data)
@@ -135,7 +137,7 @@ public class encryption: IDisposable
     {
         int index = 0;
 
-        for (int i = 0; i < source.Length; i++)
+        for (int i = 6; i < source.Length; i++)
         {
             source[i] = (byte)(source[i] + key[index]);
 
@@ -154,7 +156,7 @@ public class encryption: IDisposable
     {
         int index = 0;
 
-        for (int i = 0; i < source.Length; i++)
+        for (int i = 6; i < source.Length; i++)
         {
             source[i] = (byte)(source[i] - key[index]);
 

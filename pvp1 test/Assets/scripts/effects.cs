@@ -61,7 +61,8 @@ public class effects : MonoBehaviour
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
-    public GameObject DeathBeamExample;
+    public GameObject DeathBeam;
+    public GameObject ChargeDeathBeam;
 
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
@@ -158,8 +159,9 @@ public class effects : MonoBehaviour
 
         if (MyPlayerClass == 5)
         {
-            DeathBeamsList = new ObjectPooling(40, DeathBeamExample, VFXRespPlace);
-
+            //DeathBeamsList = new ObjectPooling(40, DeathBeam, VFXRespPlace);
+            DeathBeam.SetActive(false);
+            ChargeDeathBeam.SetActive(false);
         }
 
     }
@@ -314,9 +316,7 @@ public class effects : MonoBehaviour
                             break;
 
 
-                        case 201:
-                            StartCoroutine(SpellShooting201(CurrentConds[CurrCondIndex]));
-                            break;
+                        
                         case 202:
                             StartCoroutine(SpellShooting202(CurrentConds[CurrCondIndex]));
                             break;
@@ -515,6 +515,28 @@ public class effects : MonoBehaviour
             }
             //=================================
 
+            //WIZARD===================================
+            if (SomeConds.cond_type == "ca" && SomeConds.spell_index == 201)
+            {
+                ChargeDeathBeam.SetActive(true);
+            } 
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 201 && ChargeDeathBeam.activeSelf)
+            {
+                ChargeDeathBeam.SetActive(false);
+            }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 201)
+            {
+                print(SomeConds.cond_time + " - time");
+                StartCoroutine(TurnOnSomeEffect(DeathBeam, SomeConds.cond_time, 0));                
+                ChargeDeathBeam.SetActive(false);
+            }            
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 201 && DeathBeam.activeSelf)
+            {
+                DeathBeam.SetActive(false);
+            }
+
+            //=========================================
 
         }
 
@@ -712,23 +734,11 @@ public class effects : MonoBehaviour
     }
 
 
-    IEnumerator SpellShooting201(Conds CurrConditions)
-    {
-
-        GameObject SpellSource = DeathBeamsList.GetObject();
-        SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z);
-        isSpellShooting = false;
-        //yield return new WaitForSeconds(0.1f);
-        CurrentConds.Remove(CurrConditions);
-        yield return new WaitForSeconds(0.1f);
-        SpellSource.SetActive(false);
-
-    }
 
     IEnumerator SpellShooting202(Conds CurrConditions)
     {
 
-        GameObject SpellSource = Instantiate(DeathBeamExample, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        GameObject SpellSource = Instantiate(DeathBeam, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.1f, CurrConditions.coord_z);
         SpellSource.SetActive(true);
         isSpellShooting = false;

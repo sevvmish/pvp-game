@@ -108,6 +108,7 @@ public class connection : MonoBehaviour
             raw_data_received.Clear();
 
             int n = socket_udp.EndReceiveFrom(ar, ref endpoint_udp);
+            encryption.Decode(ref buffer_received_udp, general.SecretKey);
             raw_data_received.Append(Encoding.UTF8.GetString(buffer_received_udp, 0, n));
             //Console.WriteLine(raw_data_received);
 
@@ -135,7 +136,9 @@ public class connection : MonoBehaviour
             //print(Thread.CurrentThread.ManagedThreadId + " - from sender");
             
             buffer_send_udp = Encoding.UTF8.GetBytes(DataForServer);
-
+            encryption.Encode(ref buffer_send_udp, general.SecretKey);
+            //print(Encoding.UTF8.GetString(buffer_send_udp) + " - " + Encoding.UTF8.GetString(general.SecretKey));
+            //print(Encoding.UTF8.GetString(general.SecretKey) + " - RRRRRRRRRRRRRRR");
             socket_udp.SendTo(buffer_send_udp, buffer_send_udp.Length, SocketFlags.None, endpoint);
             return Task.CompletedTask;
         }
@@ -180,72 +183,6 @@ public class connection : MonoBehaviour
         await Task.Run(() => TalkToServer(Data));
     }
 
-
-    public async void ListenToServer()
-    {
-        
-
-        //await Task.Run(() => ReceiveData(token));
-        //await Task.Run(() => TryStreamReceive());
-        //await Task.Run(() => TalkToServer(Data));
-
-    }
-
-
-    /*
-    public void ReceiveData(CancellationToken token)
-    {
-
-        howmany++;
-
-        try
-        {
-
-            StringBuilder messrec = new StringBuilder();
-            byte[] msgBuff = new byte[1024 * general.SessionNumberOfPlayers];
-            int size = 0;
-
-            
-
-            {
-                //size = sck.Receive(msgBuff);
-                size = sck.ReceiveFrom(msgBuff, ref remoteIp);
-                messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
-                cur_time++;
-
-                if (token.IsCancellationRequested)
-                {
-                    Console.WriteLine("Операция прервана токеном");
-                    return;
-                }
-            }
-            while (sck.Available > 0) ;
-
-            isstart = true;
-
-            if (messrec.ToString() != "" && messrec.ToString() != null)
-            {
-                
-                print(messrec.ToString());
-
-                howmany--;
-
-                RawPacketsProcess(messrec.ToString());
-                
-
-
-            }
-        }
-        catch (Exception ex)
-        {
-            print(ex + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-        }
-
-
-        //}
-    }
-    */
 
 
     public static void RawPacketsProcess(string RawData)
