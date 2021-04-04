@@ -7,7 +7,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine.EventSystems;
 using System.Globalization;
-using UnityEngine.EventSystems;
+
 using System.Threading;
 //using UnityEngine.UIElements;
 

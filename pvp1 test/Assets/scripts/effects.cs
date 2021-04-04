@@ -26,7 +26,7 @@ public class effects : MonoBehaviour
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, StrafeEff;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, StrafeEff, StunScreenEffect;
 
     //warr 1 effects
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
@@ -63,6 +63,7 @@ public class effects : MonoBehaviour
     private ObjectPooling DeathBeamsList;
     public GameObject DeathBeam;
     public GameObject ChargeDeathBeam;
+    public GameObject BlackHoleEff;
 
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
@@ -89,11 +90,17 @@ public class effects : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        
-        VFXRespPlace = GameObject.Find("OtherPlayers").transform;
-        
+    {        
+        VFXRespPlace = GameObject.Find("OtherPlayers").transform;        
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
+
+        if (PlayerSessionDataOrder == 0)
+        {
+            StunScreenEffect = Instantiate(Resources.Load<GameObject>("prefabs/StunScreenEff"), Vector3.zero, Quaternion.identity, GameObject.Find("Canvas").transform);
+            StunScreenEffect.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+            StunScreenEffect.SetActive(false);
+        }
+
         StunEffect.SetActive(false);
         BloodLossEff.SetActive(false);
         ExplosionFireBall.SetActive(false);
@@ -162,6 +169,7 @@ public class effects : MonoBehaviour
             //DeathBeamsList = new ObjectPooling(40, DeathBeam, VFXRespPlace);
             DeathBeam.SetActive(false);
             ChargeDeathBeam.SetActive(false);
+            BlackHoleEff.SetActive(false);
         }
 
     }
@@ -182,7 +190,7 @@ public class effects : MonoBehaviour
             if (!StunEffect.activeSelf)
             {
                 StunEffect.SetActive(true);
-
+                
             }
         } 
         else
@@ -380,6 +388,20 @@ public class effects : MonoBehaviour
                 CancelCasting();
             }
 
+            //stun screen eff
+            if (SomeConds.spell_index == 1002 && SomeConds.cond_time>0.5f && PlayerSessionDataOrder==0)
+            {
+                
+                StartCoroutine(TurnOnSomeEffect(StunScreenEffect, SomeConds.cond_time, 0));
+            }
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 1002 && (StunScreenEffect.activeSelf) && PlayerSessionDataOrder == 0)
+            {                
+                StunScreenEffect.SetActive(false);
+            }
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 1002 && (StunEffect.activeSelf))
+            {
+                StunEffect.SetActive(false);
+            }
 
 
             //ONLY FOR WARRIOR====================================            
@@ -737,8 +759,7 @@ public class effects : MonoBehaviour
 
     IEnumerator SpellShooting202(Conds CurrConditions)
     {
-
-        GameObject SpellSource = Instantiate(DeathBeam, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        GameObject SpellSource = Instantiate(BlackHoleEff, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.1f, CurrConditions.coord_z);
         SpellSource.SetActive(true);
         isSpellShooting = false;
