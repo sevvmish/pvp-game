@@ -239,9 +239,9 @@ public class player_setup : MonoBehaviour
         //print(SpellButton1.GetComponent<RectTransform>().rect.x.ToString() + " - " + SpellButton1.GetComponent<Rect>().y.ToString() + "==========");
 
         //toDELETE
-        general.CharacterType = 1;
-        general.CurrentTicket = "WcF7OkCt1h";
-        general.CharacterName = "warWARmain";
+        //general.CharacterType = 1;
+        //general.CurrentTicket = "WcF7OkCt1h";
+        //general.CharacterName = "warWARmain";
         //===================
 
         
