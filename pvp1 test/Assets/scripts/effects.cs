@@ -729,14 +729,14 @@ public class effects : MonoBehaviour
 
     IEnumerator SpellShooting156(Conds CurrConditions)
     {
-        GameObject SpellSource = Instantiate(BulletTrail, new Vector3(this.gameObject.transform.position.x, 1, this.gameObject.transform.position.z), Quaternion.identity, VFXRespPlace);        
+        GameObject SpellSource = Instantiate(BulletTrail, new Vector3(this.gameObject.transform.position.x, 1.3f, this.gameObject.transform.position.z), Quaternion.identity, VFXRespPlace);        
         SpellSource.SetActive(true);
         SmokePuff.SetActive(true);
         
         yield return new WaitForSeconds(0.05f);
-        SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z), 0.5f);
+        SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1.3f, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1.3f, CurrConditions.coord_z), 0.5f);
         yield return new WaitForSeconds(0.05f);
-        SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z), 1);
+        SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1.3f, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1.3f, CurrConditions.coord_z), 1);
         Fuseeff.SetActive(false);
 
         StartCoroutine(TurnOnAfterDelay(PistolOnBelt, 1f));
