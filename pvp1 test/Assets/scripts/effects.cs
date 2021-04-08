@@ -29,7 +29,7 @@ public class effects : MonoBehaviour
     public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, StrafeEff, StunScreenEffect;
 
     //warr 1 effects
-    public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff;
+    public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff, RocksEff;
 
     //mage 1 effects
     public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff, IceNova;
@@ -127,6 +127,7 @@ public class effects : MonoBehaviour
             ShieldChargeEff.SetActive(false);
             BuffEff.SetActive(false);
             ShieldOnEff.SetActive(false);
+            RocksEff.SetActive(false);
         }
         if (MyPlayerClass == 2)
         {            
@@ -410,6 +411,12 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, SomeConds.cond_time, 0));
 
             }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 9)
+            {
+                StartCoroutine(TurnOnSomeEffect(RocksEff, 3f, 0));
+            }
+            
 
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 3)
