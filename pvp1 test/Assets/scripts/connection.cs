@@ -231,10 +231,13 @@ public class connection : MonoBehaviour
 
 
 
-    public static string SendAndGetTCP(string DataForSending)
+    public static string SendAndGetTCP(string DataForSending, general.Ports CurrentPort, string IP, bool is_it_encoded)
     {
-        int CurrentPort_tcp = general.GameServerTCPPort;
-        string CurrentIP_tcp = general.GameServerIP;
+        //int CurrentPort_tcp = general.GameServerTCPPort;
+        //string CurrentIP_tcp = general.GameServerIP;
+        int CurrentPort_tcp = (int)CurrentPort;
+        string CurrentIP_tcp = IP;
+
         string result = null;
 
         IPEndPoint endpoint_tcp = new IPEndPoint(IPAddress.Parse(CurrentIP_tcp), CurrentPort_tcp);
@@ -256,7 +259,14 @@ public class connection : MonoBehaviour
         //===============================SEND======================================
         try
         {
-            sck_tcp.Send(Encoding.UTF8.GetBytes(DataForSending));
+            byte [] data_to_s = Encoding.UTF8.GetBytes(DataForSending);
+
+            if (is_it_encoded)
+            {
+                encryption.Encode(ref data_to_s, general.SecretKey);
+            }
+            
+            sck_tcp.Send(data_to_s);
         }
         catch (Exception ex)
         {
@@ -278,7 +288,21 @@ public class connection : MonoBehaviour
                 size = sck_tcp.Receive(msgBuff);
                 messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
             }
-            while (sck_tcp.Available > 0) ;
+            while (sck_tcp.Available > 0);
+                       
+
+            if (is_it_encoded)
+            {
+                byte[] data_r = new byte[size];
+
+                for (int i = 0; i < size; i++)
+                {
+                    data_r[i] = msgBuff[i];
+                }
+                encryption.Decode(ref data_r, general.SecretKey);
+                messrec.Clear();
+                messrec.Append(Encoding.UTF8.GetString(data_r, 0, data_r.Length));
+            }
 
             if (messrec.ToString() != "" && messrec.ToString() != null)
             {

@@ -10,17 +10,24 @@ public class general
 {
     public static bool isRus = true;
     
+    public enum Ports
+    {
+        tcp2323=2323,
+        tcp2324=2324,
+        tcp2326=2326,
+        udp2325=2325
+    }
 
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string HUB1_ip = "192.168.0.103";
+    public static string HUB1_ip = "127.0.0.1";
     public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57   //192.168.0.103
 
     public static int SetupServerTCPPort = 2326;
     public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
 
-    public static int LoginServerTCPPort = 2324;
-    public static string LoginServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+    public static int LoginServerTCPPort = (int)Ports.tcp2324;
+    public static string LoginServerIP = "127.0.0.1"; //185.18.53.239   "45.67.57.30"
 
     public static string SessionPlayerID; //playerX
     public static string SessionTicket; //sessionX
@@ -120,12 +127,13 @@ public struct SessionData
     public static string SendSessionDataRequest()
     {
 
-        return "0~4~" + general.SessionPlayerID + "~" + general.SessionTicket;
+        return $"{general.PacketID}~0~4~{general.SessionPlayerID}~{general.SessionTicket}";
     }
 
 
     public static void GetDataSessionPlayers(string Data)
     {
+        
         //general.DataForSession
         if (general.DataForSession.Count > 0)
         {
@@ -277,6 +285,7 @@ public static class sr
 
         }
         //===============================SEND======================================
+                
         try
         {
             sck.Send(Encoding.UTF8.GetBytes(DataForSending));
@@ -292,6 +301,7 @@ public static class sr
             return result;
         }
         //================================GET======================================
+        
         try
         {
             StringBuilder messrec = new StringBuilder();
@@ -323,6 +333,7 @@ public static class sr
             sck.Close();
             return result;
         }
+        
         //error case
         sck.Shutdown(SocketShutdown.Both);
         sck.Close();

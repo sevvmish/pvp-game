@@ -38,6 +38,7 @@ public class login_setup : MonoBehaviour
         TheLoginText.text = lang.TheLoginText;
         ThePasswordText.text = lang.ThePasswordText;
 
+        /*
         if (PlayerPrefs.GetInt("EnterAs") == 0)
         {
             NewLogOrGuest.gameObject.SetActive(true);
@@ -58,7 +59,7 @@ public class login_setup : MonoBehaviour
             createnew_button.gameObject.SetActive(false);
 
         }
-       
+       */
         
         
         CanvasGetServer.gameObject.SetActive(false);

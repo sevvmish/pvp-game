@@ -58,7 +58,7 @@ public class encryption: IDisposable
         return Encoding.UTF8.GetBytes(preres);
     }
 
-    public void ProcessInitDataFromServer(string data)
+    public void ProcessInitDataFromServerUDP(string data)
     {
         //return $"{RawDataArray[0]}~{RawDataArray[1]}~0~{player.PlayerEncryption.base_part_pow}~{player.PlayerEncryption.mod_part}~{player.PlayerEncryption.open_key_from_server_one}~{player.PlayerEncryption.open_key_from_server_two}~{player.PlayerEncryption.open_key_from_server_three}";
         string[] string_data = data.Split('~');
@@ -66,6 +66,17 @@ public class encryption: IDisposable
         CreateOpenKeys(int.Parse(string_data[3]), int.Parse(string_data[4]));
         general.SecretKey = GetSecretKey(int.Parse(string_data[5]), int.Parse(string_data[6]), int.Parse(string_data[7]));
         general.PacketID = string_data[8];
+    }
+
+    public void ProcessInitDataFromServerTCP(string data)
+    {
+        
+        //return $"{RawDataArray[0]}~{RawDataArray[1]}~0~ code ~ {player.PlayerEncryption.base_part_pow}~{player.PlayerEncryption.mod_part}~{player.PlayerEncryption.open_key_from_server_one}~{player.PlayerEncryption.open_key_from_server_two}~{player.PlayerEncryption.open_key_from_server_three}";
+        string[] string_data = data.Split('~');
+
+        CreateOpenKeys(int.Parse(string_data[4]), int.Parse(string_data[5]));
+        general.SecretKey = GetSecretKey(int.Parse(string_data[6]), int.Parse(string_data[7]), int.Parse(string_data[8]));
+        general.PacketID = string_data[3];
     }
 
 
@@ -169,7 +180,46 @@ public class encryption: IDisposable
                 index++;
             }
         }
-
-
     }
+
+    public static bool InitEncodingConnection(general.Ports ports)
+    {
+        //port 2324 for login
+        if ((int)ports == 2324)
+        {
+            general.PlayerEncryption.ProcessInitDataFromServerTCP(sr.SendAndGetLoginSetup("0~6~0"));
+            string res = sr.SendAndGetLoginSetup($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}");
+            string[] result = res.Split('~');
+
+            if (result[3] == "ok")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //port 2323 for gameplay
+        if ((int)ports == 2323)
+        {
+            general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2323, general.GameServerIP, false));
+            string res = connection.SendAndGetTCP($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}", general.Ports.tcp2323, general.GameServerIP, false);
+            string[] result = res.Split('~');
+
+            if (result[3] == "ok")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+
 }

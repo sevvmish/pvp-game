@@ -97,12 +97,16 @@ public class playercontrol : MonoBehaviour
         Camera.main.aspect = 16f / 9f;
         Application.targetFrameRate = 60;
 
+        /*
         string EncodingData = connection.SendAndGetTCP($"0~6~{general.SessionPlayerID}~{general.SessionTicket}~0");
-        general.PlayerEncryption.ProcessInitDataFromServer(EncodingData);
+        general.PlayerEncryption.ProcessInitDataFromServerUDP(EncodingData);
         connection.SendAndGetTCP($"0~6~{general.SessionPlayerID}~{general.SessionTicket}~1~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}");
-                
-        string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest());
-        print(SessionResult);
+        */
+
+        encryption.InitEncodingConnection(general.Ports.tcp2323);
+
+        string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest(), general.Ports.tcp2323, general.GameServerIP, true);
+        print(SessionResult  +" - result of sess");
         SessionData.GetDataSessionPlayers(SessionResult);
         general.SetSessionData();
 
