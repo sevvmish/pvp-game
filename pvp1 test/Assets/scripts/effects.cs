@@ -64,6 +64,7 @@ public class effects : MonoBehaviour
     public GameObject DeathBeam;
     public GameObject ChargeDeathBeam;
     public GameObject BlackHoleEff;
+    public GameObject AutoHealShield;
 
     private Animator PlayerAnimator;    
     private Vector2 CastingPos;
@@ -171,6 +172,7 @@ public class effects : MonoBehaviour
             DeathBeam.SetActive(false);
             ChargeDeathBeam.SetActive(false);
             BlackHoleEff.SetActive(false);
+            AutoHealShield.SetActive(false);
         }
 
     }
@@ -556,13 +558,18 @@ public class effects : MonoBehaviour
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 201)
             {
-                print(SomeConds.cond_time + " - time");
+                
                 StartCoroutine(TurnOnSomeEffect(DeathBeam, SomeConds.cond_time, 0));                
                 ChargeDeathBeam.SetActive(false);
             }            
             if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 201 && DeathBeam.activeSelf)
             {
                 DeathBeam.SetActive(false);
+            }
+
+            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 204)
+            {                
+                StartCoroutine(TurnOnSomeEffect(AutoHealShield, SomeConds.cond_time, 0));                
             }
 
             //=========================================

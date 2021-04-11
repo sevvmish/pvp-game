@@ -257,11 +257,19 @@ public class playercontrol : MonoBehaviour
 
         }
 
+
+        //button cooldowns======================================================
         if (SendAndReceive.SpecificationReceived == 1)
         {
             StartCoroutine(killmess(SendAndReceive.MessageType));
             StartCoroutine(ButtonsManagement.buttoncooldown());
         }
+        if (SendAndReceive.SpecificationReceived == 2)
+        {
+            StartCoroutine(ButtonsManagement.CurrentButtonCooldown());
+        }
+        //=========================================================================
+
 
         if (SendAndReceive.SpecificationReceived == 1 && button_order != SendAndReceive.OrderReceived)
         {
@@ -606,7 +614,7 @@ public class playercontrol : MonoBehaviour
                 }
 
 
-
+                /*
                 else if (MyConds.curr_conds[i].cond_type == "him")
                 {
                     if (MyConds.curr_conds[i].cond_message == "r")
@@ -620,6 +628,7 @@ public class playercontrol : MonoBehaviour
                     }
 
                 }
+                */
 
                 else if (MyConds.curr_conds[i].cond_type == "ht" && MyConds.curr_conds[i].damage_or_heal > 0)
                 {
@@ -680,6 +689,37 @@ public class playercontrol : MonoBehaviour
 
                     if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "me" )
                     {
+                        for (int g = 0; g < MyConds.curr_conds.Count; g++)
+                        {
+                            if (MyConds.curr_conds[g].cond_type == "him" && MyConds.curr_conds[g].cond_id== OtherGamers[ii].Conds.curr_conds[iii].cond_id)
+                            {
+                                switch(OtherGamers[ii].Conds.curr_conds[iii].cond_message)
+                                {
+                                    case "d":
+                                        MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
+                                        OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+                                        MyConds.curr_conds[g].isChecked = true;
+                                        break;
+                                    case "b":
+                                        MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
+                                        OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+                                        MyConds.curr_conds[g].isChecked = true;
+                                        break;
+                                    case "r":
+                                        MakeSign("RESISTED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
+                                        OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+                                        MyConds.curr_conds[g].isChecked = true;
+                                        break;
+                                    case "i":
+                                        MakeSign("IMMUNE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
+                                        OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+                                        MyConds.curr_conds[g].isChecked = true;
+                                        break;
+                                }
+                            }
+                        }
+
+                        /*
                         if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "d")
                         {
                             MakeSign("DODGE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
@@ -691,6 +731,19 @@ public class playercontrol : MonoBehaviour
                             MakeSign("BLOCKED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
                             OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
                         }
+                        if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "r")
+                        {
+                            MakeSign("RESISTED", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
+                            OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+
+                        }
+                        if (OtherGamers[ii].Conds.curr_conds[iii].cond_message == "i")
+                        {
+                            MakeSign("IMMUNE", OtherGamers[ii].transform.position + new Vector3(0, 2, 0), Color.white, false, true);
+                            OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
+
+                        }
+                        */
                     }
 
                     OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;

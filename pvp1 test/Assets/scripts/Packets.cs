@@ -840,7 +840,8 @@ public static class SendAndReceive
     public static string MessageType;
     public static float SpellCooldown;
     public static int SwButtonCond;
-
+    public static int SpellIndex;
+    public static string UniqCode;
 
 
     public static void GetHeader(string Header)
@@ -854,6 +855,13 @@ public static class SendAndReceive
             ButtonState = int.Parse(getstr[2]);
             MessageType = MessageTypeDecode(int.Parse(getstr[3]));
             SpellCooldown = float.Parse(getstr[4].Replace('.', ','));            
+        }
+
+        if (SpecificationReceived == 2)
+        {
+            SpellIndex = int.Parse(getstr[2]);
+            MessageType = MessageTypeDecode(int.Parse(getstr[3]));
+            SpellCooldown = float.Parse(getstr[4].Replace('.', ','));
         }
     }
 
@@ -1352,6 +1360,8 @@ public class Buttons
     public  string WhatPacketAwaiting;
     public  float CountTries;
     public  int ButtonNumber;
+
+    public static HashSet<string> unique_codes = new HashSet<string>();
     
 
     public struct WhichButton
@@ -1468,6 +1478,50 @@ public class Buttons
     }
 
 
+    public IEnumerator CurrentButtonCooldown()
+    {
+        if (unique_codes.Contains(SendAndReceive.UniqCode))
+        {
+            yield break;
+        }
+
+        unique_codes.Add(SendAndReceive.UniqCode);
+
+        int number_of_button = 0;
+        int spell_index = SendAndReceive.SpellIndex;
+
+        if (spell_index == general.DataForSession[0].Spell1) number_of_button = 1;
+        if (spell_index == general.DataForSession[0].Spell2) number_of_button = 2;
+        if (spell_index == general.DataForSession[0].Spell3) number_of_button = 3;
+        if (spell_index == general.DataForSession[0].Spell4) number_of_button = 4;
+        if (spell_index == general.DataForSession[0].Spell5) number_of_button = 5;
+        if (spell_index == general.DataForSession[0].Spell6) number_of_button = 6;
+
+        Button CurrentButton = GetButton(number_of_button);
+
+        if (CurrentButton != null)
+        {
+            float CoolDown = SendAndReceive.SpellCooldown;
+            
+            Image CurrentButtonImage = CurrentButton.gameObject.GetComponent<Image>();
+
+            CurrentButtonImage.fillAmount = 0;
+            CurrentButton.interactable = false;
+
+            for (float i = 0; i < CoolDown; i += 0.1f)
+            {
+                CurrentButtonImage.fillAmount = i / CoolDown;
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            CurrentButtonImage.fillAmount = 1;
+            CurrentButton.interactable = true;
+            CurrentButton = null;
+        }
+    }
+
+
+
     public IEnumerator buttoncooldown()
     {
 
@@ -1478,7 +1532,7 @@ public class Buttons
             float CoolDown = SendAndReceive.SpellCooldown;
             if (CoolDown == 0 && SendAndReceive.ButtonState==1 )
             {
-                CoolDown = 0.5f;
+                CoolDown = 0.7f;
             }
             Image CurrentButtonImage = CurrentButton.gameObject.GetComponent<Image>();
 
@@ -1503,31 +1557,31 @@ public class Buttons
 
     
 
-        private Button GetButton(int numb)
+    private Button GetButton(int numb)
     {
-        Button result = null;
-        switch (numb)
-        {
-            case 1:
-                result = SpellButton1;
-                break;
-            case 2:
-                result = SpellButton2;
-                break;
-            case 3:
-                result = SpellButton3;
-                break;
-            case 4:
-                result = SpellButton4;
-                break;
-            case 5:
-                result = SpellButton5;
-                break;
-            case 6:
-                result = SpellButton6;
-                break;
-        }
-        return result;
+    Button result = null;
+    switch (numb)
+    {
+        case 1:
+            result = SpellButton1;
+            break;
+        case 2:
+            result = SpellButton2;
+            break;
+        case 3:
+            result = SpellButton3;
+            break;
+        case 4:
+            result = SpellButton4;
+            break;
+        case 5:
+            result = SpellButton5;
+            break;
+        case 6:
+            result = SpellButton6;
+            break;
+    }
+    return result;
     }
 
 }
