@@ -289,7 +289,13 @@ public class connection : MonoBehaviour
                 messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
             }
             while (sck_tcp.Available > 0);
-                       
+            
+            if (messrec.ToString()=="nsc")
+            {
+                sck_tcp.Shutdown(SocketShutdown.Both);
+                sck_tcp.Close();
+                return "nsc";
+            }
 
             if (is_it_encoded)
             {

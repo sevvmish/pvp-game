@@ -25,6 +25,7 @@ public class login_setup : MonoBehaviour
         sr.isConnectionError = false;
 
         //langu.SetLangu("eng");
+        encryption.InitEncodingConnection(general.Ports.tcp2324);
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
