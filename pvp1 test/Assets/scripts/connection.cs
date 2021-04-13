@@ -281,7 +281,7 @@ public class connection : MonoBehaviour
         try
         {
             StringBuilder messrec = new StringBuilder();
-            byte[] msgBuff = new byte[256 * general.SessionNumberOfPlayers];
+            byte[] msgBuff = new byte[1024];
             int size = 0;
 
             {
@@ -289,7 +289,9 @@ public class connection : MonoBehaviour
                 messrec.Append(Encoding.UTF8.GetString(msgBuff, 0, size));
             }
             while (sck_tcp.Available > 0);
+
             
+
             if (messrec.ToString()=="nsc")
             {
                 sck_tcp.Shutdown(SocketShutdown.Both);

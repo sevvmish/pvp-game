@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class testing_tcp : MonoBehaviour
@@ -8,7 +9,8 @@ public class testing_tcp : MonoBehaviour
     void Start()
     {
         encryption.InitEncodingConnection(general.Ports.tcp2324);
-                
+        
+        print(connection.SendAndGetTCP($"{general.PacketID}~0~0~sbsdfdsv~df43h", general.Ports.tcp2324, general.LoginServerIP, true));
     }
 
     // Update is called once per frame

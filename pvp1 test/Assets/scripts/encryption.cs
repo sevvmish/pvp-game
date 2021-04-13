@@ -187,8 +187,10 @@ public class encryption: IDisposable
         //port 2324 for login
         if ((int)ports == 2324)
         {
-            general.PlayerEncryption.ProcessInitDataFromServerTCP(sr.SendAndGetLoginSetup("0~6~0"));
-            string res = sr.SendAndGetLoginSetup($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}");
+            //general.PlayerEncryption.ProcessInitDataFromServerTCP(sr.SendAndGetLoginSetup("0~6~0"));
+            //string res = sr.SendAndGetLoginSetup($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}");
+            general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2324, general.LoginServerIP, false));
+            string res = connection.SendAndGetTCP($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}", general.Ports.tcp2324, general.LoginServerIP, false);
             string[] result = res.Split('~');
 
             if (result[3] == "ok")
