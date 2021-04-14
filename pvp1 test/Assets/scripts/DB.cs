@@ -275,12 +275,15 @@ public static class lang
 
 
     public static string wlltext = "неправильная длина логина";
+    public static string wdstext = "недопустимые символы";
     public static string wlptext = "неправильная длина пароля";
     public static string uaetext = "такой логин уже существует";
     public static string ecutext = "ошибка при создании логина";
     public static string udetext = "нет такого пользователя";
     public static string wptext = "ошибка в пароле";
     public static string uctext = "пользователь создан";
+    public static string egttext = "ошибка в получении тикета";
+    public static string errtext = "произошла ошибка";
 
     public static string WarriorText = "ВОИН";
     public static string ElemText = "ЕЛЕМЕНТАЛИСТ";

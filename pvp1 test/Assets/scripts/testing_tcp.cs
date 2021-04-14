@@ -11,7 +11,9 @@ public class testing_tcp : MonoBehaviour
         encryption.InitEncodingConnection(general.Ports.tcp2324);
 
         //print(connection.SendAndGetTCP($"{general.PacketID}~0~0~tester22~passpass1", general.Ports.tcp2324, general.LoginServerIP, true));
-        print(connection.SendAndGetTCP($"{general.PacketID}~0~1~tester22~{encryption.FromByteToString(encryption.GetHash384("passpass1"))}", general.Ports.tcp2324, general.LoginServerIP, true));
+        //print(connection.SendAndGetTCP($"{general.PacketID}~0~1~tester22~{encryption.FromByteToString(encryption.GetHash384("passpass12"))}", general.Ports.tcp2324, general.LoginServerIP, true));
+        //print(connection.SendAndGetTCP($"{general.PacketID}~0~2", general.Ports.tcp2324, general.LoginServerIP, true));
+        print(connection.SendAndGetTCP($"{general.PacketID}~1~0~q7aTM3DGHj", general.Ports.tcp2324, general.LoginServerIP, true));
     }
 
     // Update is called once per frame

@@ -25,7 +25,15 @@ public class login_setup : MonoBehaviour
         sr.isConnectionError = false;
 
         //langu.SetLangu("eng");
-        encryption.InitEncodingConnection(general.Ports.tcp2324);
+        try
+        {
+            encryption.InitEncodingConnection(general.Ports.tcp2324);
+        }
+        catch (Exception ex)
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
@@ -39,7 +47,7 @@ public class login_setup : MonoBehaviour
         TheLoginText.text = lang.TheLoginText;
         ThePasswordText.text = lang.ThePasswordText;
 
-        /*
+        
         if (PlayerPrefs.GetInt("EnterAs") == 0)
         {
             NewLogOrGuest.gameObject.SetActive(true);
@@ -60,7 +68,7 @@ public class login_setup : MonoBehaviour
             createnew_button.gameObject.SetActive(false);
 
         }
-       */
+       
         
         
         CanvasGetServer.gameObject.SetActive(false);
@@ -118,46 +126,59 @@ public class login_setup : MonoBehaviour
 
     public void Beforelogin_asguest()
     {
-
-        if (PlayerPrefs.GetString("GuestLogin")=="")
+        try
         {
-            string result1 = sr.SendAndGetLoginSetup("0~2");
-                        
-            string[] getstr1 = result1.Split('~');
-            
-            if (result1==null || result1=="")
+            if (PlayerPrefs.GetString("GuestLogin") == "")
             {
-                StartCoroutine(ConnectionErr());
-                
-            } else
-            {                
-                PlayerPrefs.SetString("GuestLogin", getstr1[2]);
-                PlayerPrefs.SetString("GuestPassword", getstr1[3]);
-                string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+                //string result1 = sr.SendAndGetLoginSetup("0~2");
+                string result1 = connection.SendAndGetTCP($"{general.PacketID}~0~2", general.Ports.tcp2324, general.LoginServerIP, true);
+
+
+                string[] getstr1 = result1.Split('~');
+
+                if (result1 == null || result1 == "")
+                {
+                    StartCoroutine(ConnectionErr());
+
+                }
+                else
+                {
+                    PlayerPrefs.SetString("GuestLogin", getstr1[2]);
+                    PlayerPrefs.SetString("GuestPassword", getstr1[3]);
+                    //string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+                    string result = connection.SendAndGetTCP($"{general.PacketID}~0~1~{PlayerPrefs.GetString("GuestLogin")}~{encryption.FromByteToString(encryption.GetHash384(PlayerPrefs.GetString("GuestPassword")))}", general.Ports.tcp2324, general.LoginServerIP, true);
+                    string[] getstr = result.Split('~');
+                    general.CurrentTicket = getstr[2];
+                    print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
+                }
+            }
+            else
+            {
+                //string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+                string result = connection.SendAndGetTCP($"{general.PacketID}~0~1~{PlayerPrefs.GetString("GuestLogin")}~{encryption.FromByteToString(encryption.GetHash384(PlayerPrefs.GetString("GuestPassword")))}", general.Ports.tcp2324, general.LoginServerIP, true);
                 string[] getstr = result.Split('~');
-                general.CurrentTicket = getstr[2];
-                print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
-            }            
-        } 
-        else
-        {
-            string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
-            string[] getstr = result.Split('~');
 
-            if (result == null || result == "")
-            {
-                StartCoroutine(ConnectionErr());
+                if (result == null || result == "")
+                {
+                    StartCoroutine(ConnectionErr());
 
-            } else
-            {
-                general.CurrentTicket = getstr[2];
-                print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
-            }            
+                }
+                else
+                {
+                    general.CurrentTicket = getstr[2];
+                    print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
+                }
+            }
+
+            //add the server map
+            PlayerPrefs.SetInt("EnterAs", 2);
+            SceneManager.LoadScene("player_choose");
         }
-
-        //add the server map
-        PlayerPrefs.SetInt("EnterAs", 2);
-        SceneManager.LoadScene("player_choose");
+        catch (Exception ex)
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        
     }
 
 
@@ -169,63 +190,81 @@ public class login_setup : MonoBehaviour
 
     private void TryLoginSend()
     {
-        string result = sr.SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
-        string[] getstr = result.Split('~');
-
-        if (result == null || result == "")
+        try
         {
-            StartCoroutine(ConnectionErr());
-        }
-        else if (getstr[2]=="wll" || getstr[2] == "wlp" || getstr[2] == "ude" || getstr[2] == "wp")
-        {
-            StartCoroutine(Info(getstr[2]));
-        } 
-        else
-        {
-            general.CurrentTicket = getstr[2];
-            print(general.CurrentTicket + " - " + login_input.text + " - " + password_input.text);
-            //PlayerPrefs.SetInt("EnterAs", 1);
-            SceneManager.LoadScene("player_choose");
-        }
-    }
-
-    private void CreateNewLog()
-    {
-        string result = sr.SendAndGetLoginSetup("0~0~" + login_input.text + "~" + password_input.text);
-
-        print(result);
-
-        string[] getstr = result.Split('~');
-
-        if (result == null || result == "")
-        {
-            StartCoroutine(ConnectionErr());
-        }
-        else if (getstr[2] == "wll" || getstr[2] == "wlp" || getstr[2] == "uae" || getstr[2] == "ecu")
-        {
-            StartCoroutine(Info(getstr[2]));
-        }
-        else
-        {
-            string result11 = sr.SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
-            string[] getstr11 = result11.Split('~');
+            //string result = sr.SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
+            string result = connection.SendAndGetTCP($"{general.PacketID}~0~1~{login_input.text}~{encryption.FromByteToString(encryption.GetHash384(password_input.text))}", general.Ports.tcp2324, general.LoginServerIP, true);
+            string[] getstr = result.Split('~');
 
             if (result == null || result == "")
             {
                 StartCoroutine(ConnectionErr());
             }
-            else if (getstr11[2] == "wll" || getstr11[2] == "wlp" || getstr11[2] == "ude" || getstr11[2] == "wp")
+            else if (getstr[2] == "wll" || getstr[2] == "wlp" || getstr[2] == "ude" || getstr[2] == "wp")
             {
-                StartCoroutine(Info(getstr11[2]));
+                StartCoroutine(Info(getstr[2]));
             }
             else
             {
-                general.CurrentTicket = getstr11[2];
+                general.CurrentTicket = getstr[2];
                 print(general.CurrentTicket + " - " + login_input.text + " - " + password_input.text);
-                PlayerPrefs.SetInt("EnterAs", 1);
+                //PlayerPrefs.SetInt("EnterAs", 1);
                 SceneManager.LoadScene("player_choose");
             }
         }
+        catch (Exception ex)
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        
+    }
+
+    private void CreateNewLog()
+    {
+        try
+        {
+            //string result = sr.SendAndGetLoginSetup("0~0~" + login_input.text + "~" + password_input.text);
+            string result = connection.SendAndGetTCP($"{general.PacketID}~0~0~{login_input.text}~{password_input.text}", general.Ports.tcp2324, general.LoginServerIP, true);
+            print(result);
+
+            string[] getstr = result.Split('~');
+
+            if (result == null || result == "")
+            {
+                StartCoroutine(ConnectionErr());
+            }
+            else if (getstr[2] == "wll" || getstr[2] == "wlp" || getstr[2] == "uae" || getstr[2] == "ecu")
+            {
+                StartCoroutine(Info(getstr[2]));
+            }
+            else
+            {
+                //string result11 = sr.SendAndGetLoginSetup("0~1~" + login_input.text + "~" + password_input.text);
+                string result11 = connection.SendAndGetTCP($"{general.PacketID}~0~1~{login_input.text}~{encryption.FromByteToString(encryption.GetHash384(password_input.text))}", general.Ports.tcp2324, general.LoginServerIP, true);
+                string[] getstr11 = result11.Split('~');
+
+                if (result == null || result == "")
+                {
+                    StartCoroutine(ConnectionErr());
+                }
+                else if (getstr11[2] == "wll" || getstr11[2] == "wlp" || getstr11[2] == "ude" || getstr11[2] == "wp")
+                {
+                    StartCoroutine(Info(getstr11[2]));
+                }
+                else
+                {
+                    general.CurrentTicket = getstr11[2];
+                    print(general.CurrentTicket + " - " + login_input.text + " - " + password_input.text);
+                    PlayerPrefs.SetInt("EnterAs", 1);
+                    SceneManager.LoadScene("player_choose");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        
     }
 
    
@@ -238,26 +277,34 @@ public class login_setup : MonoBehaviour
 
     IEnumerator WaitingAndEnter()
     {
-        CanvasWaiting.gameObject.SetActive(true);
+        try
+        {
+            CanvasWaiting.gameObject.SetActive(true);
 
+            //string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
+            string result = connection.SendAndGetTCP($"{general.PacketID}~0~1~{PlayerPrefs.GetString("GuestLogin")}~{encryption.FromByteToString(encryption.GetHash384(PlayerPrefs.GetString("GuestPassword")))}", general.Ports.tcp2324, general.LoginServerIP, true);
+            string[] getstr = result.Split('~');
 
-        string result = sr.SendAndGetLoginSetup("0~1~" + PlayerPrefs.GetString("GuestLogin") + "~" + PlayerPrefs.GetString("GuestPassword"));
-        string[] getstr = result.Split('~');
+            if (result == null || result == "")
+            {
+                StartCoroutine(ConnectionErr());
 
-        if (result == null || result == "")
+            }
+            else
+            {
+                general.CurrentTicket = getstr[2];
+                print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
+            }
+            
+        }
+        catch (Exception ex)
         {
             StartCoroutine(ConnectionErr());
-
         }
-        else
-        {
-            general.CurrentTicket = getstr[2];
-            print(general.CurrentTicket + " - " + PlayerPrefs.GetString("GuestLogin") + " - " + PlayerPrefs.GetString("GuestPassword"));
-        }
-
 
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("player_choose");
+
     }
 
     IEnumerator Info(string Message)
@@ -283,6 +330,9 @@ public static class codes
             case "wll":
                 result = lang.wlltext;
                 break;
+            case "wds":
+                result = lang.wdstext;
+                break;
             case "wlp":
                 result = lang.wlptext;
                 break;
@@ -300,6 +350,12 @@ public static class codes
                 break;
             case "uc":
                 result = lang.uctext;
+                break;
+            case "egt":
+                result = lang.egttext;
+                break;
+            case "err":
+                result = lang.errtext;
                 break;
         }
 
