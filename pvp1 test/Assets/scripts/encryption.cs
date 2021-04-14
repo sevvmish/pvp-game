@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Numerics;
 using System;
 using System.Text;
+using System.Security.Cryptography;
 
 public class encryption: IDisposable
 {
@@ -221,6 +222,23 @@ public class encryption: IDisposable
         }
 
         return false;
+    }
+
+    public static byte[] GetHash384(string data)
+    {
+        SHA384 create_hash = SHA384.Create();
+        return create_hash.ComputeHash(Encoding.UTF8.GetBytes(data));
+    }
+
+    public static string FromByteToString(byte[] data)
+    {
+        StringBuilder d = new StringBuilder();
+        for (int i = 0; i < data.Length; i++)
+        {
+            d.Append(data[i]);
+        }
+
+        return d.ToString();
     }
 
 
