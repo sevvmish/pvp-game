@@ -65,7 +65,16 @@ public class player_choose : MonoBehaviour
 
 
         string result = null;
-        result = sr.SendAndGetLoginSetup("1~0~" + general.CurrentTicket);
+        //result = sr.SendAndGetLoginSetup("1~0~" + general.CurrentTicket);
+        try
+        {
+            result = connection.SendAndGetTCP($"{general.PacketID}~1~0~{general.CurrentTicket}", general.Ports.tcp2324, general.LoginServerIP, true);
+        }
+        catch (System.Exception ex)
+        {
+            StartCoroutine(ConnectionErr());
+        }
+        
 
         string[] getstr = result.Split('~');
         switch (getstr[2])

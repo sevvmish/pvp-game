@@ -122,7 +122,8 @@ public class player_get_new : MonoBehaviour
     {
         EnterNamePanel.SetActive(false);
         string result = null;
-        result = sr.SendAndGetLoginSetup("1~1~" + general.CurrentTicket + "~" + char_name_input.text + "~" + CurrentPlayerNumber);
+        //result = sr.SendAndGetLoginSetup("1~1~" + general.CurrentTicket + "~" + char_name_input.text + "~" + CurrentPlayerNumber);
+        result = connection.SendAndGetTCP($"{general.PacketID}~1~1~{general.CurrentTicket}~{char_name_input.text}~{CurrentPlayerNumber}", general.Ports.tcp2324, general.LoginServerIP, true);
 
         string[] getstr = result.Split('~');
         switch(getstr[2])
