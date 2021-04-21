@@ -29,10 +29,13 @@ public class player_choose : MonoBehaviour
     private chars CurrentPlayerChosen;
     private List<chars> WhatCharacters = new List<chars>();
 
+    public GameObject err_log_window;
+    MessageInfo error_messages;
+
     // Start is called before the first frame update
     void Start()
     {
-        sr.isConnectionError = false;
+        error_messages = new MessageInfo(err_log_window);
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
@@ -72,7 +75,7 @@ public class player_choose : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            StartCoroutine(ConnectionErr());
+            StartCoroutine(error_messages.process_error("con_err"));
         }
         
 
@@ -81,9 +84,11 @@ public class player_choose : MonoBehaviour
         {           
             case "nst":
                 print("wrong login");
+                StartCoroutine(error_messages.process_error("nst"));
                 break;
             case "nc":
                 print("no characters");
+                
                 SceneManager.LoadScene("player_get_new");
                 break;
         }
@@ -92,6 +97,11 @@ public class player_choose : MonoBehaviour
         {
             int index = int.Parse(getstr[2]);
             
+            if (index==5)
+            {
+                ChooseAnother.gameObject.SetActive(false);
+            }
+
             for (int i=1; i<=index; i++)
             {
 
@@ -145,14 +155,7 @@ public class player_choose : MonoBehaviour
         SceneManager.LoadScene("player_setup");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (sr.isConnectionError)
-        {
-            StartCoroutine(ConnectionErr());
-        }
-    }
+    
 
 
     IEnumerator ConnectionErr()

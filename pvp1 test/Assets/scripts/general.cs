@@ -5,6 +5,9 @@ using System.Net.Sockets;
 using System.Net;
 using System;
 using System.Text;
+using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class general
 {
@@ -340,4 +343,121 @@ public static class sr
         return result;
     }
 }
+
+
+public class MessageInfo : MonoBehaviour
+{
+    public GameObject mess_obj;    
+    private TextMeshProUGUI mess_text_mesh;
+        
+    public MessageInfo(GameObject obj)
+    {                
+        mess_obj = obj;
+        mess_obj.SetActive(false);
+        mess_text_mesh = mess_obj.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();       
+    }
+        
+    public IEnumerator process_error(string _code)
+    {
+        bool is_restarting = false;
+
+        switch (_code)
+        {            
+            case "ecu":
+                is_restarting = true;
+                break;
+            case "egt":
+                is_restarting = true;
+                break;
+            case "err":
+                is_restarting = true;
+                break;
+            case "con_err":
+                is_restarting = true;
+                break;
+            case "nst":
+                is_restarting = true;
+                break;
+        }
+
+        mess_obj.SetActive(true);
+        mess_text_mesh.text = codes.GetCodeResult(_code);
+        yield return new WaitForSeconds(3f);
+        mess_obj.SetActive(false);
+
+        if (is_restarting)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+}
+
+public static class codes
+{
+    public static string GetCodeResult(string CodeResult)
+    {
+        string result = null;
+
+        switch (CodeResult)
+        {
+            case "wll":
+                result = lang.wlltext; //long login
+                break;
+            case "wds":
+                result = lang.wdstext; //wrong symbols
+                break;
+            case "wlp":
+                result = lang.wlptext; //long pass
+                break;
+            case "uae":
+                result = lang.uaetext; //user allready exists
+                break;
+            case "ecu":
+                result = lang.ecutext; // err creating login
+                break;
+            case "ude":
+                result = lang.udetext; //no user with such name
+                break;
+            case "wp":
+                result = lang.wptext; //wrong pass
+                break;
+            case "load":
+                result = lang.loadtext; //loading...
+                break;
+
+            case "egt":
+                result = lang.egttext; //err getting ticket
+                break;
+            case "err":
+                result = lang.errtext; //just err
+                break;
+            case "con_err":
+                result = lang.conerrtext;
+                break;
+            case "nst":
+                result = lang.nsttext ; //loading...
+                break;
+            case "wcn":
+                result = lang.wcntext ; //loading...
+                break;
+            case "cae":
+                result = lang.caetext; //loading...
+                break;
+            case "tae":
+                result = lang.taetext ; //loading...
+                break;
+
+            //nc
+
+
+            default:
+                result = "none";
+                break;
+        }
+
+        return result;
+
+    }
+}
+
 

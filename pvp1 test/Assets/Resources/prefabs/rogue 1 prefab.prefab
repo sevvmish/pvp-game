@@ -14525,7 +14525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &636375368848151564
 Transform:
   m_ObjectHideFlags: 0
@@ -29014,6 +29014,7 @@ MonoBehaviour:
   BuffEff: {fileID: 0}
   ShieldOnEff: {fileID: 0}
   ShieldChargeEff: {fileID: 0}
+  RocksEff: {fileID: 0}
   CastingEffFireHandL: {fileID: 0}
   CastingEffFireHandR: {fileID: 0}
   Fireball: {fileID: 0}
@@ -29043,6 +29044,7 @@ MonoBehaviour:
   DeathBeam: {fileID: 0}
   ChargeDeathBeam: {fileID: 0}
   BlackHoleEff: {fileID: 0}
+  AutoHealShield: {fileID: 0}
 --- !u!82 &7289464564138589573
 AudioSource:
   m_ObjectHideFlags: 0
@@ -122773,7 +122775,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9b8d44f8cd98c5b428345db6b7908bd0,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b8d44f8cd98c5b428345db6b7908bd0, type: 3}

@@ -25,10 +25,48 @@ public class player_get_new : MonoBehaviour
 
     public TextMeshProUGUI warrtext, elemtext, barbartext, rogtext, wizardtext, createnewchartext, backtext, enterloginname;
 
+    public GameObject err_log_window;
+    MessageInfo error_messages;
+
     // Start is called before the first frame update
     void Start()
     {
         sr.isConnectionError = false;
+        error_messages = new MessageInfo(err_log_window);
+
+        string result = null;
+        //result = sr.SendAndGetLoginSetup("1~0~" + general.CurrentTicket);
+        try
+        {
+            result = connection.SendAndGetTCP($"{general.PacketID}~1~0~{general.CurrentTicket}", general.Ports.tcp2324, general.LoginServerIP, true);
+        }
+        catch (System.Exception ex)
+        {
+            StartCoroutine(error_messages.process_error("con_err"));
+        }
+
+        string[] getstr = result.Split('~');
+        List<int> existing_chars = new List<int>();
+
+        if (getstr[2] != "nst" && getstr[2] != "nc")
+        {
+            int index = int.Parse(getstr[2]);
+            if (index > 0)
+            {
+                for (int i = 1; i <= index; i++)
+                {
+                    existing_chars.Add( int.Parse(getstr[2 + 2*i]));
+
+                }
+                for (int i = 0; i < existing_chars.Count; i++)
+                {
+                    print(existing_chars[i] + " - ");
+                }
+            }           
+        }
+
+        
+
 
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
@@ -51,6 +89,61 @@ public class player_get_new : MonoBehaviour
         createnewchartext.text = lang.CreateNewCharacter;
         backtext.text = lang.back;
 
+
+        if (existing_chars.Count > 0)
+        {
+            for (int i = 0; i < existing_chars.Count; i++)
+            {
+                switch (existing_chars[i])
+                {
+                    case 1:
+                        pl1.interactable = false;
+                        break;
+                    case 2:
+                        pl2.interactable = false;
+                        break;
+                    case 3:
+                        pl3.interactable = false;
+                        break;
+                    case 4:
+                        pl4.interactable = false;
+                        break;
+                    case 5:
+                        pl5.interactable = false;
+                        break;
+                }
+                
+            }            
+        }
+
+        for (int i = 1; i <= 5; i++)
+        {
+            if (!existing_chars.Contains(i))
+            {
+                switch (i)
+                {
+                    case 1:
+                        CurrentPlayerNumber = 1;
+                        break;
+                    case 2:
+                        CurrentPlayerNumber = 2;
+                        break;
+                    case 3:
+                        CurrentPlayerNumber = 3;
+                        break;
+                    case 4:
+                        CurrentPlayerNumber = 4;
+                        break;
+                    case 5:
+                        CurrentPlayerNumber = 5;
+                        break;
+                }
+                StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
+                break;
+            }            
+        }
+
+
         //print(sr.SendAndGetLoginSetup("1~2~" + "77NGYdzGd9" + "~" + "wizwizwiz"));
 
     }
@@ -67,22 +160,7 @@ public class player_get_new : MonoBehaviour
             Onn();
         }
 
-        if (sr.isConnectionError)
-        {
-            StartCoroutine(ConnectionErr());
-        }
-
-        /*
-        if (cur_time>2)
-        {
-            cur_time = 0;
-            await Task.Run(() => sr.isServerOff());            
-
-        } else
-        {
-            cur_time += Time.deltaTime;
-        }
-        */
+        
 
         if (char_name_input.text != null)
         {
@@ -123,42 +201,66 @@ public class player_get_new : MonoBehaviour
         EnterNamePanel.SetActive(false);
         string result = null;
         //result = sr.SendAndGetLoginSetup("1~1~" + general.CurrentTicket + "~" + char_name_input.text + "~" + CurrentPlayerNumber);
-        result = connection.SendAndGetTCP($"{general.PacketID}~1~1~{general.CurrentTicket}~{char_name_input.text}~{CurrentPlayerNumber}", general.Ports.tcp2324, general.LoginServerIP, true);
 
-        string[] getstr = result.Split('~');
-        switch(getstr[2])
+        try
         {
-            case "ok":
-                print("OK");
-                break;
-            case "wcn":
-                print("wrong character name");
-                break;
-            case "cae":
-                print("character name allready in use");
-                break;
-            case "tae":
-                print("you allready have such character type");
-                break;
-            case "err":
-                print("error creating character");
-                break;
-            case "nst":
-                print("wrong login");
-                break;
+            result = connection.SendAndGetTCP($"{general.PacketID}~1~1~{general.CurrentTicket}~{char_name_input.text}~{CurrentPlayerNumber}", general.Ports.tcp2324, general.LoginServerIP, true);
 
+            string[] getstr = result.Split('~');
+            print(result);
+            /*
+            switch(getstr[2])
+            {
+                case "ok":
+                    print("OK");
+                    break;
+                case "wcn":
+                    print("wrong character name");
+                    break;
+                case "cae":
+                    print("character name allready in use");
+                    break;
+                case "tae":
+                    print("you allready have such character type");
+                    break;
+                case "err":
+                    print("error creating character");
+                    break;
+                case "nst":
+                    print("wrong login");
+                    break;
+
+            }
+            */
+
+            if (codes.GetCodeResult(getstr[2]) != "none")
+            {
+                StartCoroutine(error_messages.process_error(getstr[2]));
+            } 
+
+            if (getstr[2] == "ok")
+            {
+                SceneManager.LoadScene("player_choose");
+            }
+            else
+            {
+                StartCoroutine(LoadAgain());
+            }
         }
-
-        if (getstr[2]=="ok")
+        catch (System.Exception)
         {
-            SceneManager.LoadScene("player_choose");
-        } else
-        {
-            SceneManager.LoadScene("player_get_new");
+            StartCoroutine(error_messages.process_error("con_err"));
         }
+        
         
 
 
+    }
+
+    IEnumerator LoadAgain()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("player_get_new");
     }
 
     private void create_char_panel_on()
@@ -169,6 +271,7 @@ public class player_get_new : MonoBehaviour
 
     private void Off()
     {
+        /*
         if (pl1.interactable)
         {
             pl1.interactable = false;
@@ -189,6 +292,30 @@ public class player_get_new : MonoBehaviour
         {
             pl5.interactable = false;
         }
+        */
+
+        if (pl1.isActiveAndEnabled)
+        {
+            pl1.gameObject.SetActive(false);
+        }
+        if (pl2.isActiveAndEnabled)
+        {
+            pl2.gameObject.SetActive(false);
+        }
+        if (pl3.isActiveAndEnabled)
+        {
+            pl3.gameObject.SetActive(false);
+        }
+        if (pl4.isActiveAndEnabled)
+        {
+            pl4.gameObject.SetActive(false);
+        }
+        if (pl5.isActiveAndEnabled)
+        {
+            pl5.gameObject.SetActive(false);
+        }
+
+
         if (create_char_button.interactable)
         {
             create_char_button.interactable = false;
@@ -197,6 +324,7 @@ public class player_get_new : MonoBehaviour
 
     private void Onn()
     {
+        /*
         if (!pl1.interactable)
         {
             pl1.interactable = true;
@@ -217,6 +345,30 @@ public class player_get_new : MonoBehaviour
         {
             pl5.interactable = true;
         }
+        */
+
+        if (!pl1.isActiveAndEnabled)
+        {
+            pl1.gameObject.SetActive(true);
+        }
+        if (!pl2.isActiveAndEnabled)
+        {
+            pl2.gameObject.SetActive(true);
+        }
+        if (!pl3.isActiveAndEnabled)
+        {
+            pl3.gameObject.SetActive(true);
+        }
+        if (!pl4.isActiveAndEnabled)
+        {
+            pl4.gameObject.SetActive(true);
+        }
+        if (!pl5.isActiveAndEnabled)
+        {
+            pl5.gameObject.SetActive(true);
+        }
+
+
         if (!create_char_button.interactable)
         {
             create_char_button.interactable = true;

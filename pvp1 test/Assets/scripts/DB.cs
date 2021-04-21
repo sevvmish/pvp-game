@@ -284,6 +284,12 @@ public static class lang
     public static string uctext = "пользователь создан";
     public static string egttext = "ошибка в получении тикета";
     public static string errtext = "произошла ошибка";
+    public static string conerrtext = "ошибка соединения";
+    public static string loadtext = "ЗАГРУЗКА...";
+    public static string nsttext = "тикет не существует";
+    public static string wcntext = "неправильное имя или пароль";
+    public static string caetext = "такое имя уже есть";
+    public static string taetext = "такой тип персонажа у вас уже есть";
 
     public static string WarriorText = "ВОИН";
     public static string ElemText = "ЕЛЕМЕНТАЛИСТ";
