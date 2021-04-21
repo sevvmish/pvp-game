@@ -77,9 +77,14 @@ public class player_choose : MonoBehaviour
         {
             StartCoroutine(error_messages.process_error("con_err"));
         }
-        
+
+
+        print(result);
 
         string[] getstr = result.Split('~');
+
+
+
         switch (getstr[2])
         {           
             case "nst":
@@ -87,13 +92,17 @@ public class player_choose : MonoBehaviour
                 StartCoroutine(error_messages.process_error("nst"));
                 break;
             case "nc":
-                print("no characters");
-                
+                print("no characters");                
                 SceneManager.LoadScene("player_get_new");
                 break;
+            case "ns":
+                encryption.InitEncodingConnection(general.Ports.tcp2324);
+                SceneManager.LoadScene("player_choose");
+                break;
+
         }
 
-        if (getstr[2]!= "nst" && getstr[2] != "nc")
+        if (getstr[2]!= "nst" && getstr[2] != "nc" && getstr[2] != "ns")
         {
             int index = int.Parse(getstr[2]);
             

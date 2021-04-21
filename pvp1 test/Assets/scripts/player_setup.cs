@@ -11,6 +11,9 @@ using System;
 
 public class player_setup : MonoBehaviour
 {
+    public const int MaxTalents = 11;
+    public const int MaxTalentsInRow = 8;
+
     public GameObject ConnectionError, 
         PlayerType1, PlayerType2, PlayerType3, PlayerType4, PlayerType5,
         MeleeDataPanel, MagicDataPanel, podskazka, AllPlayersTypes, SpellBook;
@@ -62,11 +65,15 @@ public class player_setup : MonoBehaviour
         basespells
     }
 
+    public GameObject err_log_window;
+    MessageInfo error_messages;
+
     private WhereSpellFromTypes WhereSpellFrom;
 
     private void GetCharDataToView()
     {
-        string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        //string result = sr.SendAndGetOnlySetup("2~0~" + general.CurrentTicket + "~" + general.CharacterName);
+        string result = connection.SendAndGetTCP($"{general.PacketID}~2~0~{general.CurrentTicket}~{general.CharacterName}", general.Ports.tcp2326, general.SetupServerIP, true);
         
         try
         {
@@ -220,12 +227,17 @@ public class player_setup : MonoBehaviour
         Camera.main.aspect = 16f / 9f;
         ConnectionError.SetActive(false);
 
+        error_messages = new MessageInfo(err_log_window);
 
-        sr.isConnectionError = false;
+        try
+        {
+            encryption.InitEncodingConnection(general.Ports.tcp2326);
+        }
+        catch (Exception)
+        {
+            StartCoroutine(error_messages.process_error("con_err"));
+        }
 
-        print("dfm,sjvnsjdfbnvjkfbv sdhvkjsdfvksdfvbsv sdvkjsdh vkjsd hvksdv skdvksd vksd vsjvk");
-
-        
         BaseSpellsRects.Add(SpellButton1.GetComponent<RectTransform>());
         BaseSpellsRects.Add(SpellButton2.GetComponent<RectTransform>());
         BaseSpellsRects.Add(SpellButton3.GetComponent<RectTransform>());
@@ -304,25 +316,25 @@ public class player_setup : MonoBehaviour
         }
 
         Talents.gameObject.SetActive(true);
-        r00 = new TalentsButton(StartTalentNumber, DB.GetTalentByNumber(StartTalentNumber).Talent_icon, CurrentTalentsSpread[0, 0], 3, "r00", new Vector2(-424, 146), 80);
-        r01 = new TalentsButton(StartTalentNumber + 1, DB.GetTalentByNumber(StartTalentNumber + 1).Talent_icon, CurrentTalentsSpread[0, 1], 3, "r01", new Vector2(-424, 5),70);
-        r02 = new TalentsButton(StartTalentNumber + 2, DB.GetTalentByNumber(StartTalentNumber + 2).Talent_icon, CurrentTalentsSpread[0, 2], 3, "r02", new Vector2(-424, -139), 100);
-        r10 = new TalentsButton(StartTalentNumber + 3, DB.GetTalentByNumber(StartTalentNumber + 3).Talent_icon, CurrentTalentsSpread[1, 0], 2, "r10", new Vector2(-279, 146), 100);
-        r11 = new TalentsButton(StartTalentNumber + 4, DB.GetTalentByNumber(StartTalentNumber + 4).Talent_icon, CurrentTalentsSpread[1, 1], 2, "r11", new Vector2(-279, 5), 100);
-        r12 = new TalentsButton(StartTalentNumber + 5, DB.GetTalentByNumber(StartTalentNumber + 5).Talent_icon, CurrentTalentsSpread[1, 2], 2, "r12", new Vector2(-279, -139), 100);
+        r00 = new TalentsButton(StartTalentNumber, DB.GetTalentByNumber(StartTalentNumber).Talent_icon, CurrentTalentsSpread[0, 0], 1, "r00", new Vector2(-424, 146), 80);
+        r01 = new TalentsButton(StartTalentNumber + 1, DB.GetTalentByNumber(StartTalentNumber + 1).Talent_icon, CurrentTalentsSpread[0, 1], 1, "r01", new Vector2(-424, 5),70);
+        r02 = new TalentsButton(StartTalentNumber + 2, DB.GetTalentByNumber(StartTalentNumber + 2).Talent_icon, CurrentTalentsSpread[0, 2], 1, "r02", new Vector2(-424, -139), 100);
+        r10 = new TalentsButton(StartTalentNumber + 3, DB.GetTalentByNumber(StartTalentNumber + 3).Talent_icon, CurrentTalentsSpread[1, 0], 1, "r10", new Vector2(-279, 146), 100);
+        r11 = new TalentsButton(StartTalentNumber + 4, DB.GetTalentByNumber(StartTalentNumber + 4).Talent_icon, CurrentTalentsSpread[1, 1], 1, "r11", new Vector2(-279, 5), 100);
+        r12 = new TalentsButton(StartTalentNumber + 5, DB.GetTalentByNumber(StartTalentNumber + 5).Talent_icon, CurrentTalentsSpread[1, 2], 1, "r12", new Vector2(-279, -139), 100);
         r20 = new TalentsButton(StartTalentNumber + 6, DB.GetTalentByNumber(StartTalentNumber + 6).Talent_icon, CurrentTalentsSpread[2, 0], 1, "r20", new Vector2(-154, 146), 100);
         r21 = new TalentsButton(StartTalentNumber + 7, DB.GetTalentByNumber(StartTalentNumber + 7).Talent_icon, CurrentTalentsSpread[2, 1], 1, "r21", new Vector2(-154, 5), 100);
-        r30 = new TalentsButton(StartTalentNumber + 8, DB.GetTalentByNumber(StartTalentNumber + 8).Talent_icon, CurrentTalentsSpread[3, 0], 2, "r30", new Vector2(-35, 146), 100);
-        r31 = new TalentsButton(StartTalentNumber + 9, DB.GetTalentByNumber(StartTalentNumber + 9).Talent_icon, CurrentTalentsSpread[3, 1], 2, "r31", new Vector2(-35, 5), 100);
-        r32 = new TalentsButton(StartTalentNumber + 10, DB.GetTalentByNumber(StartTalentNumber + 10).Talent_icon, CurrentTalentsSpread[3, 2], 2, "r32", new Vector2(-35, -139), 100);
-        r40 = new TalentsButton(StartTalentNumber + 11, DB.GetTalentByNumber(StartTalentNumber + 11).Talent_icon, CurrentTalentsSpread[4, 0], 3, "r40", new Vector2(98, 146), 100);
-        r41 = new TalentsButton(StartTalentNumber + 12, DB.GetTalentByNumber(StartTalentNumber + 12).Talent_icon, CurrentTalentsSpread[4, 1], 3, "r41", new Vector2(98, 5), 100);
-        r42 = new TalentsButton(StartTalentNumber + 13, DB.GetTalentByNumber(StartTalentNumber + 13).Talent_icon, CurrentTalentsSpread[4, 2], 3, "r42", new Vector2(98, -139), 100);
+        r30 = new TalentsButton(StartTalentNumber + 8, DB.GetTalentByNumber(StartTalentNumber + 8).Talent_icon, CurrentTalentsSpread[3, 0], 1, "r30", new Vector2(-35, 146), 100);
+        r31 = new TalentsButton(StartTalentNumber + 9, DB.GetTalentByNumber(StartTalentNumber + 9).Talent_icon, CurrentTalentsSpread[3, 1], 1, "r31", new Vector2(-35, 5), 100);
+        r32 = new TalentsButton(StartTalentNumber + 10, DB.GetTalentByNumber(StartTalentNumber + 10).Talent_icon, CurrentTalentsSpread[3, 2], 1, "r32", new Vector2(-35, -139), 100);
+        r40 = new TalentsButton(StartTalentNumber + 11, DB.GetTalentByNumber(StartTalentNumber + 11).Talent_icon, CurrentTalentsSpread[4, 0], 1, "r40", new Vector2(98, 146), 100);
+        r41 = new TalentsButton(StartTalentNumber + 12, DB.GetTalentByNumber(StartTalentNumber + 12).Talent_icon, CurrentTalentsSpread[4, 1], 1, "r41", new Vector2(98, 5), 100);
+        r42 = new TalentsButton(StartTalentNumber + 13, DB.GetTalentByNumber(StartTalentNumber + 13).Talent_icon, CurrentTalentsSpread[4, 2], 1, "r42", new Vector2(98, -139), 100);
         r50 = new TalentsButton(StartTalentNumber + 14, DB.GetTalentByNumber(StartTalentNumber + 14).Talent_icon, CurrentTalentsSpread[5, 0], 1, "r50", new Vector2(223, 146), 100);
         r51 = new TalentsButton(StartTalentNumber + 15, DB.GetTalentByNumber(StartTalentNumber + 15).Talent_icon, CurrentTalentsSpread[5, 1], 1, "r51", new Vector2(223, 5), 100);
-        r60 = new TalentsButton(StartTalentNumber + 16, DB.GetTalentByNumber(StartTalentNumber + 16).Talent_icon, CurrentTalentsSpread[6, 0], 2, "r60", new Vector2(345, 146), 100);
-        r61 = new TalentsButton(StartTalentNumber + 17, DB.GetTalentByNumber(StartTalentNumber + 17).Talent_icon, CurrentTalentsSpread[6, 1], 2, "r61", new Vector2(345, 5), 100);
-        r62 = new TalentsButton(StartTalentNumber + 18, DB.GetTalentByNumber(StartTalentNumber + 18).Talent_icon, CurrentTalentsSpread[6, 2], 2, "r62", new Vector2(345, -139), 100);
+        r60 = new TalentsButton(StartTalentNumber + 16, DB.GetTalentByNumber(StartTalentNumber + 16).Talent_icon, CurrentTalentsSpread[6, 0], 1, "r60", new Vector2(345, 146), 100);
+        r61 = new TalentsButton(StartTalentNumber + 17, DB.GetTalentByNumber(StartTalentNumber + 17).Talent_icon, CurrentTalentsSpread[6, 1], 1, "r61", new Vector2(345, 5), 100);
+        r62 = new TalentsButton(StartTalentNumber + 18, DB.GetTalentByNumber(StartTalentNumber + 18).Talent_icon, CurrentTalentsSpread[6, 2], 1, "r62", new Vector2(345, -139), 100);
         r70 = new TalentsButton(StartTalentNumber + 19, DB.GetTalentByNumber(StartTalentNumber + 19).Talent_icon, CurrentTalentsSpread[7, 0], 1, "r70", new Vector2(479, 146), 100);
         r71 = new TalentsButton(StartTalentNumber + 20, DB.GetTalentByNumber(StartTalentNumber + 20).Talent_icon, CurrentTalentsSpread[7, 1], 1, "r71", new Vector2(479, 5), 100);
         r72 = new TalentsButton(StartTalentNumber + 21, DB.GetTalentByNumber(StartTalentNumber + 21).Talent_icon, CurrentTalentsSpread[7, 2], 1, "r72", new Vector2(479, -139), 100);
@@ -583,7 +595,8 @@ public class player_setup : MonoBehaviour
 
         print(TalentsToSend + " - for sending");
 
-        string result = sr.SendAndGetOnlySetup("3~4~" + general.CurrentTicket + "~" + general.CharacterName + "~" + TalentsToSend);
+        //string result = sr.SendAndGetOnlySetup("3~4~" + general.CurrentTicket + "~" + general.CharacterName + "~" + TalentsToSend);
+        string result = connection.SendAndGetTCP($"{general.PacketID}~3~4~{general.CurrentTicket}~{general.CharacterName}~{TalentsToSend}", general.Ports.tcp2326, general.SetupServerIP, true);
         print(result);
 
         GetCharDataToView();
@@ -838,13 +851,7 @@ public class player_setup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (sr.isConnectionError)
-        {
-            StartCoroutine(ConnectionErr());
-        }
-
         
-
         //print(SpellButtonDraged + "--------------===================");
 
         if (Input.GetKeyDown(KeyCode.A))
@@ -892,9 +899,9 @@ public class player_setup : MonoBehaviour
 
                 CurrentTalentsCount = sum;
 
-                UsedTalentsInfo.text = sum.ToString() + "/16";
+                UsedTalentsInfo.text = sum.ToString() + $"/{MaxTalents}";
 
-                if (sum >= 16)
+                if (sum >= MaxTalents)
                 {
                     isNoTalentPointAvailable = true;
                 }

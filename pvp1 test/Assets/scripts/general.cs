@@ -26,11 +26,11 @@ public class general
     public static string HUB1_ip = "192.168.0.103";
     public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57   //192.168.0.103
 
-    public static int SetupServerTCPPort = 2326;
-    public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+    public static int SetupServerTCPPort = (int)Ports.tcp2326;
+    public static string SetupServerIP = "192.168.0.103"; //185.18.53.239   "45.67.57.30"
 
     public static int LoginServerTCPPort = (int)Ports.tcp2324;
-    public static string LoginServerIP = "127.0.0.1"; //185.18.53.239   "45.67.57.30"
+    public static string LoginServerIP = "192.168.0.103"; //185.18.53.239   "45.67.57.30"
 
     public static string SessionPlayerID; //playerX
     public static string SessionTicket; //sessionX
@@ -357,9 +357,10 @@ public class MessageInfo : MonoBehaviour
         mess_text_mesh = mess_obj.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();       
     }
         
-    public IEnumerator process_error(string _code)
+    public IEnumerator process_error(string _code, general.Ports port)
     {
         bool is_restarting = false;
+        bool is_fast_restaritng = false;
 
         switch (_code)
         {            
@@ -378,7 +379,58 @@ public class MessageInfo : MonoBehaviour
             case "nst":
                 is_restarting = true;
                 break;
+            case "ns":
+                is_fast_restaritng = true;
+                break;
         }
+
+        if (is_fast_restaritng)
+        {
+            encryption.InitEncodingConnection(port);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else
+        {
+
+            mess_obj.SetActive(true);
+            mess_text_mesh.text = codes.GetCodeResult(_code);
+            yield return new WaitForSeconds(3f);
+            mess_obj.SetActive(false);
+
+            if (is_restarting)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+    }
+
+    public IEnumerator process_error(string _code)
+    {
+        bool is_restarting = false;
+        
+        switch (_code)
+        {
+            case "ecu":
+                is_restarting = true;
+                break;
+            case "egt":
+                is_restarting = true;
+                break;
+            case "err":
+                is_restarting = true;
+                break;
+            case "con_err":
+                is_restarting = true;
+                break;
+            case "nst":
+                is_restarting = true;
+                break;
+            case "ns":
+                is_restarting = true;
+                break;
+        }
+
+        
 
         mess_obj.SetActive(true);
         mess_text_mesh.text = codes.GetCodeResult(_code);
@@ -389,6 +441,7 @@ public class MessageInfo : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+        
     }
 }
 
@@ -445,6 +498,15 @@ public static class codes
                 break;
             case "tae":
                 result = lang.taetext ; //loading...
+                break;
+            case "nd":
+                result = lang.errtext; //loading...
+                break;
+            case "ns":
+                result = lang.nsctext; //loading...
+                break;
+            case "eit":
+                result = lang.eittext; //loading...
                 break;
 
             //nc

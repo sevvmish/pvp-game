@@ -290,6 +290,8 @@ public static class lang
     public static string wcntext = "неправильное имя или пароль";
     public static string caetext = "такое имя уже есть";
     public static string taetext = "такой тип персонажа у вас уже есть";
+    public static string nsctext = "такого персонажа нет";
+    public static string eittext = "ошибка в талантах";
 
     public static string WarriorText = "ВОИН";
     public static string ElemText = "ЕЛЕМЕНТАЛИСТ";

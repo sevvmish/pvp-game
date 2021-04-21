@@ -50,6 +50,12 @@ public class player_get_new : MonoBehaviour
 
         if (getstr[2] != "nst" && getstr[2] != "nc")
         {
+            if(getstr[2] == "nsc")
+            {
+                encryption.InitEncodingConnection(general.Ports.tcp2324);
+                SceneManager.LoadScene("player_get_new");
+            }
+
             int index = int.Parse(getstr[2]);
             if (index > 0)
             {
