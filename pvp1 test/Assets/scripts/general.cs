@@ -508,6 +508,13 @@ public static class codes
             case "eit":
                 result = lang.eittext; //loading...
                 break;
+            case "nss":
+                result = lang.nsstext; //loading...
+                break;
+            case "rsn":
+                result = lang.nsstext; //loading...
+                break;
+
 
             //nc
 

@@ -382,12 +382,21 @@ public class player_setup : MonoBehaviour
             BaseSpellButtonList[2].GetSpellNumber().ToString() + "," +
             BaseSpellButtonList[3].GetSpellNumber().ToString() + "," +
             BaseSpellButtonList[4].GetSpellNumber().ToString() + "," +
-            BaseSpellButtonList[5].GetSpellNumber().ToString() + ",";
+            BaseSpellButtonList[5].GetSpellNumber().ToString();
 
-
-        string result = sr.SendAndGetOnlySetup("3~5~" + general.CurrentTicket + "~" + general.CharacterName + "~" + NewSpellBaseButtons);
-        print(result + " spells new");
-
+        string result;
+        //string result = sr.SendAndGetOnlySetup("3~5~" + general.CurrentTicket + "~" + general.CharacterName + "~" + NewSpellBaseButtons);
+        try
+        {
+            result = connection.SendAndGetTCP($"{general.PacketID}~3~5~{general.CurrentTicket}~{general.CharacterName}~{NewSpellBaseButtons}", general.Ports.tcp2326, general.SetupServerIP, true);
+            print(result + " spells new");
+        }
+        catch (Exception ex)
+        {
+            print(ex);
+        }
+        
+        
         GetCharDataToView();
     }
 
@@ -410,6 +419,15 @@ public class player_setup : MonoBehaviour
     
     private void CheckNormalTalentDisp()
     {
+        
+
+        r00.MakeActive();
+        r01.MakeActive();
+        r02.MakeActive();
+        r10.MakeActive();
+        r11.MakeActive();
+        r12.MakeActive();
+
         //only one talent per row==================
         if (r20.GetCurrentTalentPoint() == 1)
         {
@@ -448,7 +466,7 @@ public class player_setup : MonoBehaviour
 
         //first row==========================
 
-        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint())<3)
+        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint())<2)
         {
             r20.MakeInactive();
             r30.MakeInactive();
@@ -461,7 +479,7 @@ public class player_setup : MonoBehaviour
             
         }
 
-        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint()) < 3)
+        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint()) < 2)
         {
             r21.MakeInactive();
             r31.MakeInactive();
@@ -475,7 +493,7 @@ public class player_setup : MonoBehaviour
             
         }
 
-        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint()) < 3)
+        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint()) < 2)
         {            
             r32.MakeInactive();
             r42.MakeInactive();            
@@ -489,7 +507,7 @@ public class player_setup : MonoBehaviour
 
         //==================================================
 
-        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint()) < 6)
+        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint()) < 4)
         {
             r50.MakeInactive();
             r60.MakeInactive();            
@@ -502,7 +520,7 @@ public class player_setup : MonoBehaviour
 
         }
 
-        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint()  +r31.GetCurrentTalentPoint()  +r41.GetCurrentTalentPoint()) < 6)
+        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint()  +r31.GetCurrentTalentPoint()  +r41.GetCurrentTalentPoint()) < 4)
         {
             r51.MakeInactive();
             r61.MakeInactive();
@@ -513,7 +531,7 @@ public class player_setup : MonoBehaviour
             r61.MakeActive();
         }
 
-        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint()) < 6)
+        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint()) < 4)
         {
             
             r62.MakeInactive();
@@ -528,7 +546,7 @@ public class player_setup : MonoBehaviour
 
         //==================================================
 
-        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint() + r50.GetCurrentTalentPoint() + r60.GetCurrentTalentPoint()) < 10)
+        if ((r00.GetCurrentTalentPoint() + r10.GetCurrentTalentPoint() + r20.GetCurrentTalentPoint() + r30.GetCurrentTalentPoint() + r40.GetCurrentTalentPoint() + r50.GetCurrentTalentPoint() + r60.GetCurrentTalentPoint()) < 6)
         {
             r70.MakeInactive();            
         }
@@ -537,7 +555,7 @@ public class player_setup : MonoBehaviour
             r70.MakeActive();            
         }
 
-        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint() +r31.GetCurrentTalentPoint() +r41.GetCurrentTalentPoint() + r51.GetCurrentTalentPoint() + r61.GetCurrentTalentPoint()) < 10)
+        if ((r01.GetCurrentTalentPoint() + r11.GetCurrentTalentPoint() + r21.GetCurrentTalentPoint() +r31.GetCurrentTalentPoint() +r41.GetCurrentTalentPoint() + r51.GetCurrentTalentPoint() + r61.GetCurrentTalentPoint()) < 6)
         {
             r71.MakeInactive();            
         }
@@ -546,7 +564,7 @@ public class player_setup : MonoBehaviour
             r71.MakeActive();            
         }
 
-        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint() + r62.GetCurrentTalentPoint()) < 10)
+        if ((r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint() + r62.GetCurrentTalentPoint()) < 5)
         {
 
             r72.MakeInactive();
@@ -568,6 +586,23 @@ public class player_setup : MonoBehaviour
 
         int line3 = r02.GetCurrentTalentPoint() + r12.GetCurrentTalentPoint() + r32.GetCurrentTalentPoint() + r42.GetCurrentTalentPoint() + r62.GetCurrentTalentPoint() + r72.GetCurrentTalentPoint();
         Line3Talents.text = line3.ToString();
+
+        int summ = 0;
+        for (int i = 0; i < TalentBottonsList.Count; i++)
+        {
+            summ += TalentBottonsList[i].GetCurrentTalentPoint();
+        }
+
+        if (summ >= MaxTalents)
+        {
+            for (int i = 0; i < TalentBottonsList.Count; i++)
+            {
+                if (TalentBottonsList[i].GetCurrentTalentPoint() == 0)
+                {
+                    TalentBottonsList[i].MakeInactive();
+                }
+            }
+        }
 
 
     }
@@ -709,6 +744,18 @@ public class player_setup : MonoBehaviour
 
     private void BackToLogChoose()
     {
+        try
+        {
+            if (general.PacketID != null && general.PacketID != "")
+            {
+                connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2326, general.SetupServerIP, false);
+            }
+        }
+        catch (Exception ex)
+        {
+            print(ex);
+        }
+        
         SceneManager.LoadScene("player_choose");
     }
 
@@ -1092,6 +1139,18 @@ public class player_setup : MonoBehaviour
 
                 if (session_type==0 && ticket=="nst")
                 {
+                    try
+                    {
+                        if (general.PacketID != null && general.PacketID != "")
+                        {
+                            connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2326, general.SetupServerIP, false);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        print(ex);
+                    }
+                    
                     SceneManager.LoadScene("player_choose");
                 }
 

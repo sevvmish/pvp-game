@@ -161,6 +161,19 @@ public class player_choose : MonoBehaviour
     {
         general.CharacterName = CurrentPlayerChosen.char_name;
         general.CharacterType = CurrentPlayerChosen.char_type;
+        try
+        {
+            if (general.PacketID != null && general.PacketID != "")
+            {
+                connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2324, general.LoginServerIP, false);
+            }
+        }
+        catch (System.Exception ex)
+        {
+
+            print(ex);
+        }
+        
         SceneManager.LoadScene("player_setup");
     }
 

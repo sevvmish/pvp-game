@@ -193,7 +193,7 @@ public class encryption: IDisposable
     public static bool InitEncodingConnection(general.Ports ports)
     {
 
-        //port 2326 for login
+        //port 2326 for setup
         if ((int)ports == 2326)
         {
             if (general.PacketID!=null && general.PacketID != "")
@@ -220,7 +220,7 @@ public class encryption: IDisposable
         {
             if (general.PacketID != null && general.PacketID != "")
             {
-                connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2324, general.SetupServerIP, false);
+                connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2324, general.LoginServerIP, false);
             }
 
             general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2324, general.LoginServerIP, false));
@@ -242,7 +242,7 @@ public class encryption: IDisposable
         {
             if (general.PacketID != null && general.PacketID != "")
             {
-                connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2323, general.SetupServerIP, false);
+                connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2323, general.GameServerIP, false);
             }
 
             general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2323, general.GameServerIP, false));

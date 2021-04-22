@@ -292,6 +292,8 @@ public static class lang
     public static string taetext = "такой тип персонажа у вас уже есть";
     public static string nsctext = "такого персонажа нет";
     public static string eittext = "ошибка в талантах";
+    public static string nsstext = "такого спела нет в книге";
+    public static string rsntext = "спелы повторяются";
 
     public static string WarriorText = "ВОИН";
     public static string ElemText = "ЕЛЕМЕНТАЛИСТ";
