@@ -677,24 +677,33 @@ public class player_setup : MonoBehaviour
 
     private void pvp1vs1()
     {
-        
-        string result = sr.SendAndGetOnlySetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
-        print(result);
+        string result;
 
-        string[] getstr = result.Split('~');
-        string type = getstr[2];
-        int session_type = int.Parse(getstr[3]);
-
-        if (type=="in" && session_type==1)
+        try
         {
-            general.SessionNumberOfPlayers = 2;
-            isStartWaitingPVP = true;
-        }
+            //result = sr.SendAndGetOnlySetup("3~1~" + general.CurrentTicket + "~" + general.CharacterName);
+            result = connection.SendAndGetTCP($"{general.PacketID}~3~1~{general.CurrentTicket}~{general.CharacterName}", general.Ports.tcp2326, general.SetupServerIP, true);
+            print(result);
 
-        if (type == "out" && session_type == 1)
-        {
-            isStartWaitingPVP = false;
+            string[] getstr = result.Split('~');
+            string type = getstr[2];
+            int session_type = int.Parse(getstr[3]);
+
+            if (type == "in" && session_type == 1)
+            {
+                general.SessionNumberOfPlayers = 2;
+                isStartWaitingPVP = true;
+            }
+
+            if (type == "out" && session_type == 1)
+            {
+                isStartWaitingPVP = false;
+            }
         }
+        catch (Exception ex)
+        {
+            print(ex);
+        }       
 
     }
 

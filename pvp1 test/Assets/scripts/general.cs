@@ -514,6 +514,9 @@ public static class codes
             case "rsn":
                 result = lang.nsstext; //loading...
                 break;
+            case "dbe":
+                result = lang.dbetext; //loading...
+                break;
 
 
             //nc

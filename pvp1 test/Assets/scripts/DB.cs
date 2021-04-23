@@ -294,6 +294,7 @@ public static class lang
     public static string eittext = "ошибка в талантах";
     public static string nsstext = "такого спела нет в книге";
     public static string rsntext = "спелы повторяются";
+    public static string dbetext = "ошибка в БД";
 
     public static string WarriorText = "ВОИН";
     public static string ElemText = "ЕЛЕМЕНТАЛИСТ";
