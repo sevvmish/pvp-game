@@ -872,6 +872,7 @@ public static class SendAndReceive
 
         try
         {
+            
             getstr = ReceivedData.Split('^');
             //1
             GetHeader(getstr[0]);

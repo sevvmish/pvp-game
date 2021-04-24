@@ -218,7 +218,7 @@ public class player_setup : MonoBehaviour
 
     }
 
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -1136,17 +1136,18 @@ public class player_setup : MonoBehaviour
             {
                 print(general.CurrentTicket + " ============" + general.CharacterName);
                 cur_time = 0;
-                string result = sr.SendAndGetOnlySetup("4~0~" + general.CurrentTicket + "~" + general.CharacterName);
+                //string result = sr.SendAndGetOnlySetup("4~0~" + general.CurrentTicket + "~" + general.CharacterName);
+                string result = connection.SendAndGetTCP($"{general.PacketID}~4~0~{general.CurrentTicket}~{general.CharacterName}", general.Ports.tcp2326, general.SetupServerIP, true);
                 print(result);
 
                 string[] getstr = result.Split('~');
 
-                int session_type = int.Parse(getstr[2]);
+                int status = int.Parse(getstr[2]);
                 string ticket = getstr[3];
-                string session = getstr[4];
-                string hub_data = getstr[5];
+                //string session = getstr[4];
+                //string hub_data = getstr[5];
 
-                if (session_type==0 && ticket=="nst")
+                if (status == 0 && (ticket=="nst" || ticket == "wds" || ticket == "nsc"))
                 {
                     try
                     {
@@ -1163,37 +1164,51 @@ public class player_setup : MonoBehaviour
                     SceneManager.LoadScene("player_choose");
                 }
 
-                if (session_type == 2)
+                if (status == 2)
                 {
                     
                     print("GGGGGGGEEEEEEEETTTTTT      RRRRRRRREEEEEAAAADDDDDDDDYYYYYYYYY");
                 }
-
-                if (session_type == 4)
+                               
+                if (status == 3)
                 {
-                    
-                    general.CurrentTicket = ticket;
+                    isStartWaitingPVP = false;
+                    //answer 4~0~status~ticket~session~HUB
+                    //status 0 - nothng good, 3 - OK sending data and play
 
-                    print("FFFFFFFAAAAAAAAAAIIIILLLLLLLLLLLLLEEEEEEEEEDDDDDDDDDDDD");
-                    SceneManager.LoadScene("player_choose");
-                }
-
-                if (session_type == 3)
-                {
-                    general.SessionTicket = session;
+                    general.SessionTicket = getstr[4];
                     general.CurrentTicket = ticket;
                     general.SessionPlayerID = ticket;
+                    general.SessionNumberOfPlayers = 2;                    
+                    general.GameServerIP = general.HUB1_ip;
 
-                    switch(hub_data)
+                    switch (getstr[5])
                     {
                         case "1":
+                            
                             general.GameServerIP = general.HUB1_ip;
                             break;
                     }
                     
-                    print("OOOOOOOOOOOKKKKKKKKKKKKKK");
+                    print("OOOOOOOOOOOKKKKKKKKKKKKKK  new ticket - " + general.SessionPlayerID + "    new session - " + general.SessionTicket);
+
+                    /*
+                    try
+                    {
+                        if (general.PacketID != null && general.PacketID != "")
+                        {
+                            connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2326, general.SetupServerIP, false);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        print(ex);
+                    }
+                    */
+
 
                     SceneManager.LoadScene("SampleScene");
+                    
                 }
 
 
@@ -1698,6 +1713,8 @@ public class TalentsButton : MonoBehaviour
         TalentsNumbers.text = CurrentTalents + "/" + MaxTalents;
     }
 
+
+    
 
 }
 

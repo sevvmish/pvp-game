@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class general
+public class general 
 {
     public static bool isRus = true;
     
@@ -52,13 +52,14 @@ public class general
     public const float Tick = 0.05f;
 
 
+
     public static void SetSessionData()
     {
         MainPlayerOrder = DataForSession[0].PlayerOrder;
         MainPlayerName = DataForSession[0].PlayerName;
         MainPlayerClass = DataForSession[0].PlayerClass;
         MainPlayerTeam = DataForSession[0].PlayerTeam;
-        SessionNumberOfPlayers = DataForSession.Count;
+        //SessionNumberOfPlayers = DataForSession.Count;
     }
 
     public static GameObject GetPlayerByClass(int ClassNumber)
@@ -149,11 +150,12 @@ public struct SessionData
         string[] getData = Data.Split('~');
         int order = int.Parse(getData[0]);
         int specification = int.Parse(getData[1]);
-        general.SessionNumberOfPlayers = int.Parse(getData[2]);
+        //general.SessionNumberOfPlayers = int.Parse(getData[2]);
+        Debug.Log(int.Parse(getData[2]) + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
         general.DataForSession.Add(new SessionData(int.Parse(getData[3]), int.Parse(getData[4]), getData[5], int.Parse(getData[6]), int.Parse(getData[7]), int.Parse(getData[8]), int.Parse(getData[9]), int.Parse(getData[10]), int.Parse(getData[11]), int.Parse(getData[12]), 997));
 
         int ort = 13;
-        for (int i = 0; i < (general.SessionNumberOfPlayers - 1); i++)
+        for (int i = 0; i < (int.Parse(getData[2]) - 1); i++)
         {
             general.DataForSession.Add(new SessionData(int.Parse(getData[ort]), 0, getData[ort + 2], int.Parse(getData[ort + 2]), int.Parse(getData[ort + 3]), 0, 0, 0, 0, 0, 0));
             ort += 4;

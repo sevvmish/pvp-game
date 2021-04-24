@@ -16,7 +16,7 @@ public class connection : MonoBehaviour
     private static IPEndPoint ipendpoint_udp;
     private static EndPoint endpoint_udp;
     private static StringBuilder raw_data_received = new StringBuilder(1024);
-    private static byte[] buffer_received_udp = new byte[256 * general.SessionNumberOfPlayers];
+    private static byte[] buffer_received_udp = new byte[1024];
     private static byte[] buffer_send_udp = new byte[128];
 
 

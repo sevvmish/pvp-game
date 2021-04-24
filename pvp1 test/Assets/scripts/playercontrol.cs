@@ -103,8 +103,11 @@ public class playercontrol : MonoBehaviour
         connection.SendAndGetTCP($"0~6~{general.SessionPlayerID}~{general.SessionTicket}~1~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}");
         */
 
-        encryption.InitEncodingConnection(general.Ports.tcp2323);
+        
+        print(encryption.InitEncodingConnection(general.Ports.tcp2323) + " - result of encoding");
 
+        print("new packetID - " + general.PacketID);
+        
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest(), general.Ports.tcp2323, general.GameServerIP, true);
         print(SessionResult  +" - result of sess");
         SessionData.GetDataSessionPlayers(SessionResult);
@@ -166,6 +169,7 @@ public class playercontrol : MonoBehaviour
         //=====================
 
         OtherGamers = new List<players>();
+        
         for (int i = 1; i <= general.SessionNumberOfPlayers-1; i++)
         {
             AddPlayer(Vector3.zero, Vector3.zero, i);

@@ -88,7 +88,7 @@ public class player_choose : MonoBehaviour
         switch (getstr[2])
         {           
             case "nst":
-                print("wrong login");
+                print("wrong ticket");
                 StartCoroutine(error_messages.process_error("nst"));
                 break;
             case "nc":

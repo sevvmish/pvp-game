@@ -199,6 +199,7 @@ public class encryption: IDisposable
             if (general.PacketID!=null && general.PacketID != "")
             {
                 connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2326, general.SetupServerIP, false);
+                general.PacketID = "";
             }
             general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2326, general.SetupServerIP, false));
             string res = connection.SendAndGetTCP($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}", general.Ports.tcp2326, general.SetupServerIP , false);
@@ -221,6 +222,7 @@ public class encryption: IDisposable
             if (general.PacketID != null && general.PacketID != "")
             {
                 connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2324, general.LoginServerIP, false);
+                general.PacketID = "";
             }
 
             general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2324, general.LoginServerIP, false));
@@ -240,14 +242,18 @@ public class encryption: IDisposable
         //port 2323 for gameplay
         if ((int)ports == 2323)
         {
+            /*
             if (general.PacketID != null && general.PacketID != "")
             {
                 connection.SendAndGetTCP($"0~6~2~{general.PacketID}", general.Ports.tcp2323, general.GameServerIP, false);
-            }
+                general.PacketID = "";
+            }*/
 
             general.PlayerEncryption.ProcessInitDataFromServerTCP(connection.SendAndGetTCP("0~6~0", general.Ports.tcp2323, general.GameServerIP, false));
             string res = connection.SendAndGetTCP($"0~6~1~{general.PacketID}~{general.PlayerEncryption.open_key_from_client_one}~{general.PlayerEncryption.open_key_from_client_two}~{general.PlayerEncryption.open_key_from_client_three}", general.Ports.tcp2323, general.GameServerIP, false);
             string[] result = res.Split('~');
+
+            Debug.Log("new packet ID - " + general.PacketID);
 
             if (result[3] == "ok")
             {
