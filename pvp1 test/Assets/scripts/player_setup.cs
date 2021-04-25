@@ -640,6 +640,8 @@ public class player_setup : MonoBehaviour
 
     private void testing_regime()
     {
+        SceneManager.LoadScene("plchoose");
+        /*
         string result = sr.SendAndGetOnlySetup("3~0~" + general.CurrentTicket + "~" + general.CharacterName);
         print(result + "=====================================================");
 
@@ -671,7 +673,7 @@ public class player_setup : MonoBehaviour
             print("OOOOOOOOOOOKKKKKKKKKKKKKK" + general.CurrentTicket + " - " + general.SessionTicket);
 
             SceneManager.LoadScene("SampleScene");
-        }        
+        }    */    
     }
 
 

@@ -10,9 +10,9 @@ public class player_choose : MonoBehaviour
 {
     public Button pl1, pl2, pl3, pl4, pl5, ChooseAnother, EnterTheGame;
 
-    public GameObject warr, mage, barb, rog, wiz, ConnectionError;
+    public GameObject warr, mage, barb, rog, wiz;
 
-    public TextMeshProUGUI EnterTheGameText, ChooseAnotherText, ConnError;
+    public TextMeshProUGUI EnterTheGameText, ChooseAnotherText;
 
     public struct chars
     {
@@ -42,9 +42,9 @@ public class player_choose : MonoBehaviour
 
         EnterTheGameText.text = lang.EnterTheGameText;
         ChooseAnotherText.text = lang.ChooseAnotherText;
-        ConnError.text = lang.ConnectionErrorText;
+        //ConnError.text = lang.ConnectionErrorText;
 
-        ConnectionError.SetActive(false);
+        //ConnectionError.SetActive(false);
         warr.SetActive(false);
         mage.SetActive(false);
         barb.SetActive(false);
@@ -177,22 +177,14 @@ public class player_choose : MonoBehaviour
         SceneManager.LoadScene("player_setup");
     }
 
-    
+               
 
-
-    IEnumerator ConnectionErr()
+    /*IEnumerator OK()
     {
-        ConnectionError.gameObject.SetActive(true);
+        //ConnectionError.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("player_choose");
-    }
-
-    IEnumerator OK()
-    {
-        ConnectionError.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("player_choose");
-    }
+    }*/
 
     private void SetName(Button button, string ButtonName)
     {

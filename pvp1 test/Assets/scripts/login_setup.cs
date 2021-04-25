@@ -11,11 +11,11 @@ using UnityEngine.SceneManagement;
 
 public class login_setup : MonoBehaviour
 {
-    public Canvas NewLogOrGuest, CanvasLogin, CanvasGetServer, ConnectionError, CanvasWaiting;    
+    public Canvas NewLogOrGuest, CanvasLogin, CanvasGetServer;    
     public TMP_InputField login_input;
     public TMP_InputField password_input;
     public Button login_button, createnew_button, beforelogin_newlog, beforelogin_asguest, MoscowButton;
-    public TextMeshProUGUI InfoMessages, Createnewtext, Logintext, ConnError, AwaitingText, TheLoginText, ThePasswordText;
+    public TextMeshProUGUI Createnewtext, Logintext, TheLoginText, ThePasswordText, enterasguesttext, createnewloginpasstext;
 
     public GameObject err_log_window;
     MessageInfo error_messages;
@@ -40,10 +40,12 @@ public class login_setup : MonoBehaviour
         NewLogOrGuest.gameObject.SetActive(false);
         CanvasLogin.gameObject.SetActive(false);
 
+        enterasguesttext.text = lang.EnterAsGuest;
+        createnewloginpasstext.text = lang.CreateNewLoginPass;
         Createnewtext.text = lang.CreateNewText;
         Logintext.text = lang.LoginText;
-        ConnError.text = lang.ConnectionErrorText;
-        AwaitingText.text = lang.AwaitingText;
+        //ConnError.text = lang.ConnectionErrorText;
+        //AwaitingText.text = lang.AwaitingText;
         TheLoginText.text = lang.TheLoginText;
         ThePasswordText.text = lang.ThePasswordText;
         
@@ -73,7 +75,7 @@ public class login_setup : MonoBehaviour
 
 
         CanvasGetServer.gameObject.SetActive(false);
-        ConnectionError.gameObject.SetActive(false);
+        //ConnectionError.gameObject.SetActive(false);
         
         beforelogin_newlog.onClick.AddListener(Beforelogin_newlog);
         login_button.onClick.AddListener(TryLoginSend);
@@ -265,12 +267,6 @@ public class login_setup : MonoBehaviour
     }
 
    
-    IEnumerator ConnectionErr()
-    {
-        ConnectionError.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("login");
-    }
 
     IEnumerator WaitingAndEnter()
     {
@@ -298,22 +294,16 @@ public class login_setup : MonoBehaviour
         }
         catch (Exception ex)
         {
-            StartCoroutine(ConnectionErr());
+            StartCoroutine(error_messages.process_error("con_err"));
         }
 
         if (isOK)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(0.5f);
             SceneManager.LoadScene("player_choose");
         }
     }
 
-    IEnumerator Info(string Message)
-    {
-        InfoMessages.text = codes.GetCodeResult(Message);        
-        yield return new WaitForSeconds(1f);
-        InfoMessages.text = "";
-    }
 
 }
 

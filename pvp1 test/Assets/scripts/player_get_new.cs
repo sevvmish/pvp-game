@@ -17,11 +17,12 @@ public class player_get_new : MonoBehaviour
 
     public TMP_InputField char_name_input;
     public Transform PlayerLine;
-    public GameObject EnterNamePanel, ConnectionError;
+    public GameObject EnterNamePanel;
     public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing, back_button;
 
     private int CurrentPlayerNumber = 1;
     private bool isBusy;
+    private float delta_for_moving = 0.01f;
 
     public TextMeshProUGUI warrtext, elemtext, barbartext, rogtext, wizardtext, createnewchartext, backtext, enterloginname;
 
@@ -77,7 +78,7 @@ public class player_get_new : MonoBehaviour
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
         EnterNamePanel.SetActive(false);
-        ConnectionError.SetActive(false);
+        //ConnectionError.SetActive(false);
         pl1.onClick.AddListener(Click1);
         pl2.onClick.AddListener(Click2);
         pl3.onClick.AddListener(Click3);
@@ -265,7 +266,7 @@ public class player_get_new : MonoBehaviour
 
     IEnumerator LoadAgain()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene("player_get_new");
     }
 
@@ -453,18 +454,13 @@ public class player_get_new : MonoBehaviour
 
             PlayerLine.position = Vector3.Lerp(PlayerLine.position, NewCoords, i);
 
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(delta_for_moving);
         }
 
         isBusy = false;
-
+        delta_for_moving = 0.05f;
     }
 
-    IEnumerator ConnectionErr()
-    {
-        ConnectionError.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("player_get_new");
-    }
+   
 
 }

@@ -436,7 +436,7 @@ public class MessageInfo : MonoBehaviour
 
         mess_obj.SetActive(true);
         mess_text_mesh.text = codes.GetCodeResult(_code);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         mess_obj.SetActive(false);
 
         if (is_restarting)

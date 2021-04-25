@@ -267,6 +267,8 @@ public static class lang
     public static string CreateNewText = "СОЗДАТЬ";
     public static string AwaitingText = "ЗАГРУЗКА...";
     public static string ConnectionErrorText = "НЕТ СОЕДИНЕНИЯ";
+    public static string CreateNewLoginPass = "создать новый логин-пароль";
+    public static string EnterAsGuest = "войти в игру как гость";
 
     public static string TheLoginText = "ЛОГИН";
     public static string ThePasswordText = "ПАРОЛЬ";
