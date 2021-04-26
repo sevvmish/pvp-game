@@ -9,7 +9,7 @@ public class testing_tcp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //encryption.InitEncodingConnection(general.Ports.tcp2324);
+        encryption.InitEncodingConnection(general.Ports.tcp2324);
 
         //print(connection.SendAndGetTCP($"{general.PacketID}~0~0~tester22~passpass1", general.Ports.tcp2324, general.LoginServerIP, true));
         //print(connection.SendAndGetTCP($"{general.PacketID}~0~1~tester22~{encryption.FromByteToString(encryption.GetHash384("passpass12"))}", general.Ports.tcp2324, general.LoginServerIP, true));
@@ -17,14 +17,7 @@ public class testing_tcp : MonoBehaviour
         //print(connection.SendAndGetTCP($"{general.PacketID}~1~0~LnVY3pRjHa", general.Ports.tcp2324, general.LoginServerIP, true));
         //print(connection.SendAndGetTCP($"{general.PacketID}~1~1~LnVY3pRjHa~charnum1~2", general.Ports.tcp2324, general.LoginServerIP, true));
 
-        DateTime t = DateTime.Now;
-        DateTime r = DateTime.Now.AddSeconds(30);
-        print(t + " - " + r + " : " + DateTime.Compare(t, r) + "  ...  " + t.Second + " - " + r.Second);
-
-        if (r>t)
-        {
-
-        }
+        
         
     }
 

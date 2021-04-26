@@ -62,6 +62,19 @@ public class general
         //SessionNumberOfPlayers = DataForSession.Count;
     }
 
+    public static string get_random_set_of_symb(int nub_of_symb)
+    {
+        string[] arr_name = { "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
+        string result = "";
+        System.Random rnd = new System.Random();
+        for (int i = 0; i < nub_of_symb; i++)
+        {
+            result = result + arr_name[rnd.Next(0, arr_name.Length - 1)];
+        }
+
+        return result;
+    }
+
     public static GameObject GetPlayerByClass(int ClassNumber)
     {
         GameObject result = null;
