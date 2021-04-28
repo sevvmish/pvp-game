@@ -68,10 +68,30 @@ public class player_choose : MonoBehaviour
 
 
         string result = null;
+        string[] getstr = new string[0];
         //result = sr.SendAndGetLoginSetup("1~0~" + general.CurrentTicket);
         try
         {
             result = connection.SendAndGetTCP($"{general.PacketID}~1~0~{general.CurrentTicket}", general.Ports.tcp2324, general.LoginServerIP, true);
+            print(result);
+            getstr = result.Split('~');
+
+            switch (getstr[2])
+            {
+                case "nst":
+                    print("wrong ticket");
+                    StartCoroutine(error_messages.process_error("nst"));
+                    break;
+                case "nc":
+                    print("no characters");
+                    SceneManager.LoadScene("player_get_new");
+                    break;
+                case "ns":
+                    encryption.InitEncodingConnection(general.Ports.tcp2324);
+                    SceneManager.LoadScene("player_choose");
+                    break;
+
+            }
         }
         catch (System.Exception ex)
         {
@@ -79,28 +99,9 @@ public class player_choose : MonoBehaviour
         }
 
 
-        print(result);
+        
 
-        string[] getstr = result.Split('~');
-
-
-
-        switch (getstr[2])
-        {           
-            case "nst":
-                print("wrong ticket");
-                StartCoroutine(error_messages.process_error("nst"));
-                break;
-            case "nc":
-                print("no characters");                
-                SceneManager.LoadScene("player_get_new");
-                break;
-            case "ns":
-                encryption.InitEncodingConnection(general.Ports.tcp2324);
-                SceneManager.LoadScene("player_choose");
-                break;
-
-        }
+        
 
         if (getstr[2]!= "nst" && getstr[2] != "nc" && getstr[2] != "ns")
         {
