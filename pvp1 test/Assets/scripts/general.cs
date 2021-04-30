@@ -23,14 +23,14 @@ public class general
 
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string HUB1_ip = "45.67.57.30";
+    public static string HUB1_ip = "127.0.0.1";
     public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57   //192.168.0.103
 
     public static int SetupServerTCPPort = (int)Ports.tcp2326;
-    public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+    public static string SetupServerIP = "127.0.0.1"; //185.18.53.239   "45.67.57.30"
 
     public static int LoginServerTCPPort = (int)Ports.tcp2324;
-    public static string LoginServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+    public static string LoginServerIP = "127.0.0.1"; //185.18.53.239   "45.67.57.30"
 
     public static string SessionPlayerID; //playerX
     public static string SessionTicket; //sessionX
@@ -163,8 +163,7 @@ public struct SessionData
         string[] getData = Data.Split('~');
         int order = int.Parse(getData[0]);
         int specification = int.Parse(getData[1]);
-        //general.SessionNumberOfPlayers = int.Parse(getData[2]);
-        Debug.Log(int.Parse(getData[2]) + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                
         general.DataForSession.Add(new SessionData(int.Parse(getData[3]), int.Parse(getData[4]), getData[5], int.Parse(getData[6]), int.Parse(getData[7]), int.Parse(getData[8]), int.Parse(getData[9]), int.Parse(getData[10]), int.Parse(getData[11]), int.Parse(getData[12]), 997));
 
         int ort = 13;
@@ -178,23 +177,12 @@ public struct SessionData
 }
 
 
-
+/*
 public static class sr
 {
     public static bool isConnectionError;
 
-    public static void isServerOff()
-    {
-        if (sr.SendAndGetLoginSetup("0~0~0~0") != "online")
-        {
-            Debug.Log("BBBBBBAAAAAAAAAADDDDDDDDD");
-            sr.isConnectionError = true;
-
-        }
-
-    }
-
-
+    
     public static string SendAndGetOnlySetup(string DataForSending)
     {
         int CurrentPort = general.SetupServerTCPPort;
@@ -214,10 +202,6 @@ public static class sr
             Debug.Log(ex);
             result = ex.ToString();
 
-            /*
-            sck.Shutdown(SocketShutdown.Both);
-            sck.Close();
-            */
             return result;
 
         }
@@ -295,10 +279,7 @@ public static class sr
             Debug.Log(ex);
             result = ex.ToString();
 
-            /*
-            sck.Shutdown(SocketShutdown.Both);
-            sck.Close();
-            */
+           
             return result;
 
         }
@@ -358,7 +339,7 @@ public static class sr
         return result;
     }
 }
-
+*/
 
 public class MessageInfo : MonoBehaviour
 {
@@ -532,10 +513,6 @@ public static class codes
             case "dbe":
                 result = lang.dbetext; //loading...
                 break;
-
-
-            //nc
-
 
             default:
                 result = "none";

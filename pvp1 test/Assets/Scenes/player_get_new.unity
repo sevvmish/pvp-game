@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.16680108, g: 0.19666815, b: 0.22643083, a: 1}
+  m_IndirectSpecularColor: {r: 0.16680093, g: 0.19666773, b: 0.22643062, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -276,7 +276,8 @@ MonoBehaviour:
   m_text: OK
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 574e7160a977dc849b7f968ad31fa36a, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5694572518611872370, guid: 574e7160a977dc849b7f968ad31fa36a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -339,7 +340,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &65772028
@@ -929,7 +930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &183169313
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1533,6 +1534,7 @@ MonoBehaviour:
   createnewchartext: {fileID: 1411511869}
   backtext: {fileID: 677962128}
   enterloginname: {fileID: 633162492}
+  enter_char_name_text: {fileID: 633162492}
   err_log_window: {fileID: 1502256370}
 --- !u!1 &620411726
 GameObject:

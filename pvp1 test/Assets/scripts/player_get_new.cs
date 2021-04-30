@@ -24,7 +24,7 @@ public class player_get_new : MonoBehaviour
     private bool isBusy;
     private float delta_for_moving = 0.01f;
 
-    public TextMeshProUGUI warrtext, elemtext, barbartext, rogtext, wizardtext, createnewchartext, backtext, enterloginname;
+    public TextMeshProUGUI warrtext, elemtext, barbartext, rogtext, wizardtext, createnewchartext, backtext, enterloginname, enter_char_name_text;
 
     public GameObject err_log_window;
     MessageInfo error_messages;
@@ -32,7 +32,7 @@ public class player_get_new : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sr.isConnectionError = false;
+        
         error_messages = new MessageInfo(err_log_window);
 
         string result = null;
@@ -88,6 +88,7 @@ public class player_get_new : MonoBehaviour
         OkOnChoosing.onClick.AddListener(OkOnChoose);
         back_button.onClick.AddListener(Back);
 
+        enter_char_name_text.text = lang.EnterCharName;
         warrtext.text = lang.WarriorText;
         elemtext.text = lang.ElemText;
         barbartext.text = lang.BarbarText;

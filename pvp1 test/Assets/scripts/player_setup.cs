@@ -86,8 +86,8 @@ public class player_setup : MonoBehaviour
 
         FromStringToArrTalents(out CurrentTalentsSpread, CurrentCharacterData.talents);
 
-        
 
+        print(general.CharacterName + " - " + general.CharacterType + " - in SETUP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         print(FromArrToStringTalents(CurrentTalentsSpread) + " !");
 
         CharNameText.text = general.CharacterName;
@@ -165,7 +165,7 @@ public class player_setup : MonoBehaviour
                 PlayerType5.SetActive(false);
                 MeleeDataPanel.SetActive(true);
                 MagicDataPanel.SetActive(false);
-
+                print("pla1 !!!!!!!!!!");
 
                 break;
 
@@ -712,7 +712,8 @@ public class player_setup : MonoBehaviour
 
     private void pvp2vs2()
     {
-        string result = sr.SendAndGetOnlySetup("3~2~" + general.CurrentTicket + "~" + general.CharacterName);
+        string result = "";
+        //string result = sr.SendAndGetOnlySetup("3~2~" + general.CurrentTicket + "~" + general.CharacterName);
         print(result);
 
         string[] getstr = result.Split('~');
@@ -734,7 +735,8 @@ public class player_setup : MonoBehaviour
 
     private void pvp5vs5()
     {
-        string result = sr.SendAndGetOnlySetup("3~3~" + general.CurrentTicket + "~" + general.CharacterName);
+        string result = "";
+        //string result = sr.SendAndGetOnlySetup("3~3~" + general.CurrentTicket + "~" + general.CharacterName);
         print(result);
 
         string[] getstr = result.Split('~');
@@ -1163,7 +1165,7 @@ public class player_setup : MonoBehaviour
                         print(ex);
                     }
                     
-                    SceneManager.LoadScene("player_choose");
+                    SceneManager.LoadScene("player_setup");
                 }
 
                 if (status == 2)

@@ -306,6 +306,7 @@ public static class lang
 
     public static string CreateNewCharacter = "СОЗДАТЬ НОВОГО ГЕРОЯ";
     public static string back = "НАЗАД";
+    public static string EnterCharName = "введите имя персонажа:";
 
     public static string EnterTheGameText = "ВОЙТИ В ИГРУ";
     public static string ChooseAnotherText = "ВЫБРАТЬ ДРУГОГО ГЕРОЯ";

@@ -162,6 +162,9 @@ public class player_choose : MonoBehaviour
     {
         general.CharacterName = CurrentPlayerChosen.char_name;
         general.CharacterType = CurrentPlayerChosen.char_type;
+
+        print(general.CharacterName + " - " + general.CharacterType + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         try
         {
             if (general.PacketID != null && general.PacketID != "")
