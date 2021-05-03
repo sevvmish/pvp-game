@@ -394,12 +394,14 @@ public class effects : MonoBehaviour
             //stun screen eff
             if (SomeConds.spell_index == 1002 && SomeConds.cond_time>0.5f && PlayerSessionDataOrder==0)
             {
-                
-                StartCoroutine(TurnOnSomeEffect(StunScreenEffect, SomeConds.cond_time, 0));
+
+                //StartCoroutine(TurnOnSomeEffect(StunScreenEffect, SomeConds.cond_time, 0));
+                StartCoroutine(StunScreenWholeEff(SomeConds.cond_time));
             }
             if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 1002 && (StunScreenEffect.activeSelf) && PlayerSessionDataOrder == 0)
-            {                
-                StunScreenEffect.SetActive(false);
+            {
+                //StunScreenEffect.SetActive(false);
+                StartCoroutine(StunScreenFastEnd());
             }
             if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 1002 && (StunEffect.activeSelf))
             {
@@ -651,6 +653,41 @@ public class effects : MonoBehaviour
             SomeObject.SetActive(false);
         }
     }
+
+    IEnumerator StunScreenWholeEff(float TimeForStun)
+    {
+        StunScreenEffect.SetActive(true);
+
+        for (float i = 0; i <= 10f; i++)
+        {
+            StunScreenEffect.gameObject.GetComponent<RectTransform>().localScale = Vector3.Lerp(new Vector3(2.5f, 2.5f, 1), new Vector3(1, 1, 1), (i / 10f));
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        yield return new WaitForSeconds(TimeForStun - 1f);
+
+        for (float i = 0; i <= 10f; i++)
+        {
+            StunScreenEffect.gameObject.GetComponent<RectTransform>().localScale = Vector3.Lerp(new Vector3(1, 1, 1), new Vector3(2.5f, 2.5f, 1), (i / 10f));
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        StunScreenEffect.SetActive(false);
+    }
+
+    IEnumerator StunScreenFastEnd()
+    {
+        
+        for (float i = 0; i <= 10f; i++)
+        {
+            StunScreenEffect.gameObject.GetComponent<RectTransform>().localScale = Vector3.Lerp(new Vector3(1, 1, 1), new Vector3(2.5f, 2.5f, 2), (i / 10f));
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        StunScreenEffect.SetActive(false);
+    }
+
+
 
     IEnumerator PlaySomeSound(AudioClip AClip, float DelayTime, bool isLooping)
     {
