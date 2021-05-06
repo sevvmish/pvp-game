@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0336842882f1560448923f878a83e6c2, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17850718, g: 0.2235142, b: 0.30549717, a: 1}
+  m_IndirectSpecularColor: {r: 0.61437285, g: 0.6019833, b: 0.533877, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6264,6 +6264,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: location1
       objectReference: {fileID: 0}
+    - target: {fileID: 19069632043887562, guid: 1dfb4f466c576ec47916fd324522ac8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 19069632043887563, guid: 1dfb4f466c576ec47916fd324522ac8f,
         type: 3}
       propertyPath: m_RootOrder
@@ -11859,14 +11864,14 @@ RectTransform:
   m_GameObject: {fileID: 1057918383}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.96067625, y: 1.3286374, z: 1}
   m_Children: []
   m_Father: {fileID: 1075587386}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -344, y: 273.1}
+  m_AnchoredPosition: {x: -344.8, y: 270}
   m_SizeDelta: {x: 282.7, y: 22.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1057918385
@@ -22230,7 +22235,7 @@ RectTransform:
   m_GameObject: {fileID: 1743038241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.93738, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1075587386}
   m_RootOrder: 3
@@ -27749,7 +27754,7 @@ RectTransform:
   m_GameObject: {fileID: 1976340037}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9607207, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1075587386}
   m_RootOrder: 2
