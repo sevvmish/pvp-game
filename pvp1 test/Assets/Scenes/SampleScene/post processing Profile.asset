@@ -75,7 +75,7 @@ MonoBehaviour:
     min: 0
   gaussianEnd:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 100
     min: 0
   gaussianMaxRadius:
     m_OverrideState: 1

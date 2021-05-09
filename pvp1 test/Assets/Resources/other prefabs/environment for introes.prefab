@@ -336,6 +336,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock4B (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8301896075086006379, guid: 38bfa2258b63c5949be9d72caddbfecd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38bfa2258b63c5949be9d72caddbfecd, type: 3}
 --- !u!4 &4984625501782136982 stripped
@@ -426,6 +431,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock6A (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3814236403074001542, guid: a9d5b45d130eeb342a9990ddca7b5087,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9d5b45d130eeb342a9990ddca7b5087, type: 3}
 --- !u!4 &4226619253438699846 stripped
@@ -516,6 +526,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock4B (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8301896075086006379, guid: 38bfa2258b63c5949be9d72caddbfecd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38bfa2258b63c5949be9d72caddbfecd, type: 3}
 --- !u!4 &8403326711182661013 stripped
@@ -554,7 +569,7 @@ PrefabInstance:
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 91.7
+      value: 77
       objectReference: {fileID: 0}
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
@@ -564,7 +579,7 @@ PrefabInstance:
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 104.2
+      value: 86.4
       objectReference: {fileID: 0}
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
@@ -605,7 +620,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: e53a55266d808aa44af64a197df80fe3, type: 2}
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     - target: {fileID: 8149555677709841774, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
       propertyPath: m_Name
@@ -700,7 +715,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 25615b43fccd5a846828d755e21a0178, type: 2}
+      objectReference: {fileID: 2100000, guid: 946f0574f8b700f4ca21781386e7f75b, type: 2}
     - target: {fileID: 8719558203967380534, guid: 7a4e71d464e1f0d43b1306a0cc724e44,
         type: 3}
       propertyPath: m_Name
@@ -796,6 +811,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock6A
       objectReference: {fileID: 0}
+    - target: {fileID: 3814236403074001542, guid: a9d5b45d130eeb342a9990ddca7b5087,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9d5b45d130eeb342a9990ddca7b5087, type: 3}
 --- !u!4 &8827373465290945629 stripped
@@ -834,12 +854,12 @@ PrefabInstance:
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30.4
+      value: 38.1
       objectReference: {fileID: 0}
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -41.8
+      value: -50.5
       objectReference: {fileID: 0}
     - target: {fileID: 5134754954249979773, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
@@ -885,7 +905,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: e53a55266d808aa44af64a197df80fe3, type: 2}
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     - target: {fileID: 8149555677709841774, guid: eea1925fbaf9c744282d7c2a9f92f34c,
         type: 3}
       propertyPath: m_Name
@@ -981,6 +1001,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock4B
       objectReference: {fileID: 0}
+    - target: {fileID: 8301896075086006379, guid: 38bfa2258b63c5949be9d72caddbfecd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38bfa2258b63c5949be9d72caddbfecd, type: 3}
 --- !u!4 &4420706172945755367 stripped
@@ -1000,6 +1025,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FogHeavyWhite
       objectReference: {fileID: 0}
+    - target: {fileID: 127496, guid: 5c44ffd6bd009b5478488ee0c5e53673, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 449672, guid: 5c44ffd6bd009b5478488ee0c5e53673, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1010,7 +1039,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 449672, guid: 5c44ffd6bd009b5478488ee0c5e53673, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.2
+      value: -21.69
       objectReference: {fileID: 0}
     - target: {fileID: 449672, guid: 5c44ffd6bd009b5478488ee0c5e53673, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1290,6 +1319,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock6A (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3814236403074001542, guid: a9d5b45d130eeb342a9990ddca7b5087,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 946f0574f8b700f4ca21781386e7f75b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9d5b45d130eeb342a9990ddca7b5087, type: 3}
 --- !u!4 &9142597018965623522 stripped
@@ -1380,6 +1414,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock4B (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8301896075086006379, guid: 38bfa2258b63c5949be9d72caddbfecd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 13f99e0650fcf254d823e94cb03638f0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38bfa2258b63c5949be9d72caddbfecd, type: 3}
 --- !u!4 &2958384441202015632 stripped

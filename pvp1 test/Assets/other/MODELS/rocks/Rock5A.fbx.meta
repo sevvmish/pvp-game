@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 1e3f5eee0b7e2a54195a2a32bf7fcf20
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       43: 4300000
@@ -47,8 +47,8 @@ ModelImporter:
     importCameras: 0
     importLights: 0
     fileIdsGeneration: 1
-    swapUVChannels: 0
-    generateSecondaryUV: 0
+    swapUVChannels: 1
+    generateSecondaryUV: 1
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
@@ -68,7 +68,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 0
   tangentSpace:
-    normalSmoothAngle: 0
+    normalSmoothAngle: 104
     normalImportMode: 1
     tangentImportMode: 4
     normalCalculationMode: 4
@@ -98,6 +98,7 @@ ModelImporter:
   animationType: 0
   humanoidOversampling: 1
   avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
