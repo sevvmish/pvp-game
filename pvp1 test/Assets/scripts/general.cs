@@ -350,7 +350,7 @@ public class MessageInfo : MonoBehaviour
     {                
         mess_obj = obj;
         mess_obj.SetActive(false);
-        mess_text_mesh = mess_obj.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();       
+        mess_text_mesh = mess_obj.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();       
     }
         
     public IEnumerator process_error(string _code, general.Ports port)

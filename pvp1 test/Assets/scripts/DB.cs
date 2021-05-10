@@ -304,7 +304,7 @@ public static class lang
     public static string RogText = "РАЗБОЙНИК";
     public static string WizText = "ВОЛШЕБНИК";
 
-    public static string CreateNewCharacter = "СОЗДАТЬ НОВОГО ГЕРОЯ";
+    public static string CreateNewCharacter = "СОЗДАТЬ ГЕРОЯ";
     public static string back = "НАЗАД";
     public static string EnterCharName = "введите имя персонажа:";
 

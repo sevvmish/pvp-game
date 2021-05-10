@@ -107,6 +107,7 @@ public class player_choose : MonoBehaviour
         {
             int index = int.Parse(getstr[2]);
             
+            
             if (index==5)
             {
                 ChooseAnother.gameObject.SetActive(false);
