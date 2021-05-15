@@ -24,7 +24,7 @@ public class player_get_new : MonoBehaviour
     private bool isBusy;
     private float delta_for_moving = 0.01f;
 
-    public TextMeshProUGUI warrtext, elemtext, barbartext, rogtext, wizardtext, createnewchartext, backtext, enterloginname, enter_char_name_text;
+    public TextMeshProUGUI char_class_name_in_discr, char_descr, createnewchartext, backtext, enterloginname, enter_char_name_text;
 
     public GameObject err_log_window;
     MessageInfo error_messages;
@@ -89,11 +89,10 @@ public class player_get_new : MonoBehaviour
         back_button.onClick.AddListener(Back);
 
         enter_char_name_text.text = lang.EnterCharName;
-        warrtext.text = lang.WarriorText;
-        elemtext.text = lang.ElemText;
-        barbartext.text = lang.BarbarText;
-        rogtext.text = lang.RogText;
-        wizardtext.text = lang.WizText;
+        
+        
+        
+        
         createnewchartext.text = lang.CreateNewCharacter;
         backtext.text = lang.back;
 
@@ -132,18 +131,23 @@ public class player_get_new : MonoBehaviour
                 {
                     case 1:
                         CurrentPlayerNumber = 1;
+                        pl1.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
                         break;
                     case 2:
                         CurrentPlayerNumber = 2;
+                        pl2.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
                         break;
                     case 3:
                         CurrentPlayerNumber = 3;
+                        pl3.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
                         break;
                     case 4:
                         CurrentPlayerNumber = 4;
+                        pl4.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
                         break;
                     case 5:
                         CurrentPlayerNumber = 5;
+                        pl5.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
                         break;
                 }
                 StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
@@ -151,7 +155,7 @@ public class player_get_new : MonoBehaviour
             }            
         }
 
-
+        update_char_class_description();
         //print(sr.SendAndGetLoginSetup("1~2~" + "77NGYdzGd9" + "~" + "wizwizwiz"));
 
     }
@@ -198,6 +202,46 @@ public class player_get_new : MonoBehaviour
 
     }
 
+    private void update_char_class_description()
+    {
+        pl1.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        pl2.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        pl3.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        pl4.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        pl5.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+
+        switch (CurrentPlayerNumber)
+        {
+            case 1:
+                char_class_name_in_discr.text = lang.WarriorText;
+                char_descr.text = lang.WarriorText_descr;
+                pl1.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+            case 2:
+                char_class_name_in_discr.text = lang.ElemText;
+                char_descr.text = lang.ElemText_descr;
+                pl2.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+            case 3:
+                char_class_name_in_discr.text = lang.BarbarText;
+                char_descr.text = lang.BarbarText_descr;
+                pl3.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+            case 4:
+                char_class_name_in_discr.text = lang.RogText;
+                char_descr.text = lang.RogText_descr;
+                pl4.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+            case 5:
+                char_class_name_in_discr.text = lang.WizText;
+                char_descr.text = lang.WizText_descr;
+                pl5.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+
+        }
+
+
+    }
 
     private void Back()
     {
@@ -383,10 +427,22 @@ public class player_get_new : MonoBehaviour
         }
     }
 
+    void reset_all_buttons()
+    {
+        pl1.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl2.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl3.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl4.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl5.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+    }
+
     private void Click1()
     {
         if (CurrentPlayerNumber == 1) return;
         CurrentPlayerNumber = 1;
+        reset_all_buttons();
+        print("YYYYYYYYYYYYEEEEEEEESSSSSSSSSSSS");
+        pl1.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
         
     }
@@ -395,6 +451,8 @@ public class player_get_new : MonoBehaviour
     {
         if (CurrentPlayerNumber == 2) return;
         CurrentPlayerNumber = 2;
+        reset_all_buttons();
+        pl2.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
@@ -402,6 +460,8 @@ public class player_get_new : MonoBehaviour
     {
         if (CurrentPlayerNumber == 3) return;
         CurrentPlayerNumber = 3;
+        reset_all_buttons();
+        pl3.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
@@ -409,6 +469,8 @@ public class player_get_new : MonoBehaviour
     {
         if (CurrentPlayerNumber == 4) return;
         CurrentPlayerNumber = 4;
+        reset_all_buttons();
+        pl4.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
@@ -416,6 +478,8 @@ public class player_get_new : MonoBehaviour
     {
         if (CurrentPlayerNumber == 5) return;
         CurrentPlayerNumber = 5;
+        reset_all_buttons();
+        pl5.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.3f, 1.3f, 1.3f);
         StartCoroutine(ChangePlayer(GetPlayerByNumber(CurrentPlayerNumber)));
     }
 
@@ -448,6 +512,7 @@ public class player_get_new : MonoBehaviour
 
     IEnumerator ChangePlayer(Vector3 NewCoords)
     {
+        update_char_class_description();
         isBusy = true;
 
         for (float i=0; i<1; i+=0.1f)
@@ -457,6 +522,8 @@ public class player_get_new : MonoBehaviour
 
             yield return new WaitForSeconds(delta_for_moving);
         }
+
+        
 
         isBusy = false;
         delta_for_moving = 0.05f;

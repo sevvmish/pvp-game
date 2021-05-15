@@ -304,6 +304,12 @@ public static class lang
     public static string RogText = "РАЗБОЙНИК";
     public static string WizText = "ВОЛШЕБНИК";
 
+    public static string WarriorText_descr = "здесь все про воина";
+    public static string ElemText_descr = "здесь все про элементалиста";
+    public static string BarbarText_descr = "здесь все про варвара";
+    public static string RogText_descr = "здесь все про разбойника";
+    public static string WizText_descr = "здесь все про волшебника";
+
     public static string CreateNewCharacter = "СОЗДАТЬ ГЕРОЯ";
     public static string back = "НАЗАД";
     public static string EnterCharName = "введите имя персонажа:";
