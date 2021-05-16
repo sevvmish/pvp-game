@@ -99,7 +99,7 @@ public class player_choose : MonoBehaviour
         }
 
 
-        
+        base_reset();
 
         
 
@@ -123,26 +123,31 @@ public class player_choose : MonoBehaviour
                         SetName(pl1, getstr[3]);
                         WhatCharacters.Add(new chars(getstr[3], int.Parse(getstr[4])));
                         print(getstr[3] + " - " + int.Parse(getstr[4]));
+                        pl1.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = DB.get_logo_by_number(WhatCharacters[1].char_type);
                         break;
                     case 2: //5 6
                         pl2.gameObject.SetActive(true);
                         SetName(pl2, getstr[5]);
                         WhatCharacters.Add(new chars(getstr[5], int.Parse(getstr[6])));
+                        pl2.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = DB.get_logo_by_number(WhatCharacters[2].char_type);
                         break;
                     case 3:
                         pl3.gameObject.SetActive(true);
                         SetName(pl3, getstr[7]);
                         WhatCharacters.Add(new chars(getstr[7], int.Parse(getstr[8])));
+                        pl3.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = DB.get_logo_by_number(WhatCharacters[3].char_type);
                         break;
                     case 4:
                         pl4.gameObject.SetActive(true);
                         SetName(pl4, getstr[9]);
                         WhatCharacters.Add(new chars(getstr[9], int.Parse(getstr[10])));
+                        pl4.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = DB.get_logo_by_number(WhatCharacters[4].char_type);
                         break;
                     case 5:
                         pl5.gameObject.SetActive(true);
                         SetName(pl5, getstr[11]);
                         WhatCharacters.Add(new chars(getstr[11], int.Parse(getstr[12])));
+                        pl5.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = DB.get_logo_by_number(WhatCharacters[5].char_type);
                         break;
                 }
             }
@@ -150,9 +155,35 @@ public class player_choose : MonoBehaviour
             GetPlayerByNumber(WhatCharacters[1].char_type);
             CurrentPlayerChosen = WhatCharacters[1];
         }
+
+        p1();
         
     }
 
+    private void base_reset()
+    {
+        pl1.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl1.transform.GetChild(2).gameObject.SetActive(false);
+
+        pl2.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl2.transform.GetChild(2).gameObject.SetActive(false);
+
+        pl3.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl3.transform.GetChild(2).gameObject.SetActive(false);
+
+        pl4.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl4.transform.GetChild(2).gameObject.SetActive(false);
+
+        pl5.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        pl5.transform.GetChild(2).gameObject.SetActive(false);
+    }
+
+    private void set_logo_and_light()
+    {
+        
+
+
+    }
 
     private void ChooseAnotPl()
     {
@@ -200,30 +231,50 @@ public class player_choose : MonoBehaviour
     {
         GetPlayerByNumber(WhatCharacters[1].char_type);
         CurrentPlayerChosen = WhatCharacters[1];
+        base_reset();
+        pl1.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        pl1.transform.GetChild(2).gameObject.SetActive(true);
+        
     }
 
     private void p2()
     {
         GetPlayerByNumber(WhatCharacters[2].char_type);
         CurrentPlayerChosen = WhatCharacters[2];
+        base_reset();
+        pl2.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        pl2.transform.GetChild(2).gameObject.SetActive(true);
+        
     }
 
     private void p3()
     {
         GetPlayerByNumber(WhatCharacters[3].char_type);
         CurrentPlayerChosen = WhatCharacters[3];
+        base_reset();
+        pl3.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        pl3.transform.GetChild(2).gameObject.SetActive(true);
+        
     }
 
     private void p4()
     {
         GetPlayerByNumber(WhatCharacters[4].char_type);
         CurrentPlayerChosen = WhatCharacters[4];
+        base_reset();
+        pl4.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        pl4.transform.GetChild(2).gameObject.SetActive(true);
+        
     }
 
     private void p5()
     {
         GetPlayerByNumber(WhatCharacters[5].char_type);
         CurrentPlayerChosen = WhatCharacters[5];
+        base_reset();
+        pl5.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        pl5.transform.GetChild(2).gameObject.SetActive(true);
+        
     }
 
 
@@ -270,5 +321,7 @@ public class player_choose : MonoBehaviour
         }
                 
     }
+
+    
 
 }

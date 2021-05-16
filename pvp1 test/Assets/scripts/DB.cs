@@ -177,7 +177,31 @@ public class DB : MonoBehaviour
     public static talentsIDs talent21 = new talentsIDs(lang.Talent1Name, 21, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
     public static talentsIDs talent22 = new talentsIDs(lang.Talent1Name, 22, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
 
+    public static Sprite get_logo_by_number(int number)
+    {
+        Sprite result = null;
 
+        switch (number)
+        {
+            case 1:
+                result = Resources.Load<Sprite>("sprites/heroes/warrior sign");
+                break;
+            case 2:
+                result = Resources.Load<Sprite>("sprites/heroes/elementalist sign");
+                break;
+            case 3:
+                result = Resources.Load<Sprite>("sprites/heroes/barbarian sign");
+                break;
+            case 4:
+                result = Resources.Load<Sprite>("sprites/heroes/rogue sign");
+                break;
+            case 5:
+                result = Resources.Load<Sprite>("sprites/heroes/wizard sign");
+                break;
+        }
+
+        return result;
+    }
 
 }
 
@@ -324,7 +348,7 @@ public static class lang
     public static string WeaponAttackText = "атака оружия";
     public static string HitPowerText = "сила удара";
     public static string ArmorText = "броня";
-    public static string ShieldBlockText = "блокировка щитом";
+    public static string ShieldBlockText = "блок щитом";
     public static string MagicResistanceText = "защита от магии";
     public static string DodgeText = "уклонение";
     public static string CastSpeedText = "скорость заклинания";
@@ -339,7 +363,7 @@ public static class lang
     public static string WeaponAttackTextHint = "атака оружия";
     public static string HitPowerTextHint = "сила удара";
     public static string ArmorTextHint = "броня";
-    public static string ShieldBlockTextHint = "блокировка щитом";
+    public static string ShieldBlockTextHint = "блок щитом";
     public static string MagicResistanceTextHint = "защита от магии";
     public static string DodgeTextHint = "уклонение";
     public static string CastSpeedTextHint = "скорость заклинания";

@@ -515,7 +515,7 @@ public class player_get_new : MonoBehaviour
         update_char_class_description();
         isBusy = true;
 
-        for (float i=0; i<1; i+=0.1f)
+        for (float i=0; i<1; i+=0.2f)
         {
 
             PlayerLine.position = Vector3.Lerp(PlayerLine.position, NewCoords, i);
