@@ -156,8 +156,9 @@ public class player_choose : MonoBehaviour
             CurrentPlayerChosen = WhatCharacters[1];
         }
 
-        p1();
-        
+        pl1.gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        pl1.transform.GetChild(2).gameObject.SetActive(true);
+
     }
 
     private void base_reset()
