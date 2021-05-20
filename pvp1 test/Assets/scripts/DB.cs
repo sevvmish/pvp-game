@@ -352,8 +352,8 @@ public static class lang
     public static string MagicResistanceText = "защита от магии";
     public static string DodgeText = "уклонение";
     public static string CastSpeedText = "скорость заклинания";
-    public static string MeleeCritText = "крит ближней атаки";
-    public static string MagicCritText = "крит магической атаки";
+    public static string MeleeCritText = "шанс крит атаки";
+    public static string MagicCritText = "шанс крит атаки";
     public static string SpellPowerText = "сила магии";
 
     public static string SpeedTextHint = "скорость";
@@ -367,8 +367,8 @@ public static class lang
     public static string MagicResistanceTextHint = "защита от магии";
     public static string DodgeTextHint = "уклонение";
     public static string CastSpeedTextHint = "скорость заклинания";
-    public static string MeleeCritTextHint = "крит ближней атаки";
-    public static string MagicCritTextHint = "крит магической атаки";
+    public static string MeleeCritTextHint = "шанс крит атаки";
+    public static string MagicCritTextHint = "шанс крит атаки";
     public static string SpellPowerTextHint = "сила магии";
 
     //envir===================================

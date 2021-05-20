@@ -165,7 +165,7 @@ public class player_setup : MonoBehaviour
                 PlayerType5.SetActive(false);
                 MeleeDataPanel.SetActive(true);
                 MagicDataPanel.SetActive(false);
-                print("pla1 !!!!!!!!!!");
+              
 
                 break;
 
