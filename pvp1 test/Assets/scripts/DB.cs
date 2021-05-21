@@ -262,26 +262,8 @@ public struct spellsIDs
 }
 
 
-public static class langu
-{
-    public static string kkk;
 
-    public static void SetLangu(string whichh)
-    {
-        if (whichh == "ru")
-        {
-            kkk = "на русском";
-        }
-
-        if (whichh == "eng")
-        {
-            kkk = "in english";
-        }
-    }
-}
-
-
-public static class lang
+public class lang
 {
 
 
@@ -322,17 +304,23 @@ public static class lang
     public static string rsntext = "спелы повторяются";
     public static string dbetext = "ошибка в БД";
 
-    public static string WarriorText = "ВОИН";
+    public static string WarriorText = "ВОИН";    
     public static string ElemText = "ЕЛЕМЕНТАЛИСТ";
     public static string BarbarText = "ВАРВАР";
     public static string RogText = "РАЗБОЙНИК";
     public static string WizText = "ВОЛШЕБНИК";
 
-    public static string WarriorText_descr = "здесь все про воина";
-    public static string ElemText_descr = "здесь все про элементалиста";
-    public static string BarbarText_descr = "здесь все про варвара";
-    public static string RogText_descr = "здесь все про разбойника";
-    public static string WizText_descr = "здесь все про волшебника";
+    public static string WarriorText_descr = "Использует обычный меч и преимущества экипировки: щит и броню.";
+    public static string ElemText_descr = "Применяет силу стихий для быстрого нанесения большого урона.";
+    public static string BarbarText_descr = "Обладает крепким здоровьем и способен превращать свою ярость в мощные удары.";
+    public static string RogText_descr = "Мастер скрытности, мобильности и крайне опасных ударов.";
+    public static string WizText_descr = "Имеет самый большой арсенал заклинаний контроля и магических уловок.";
+
+    public static string WarriorText_conspros = "- высокая выживаемость;\n- навык блокировки щитом;\n- мощная броня;\n- слабый удар и шанс критичес-\nкого удара;";
+    public static string ElemText_conspros = "- быстрое нанесение значительного урона;\n- ускоренное восполнение энергии;\n- слабая броня и здоровье;";
+    public static string BarbarText_conspros = "- большой запас здоровья;\n- увеличенная защита от магии;\n- слабая броня и медленное восста-\nновление энергии";
+    public static string RogText_conspros = "- увеличенная скорость передвижения;\n- навык невидимости;\n- увеличенный шанс критических ударов;\n- низкий показатель здоровья и брони;";
+    public static string WizText_conspros = "- аресенал заклинаний контроля;\n- высокая мобильность;\n- слабая броня и здоровье;";
 
     public static string CreateNewCharacter = "СОЗДАТЬ ГЕРОЯ";
     public static string back = "НАЗАД";
@@ -417,7 +405,7 @@ public static class lang
     public static string Talent1Description = "оглушение gvbrffgd egerg  egref";
 }
 
-public static class ENlang
+public class ENlang
 {
 
     //логин и вызов пользователя

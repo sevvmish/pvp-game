@@ -13,8 +13,7 @@ public class player_get_new : MonoBehaviour
     private Vector3 BarbarPos = new Vector3(-14, 0, 0);
     private Vector3 RogPos = new Vector3(-21, 0, 0);
     private Vector3 WizPos = new Vector3(-28, 0, 0);
-    private float cur_time;
-
+    
     public TMP_InputField char_name_input;
     public Transform PlayerLine;
     public GameObject EnterNamePanel;
@@ -24,7 +23,7 @@ public class player_get_new : MonoBehaviour
     private bool isBusy;
     private float delta_for_moving = 0.01f;
 
-    public TextMeshProUGUI char_class_name_in_discr, char_descr, createnewchartext, backtext, enterloginname, enter_char_name_text;
+    public TextMeshProUGUI char_class_name_in_discr, char_descr, char_conspros, createnewchartext, backtext, enterloginname, enter_char_name_text;
 
     public GameObject err_log_window;
     MessageInfo error_messages;
@@ -215,26 +214,31 @@ public class player_get_new : MonoBehaviour
             case 1:
                 char_class_name_in_discr.text = lang.WarriorText;
                 char_descr.text = lang.WarriorText_descr;
+                char_conspros.text = lang.WarriorText_conspros;
                 pl1.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 2:
                 char_class_name_in_discr.text = lang.ElemText;
                 char_descr.text = lang.ElemText_descr;
+                char_conspros.text = lang.ElemText_conspros;
                 pl2.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 3:
                 char_class_name_in_discr.text = lang.BarbarText;
                 char_descr.text = lang.BarbarText_descr;
+                char_conspros.text = lang.BarbarText_conspros;
                 pl3.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 4:
                 char_class_name_in_discr.text = lang.RogText;
                 char_descr.text = lang.RogText_descr;
+                char_conspros.text = lang.RogText_conspros;
                 pl4.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 5:
                 char_class_name_in_discr.text = lang.WizText;
                 char_descr.text = lang.WizText_descr;
+                char_conspros.text = lang.WizText_conspros;
                 pl5.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
 
