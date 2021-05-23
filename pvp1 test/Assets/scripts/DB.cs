@@ -339,7 +339,7 @@ public class lang
     public static string ShieldBlockText = "блок щитом";
     public static string MagicResistanceText = "защита от магии";
     public static string DodgeText = "уклонение";
-    public static string CastSpeedText = "скорость заклинания";
+    public static string CastSpeedText = "скорость применения магии";
     public static string MeleeCritText = "шанс крит атаки";
     public static string MagicCritText = "шанс крит атаки";
     public static string SpellPowerText = "сила магии";
@@ -354,7 +354,7 @@ public class lang
     public static string ShieldBlockTextHint = "блок щитом";
     public static string MagicResistanceTextHint = "защита от магии";
     public static string DodgeTextHint = "уклонение";
-    public static string CastSpeedTextHint = "скорость заклинания";
+    public static string CastSpeedTextHint = "скорость применения магии";
     public static string MeleeCritTextHint = "шанс крит атаки";
     public static string MagicCritTextHint = "шанс крит атаки";
     public static string SpellPowerTextHint = "сила магии";
