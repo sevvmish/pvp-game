@@ -1125,12 +1125,13 @@ public class PlayerUI : MonoBehaviour
         {
             CondPositions = CondPositionsForOtherPlayer;
         }
+        print(AllObject.transform.GetChild(2).gameObject.name + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         cond_example = AllObject.transform.GetChild(2).gameObject;
         cond_example.SetActive(false);
         for (int i = 0; i < CondObjectLenth; i++)
         {
             CondObjects.Add(new CondManager());
-            CondObjects[i].con_object = Instantiate(cond_example, Vector3.zero, Quaternion.identity, AllObject.transform);
+            CondObjects[i].con_object = Instantiate(cond_example, Vector3.zero, Quaternion.identity, AllObject.transform.GetChild(4).gameObject.transform);
             CondObjects[i].con_object.SetActive(false);
         }
 
@@ -1276,14 +1277,17 @@ public class PlayerUI : MonoBehaviour
                 do
                 {
                     yield return new WaitForSeconds(0.2f);
-                    
-                    CondObjects[index].spell_timer -= 0.2f;
+
+                    //CondObjects[index].spell_timer -= 0.2f;
+                    CondObjects[index].spell_timer = data.cond_time;
                     CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString("f0");
-                    if (data.cond_time == 9999)
+                    if (data.cond_time == 0)
                     {
                         break;
                     }
                 } while (CondObjects[index].spell_timer > 0);
+
+                yield return new WaitForSeconds(0.5f);
 
                 //string texter = CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;
                 Vector2 expCoords = CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition;
