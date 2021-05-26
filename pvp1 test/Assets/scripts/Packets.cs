@@ -14,6 +14,7 @@ public class Conds
 {
     public string cond_id;
     public string cond_type;
+    public int cond_stack;
     public float damage_or_heal;
     public string cond_bulk;
     public string cond_message;
@@ -111,7 +112,12 @@ public class ConditionsAnalys
         if (curr_conds[Index].cond_type == "co") //condition type in conditions
         {
             curr_conds[Index].spell_index = int.Parse(getstrcond[1]);
-            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);            
+            curr_conds[Index].cond_time = float.Parse(getstrcond[2], CultureInfo.InvariantCulture);
+            
+            if (getstrcond.Length>3)
+            {
+                curr_conds[Index].cond_stack = int.Parse(getstrcond[3]);                
+            }
         }
         else if (curr_conds[Index].cond_type == "dt" || curr_conds[Index].cond_type == "dg") //damage taken or given
         {
@@ -1056,7 +1062,7 @@ public class PlayerUI : MonoBehaviour
     public bool isMainPlayer;
 
     public bool isCasting = false;
-    private TextMeshProUGUI CancelationText;
+    private TextMeshProUGUI CancelationText, StacksText;
     private bool isShowStopCastingText;
 
     public class CondManager
@@ -1067,6 +1073,7 @@ public class PlayerUI : MonoBehaviour
         public bool isBusy;
         public int spell_index;
         public float spell_timer;
+        public int stacks;
     }
 
     public List<CondManager> CondObjects = new List<CondManager>();
@@ -1125,7 +1132,7 @@ public class PlayerUI : MonoBehaviour
         {
             CondPositions = CondPositionsForOtherPlayer;
         }
-        print(AllObject.transform.GetChild(2).gameObject.name + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        
         cond_example = AllObject.transform.GetChild(2).gameObject;
         cond_example.SetActive(false);
         for (int i = 0; i < CondObjectLenth; i++)
@@ -1193,7 +1200,7 @@ public class PlayerUI : MonoBehaviour
         string condID = data.cond_id;
         int spell_ind = data.spell_index;
         float spell_time = data.cond_time;
-        
+        int stacks = data.cond_stack;
 
 
         print(condID + ": " + spell_ind + " - ");
@@ -1266,10 +1273,15 @@ public class PlayerUI : MonoBehaviour
                 CondObjects[index].cond_id = condID;
                 CondObjects[index].spell_index = spell_ind;
                 CondObjects[index].spell_timer = spell_time;
+                CondObjects[index].stacks = stacks;
                 
                 CondObjects[index].con_object.SetActive(true);
                 CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition = position;
                 CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString();
+                if (data.cond_stack > 1)
+                {
+                    CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = data.cond_stack.ToString();
+                }
                 CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = DB.GetSpellByNumber(spell_ind).Spell1_icon;
 
                 
@@ -1281,6 +1293,14 @@ public class PlayerUI : MonoBehaviour
                     //CondObjects[index].spell_timer -= 0.2f;
                     CondObjects[index].spell_timer = data.cond_time;
                     CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString("f0");
+                    print(data.cond_stack + " - !!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                    if (data.cond_stack>1)
+                    {
+                        
+                        CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = data.cond_stack.ToString();
+                    }
+
                     if (data.cond_time == 0)
                     {
                         break;
@@ -1297,6 +1317,7 @@ public class PlayerUI : MonoBehaviour
                 CondObjects[index].con_object.SetActive(false);
                 CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "";
                 CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null;
+                CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "";
 
                 //JustDO(CondObjects[index], position, spell_time);
 

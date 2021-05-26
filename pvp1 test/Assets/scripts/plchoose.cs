@@ -26,8 +26,6 @@ public class plchoose : MonoBehaviour
         pl6.onClick.AddListener(play6);
         pl7.onClick.AddListener(play7);
         pl8.onClick.AddListener(play8);
-
-
     }
 
     
@@ -38,8 +36,7 @@ public class plchoose : MonoBehaviour
         general.SessionTicket = "session";
         general.GameServerIP = general.HUB1_ip;
         general.SessionNumberOfPlayers = HowManyPlayers;
-        StartCoroutine(StartLevel());
-        
+        StartCoroutine(StartLevel());        
     }
 
     void play2()
@@ -49,7 +46,6 @@ public class plchoose : MonoBehaviour
         general.GameServerIP = general.HUB1_ip;
         general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
-
     }
 
     void play2_3()
@@ -59,7 +55,6 @@ public class plchoose : MonoBehaviour
         general.GameServerIP = general.HUB1_ip;
         general.SessionNumberOfPlayers = HowManyPlayers;
         StartCoroutine(StartLevel());
-
     }
 
     void play2_4()
