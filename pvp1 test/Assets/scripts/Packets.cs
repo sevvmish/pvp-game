@@ -1277,47 +1277,66 @@ public class PlayerUI : MonoBehaviour
                 
                 CondObjects[index].con_object.SetActive(true);
                 CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition = position;
-                CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString();
+                TextMeshProUGUI spell_timer = CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI spell_stacks = CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
+
+                spell_timer.text = CondObjects[index].spell_timer.ToString();
                 if (data.cond_stack > 1)
                 {
-                    CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = data.cond_stack.ToString();
+                    spell_stacks.text = data.cond_stack.ToString();
                 }
                 CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = DB.GetSpellByNumber(spell_ind).Spell1_icon;
+                Animator animator = CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Animator>();
 
-                
 
                 do
                 {
                     yield return new WaitForSeconds(0.2f);
 
-                    //CondObjects[index].spell_timer -= 0.2f;
-                    CondObjects[index].spell_timer = data.cond_time;
-                    CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = CondObjects[index].spell_timer.ToString("f0");
+                    //CondObjects[index].spell_timer -= 0.2f;                    
+                    spell_timer.text = data.cond_time.ToString("f0");
                     print(data.cond_stack + " - !!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                     if (data.cond_stack>1)
                     {
-                        
-                        CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = data.cond_stack.ToString();
+                        spell_stacks.text = data.cond_stack.ToString();
+                    }
+
+                    if (data.cond_time<3 && data.cond_time > 0.5f)
+                    {
+                        animator.SetBool("long", true);
+                        animator.SetBool("fast", false);
+                    } 
+                    else if (data.cond_time <= 0.5f)
+                    {                        
+                        animator.SetBool("fast", true);
+                        animator.SetBool("long", false);
+                        animator.Play("idle");
+                    } else if (data.cond_time >=3f)
+                    {
+                        animator.SetBool("long", false);
+                        animator.SetBool("fast", false);
+                        animator.Play("idle");
                     }
 
                     if (data.cond_time == 0)
                     {
                         break;
                     }
-                } while (CondObjects[index].spell_timer > 0);
+                } while (data.cond_time > 0);
 
                 yield return new WaitForSeconds(0.5f);
 
                 //string texter = CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;
                 Vector2 expCoords = CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition;
-
+                animator.SetBool("long", false);
+                animator.SetBool("fast", false);
                 CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
                 CondObjects[index].isBusy = false;
                 CondObjects[index].con_object.SetActive(false);
-                CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = "";
+                spell_timer.text = "";
                 CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null;
-                CondObjects[index].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = "";
+                spell_stacks.text = "";
 
                 //JustDO(CondObjects[index], position, spell_time);
 
