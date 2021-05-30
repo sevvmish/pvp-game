@@ -361,7 +361,7 @@ public class lang
 
     //envir===================================
     public static string Canceled = "ОТМЕНА";
-
+    public static string ManaCostText = "затраты маны:";
 
     //all spells===============================
     public static string Spell1Name = "простой удар";
