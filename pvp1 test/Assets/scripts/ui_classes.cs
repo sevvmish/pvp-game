@@ -18,10 +18,10 @@ public class SpellDescription : MonoBehaviour
     private Image SpellIcon;
     private string _name;
     private TextMeshProUGUI SpellDescr, ManaDescr;
-    private bool isPressed;
+    private bool isPressed, isOnlyNames;
 
 
-    public SpellDescription(int _spell_number, Vector2 _place_coords, Transform _where_to_add, string curr_name)
+    public SpellDescription(int _spell_number, Vector2 _place_coords, Transform _where_to_add, string curr_name, bool _isonlynames)
     {
         _mainObject = Instantiate(Resources.Load<GameObject>("prefabs/SpellDescription"), _place_coords, Quaternion.identity, _where_to_add);
         _mainObjectRect = _mainObject.GetComponent<RectTransform>();
@@ -29,7 +29,7 @@ public class SpellDescription : MonoBehaviour
         _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
         _name = curr_name;
         _mainObject.name = _name;
-
+        isOnlyNames = _isonlynames;
         SpellNumber = _spell_number;
         SpellIcon = _mainObject.transform.GetChild(0).GetComponent<Image>();
         SpellDescr = _mainObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -40,9 +40,21 @@ public class SpellDescription : MonoBehaviour
 
     private void SetNewSpell()
     {
-        SpellIcon.sprite = CurrentSpell.Spell1_icon;
-        SpellDescr.text = CurrentSpell.Spell1_full_description;
-        ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0");
+        if (isOnlyNames)
+        {
+            SpellIcon.sprite = CurrentSpell.Spell1_icon;
+            SpellDescr.text = CurrentSpell.Spell1_name;
+            SpellDescr.fontSize = 28;
+            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0");
+            ManaDescr.fontSize = 22;
+        } else
+        {
+            SpellIcon.sprite = CurrentSpell.Spell1_icon;
+            SpellDescr.text = CurrentSpell.Spell1_full_description;
+            SpellDescr.fontSize = 18;
+            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0");
+            ManaDescr.fontSize = 17;
+        }
     }
 
     public int GetSpellNumber()

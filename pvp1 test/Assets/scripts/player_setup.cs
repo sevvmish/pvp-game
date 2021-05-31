@@ -16,7 +16,7 @@ public class player_setup : MonoBehaviour
 
     public GameObject ConnectionError, 
         PlayerType1, PlayerType2, PlayerType3, PlayerType4, PlayerType5,
-        MeleeDataPanel, MagicDataPanel, podskazka, AllPlayersTypes, SpellBook;
+        MeleeDataPanel, MagicDataPanel, BaseAttrDataPanel, podskazka, AllPlayersTypes, SpellBook;
 
     public character_data CurrentCharacterData;
 
@@ -30,7 +30,7 @@ public class player_setup : MonoBehaviour
         
         Line1Talents, Line2Talents, Line3Talents, UsedTalentsInfo;
 
-    public Button SpellButton1, SpellButton2, SpellButton3, SpellButton4, SpellButton5, SpellButton6, BackToLogin, HeroB, TalentsB, PVPB, optionsB,
+    public Button BackToLogin, HeroB, TalentsB, PVPB, optionsB,
         pvp11, pvp22, pvp33, testing_but, sending_talent_info, ResetTalentsButton;
 
     public Canvas Hero, Talents, PVP, options;
@@ -43,7 +43,7 @@ public class player_setup : MonoBehaviour
     private int CurrentTalentsCount;
 
     public Image DragedSpell;
-    public ScrollRect SpellBookScrollRect;
+    
 
     //public List<Object> TalentButtonUI = new List<Object>();
 
@@ -51,29 +51,16 @@ public class player_setup : MonoBehaviour
 
     TalentsButton r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72;
     List<TalentsButton> TalentBottonsList = new List<TalentsButton>();
-    //List<SpellsButton> SpellButtonList = new List<SpellsButton>();
-    //List<SpellsButton> BaseSpellButtonList = new List<SpellsButton>();
-    //List<Button> SpellNumbers = new List<Button>();
-
-    //public static int SpellButtonDraged=-999;
-
-    //public RectTransform SpaceForSpellBookRectTr;
-    //List<RectTransform> BaseSpellsRects = new List<RectTransform>();
-    //private enum WhereSpellFromTypes
-    //{
-     //   spellbook,
-     //   basespells
-    //}
-
+    
     public GameObject err_log_window;
     MessageInfo error_messages;
 
     private RectTransform SpellAttrInside;
-
-    //private WhereSpellFromTypes WhereSpellFrom;
+    public  RectTransform SpellBookContent;
 
     private SpellDescription current_spell1, current_spell2, current_spell3, current_spell4, current_spell5;
     private List<SpellDescription> AllCurrentSpells = new List<SpellDescription>();
+    private List<SpellDescription> AllSpellBookSpells = new List<SpellDescription>();
 
     private void GetCharDataToView()
     {
@@ -114,54 +101,11 @@ public class player_setup : MonoBehaviour
         if (Hero.gameObject.activeSelf)
         {
 
-
-            //BaseSpellButtonList[0].SetNewSpell(CurrentCharacterData.spell1);
-            //BaseSpellButtonList[1].SetNewSpell(CurrentCharacterData.spell2);
-            //BaseSpellButtonList[2].SetNewSpell(CurrentCharacterData.spell3);
-            //BaseSpellButtonList[3].SetNewSpell(CurrentCharacterData.spell4);
-            //BaseSpellButtonList[4].SetNewSpell(CurrentCharacterData.spell5);
-            //BaseSpellButtonList[5].SetNewSpell(CurrentCharacterData.spell6);
-
             CurrentCharacterData.spell_book = CurrentCharacterData.spell_book.Substring(2);
             print(CurrentCharacterData.spell_book);
 
-            /*
-            string[] SpellsInSpellBook = CurrentCharacterData.spell_book.Split(',');
+            CloseSpellBook();
 
-            int row = Mathf.CeilToInt((SpellsInSpellBook.Length + 1) / 3);
-
-            SpaceForSpellBookRectTr.sizeDelta = new Vector2(0, row * 110 + row * 10 + 10);
-                        
-            int ii = 1, r = 1;
-
-            bool isStateOfSpellBook = SpellBook.activeSelf;
-
-            SpellBook.SetActive(true);
-            for (int u = 0; u < SpellsInSpellBook.Length - 1; u++)
-            {
-                
-
-                SpellButtonList.Add(new SpellsButton(int.Parse(SpellsInSpellBook[u]), new Vector2(0,0), "SpellBook")); //SpaceForSpellBook
-                //print(SpellsInSpellBook[u] + " - " + u.ToString());
-                //SpellButtonList[SpellButtonList.Count - 1].WholeButton.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
-                //SpellButtonList[SpellButtonList.Count - 1].WholeButton.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
-                //SpellButtonList[SpellButtonList.Count - 1].WholeButton.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
-                if (SpellButtonList[SpellButtonList.Count - 1]!=null)
-                SpellButtonList[SpellButtonList.Count - 1].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(10 + ii * -110, -10 - r * 110,0);
-
-                //print(SpellsInSpellBook[u].ToString() + "========= " + u.ToString());
-
-                ii++;
-                if (ii == 3)
-                {
-                    ii = 0;
-                    r++;
-                }
-
-
-            }
-            */
-            SpellBook.SetActive(false);
         }
 
 
@@ -249,25 +193,6 @@ public class player_setup : MonoBehaviour
         {
             StartCoroutine(error_messages.process_error("con_err"));
         }
-
-        //BaseSpellsRects.Add(SpellButton1.GetComponent<RectTransform>());
-        //BaseSpellsRects.Add(SpellButton2.GetComponent<RectTransform>());
-        //BaseSpellsRects.Add(SpellButton3.GetComponent<RectTransform>());
-        //BaseSpellsRects.Add(SpellButton4.GetComponent<RectTransform>());
-        //BaseSpellsRects.Add(SpellButton5.GetComponent<RectTransform>());
-        //BaseSpellsRects.Add(SpellButton6.GetComponent<RectTransform>());
-
-
-
-
-        //print(SpellButton1.GetComponent<RectTransform>().rect.x.ToString() + " - " + SpellButton1.GetComponent<Rect>().y.ToString() + "==========");
-
-        //toDELETE
-        //general.CharacterType = 1;
-        //general.CurrentTicket = "WcF7OkCt1h";
-        //general.CharacterName = "warWARmain";
-        //===================
-
         
 
         BackTo.text = lang.back;
@@ -296,13 +221,7 @@ public class player_setup : MonoBehaviour
 
         Hero.gameObject.SetActive(true);
 
-        //BaseSpellButtonList.Add(new SpellsButton(1, new Vector2(0, 0), "base spell 1"));
-        //BaseSpellButtonList.Add(new SpellsButton(1, new Vector2(0, 0), "base spell 2"));
-        //BaseSpellButtonList.Add(new SpellsButton(1, new Vector2(0, 0), "base spell 3"));
-        //BaseSpellButtonList.Add(new SpellsButton(1, new Vector2(0, 0), "base spell 4"));
-        //BaseSpellButtonList.Add(new SpellsButton(1, new Vector2(0, 0), "base spell 5"));
-        //BaseSpellButtonList.Add(new SpellsButton(1, new Vector2(0, 0), "base spell 6"));
-
+    
 
         GetCharDataToView();
 
@@ -369,15 +288,15 @@ public class player_setup : MonoBehaviour
         Talents.gameObject.SetActive(false);
         PVP.gameObject.SetActive(false);
         options.gameObject.SetActive(false);
-        SpellBook.gameObject.SetActive(false);
-
+        
+        CloseSpellBook();
         
         float xx = -17;
-        current_spell1 = new SpellDescription(2, new Vector2(xx, 161), GameObject.Find("spell attr inside").transform, "current_spell1");
-        current_spell2 = new SpellDescription(3, new Vector2(xx, 80), GameObject.Find("spell attr inside").transform, "current_spell2");
-        current_spell3 = new SpellDescription(4, new Vector2(xx, -1), GameObject.Find("spell attr inside").transform, "current_spell3");
-        current_spell4 = new SpellDescription(52, new Vector2(xx, -82), GameObject.Find("spell attr inside").transform, "current_spell4");
-        current_spell5 = new SpellDescription(51, new Vector2(xx, -163), GameObject.Find("spell attr inside").transform, "current_spell5");
+        current_spell1 = new SpellDescription(CurrentCharacterData.spell1, new Vector2(xx, 161), GameObject.Find("spell attr inside").transform, "current_spell1", true);
+        current_spell2 = new SpellDescription(CurrentCharacterData.spell2, new Vector2(xx, 80), GameObject.Find("spell attr inside").transform, "current_spell2", true);
+        current_spell3 = new SpellDescription(CurrentCharacterData.spell3, new Vector2(xx, -1), GameObject.Find("spell attr inside").transform, "current_spell3", true);
+        current_spell4 = new SpellDescription(CurrentCharacterData.spell4, new Vector2(xx, -82), GameObject.Find("spell attr inside").transform, "current_spell4", true);
+        current_spell5 = new SpellDescription(CurrentCharacterData.spell5, new Vector2(xx, -163), GameObject.Find("spell attr inside").transform, "current_spell5", true);
         AllCurrentSpells.Add(current_spell1);
         AllCurrentSpells.Add(current_spell2);
         AllCurrentSpells.Add(current_spell3);
@@ -410,6 +329,47 @@ public class player_setup : MonoBehaviour
         
         
         GetCharDataToView();
+    }
+
+
+    private void OpenSpellBook()
+    {
+        if (!isSpellBookOpened)
+        {
+            isSpellBookOpened = true;
+            SpellBook.SetActive(true);
+            
+
+            if (SpellBookContent.gameObject.transform.childCount > 0)
+            {
+                for (int i = 0; i < SpellBookContent.gameObject.transform.childCount; i++)
+                {
+                    Destroy(SpellBookContent.gameObject.transform.GetChild(i).gameObject);
+                }
+            }
+
+            float VerticalInterval = -75;
+
+            string[] _spells = CurrentCharacterData.spell_book.Split(',');
+
+            print(CurrentCharacterData.spell_book + " - " + _spells.Length);
+
+            float Ylimit = _spells.Length * Mathf.Abs(VerticalInterval) + 20;
+            SpellBookContent.sizeDelta = new Vector2(0, Ylimit);
+
+            for (int i = 0; i < _spells.Length; i++)
+            {
+                AllSpellBookSpells.Add(new SpellDescription(int.Parse(_spells[i]), new Vector2(0, (Ylimit/2-50) + i * VerticalInterval), SpellBookContent.gameObject.transform, $"spell {i}", false));
+            }
+        }
+    }
+
+    private void CloseSpellBook()
+    {
+        
+        isSpellBookOpened = false;
+        SpellBook.SetActive(false);
+        
     }
 
     private void CheckNormalTalentDisp()
@@ -807,102 +767,6 @@ public class player_setup : MonoBehaviour
     }
 
 
-    /*
-    public void EndDragAndDrop(Vector3 MouseInput)
-    {
-       
-        //if (SpellButtonDraged != -999)
-        //{
-            for (int i = 0; i < BaseSpellsRects.Count; i++)
-            {
-                //print(BaseSpellsRects[i].anchoredPosition );
-
-
-                if (BaseSpellsRects[i].rect.Contains(BaseSpellsRects[i].transform.InverseTransformPoint(MouseInput)))
-                {
-                    int index = 0;
-
-                    switch (BaseSpellsRects[i].gameObject.name)
-                    {
-                        case "base spell 1":
-                            index = 0;
-                            break;
-                        case "base spell 2":
-                            index = 1;
-                            break;
-                        case "base spell 3":
-                            index = 2;
-                            break;
-                        case "base spell 4":
-                            index = 3;
-                            break;
-                        case "base spell 5":
-                            index = 4;
-                            break;
-                        case "base spell 6":
-                            index = 5;
-                            break;
-
-                    }
-
-                    int SpellNumberForReplace = BaseSpellButtonList[index].GetSpellNumber();
-
-                    if (WhereSpellFrom == WhereSpellFromTypes.basespells)
-                    {
-                        int IndexFromWhereTaken = 0;
-                        for (int u = 0; u < BaseSpellButtonList.Count; u++)
-                        {
-                            if (BaseSpellButtonList[u].GetSpellNumber() == SpellButtonDraged)
-                            {
-                                IndexFromWhereTaken = u;
-                                break;
-                            }
-                        }
-
-                        BaseSpellButtonList[IndexFromWhereTaken].SetNewSpell(SpellNumberForReplace);
-                        BaseSpellButtonList[index].SetNewSpell(SpellButtonDraged);
-
-                    }
-                    else
-                    {
-                        BaseSpellButtonList[index].SetNewSpell(SpellButtonDraged);
-
-                        for (int u = 1; u < BaseSpellButtonList.Count; u++)
-                        {
-                            for (int y = 0; y < u; y++)
-                            {
-                                if (BaseSpellButtonList[u].GetSpellNumber() == BaseSpellButtonList[y].GetSpellNumber())
-                                {
-                                    if (u != index)
-                                    {
-                                        BaseSpellButtonList[u].SetNewSpell(0);
-                                    }
-                                    else
-                                    {
-                                        BaseSpellButtonList[y].SetNewSpell(0);
-                                    }
-                                }
-                            }
-
-                        }
-
-
-                    }
-                    //BaseSpellButtonList[index].SetNewSpell(SpellButtonDraged);
-
-                    //print(BaseSpellsRects[i].gameObject + "=-=-=-=-=- " + BaseSpellsRects[i].gameObject.transform.GetChild(0).name );
-                    //BaseSpellButtonList BaseSpellsRects[i].gameObject.transform.GetChild(0).gameObject.GetComponent<SpellsButton>().SetNewSpell(SpellButtonDraged);
-                    SendNewBaseSpells();
-
-                    break;
-
-
-
-                }
-            }
-        //}
-    }
-    */
 
     // Update is called once per frame
     void Update()
@@ -952,22 +816,7 @@ public class player_setup : MonoBehaviour
             }
         }
 
-        
-
-        /*
-        if (Input.GetMouseButtonUp(0))
-        {
-            
-            if (isEndDragAndDrop)
-            {
-                isEndDragAndDrop = false;
-                EndDragAndDrop(Input.mousePosition);
-                
-            }
-
-        }
-        */
-
+     
         //===================================================
 
         if (Input.GetMouseButtonDown(0))
@@ -980,7 +829,7 @@ public class player_setup : MonoBehaviour
                 //spell not touched
                 if (SpellAttrInside.localScale.x == 1f)
                 {
-                    SpellAttrInside.localScale = new Vector3(0.8f, 0.8f, 1);
+                    //SpellAttrInside.localScale = new Vector3(0.8f, 0.8f, 1);
                 }
 
                 for (int i = 0; i < AllCurrentSpells.Count; i++)
@@ -990,6 +839,9 @@ public class player_setup : MonoBehaviour
                         AllCurrentSpells[i].PressedOff();
                     }
                 }
+
+                CloseSpellBook();
+                
             }
 
             if (EventSystem.current.currentSelectedGameObject == null || EventSystem.current.currentSelectedGameObject.tag != "hints")
@@ -998,29 +850,61 @@ public class player_setup : MonoBehaviour
             }
 
 
-                if (EventSystem.current.currentSelectedGameObject != null)
+            if (EventSystem.current.currentSelectedGameObject != null)
             {
                 if (EventSystem.current.currentSelectedGameObject.tag == "spells")
-                {                    
+                {
+                    
                     for (int i = 0; i < AllCurrentSpells.Count; i++)
                     {
                         if (EventSystem.current.currentSelectedGameObject.name == AllCurrentSpells[i].GetThisSpellName())
-                        {                            
-                            print("yes - " + EventSystem.current.currentSelectedGameObject.name);
-                            AllCurrentSpells[i].PressedAction();
-                        }
-                        else
                         {
-                            AllCurrentSpells[i].PressedOff();
+                            for (int iii = 0; iii < AllCurrentSpells.Count; iii++)
+                            {
+                                if (EventSystem.current.currentSelectedGameObject.name == AllCurrentSpells[iii].GetThisSpellName())
+                                {
+                                    print("yes ccurr - " + EventSystem.current.currentSelectedGameObject.name);
+                                    AllCurrentSpells[iii].PressedAction();
+                                }
+                                else
+                                {
+                                    AllCurrentSpells[iii].PressedOff();
+                                }
+                            }
+                            break;
                         }
                     }
+
+
+
+                    for (int i = 0; i < AllSpellBookSpells.Count; i++)
+                    {
+                        if (EventSystem.current.currentSelectedGameObject.name == AllSpellBookSpells[i].GetThisSpellName())
+                        {
+                            for (int iii = 0; iii < AllSpellBookSpells.Count; iii++)
+                            {
+                                if (EventSystem.current.currentSelectedGameObject.name == AllSpellBookSpells[iii].GetThisSpellName())
+                                {
+                                    print("yes sp book - " + EventSystem.current.currentSelectedGameObject.name);
+                                    AllSpellBookSpells[iii].PressedAction();
+                                }
+                                else
+                                {
+                                    AllSpellBookSpells[iii].PressedOff();
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    
 
                     if (SpellAttrInside.localScale.x == 0.8f)
                     {
-                        SpellAttrInside.localScale = new Vector3(1f, 1f, 1);
+                        //SpellAttrInside.localScale = new Vector3(1f, 1f, 1);
                     }
+                    OpenSpellBook();
 
-                   
                 } 
 
 
@@ -1054,7 +938,7 @@ public class player_setup : MonoBehaviour
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(false);
                         //SpellBook.SetActive(false);
-                        isSpellBookOpened = false;
+                        CloseSpellBook();
                         CheckNormalTalentDisp();
                         
                         ChangeCanvasButton(false, true, false, false);
@@ -1396,13 +1280,7 @@ public class player_setup : MonoBehaviour
         }
         podskazka.SetActive(false);
 
-    }
-
-
-
-
-
-    
+    } 
 
 
 }

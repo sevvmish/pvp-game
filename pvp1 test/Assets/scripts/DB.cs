@@ -70,6 +70,9 @@ public class DB : MonoBehaviour
             case 1002:
                 result = spell1002;
                 break;
+            default:
+                result = spell1;
+                break;
         }
 
         return result;
