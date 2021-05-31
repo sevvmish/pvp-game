@@ -292,11 +292,11 @@ public class player_setup : MonoBehaviour
         CloseSpellBook();
         
         float xx = -17;
-        current_spell1 = new SpellDescription(CurrentCharacterData.spell1, new Vector2(xx, 161), GameObject.Find("spell attr inside").transform, "current_spell1", true);
-        current_spell2 = new SpellDescription(CurrentCharacterData.spell2, new Vector2(xx, 80), GameObject.Find("spell attr inside").transform, "current_spell2", true);
-        current_spell3 = new SpellDescription(CurrentCharacterData.spell3, new Vector2(xx, -1), GameObject.Find("spell attr inside").transform, "current_spell3", true);
-        current_spell4 = new SpellDescription(CurrentCharacterData.spell4, new Vector2(xx, -82), GameObject.Find("spell attr inside").transform, "current_spell4", true);
-        current_spell5 = new SpellDescription(CurrentCharacterData.spell5, new Vector2(xx, -163), GameObject.Find("spell attr inside").transform, "current_spell5", true);
+        current_spell1 = new SpellDescription(CurrentCharacterData.spell1, new Vector2(xx, 200), GameObject.Find("spell attr inside").transform, "current_spell1", true);
+        current_spell2 = new SpellDescription(CurrentCharacterData.spell2, new Vector2(xx, 112.5f), GameObject.Find("spell attr inside").transform, "current_spell2", true);
+        current_spell3 = new SpellDescription(CurrentCharacterData.spell3, new Vector2(xx, 25), GameObject.Find("spell attr inside").transform, "current_spell3", true);
+        current_spell4 = new SpellDescription(CurrentCharacterData.spell4, new Vector2(xx, -62.5f), GameObject.Find("spell attr inside").transform, "current_spell4", true);
+        current_spell5 = new SpellDescription(CurrentCharacterData.spell5, new Vector2(xx, -150), GameObject.Find("spell attr inside").transform, "current_spell5", true);
         AllCurrentSpells.Add(current_spell1);
         AllCurrentSpells.Add(current_spell2);
         AllCurrentSpells.Add(current_spell3);
@@ -348,7 +348,9 @@ public class player_setup : MonoBehaviour
                 }
             }
 
-            float VerticalInterval = -75;
+            AllSpellBookSpells = new List<SpellDescription>();
+
+            float VerticalInterval = -80;
 
             string[] _spells = CurrentCharacterData.spell_book.Split(',');
 

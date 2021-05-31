@@ -45,6 +45,7 @@ public class SpellDescription : MonoBehaviour
             SpellIcon.sprite = CurrentSpell.Spell1_icon;
             SpellDescr.text = CurrentSpell.Spell1_name;
             SpellDescr.fontSize = 28;
+            SpellDescr.fontStyle = FontStyles.Bold;
             ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0");
             ManaDescr.fontSize = 22;
         } else
