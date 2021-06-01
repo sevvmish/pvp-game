@@ -77,19 +77,10 @@ public class SpellDescription : MonoBehaviour
     }
 
     public void PressedAction()
-    {
-        if (!isPressed)
-        {
-            isPressed = true;
-            _mainObjectRect.localScale = new Vector3(1.05f, 1.05f, 1);
-            blink_effect.SetActive(true);
-        } 
-        else
-        {
-            isPressed = false;
-            _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
-            blink_effect.SetActive(false);
-        }
+    {        
+        isPressed = true;
+        _mainObjectRect.localScale = new Vector3(1.05f, 1.05f, 1);
+        blink_effect.SetActive(true);       
     }
 
     public void PressedOff()

@@ -22,7 +22,7 @@ public class player_setup : MonoBehaviour
 
     public TextMeshProUGUI CharNameText, SpeedText, HealthText, HealthRegenText, EnergyRegenText, WeaponAttackText,
         HitPowerText, ArmorText, ShieldBlockText, MagicResistanceText, DodgeText, CastSpeedText,
-        MeleeCritText, MagicCritText, SpellPowerText, BackTo, HintText,
+        MeleeCritText, MagicCritText, SpellPowerText, BackTo, HintText, fortesting,
 
         SpeedTextText, HealthTextText, HealthRegenTextText, EnergyRegenTextText, WeaponAttackTextText,
         HitPowerTextText, ArmorTextText, ShieldBlockTextText, MagicResistanceTextText, DodgeTextText, CastSpeedTextText,
@@ -57,6 +57,9 @@ public class player_setup : MonoBehaviour
     private List<SpellDescription> AllCurrentSpells = new List<SpellDescription>();
     private List<SpellDescription> AllSpellBookSpells = new List<SpellDescription>();
     private int SpellCheckedInSpellBook, SpellCheckedInCurrentSpells;
+
+    Ray ray;
+    RaycastHit hit;
 
     private void GetCharDataToView()
     {
@@ -167,24 +170,12 @@ public class player_setup : MonoBehaviour
 
         }
 
-        float xx = -17;
-        AllCurrentSpells.Clear();
-        for (int i = 0; i < AllCurrentSpells.Count; i++)
-        {
-            Destroy(AllCurrentSpells[i].gameObject);
-            AllCurrentSpells.Remove(AllCurrentSpells[i]);
-            
-        }
-        current_spell1 = new SpellDescription(CurrentCharacterData.spell1, new Vector2(xx, 200), GameObject.Find("spell attr inside").transform, "current_spell1", true);
-        current_spell2 = new SpellDescription(CurrentCharacterData.spell2, new Vector2(xx, 112.5f), GameObject.Find("spell attr inside").transform, "current_spell2", true);
-        current_spell3 = new SpellDescription(CurrentCharacterData.spell3, new Vector2(xx, 25), GameObject.Find("spell attr inside").transform, "current_spell3", true);
-        current_spell4 = new SpellDescription(CurrentCharacterData.spell4, new Vector2(xx, -62.5f), GameObject.Find("spell attr inside").transform, "current_spell4", true);
-        current_spell5 = new SpellDescription(CurrentCharacterData.spell5, new Vector2(xx, -150), GameObject.Find("spell attr inside").transform, "current_spell5", true);
-        AllCurrentSpells.Add(current_spell1);
-        AllCurrentSpells.Add(current_spell2);
-        AllCurrentSpells.Add(current_spell3);
-        AllCurrentSpells.Add(current_spell4);
-        AllCurrentSpells.Add(current_spell5);
+
+        current_spell1.SetNewSpell(CurrentCharacterData.spell1);
+        current_spell2.SetNewSpell(CurrentCharacterData.spell2);
+        current_spell3.SetNewSpell(CurrentCharacterData.spell3);
+        current_spell4.SetNewSpell(CurrentCharacterData.spell4);
+        current_spell5.SetNewSpell(CurrentCharacterData.spell5);
 
 
     }
@@ -236,7 +227,17 @@ public class player_setup : MonoBehaviour
 
         Hero.gameObject.SetActive(true);
 
-    
+        current_spell1 = new SpellDescription(0, new Vector2(-17, 200), GameObject.Find("spell attr inside").transform, "current_spell1", true);
+        current_spell2 = new SpellDescription(0, new Vector2(-17, 112.5f), GameObject.Find("spell attr inside").transform, "current_spell2", true);
+        current_spell3 = new SpellDescription(0, new Vector2(-17, 25), GameObject.Find("spell attr inside").transform, "current_spell3", true);
+        current_spell4 = new SpellDescription(0, new Vector2(-17, -62.5f), GameObject.Find("spell attr inside").transform, "current_spell4", true);
+        current_spell5 = new SpellDescription(0, new Vector2(-17, -150), GameObject.Find("spell attr inside").transform, "current_spell5", true);
+        AllCurrentSpells.Add(current_spell1);
+        AllCurrentSpells.Add(current_spell2);
+        AllCurrentSpells.Add(current_spell3);
+        AllCurrentSpells.Add(current_spell4);
+        AllCurrentSpells.Add(current_spell5);
+
 
         GetCharDataToView();
 
@@ -343,7 +344,7 @@ public class player_setup : MonoBehaviour
         {
             isSpellBookOpened = true;
             SpellBook.SetActive(true);
-            
+            BaseAttrDataPanel.SetActive(false);
 
             if (SpellBookContent.gameObject.transform.childCount > 0)
             {
@@ -376,7 +377,25 @@ public class player_setup : MonoBehaviour
         
         isSpellBookOpened = false;
         SpellBook.SetActive(false);
-        
+        for (int i = 0; i < AllSpellBookSpells.Count; i++)
+        {
+            if (AllSpellBookSpells[i].IsPressed())
+            {
+                AllSpellBookSpells[i].PressedOff();
+            }
+        }
+
+        for (int i = 0; i < AllCurrentSpells.Count; i++)
+        {
+            if (AllCurrentSpells[i].IsPressed())
+            {
+                AllCurrentSpells[i].PressedOff();
+            }
+        }
+
+        SpellCheckedInCurrentSpells = -1;
+        SpellCheckedInSpellBook = -1;
+        BaseAttrDataPanel.SetActive(true);
     }
 
     private void CheckNormalTalentDisp()
@@ -778,26 +797,33 @@ public class player_setup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(SpellCheckedInCurrentSpells + " - in curr     in spellbook -" + SpellCheckedInSpellBook);
-
-        if (SpellCheckedInCurrentSpells!=0 && SpellCheckedInSpellBook!=0)
+       
+        if (SpellCheckedInCurrentSpells!=-1 && SpellCheckedInSpellBook!=-1)
         {
-            print("both " + SpellCheckedInSpellBook + " -> to spells in " + SpellCheckedInCurrentSpells);
-            //SpellCheckedInCurrentSpells.SetNewSpell(SpellCheckedInSpellBook);            
-            //SpellCheckedInCurrentSpells.PressedOff();
-            //SpellCheckedInSpellBook.PressedOff();
+            print("curent chek - " + SpellCheckedInCurrentSpells + "  spell book - " + SpellCheckedInSpellBook);
+            
+            for (int i = 0; i < AllCurrentSpells.Count; i++)
+            {
+                
+                if (AllCurrentSpells[i].GetSpellNumber() == SpellCheckedInSpellBook && AllCurrentSpells[i].GetSpellNumber() != SpellCheckedInCurrentSpells)
+                {
+                    AllCurrentSpells[i].SetNewSpell(0);
+                    
+                }
+            }
 
             for (int i = 0; i < AllCurrentSpells.Count; i++)
             {
                 if (AllCurrentSpells[i].GetSpellNumber()== SpellCheckedInCurrentSpells)
                 {
+                    AllCurrentSpells[i].PressedOff();
                     AllCurrentSpells[i].SetNewSpell(SpellCheckedInSpellBook);
                     break;
                 }
+                
             }            
             
-            SpellCheckedInCurrentSpells = 0;
-            SpellCheckedInSpellBook = 0;
+            
             CloseSpellBook();
             SendNewBaseSpells();
         }
@@ -846,15 +872,15 @@ public class player_setup : MonoBehaviour
             }
         }
 
-     
+
         //===================================================
 
-        if (Input.GetMouseButtonDown(0))
+        
+
+        if (Input.GetMouseButtonDown(0) || Input.touchCount>0) //
         {
 
-          
-
-            if (EventSystem.current.currentSelectedGameObject == null || EventSystem.current.currentSelectedGameObject.tag != "spells")
+        if (EventSystem.current.currentSelectedGameObject == null || EventSystem.current.currentSelectedGameObject.tag != "spells")
             {
                 //spell not touched
                 if (SpellAttrInside.localScale.x == 1f)
@@ -871,8 +897,7 @@ public class player_setup : MonoBehaviour
                 }
 
                 CloseSpellBook();
-                SpellCheckedInCurrentSpells = 0;
-                SpellCheckedInSpellBook = 0;
+                
             }
 
             if (EventSystem.current.currentSelectedGameObject == null || EventSystem.current.currentSelectedGameObject.tag != "hints")
@@ -943,6 +968,7 @@ public class player_setup : MonoBehaviour
 
 
                 print(EventSystem.current.currentSelectedGameObject.name);
+                fortesting.text = EventSystem.current.currentSelectedGameObject.name;
 
                 if (Talents.gameObject.activeSelf)
                 {
@@ -1098,6 +1124,8 @@ public class player_setup : MonoBehaviour
             
 
         }
+
+        
 
     }
 
