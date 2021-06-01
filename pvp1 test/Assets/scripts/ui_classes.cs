@@ -11,7 +11,7 @@ public class ui_classes : MonoBehaviour
 
 public class SpellDescription : MonoBehaviour
 {
-    private GameObject _mainObject;
+    private GameObject _mainObject, blink_effect;
     private RectTransform _mainObjectRect;
     private spellsIDs CurrentSpell;
     private int SpellNumber;
@@ -27,6 +27,7 @@ public class SpellDescription : MonoBehaviour
         _mainObjectRect = _mainObject.GetComponent<RectTransform>();
         _mainObjectRect.anchoredPosition = _place_coords;
         _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
+        blink_effect = _mainObject.transform.GetChild(4).gameObject;
         _name = curr_name;
         _mainObject.name = _name;
         isOnlyNames = _isonlynames;
@@ -35,6 +36,13 @@ public class SpellDescription : MonoBehaviour
         SpellDescr = _mainObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         ManaDescr = _mainObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         CurrentSpell = DB.GetSpellByNumber(_spell_number);
+        SetNewSpell();
+    }
+
+    public void SetNewSpell(int _spell_number)
+    {
+        CurrentSpell = DB.GetSpellByNumber(_spell_number);
+        SpellNumber = _spell_number;
         SetNewSpell();
     }
 
@@ -74,18 +82,21 @@ public class SpellDescription : MonoBehaviour
         {
             isPressed = true;
             _mainObjectRect.localScale = new Vector3(1.05f, 1.05f, 1);
+            blink_effect.SetActive(true);
         } 
         else
         {
             isPressed = false;
             _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
+            blink_effect.SetActive(false);
         }
     }
 
     public void PressedOff()
     {   
         isPressed = false;
-        _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);        
+        _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
+        blink_effect.SetActive(false);
     }
 
     public bool IsPressed()

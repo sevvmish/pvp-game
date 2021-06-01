@@ -42,11 +42,6 @@ public class player_setup : MonoBehaviour
     private float WaitingTimeForPing = 1f, cur_time, cur_time_check_talents;
     private int CurrentTalentsCount;
 
-    public Image DragedSpell;
-    
-
-    //public List<Object> TalentButtonUI = new List<Object>();
-
     public int[,] CurrentTalentsSpread = new int [,] { {0,0,0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
     TalentsButton r00, r01, r02, r10, r11, r12, r20, r21, r30, r31, r32, r40, r41, r42, r50, r51, r60, r61, r62, r70, r71, r72;
@@ -61,6 +56,7 @@ public class player_setup : MonoBehaviour
     private SpellDescription current_spell1, current_spell2, current_spell3, current_spell4, current_spell5;
     private List<SpellDescription> AllCurrentSpells = new List<SpellDescription>();
     private List<SpellDescription> AllSpellBookSpells = new List<SpellDescription>();
+    private int SpellCheckedInSpellBook, SpellCheckedInCurrentSpells;
 
     private void GetCharDataToView()
     {
@@ -170,6 +166,25 @@ public class player_setup : MonoBehaviour
                 break;
 
         }
+
+        float xx = -17;
+        AllCurrentSpells.Clear();
+        for (int i = 0; i < AllCurrentSpells.Count; i++)
+        {
+            Destroy(AllCurrentSpells[i].gameObject);
+            AllCurrentSpells.Remove(AllCurrentSpells[i]);
+            
+        }
+        current_spell1 = new SpellDescription(CurrentCharacterData.spell1, new Vector2(xx, 200), GameObject.Find("spell attr inside").transform, "current_spell1", true);
+        current_spell2 = new SpellDescription(CurrentCharacterData.spell2, new Vector2(xx, 112.5f), GameObject.Find("spell attr inside").transform, "current_spell2", true);
+        current_spell3 = new SpellDescription(CurrentCharacterData.spell3, new Vector2(xx, 25), GameObject.Find("spell attr inside").transform, "current_spell3", true);
+        current_spell4 = new SpellDescription(CurrentCharacterData.spell4, new Vector2(xx, -62.5f), GameObject.Find("spell attr inside").transform, "current_spell4", true);
+        current_spell5 = new SpellDescription(CurrentCharacterData.spell5, new Vector2(xx, -150), GameObject.Find("spell attr inside").transform, "current_spell5", true);
+        AllCurrentSpells.Add(current_spell1);
+        AllCurrentSpells.Add(current_spell2);
+        AllCurrentSpells.Add(current_spell3);
+        AllCurrentSpells.Add(current_spell4);
+        AllCurrentSpells.Add(current_spell5);
 
 
     }
@@ -291,17 +306,7 @@ public class player_setup : MonoBehaviour
         
         CloseSpellBook();
         
-        float xx = -17;
-        current_spell1 = new SpellDescription(CurrentCharacterData.spell1, new Vector2(xx, 200), GameObject.Find("spell attr inside").transform, "current_spell1", true);
-        current_spell2 = new SpellDescription(CurrentCharacterData.spell2, new Vector2(xx, 112.5f), GameObject.Find("spell attr inside").transform, "current_spell2", true);
-        current_spell3 = new SpellDescription(CurrentCharacterData.spell3, new Vector2(xx, 25), GameObject.Find("spell attr inside").transform, "current_spell3", true);
-        current_spell4 = new SpellDescription(CurrentCharacterData.spell4, new Vector2(xx, -62.5f), GameObject.Find("spell attr inside").transform, "current_spell4", true);
-        current_spell5 = new SpellDescription(CurrentCharacterData.spell5, new Vector2(xx, -150), GameObject.Find("spell attr inside").transform, "current_spell5", true);
-        AllCurrentSpells.Add(current_spell1);
-        AllCurrentSpells.Add(current_spell2);
-        AllCurrentSpells.Add(current_spell3);
-        AllCurrentSpells.Add(current_spell4);
-        AllCurrentSpells.Add(current_spell5);
+        
 
     }
 
@@ -313,7 +318,7 @@ public class player_setup : MonoBehaviour
             AllCurrentSpells[2].GetSpellNumber().ToString() + "," +
             AllCurrentSpells[3].GetSpellNumber().ToString() + "," +
             AllCurrentSpells[4].GetSpellNumber().ToString() + "," +
-            AllCurrentSpells[5].GetSpellNumber().ToString();
+            "0";
 
         string result;
         //string result = sr.SendAndGetOnlySetup("3~5~" + general.CurrentTicket + "~" + general.CharacterName + "~" + NewSpellBaseButtons);
@@ -773,7 +778,30 @@ public class player_setup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        print(SpellCheckedInCurrentSpells + " - in curr     in spellbook -" + SpellCheckedInSpellBook);
+
+        if (SpellCheckedInCurrentSpells!=0 && SpellCheckedInSpellBook!=0)
+        {
+            print("both " + SpellCheckedInSpellBook + " -> to spells in " + SpellCheckedInCurrentSpells);
+            //SpellCheckedInCurrentSpells.SetNewSpell(SpellCheckedInSpellBook);            
+            //SpellCheckedInCurrentSpells.PressedOff();
+            //SpellCheckedInSpellBook.PressedOff();
+
+            for (int i = 0; i < AllCurrentSpells.Count; i++)
+            {
+                if (AllCurrentSpells[i].GetSpellNumber()== SpellCheckedInCurrentSpells)
+                {
+                    AllCurrentSpells[i].SetNewSpell(SpellCheckedInSpellBook);
+                    break;
+                }
+            }            
+            
+            SpellCheckedInCurrentSpells = 0;
+            SpellCheckedInSpellBook = 0;
+            CloseSpellBook();
+            SendNewBaseSpells();
+        }
+
 
         if (podskazka.activeSelf && isSpellDragedFromSpellBook)
         {
@@ -843,7 +871,8 @@ public class player_setup : MonoBehaviour
                 }
 
                 CloseSpellBook();
-                
+                SpellCheckedInCurrentSpells = 0;
+                SpellCheckedInSpellBook = 0;
             }
 
             if (EventSystem.current.currentSelectedGameObject == null || EventSystem.current.currentSelectedGameObject.tag != "hints")
@@ -857,6 +886,7 @@ public class player_setup : MonoBehaviour
                 if (EventSystem.current.currentSelectedGameObject.tag == "spells")
                 {
                     
+
                     for (int i = 0; i < AllCurrentSpells.Count; i++)
                     {
                         if (EventSystem.current.currentSelectedGameObject.name == AllCurrentSpells[i].GetThisSpellName())
@@ -867,6 +897,7 @@ public class player_setup : MonoBehaviour
                                 {
                                     print("yes ccurr - " + EventSystem.current.currentSelectedGameObject.name);
                                     AllCurrentSpells[iii].PressedAction();
+                                    SpellCheckedInCurrentSpells = AllCurrentSpells[iii].GetSpellNumber();
                                 }
                                 else
                                 {
@@ -877,7 +908,7 @@ public class player_setup : MonoBehaviour
                         }
                     }
 
-
+                    
 
                     for (int i = 0; i < AllSpellBookSpells.Count; i++)
                     {
@@ -889,6 +920,7 @@ public class player_setup : MonoBehaviour
                                 {
                                     print("yes sp book - " + EventSystem.current.currentSelectedGameObject.name);
                                     AllSpellBookSpells[iii].PressedAction();
+                                    SpellCheckedInSpellBook = AllSpellBookSpells[iii].GetSpellNumber();
                                 }
                                 else
                                 {
