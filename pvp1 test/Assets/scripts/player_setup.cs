@@ -56,7 +56,8 @@ public class player_setup : MonoBehaviour
     private SpellDescription current_spell1, current_spell2, current_spell3, current_spell4, current_spell5;
     private List<SpellDescription> AllCurrentSpells = new List<SpellDescription>();
     private List<SpellDescription> AllSpellBookSpells = new List<SpellDescription>();
-    private int SpellCheckedInSpellBook, SpellCheckedInCurrentSpells;
+    private int SpellCheckedInSpellBook;
+    private string SpellCheckedInCurrentSpellsName=null;
 
     Ray ray;
     RaycastHit hit;
@@ -393,7 +394,7 @@ public class player_setup : MonoBehaviour
             }
         }
 
-        SpellCheckedInCurrentSpells = -1;
+        SpellCheckedInCurrentSpellsName = null;
         SpellCheckedInSpellBook = -1;
         BaseAttrDataPanel.SetActive(true);
     }
@@ -798,14 +799,14 @@ public class player_setup : MonoBehaviour
     void Update()
     {
        
-        if (SpellCheckedInCurrentSpells!=-1 && SpellCheckedInSpellBook!=-1)
+        if (SpellCheckedInCurrentSpellsName!=null && SpellCheckedInSpellBook!=-1)
         {
-            print("curent chek - " + SpellCheckedInCurrentSpells + "  spell book - " + SpellCheckedInSpellBook);
+            print("curent chek - " + SpellCheckedInCurrentSpellsName + "  spell book - " + SpellCheckedInSpellBook);
             
             for (int i = 0; i < AllCurrentSpells.Count; i++)
             {
                 
-                if (AllCurrentSpells[i].GetSpellNumber() == SpellCheckedInSpellBook && AllCurrentSpells[i].GetSpellNumber() != SpellCheckedInCurrentSpells)
+                if (AllCurrentSpells[i].GetSpellNumber() == SpellCheckedInSpellBook && AllCurrentSpells[i].GetName() != SpellCheckedInCurrentSpellsName)
                 {
                     AllCurrentSpells[i].SetNewSpell(0);
                     
@@ -814,7 +815,7 @@ public class player_setup : MonoBehaviour
 
             for (int i = 0; i < AllCurrentSpells.Count; i++)
             {
-                if (AllCurrentSpells[i].GetSpellNumber()== SpellCheckedInCurrentSpells)
+                if (AllCurrentSpells[i].GetName()== SpellCheckedInCurrentSpellsName)
                 {
                     AllCurrentSpells[i].PressedOff();
                     AllCurrentSpells[i].SetNewSpell(SpellCheckedInSpellBook);
@@ -922,7 +923,7 @@ public class player_setup : MonoBehaviour
                                 {
                                     print("yes ccurr - " + EventSystem.current.currentSelectedGameObject.name);
                                     AllCurrentSpells[iii].PressedAction();
-                                    SpellCheckedInCurrentSpells = AllCurrentSpells[iii].GetSpellNumber();
+                                    SpellCheckedInCurrentSpellsName = AllCurrentSpells[iii].GetName();
                                 }
                                 else
                                 {

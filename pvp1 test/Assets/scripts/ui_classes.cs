@@ -46,6 +46,11 @@ public class SpellDescription : MonoBehaviour
         SetNewSpell();
     }
 
+    public string GetName()
+    {
+        return _name;
+    }
+
     private void SetNewSpell()
     {
         if (isOnlyNames)
