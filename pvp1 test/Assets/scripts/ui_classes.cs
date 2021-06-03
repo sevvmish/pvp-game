@@ -101,3 +101,203 @@ public class SpellDescription : MonoBehaviour
     }
 
 }
+
+
+public class TalentsButton : MonoBehaviour
+{
+    public GameObject WholeButtonImage;
+    private Button MainThemeImage;
+        
+    private int TalentNumber;
+    private int CurrentTalents;
+    private bool isActive, isPressed;
+    private Image nonavailable, IfPressedColor, BackGroungImg;
+    private Animator animation;
+
+    public enum TalentTypes
+    {
+        simple = 0,
+        meduim = 1,
+        super = 2
+    }
+
+    public TalentsButton(int TalentNumb, Sprite MainTheme, int CurrTalents, string TalentName, Vector2 coords, TalentTypes _current_type )
+    {
+        WholeButtonImage = Instantiate(Resources.Load<GameObject>("prefabs/TalentDescription"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("talents").transform);
+        WholeButtonImage.gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(coords.x, coords.y, 0);
+        
+        animation = WholeButtonImage.GetComponent<Animator>();
+                
+        MainThemeImage = WholeButtonImage.transform.GetChild(1).GetComponent<Button>();
+        MainThemeImage.image.sprite = MainTheme;
+        WholeButtonImage.name = TalentName;
+        MainThemeImage.name = TalentName;
+        nonavailable = WholeButtonImage.transform.GetChild(2).GetComponent<Image>();
+        BackGroungImg = WholeButtonImage.transform.GetChild(0).GetComponent<Image>();
+        
+        
+
+        IfPressedColor = WholeButtonImage.transform.GetChild(3).GetComponent<Image>();
+        CurrentTalents = CurrTalents;
+        TalentNumber = TalentNumb;
+
+        isActive = true;
+        nonavailable.gameObject.SetActive(false);
+        IfPressedColor.gameObject.SetActive(false);
+
+        switch ((int)_current_type)
+        {
+            case 0:
+                BackGroungImg.sprite = Resources.Load<Sprite>("sprites/simple circle");
+                IfPressedColor.sprite = Resources.Load<Sprite>("sprites/circle outliner");
+                BackGroungImg.gameObject.transform.localScale = new Vector3(0.8f, 0.8f, 1);
+                IfPressedColor.gameObject.transform.localScale = new Vector3(0.8f, 0.8f, 1);
+                break;
+            case 1:
+                BackGroungImg.sprite = Resources.Load<Sprite>("sprites/romb square");
+                IfPressedColor.sprite = Resources.Load<Sprite>("sprites/romb square outliner");
+                BackGroungImg.gameObject.transform.localScale = new Vector3(1.1f, 1.1f, 1);
+                IfPressedColor.gameObject.transform.localScale = new Vector3(1.1f, 1.1f, 1);
+                break;
+            case 2:
+
+                break;
+        }
+
+        if (CurrentTalents>0)
+        {
+            isPressed = true;
+            IfPressedColor.gameObject.SetActive(true);
+        }
+
+    }
+
+
+
+    public string GetName()
+    {
+        return MainThemeImage.name;
+    }
+
+    public void MakeInactive()
+    {
+        CurrentTalents = 0;
+        isPressed = false;
+        IfPressedColor.gameObject.SetActive(false);
+
+        Color curcolor = MainThemeImage.image.color;
+        curcolor.a = 0.2f;
+        MainThemeImage.image.color = curcolor;
+
+        Color curcolor1 = IfPressedColor.color;
+        curcolor1.a = 0.2f;
+        IfPressedColor.color = curcolor1;
+
+        Color curcolor2 = BackGroungImg.color;
+        curcolor2.a = 0.2f;
+        BackGroungImg.color = curcolor2;
+
+        
+        isActive = false;
+    }
+
+    public void MakeActive()
+    {
+        //MainThemeImage.interactable = true;
+        Color curcolor = MainThemeImage.image.color;
+        curcolor.a = 1f;
+        MainThemeImage.image.color = curcolor;
+
+        Color curcolor1 = IfPressedColor.color;
+        curcolor1.a = 1f;
+        IfPressedColor.color = curcolor1;
+
+        Color curcolor2 = BackGroungImg.color;
+        curcolor2.a = 1f;
+        BackGroungImg.color = curcolor2;
+
+        isActive = true;
+    }
+
+    public int GetTalentNumber()
+    {
+        return TalentNumber;
+    }
+
+    public void ResetTalents()
+    {
+        CurrentTalents = 0;
+        isPressed = false;
+        IfPressedColor.gameObject.SetActive(false);
+        
+    }
+
+    public void NonAvailable()
+    {
+        MakeInactive();
+        //MainThemeImage.interactable = false;
+        nonavailable.gameObject.SetActive(true);
+        
+    }
+
+    public void Available()
+    {
+        MakeActive();
+        //MainThemeImage.interactable = false;
+        nonavailable.gameObject.SetActive(false);
+    }
+
+    public void AddTalentPoint()
+    {
+        if (isActive && !nonavailable.gameObject.activeSelf)
+        {
+            if (CurrentTalents == 1)
+            {
+                CurrentTalents = 0;
+                isPressed = false;
+                IfPressedColor.gameObject.SetActive(false);
+                
+            }
+            else
+            {
+                CurrentTalents = 1;
+                isPressed = true;
+                IfPressedColor.gameObject.SetActive(true);
+                
+                animation.Play("tremor");
+                
+            }
+        }
+    }
+
+    public void RemoveTalentPoint()
+    {
+        if (isActive && !nonavailable.gameObject.activeSelf)
+        {
+            if (CurrentTalents == 0)
+            {
+                CurrentTalents = 0;
+                
+            }
+            else
+            {
+                CurrentTalents--;
+                
+            }
+            isPressed = false;
+            IfPressedColor.gameObject.SetActive(false);
+        }
+    }
+
+    public string GetCurrentTalentPointString()
+    {
+        return CurrentTalents.ToString();
+    }
+
+    public int GetCurrentTalentPoint()
+    {
+        return CurrentTalents;
+    }
+
+    
+}

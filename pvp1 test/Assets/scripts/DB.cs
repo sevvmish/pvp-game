@@ -157,28 +157,28 @@ public class DB : MonoBehaviour
     }
 
     //WARRIOR
-    public static talentsIDs talent1 = new talentsIDs(lang.Talent1Name, 1, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent2 = new talentsIDs(lang.Talent1Name, 2, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent3 = new talentsIDs(lang.Talent1Name, 3, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent4 = new talentsIDs(lang.Talent1Name, 4, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent5 = new talentsIDs(lang.Talent1Name, 5, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent6 = new talentsIDs(lang.Talent1Name, 6, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent7 = new talentsIDs(lang.Talent1Name, 7, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent8 = new talentsIDs(lang.Talent1Name, 8, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent9 = new talentsIDs(lang.Talent1Name, 9, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent10 = new talentsIDs(lang.Talent1Name, 10, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent11 = new talentsIDs(lang.Talent1Name, 11, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent12 = new talentsIDs(lang.Talent1Name, 12, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent13 = new talentsIDs(lang.Talent1Name, 13, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent14 = new talentsIDs(lang.Talent1Name, 14, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent15 = new talentsIDs(lang.Talent1Name, 15, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent16 = new talentsIDs(lang.Talent1Name, 16, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent17 = new talentsIDs(lang.Talent1Name, 17, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent18 = new talentsIDs(lang.Talent1Name, 18, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent19 = new talentsIDs(lang.Talent1Name, 19, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent20 = new talentsIDs(lang.Talent1Name, 20, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent21 = new talentsIDs(lang.Talent1Name, 21, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
-    public static talentsIDs talent22 = new talentsIDs(lang.Talent1Name, 22, Resources.Load<Sprite>("sprites/spell1"), lang.Talent1Description);
+    public static talentsIDs talent1 = new talentsIDs(lang.Talent1Name, 1, Resources.Load<Sprite>("sprites/spells/fireball"), lang.Talent1Description);
+    public static talentsIDs talent2 = new talentsIDs(lang.Talent1Name, 2, Resources.Load<Sprite>("sprites/spells/fireball"), lang.Talent1Description);
+    public static talentsIDs talent3 = new talentsIDs(lang.Talent1Name, 3, Resources.Load<Sprite>("sprites/spells/fireball"), lang.Talent1Description);
+    public static talentsIDs talent4 = new talentsIDs(lang.Talent1Name, 4, Resources.Load<Sprite>("sprites/spells/fireball"), lang.Talent1Description);
+    public static talentsIDs talent5 = new talentsIDs(lang.Talent1Name, 5, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent6 = new talentsIDs(lang.Talent1Name, 6, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent7 = new talentsIDs(lang.Talent1Name, 7, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent8 = new talentsIDs(lang.Talent1Name, 8, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent9 = new talentsIDs(lang.Talent1Name, 9, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent10 = new talentsIDs(lang.Talent1Name, 10, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent11 = new talentsIDs(lang.Talent1Name, 11, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent12 = new talentsIDs(lang.Talent1Name, 12, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent13 = new talentsIDs(lang.Talent1Name, 13, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent14 = new talentsIDs(lang.Talent1Name, 14, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent15 = new talentsIDs(lang.Talent1Name, 15, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent16 = new talentsIDs(lang.Talent1Name, 16, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent17 = new talentsIDs(lang.Talent1Name, 17, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent18 = new talentsIDs(lang.Talent1Name, 18, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent19 = new talentsIDs(lang.Talent1Name, 19, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent20 = new talentsIDs(lang.Talent1Name, 20, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent21 = new talentsIDs(lang.Talent1Name, 21, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
+    public static talentsIDs talent22 = new talentsIDs(lang.Talent1Name, 22, Resources.Load<Sprite>("sprites/spell example"), lang.Talent1Description);
 
     public static Sprite get_logo_by_number(int number)
     {
