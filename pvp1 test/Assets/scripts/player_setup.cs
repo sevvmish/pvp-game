@@ -188,6 +188,8 @@ public class player_setup : MonoBehaviour
         Camera.main.aspect = 16f / 9f;
         ConnectionError.SetActive(false);
 
+        
+
         error_messages = new MessageInfo(err_log_window);
 
         try
@@ -876,7 +878,7 @@ public class player_setup : MonoBehaviour
 
         
 
-        if (Input.GetMouseButtonDown(0) || Input.touchCount>0) //
+        if ((SystemInfo.deviceType == DeviceType.Desktop && Input.GetMouseButtonDown(0))  ||   (SystemInfo.deviceType == DeviceType.Handheld && (Input.touchCount>0 && Input.GetTouch(0).phase == TouchPhase.Began))) //Input.GetMouseButtonDown(0) ||
         {
 
         if (EventSystem.current.currentSelectedGameObject == null || EventSystem.current.currentSelectedGameObject.tag != "spells")
