@@ -1304,6 +1304,8 @@ MonoBehaviour:
   enterloginname: {fileID: 633162492}
   enter_char_name_text: {fileID: 633162492}
   err_log_window: {fileID: 1502256370}
+  NameDescripForTremor: {fileID: 2142907771}
+  TextDescripForTremor: {fileID: 1086383049}
 --- !u!82 &564683269
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2670,6 +2672,7 @@ GameObject:
   - component: {fileID: 1086383050}
   - component: {fileID: 1086383052}
   - component: {fileID: 1086383051}
+  - component: {fileID: 1086383053}
   m_Layer: 5
   m_Name: class descr background
   m_TagString: Untagged
@@ -2736,6 +2739,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086383049}
   m_CullTransparentMesh: 1
+--- !u!95 &1086383053
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086383049}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2be31a72c3235ba41b43cbb3d2f7796c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1192696545
 GameObject:
   m_ObjectHideFlags: 0
@@ -4856,6 +4878,7 @@ GameObject:
   - component: {fileID: 2142907772}
   - component: {fileID: 2142907774}
   - component: {fileID: 2142907773}
+  - component: {fileID: 2142907775}
   m_Layer: 5
   m_Name: class name background
   m_TagString: Untagged
@@ -4921,3 +4944,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2142907771}
   m_CullTransparentMesh: 1
+--- !u!95 &2142907775
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142907771}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2be31a72c3235ba41b43cbb3d2f7796c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

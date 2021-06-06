@@ -27,15 +27,17 @@ public class SpellDescription : MonoBehaviour
         _mainObjectRect = _mainObject.GetComponent<RectTransform>();
         _mainObjectRect.anchoredPosition = _place_coords;
         _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
-        blink_effect = _mainObject.transform.GetChild(4).gameObject;
+        blink_effect = _mainObject.transform.GetChild(0).gameObject;
+
         _name = curr_name;
         _mainObject.name = _name;
         isOnlyNames = _isonlynames;
         SpellNumber = _spell_number;
-        SpellIcon = _mainObject.transform.GetChild(0).GetComponent<Image>();
-        SpellDescr = _mainObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        ManaDescr = _mainObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        SpellIcon = _mainObject.transform.GetChild(1).GetComponent<Image>();
+        SpellDescr = _mainObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        ManaDescr = _mainObject.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
         CurrentSpell = DB.GetSpellByNumber(_spell_number);
+        blink_effect.SetActive(false);
         SetNewSpell();
     }
 

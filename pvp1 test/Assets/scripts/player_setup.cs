@@ -222,7 +222,7 @@ public class player_setup : MonoBehaviour
         SpellAttrInside = GameObject.Find("spell attr inside").GetComponent<RectTransform>();
 
 
-        HeroB.gameObject.transform.position = new Vector3(-35, HeroB.transform.position.y, 0);
+        //HeroB.gameObject.transform.position = new Vector3(-35, HeroB.transform.position.y, 0);
 
         podskazka.SetActive(false);
 
@@ -990,7 +990,7 @@ public class player_setup : MonoBehaviour
 
                         GetCharDataToView();
 
-                        ChangeCanvasButton(true, false, false, false);
+                        //ChangeCanvasButton(true, false, false, false);
                         break;
 
                     case "talentsbutton":
@@ -1002,7 +1002,7 @@ public class player_setup : MonoBehaviour
                         CloseSpellBook();
                         CheckNormalTalentDisp();
                         
-                        ChangeCanvasButton(false, true, false, false);
+                        //ChangeCanvasButton(false, true, false, false);
                         break;
 
                     case "PVPbutton":
@@ -1011,7 +1011,7 @@ public class player_setup : MonoBehaviour
                         PVP.gameObject.SetActive(true);
                         options.gameObject.SetActive(false);
                         
-                        ChangeCanvasButton(false, false, true, false);
+                        //ChangeCanvasButton(false, false, true, false);
                         break;
 
                     case "optionsbutton":
@@ -1020,7 +1020,7 @@ public class player_setup : MonoBehaviour
                         PVP.gameObject.SetActive(false);
                         options.gameObject.SetActive(true);
                         
-                        ChangeCanvasButton(false, false, false, true);
+                        //ChangeCanvasButton(false, false, false, true);
                         break;
                 }
 

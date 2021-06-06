@@ -20,12 +20,12 @@ public class player_get_new : MonoBehaviour
     public Button pl1, pl2, pl3, pl4, pl5, create_char_button, OkOnChoosing, back_button;
 
     private int CurrentPlayerNumber = 1;
-    private bool isBusy;
+    private bool isBusy, isON;
     private float delta_for_moving = 0.01f;
 
     public TextMeshProUGUI char_class_name_in_discr, char_descr, char_conspros, createnewchartext, backtext, enterloginname, enter_char_name_text;
 
-    public GameObject err_log_window;
+    public GameObject err_log_window, NameDescripForTremor, TextDescripForTremor;
     MessageInfo error_messages;
 
     // Start is called before the first frame update
@@ -164,11 +164,11 @@ public class player_get_new : MonoBehaviour
     {
         if (isBusy)
         {
-            Off();
+            if (isON)  Off();
         } 
         else if (!isBusy)
         {
-            Onn();
+            if (!isON) Onn();
         }
 
         
@@ -327,6 +327,7 @@ public class player_get_new : MonoBehaviour
 
     private void Off()
     {
+        isON = false;
         /*
         if (pl1.interactable)
         {
@@ -371,6 +372,8 @@ public class player_get_new : MonoBehaviour
             pl5.gameObject.SetActive(false);
         }
 
+        NameDescripForTremor.SetActive(false);
+        TextDescripForTremor.SetActive(false);
 
         if (create_char_button.interactable)
         {
@@ -380,6 +383,7 @@ public class player_get_new : MonoBehaviour
 
     private void Onn()
     {
+        isON = true;
         /*
         if (!pl1.interactable)
         {
@@ -424,6 +428,10 @@ public class player_get_new : MonoBehaviour
             pl5.gameObject.SetActive(true);
         }
 
+        NameDescripForTremor.SetActive(true);
+        TextDescripForTremor.SetActive(true);
+        NameDescripForTremor.GetComponent<Animator>().Play("tremor");
+        TextDescripForTremor.GetComponent<Animator>().Play("tremor");
 
         if (!create_char_button.interactable)
         {
