@@ -172,9 +172,14 @@ public class TalentsButton : MonoBehaviour
             IfPressedColor.gameObject.SetActive(true);
         }
 
+        
+
     }
 
-
+    public void AppearEffect()
+    {
+        animation.Play("appear");
+    }
 
     public string GetName()
     {

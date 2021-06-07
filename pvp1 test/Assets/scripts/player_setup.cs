@@ -595,7 +595,9 @@ public class player_setup : MonoBehaviour
         for (int i=0; i<TalentBottonsList.Count; i++)
         {
             TalentBottonsList[i].ResetTalents();
+            TalentBottonsList[i].AppearEffect();
         }
+
     }
 
 
@@ -838,6 +840,9 @@ public class player_setup : MonoBehaviour
         //=================================================
         if (Talents.gameObject.activeSelf)
         {
+            
+
+
             if (cur_time_check_talents > 0.1f)
             {
                 cur_time_check_talents = 0;
@@ -1001,6 +1006,11 @@ public class player_setup : MonoBehaviour
                         //SpellBook.SetActive(false);
                         CloseSpellBook();
                         CheckNormalTalentDisp();
+
+                        for (int i = 0; i < TalentBottonsList.Count; i++)
+                        {
+                            TalentBottonsList[i].AppearEffect();
+                        }
                         
                         //ChangeCanvasButton(false, true, false, false);
                         break;
