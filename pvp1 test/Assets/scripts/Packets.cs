@@ -1295,7 +1295,7 @@ public class PlayerUI : MonoBehaviour
 
                     //CondObjects[index].spell_timer -= 0.2f;                    
                     spell_timer.text = data.cond_time.ToString("f0");
-                    print(data.cond_stack + " - !!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                
 
                     if (data.cond_stack>1)
                     {
