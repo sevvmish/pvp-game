@@ -11,7 +11,7 @@ public class ui_classes : MonoBehaviour
 
 public class SpellDescription : MonoBehaviour
 {
-    private GameObject _mainObject, blink_effect;
+    private GameObject _mainObject, blink_effect, blink_outline;
     private RectTransform _mainObjectRect;
     private spellsIDs CurrentSpell;
     private int SpellNumber;
@@ -28,7 +28,7 @@ public class SpellDescription : MonoBehaviour
         _mainObjectRect.anchoredPosition = _place_coords;
         _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
         blink_effect = _mainObject.transform.GetChild(0).gameObject;
-
+        blink_outline = _mainObject.transform.GetChild(5).gameObject;
         _name = curr_name;
         _mainObject.name = _name;
         isOnlyNames = _isonlynames;
@@ -37,16 +37,35 @@ public class SpellDescription : MonoBehaviour
         SpellDescr = _mainObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         ManaDescr = _mainObject.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
         CurrentSpell = DB.GetSpellByNumber(_spell_number);
-        blink_effect.SetActive(false);
+        BlinkOFF();
         SetNewSpell();
     }
 
     public void SetNewSpell(int _spell_number)
     {
+        if (_spell_number != SpellNumber)
+        {
+            print("orijgklejngkljsdbgksdfbgkhdsfbgkbhdfg");
+            _mainObject.GetComponent<Animator>().Play("UI effect - appear");
+        }
+
         CurrentSpell = DB.GetSpellByNumber(_spell_number);
         SpellNumber = _spell_number;
         SetNewSpell();
     }
+
+    private void BlinkON()
+    {
+        blink_effect.SetActive(true);
+        blink_outline.SetActive(true);
+    }
+
+    private void BlinkOFF()
+    {
+        blink_effect.SetActive(false);
+        blink_outline.SetActive(false);
+    }
+
 
     public string GetName()
     {
@@ -61,14 +80,15 @@ public class SpellDescription : MonoBehaviour
             SpellDescr.text = CurrentSpell.Spell1_name;
             SpellDescr.fontSize = 28;
             SpellDescr.fontStyle = FontStyles.Bold;
-            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0");
+            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 22;
-        } else
+        } 
+        else
         {
             SpellIcon.sprite = CurrentSpell.Spell1_icon;
             SpellDescr.text = CurrentSpell.Spell1_full_description;
             SpellDescr.fontSize = 18;
-            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0");
+            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 17;
         }
     }
@@ -87,14 +107,14 @@ public class SpellDescription : MonoBehaviour
     {        
         isPressed = true;
         _mainObjectRect.localScale = new Vector3(1.05f, 1.05f, 1);
-        blink_effect.SetActive(true);       
+        BlinkON();
     }
 
     public void PressedOff()
     {   
         isPressed = false;
         _mainObjectRect.localScale = new Vector3(0.95f, 0.95f, 1);
-        blink_effect.SetActive(false);
+        BlinkOFF();
     }
 
     public bool IsPressed()
