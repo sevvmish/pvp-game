@@ -23,6 +23,7 @@ public class Conds
     public float cond_time;
     public bool isChecked;
     public float coord_x, coord_z;
+    public string [] additional_data;
 }
 
 
@@ -168,7 +169,13 @@ public class ConditionsAnalys
                 curr_conds[Index].coord_x = float.Parse(anothergetstrcond[2], CultureInfo.InvariantCulture);
                 curr_conds[Index].coord_z = float.Parse(anothergetstrcond[3], CultureInfo.InvariantCulture);
 
+            } 
+            else if (curr_conds[Index].cond_type == "ad")
+            {
+                curr_conds[Index].spell_index = int.Parse(anothergetstrcond[1]);
+                curr_conds[Index].additional_data = new string[anothergetstrcond.Length - 2];
             }
+
         } else if (curr_conds[Index].cond_type == "hg" || curr_conds[Index].cond_type == "ht") //damage taken or given
         {
             curr_conds[Index].damage_or_heal = float.Parse(getstrcond[1], CultureInfo.InvariantCulture);
@@ -183,8 +190,7 @@ public class ConditionsAnalys
             }
 
             curr_conds[Index].spell_index = int.Parse(getstrcond[3]);
-        }
-
+        } 
 
 
     }
