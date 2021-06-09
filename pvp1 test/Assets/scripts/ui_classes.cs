@@ -45,7 +45,7 @@ public class SpellDescription : MonoBehaviour
     {
         if (_spell_number != SpellNumber)
         {
-            print("orijgklejngkljsdbgksdfbgkhdsfbgkbhdfg");
+           
             _mainObject.GetComponent<Animator>().Play("UI effect - appear");
         }
 

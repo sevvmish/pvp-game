@@ -174,6 +174,10 @@ public class ConditionsAnalys
             {
                 curr_conds[Index].spell_index = int.Parse(anothergetstrcond[1]);
                 curr_conds[Index].additional_data = new string[anothergetstrcond.Length - 2];
+                for (int i = 0; i < curr_conds[Index].additional_data.Length; i++)
+                {
+                    curr_conds[Index].additional_data[i] = anothergetstrcond[2 + i];
+                }
             }
 
         } else if (curr_conds[Index].cond_type == "hg" || curr_conds[Index].cond_type == "ht") //damage taken or given

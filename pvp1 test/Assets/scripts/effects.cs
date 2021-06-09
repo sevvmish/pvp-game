@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class effects : MonoBehaviour
@@ -58,6 +59,7 @@ public class effects : MonoBehaviour
     public GameObject ButcheryEff;
     public GameObject SmokePuff;
     public GameObject Fuseeff;
+    public GameObject CheckForRogueInvis;
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
@@ -164,6 +166,7 @@ public class effects : MonoBehaviour
             BulletTrail.SetActive(false);
             SmokePuff.SetActive(false);
             Fuseeff.SetActive(false);
+            CheckForRogueInvis.SetActive(false);
         }
 
         if (MyPlayerClass == 5)
@@ -546,6 +549,11 @@ public class effects : MonoBehaviour
             {
                 StartCoroutine(TurnOnSomeEffect(BackStabEffect, 1f, 0));
             }
+
+            if (SomeConds.cond_type == "ad" && SomeConds.spell_index == 153)
+            {
+                StartCoroutine(ShowInvis153(SomeConds));
+            }
             //=================================
 
             //WIZARD===================================
@@ -817,6 +825,23 @@ public class effects : MonoBehaviour
         //yield return new WaitForSeconds(0.1f);
         CurrentConds.Remove(CurrConditions);
         yield return new WaitForSeconds(5f);
+        SpellSource.SetActive(false);
+        Destroy(SpellSource);
+    }
+
+    IEnumerator ShowInvis153(Conds CurrConditions)
+    {
+        GameObject SpellSource = Instantiate(CheckForRogueInvis, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        float coord_x = float.Parse(CurrConditions.additional_data[0], CultureInfo.InvariantCulture);
+        float coord_z = float.Parse(CurrConditions.additional_data[1], CultureInfo.InvariantCulture);
+        float rot_y = float.Parse(CurrConditions.additional_data[2], CultureInfo.InvariantCulture);
+        SpellSource.transform.position = new Vector3(coord_x, 0.1f, coord_z);
+        SpellSource.transform.localEulerAngles = new Vector3(0, rot_y, 0);
+        SpellSource.SetActive(true);
+        
+        //yield return new WaitForSeconds(0.1f);
+        CurrentConds.Remove(CurrConditions);
+        yield return new WaitForSeconds(2f);
         SpellSource.SetActive(false);
         Destroy(SpellSource);
     }
