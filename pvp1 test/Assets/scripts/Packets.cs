@@ -1057,6 +1057,7 @@ public struct Joysticks
 public class PlayerUI : MonoBehaviour
 {
     public GameObject AllObject;
+    public RectTransform UIPosition;
     private GameObject cond_example;
     public float HealthCurrentAmount = 0;
     private float EnergyCurrentAmount = 0;
@@ -1162,6 +1163,7 @@ public class PlayerUI : MonoBehaviour
         CastingSpellImage.gameObject.SetActive(false);
         CancelationText.gameObject.SetActive(false);
         CancelationText.text = lang.Canceled;
+        UIPosition = AllObject.GetComponent<RectTransform>();
     }
 
     public void StopCurrentCasting()

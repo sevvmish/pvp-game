@@ -483,6 +483,17 @@ public class playercontrol : MonoBehaviour
         {
             for (int i = 0; i < OtherGamers.Count; i++)
             {
+                //OtherGamers[i].OtherPlayerUI.GetComponent<RectTransform>().anchoredPosition = new Vector3(CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).x, CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).y);
+                //print(OtherGamers[i].name + " - " + CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z);
+                if (OtherGamers[i].PlayerEffects.MyPlayerClass==4)
+                {
+                    OtherGamers[i].OtherPlayerUI.UIPosition.anchoredPosition = new Vector3(CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).x - 60, CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).y + 150 - ((CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z / 10f) * (CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z / 10f) * (CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z / 10f) * 10f));
+                }
+                else
+                {
+                    OtherGamers[i].OtherPlayerUI.UIPosition.anchoredPosition = new Vector3(CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).x - 60, CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).y + 170 - ((CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z / 10f) * (CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z / 10f) * (CurrentCamera.WorldToScreenPoint(OtherGamers[i].PlayerTransform.position).z / 10f) * 10f));
+                }
+                
                 OtherGamers[i].SyncPosNRot(DeltaForLerpMovingNRotation, AverageCountForDeltaForLerp);
             }
         }

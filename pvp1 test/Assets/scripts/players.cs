@@ -7,7 +7,7 @@ using UnityEngine;
 public class players : MonoBehaviour
 {
     
-    private Transform PlayerTransform;    
+    public Transform PlayerTransform;    
     private AnimationsForPlayers PlayerAnimator;    
     private TextMeshProUGUI TempText1;
     public int NumberInSendAndReceive;
@@ -40,12 +40,13 @@ public class players : MonoBehaviour
 
     public void CreateUI()
     {
-        GameObject temp2 = Instantiate(Resources.Load<GameObject>("prefabs/otherplayerUI"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("CanvasInterface").transform);
+        GameObject temp2 = Instantiate(Resources.Load<GameObject>("prefabs/otherplayerUI 2"), new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("CanvasInterface").transform);
         temp2.name = OtherPlayerName;
         temp2.GetComponent<RectTransform>().anchoredPosition = new Vector2(970, -50 * (NumberInSendAndReceive+1) * 1.5f);
         temp2.SetActive(true);
         OtherPlayerUI = new PlayerUI(temp2, false);
         isUIadded = true;
+        
     }
 
     public void SyncPosNRot(float DeltaForLerp, float AverageCount)
@@ -54,6 +55,7 @@ public class players : MonoBehaviour
         TempText1.text = SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool.ToString();
         if (isUIadded)
         {
+            
             OtherPlayerUI.HealthInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].health_pool, SendAndReceive.OtherPlayerData[NumberInSendAndReceive].max_health_pool);
             OtherPlayerUI.EnergyInput(SendAndReceive.OtherPlayerData[NumberInSendAndReceive].energy);
         }
