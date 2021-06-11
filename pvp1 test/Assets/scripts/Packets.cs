@@ -483,6 +483,12 @@ public struct AnimationsForPlayers
                         shot_gun();
                     }
                     break;
+                case 22:
+                    if (!animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
+                    {
+                        death();
+                    }
+                    break;
             }
         }
 
@@ -653,6 +659,12 @@ public struct AnimationsForPlayers
     {
         animator.Play("shot gun");
         CurrentAnimationState = 21;
+    }
+
+    void death()
+    {
+        animator.Play("death");
+        CurrentAnimationState = 22;
     }
 }
 
