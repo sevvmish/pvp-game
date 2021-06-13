@@ -28939,7 +28939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7775297118129180198
 Transform:
   m_ObjectHideFlags: 0
@@ -29185,6 +29185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d03ff97f38bfd42ae24db20e14b850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerTransform: {fileID: 0}
   NumberInSendAndReceive: 0
   previousstate: 0
   previouscondition: 

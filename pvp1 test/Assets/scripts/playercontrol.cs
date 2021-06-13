@@ -30,7 +30,7 @@ public class playercontrol : MonoBehaviour
     List<Touch> touches = new List<Touch>();
 
     //My Player
-    private PlayerUI MyUI;
+    public static PlayerUI MyUI;
     private GameObject MainPlayerGameObject;
     private effects MyEffects;
 
@@ -694,6 +694,7 @@ public class playercontrol : MonoBehaviour
                     if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "co")
                     {
                         if (OtherGamers[ii].isUIadded) {
+                            
                             StartCoroutine(OtherGamers[ii].OtherPlayerUI.AddCondition(OtherGamers[ii].Conds.curr_conds[iii]));
                             
                         }

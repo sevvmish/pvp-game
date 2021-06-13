@@ -234,7 +234,7 @@ public struct AnimationsForPlayers
 
         //Debug.Log(state + " - " + CurrentAnimationState + " - " + animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"));
 
-        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18) && (/*state==1 || state==0*/ state < 2) )
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18 || PrevAnimationState == 22) && (/*state==1 || state==0*/ state < 2) )
         {
             Idle();
         }
@@ -1123,24 +1123,24 @@ public class PlayerUI : MonoBehaviour
     };
 
 
-    private Vector2[] CondPositionsForOtherPlayer = {
-        new Vector2(0,-65),
-        new Vector2(40,-65),
-        new Vector2(80,-65),
-        new Vector2(120,-65),
-        new Vector2(160,-65),
-        new Vector2(200,-65),
-        new Vector2(240,-65),
+    private Vector2[] CondPositionsForOtherPlayer = {  //-65    -120
+        new Vector2(0,40),
+        new Vector2(32,40),
+        new Vector2(64,40),
+        new Vector2(96,40),
+        new Vector2(0,80),
+        new Vector2(32,80),
+        new Vector2(64,80),
         
         
         //=============================
-        new Vector2(0,-120),
-        new Vector2(40,-120),
-        new Vector2(80,-120),
-        new Vector2(120,-120),
-        new Vector2(160,-120),
-        new Vector2(200,-120),
-        new Vector2(240,-120),
+        new Vector2(96,80),
+        //new Vector2(40,50),
+        //new Vector2(80,50),
+        //new Vector2(120,50),
+        //new Vector2(160,50),
+        //new Vector2(200,50),
+        //new Vector2(240,50),
 
     };
 
@@ -1226,6 +1226,36 @@ public class PlayerUI : MonoBehaviour
         float spell_time = data.cond_time;
         int stacks = data.cond_stack;
 
+        if (data.spell_index==1000 || data.spell_index == 1001 || data.spell_index == 1002 || data.spell_index == 1003 || data.spell_index == 1004 || data.spell_index == 1005)
+        {
+            yield break;
+        }
+
+        if (data.spell_index == 1006 || data.spell_index == 1007)
+        {
+            
+            for (int iii = 0; iii < CondObjects.Count; iii++)
+            {
+                if (CondObjects[iii].isBusy)
+                {
+                    Animator animator = CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Animator>();
+                    TextMeshProUGUI spell_timer = CondObjects[iii].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+                    TextMeshProUGUI spell_stacks = CondObjects[iii].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
+
+                    animator.SetBool("long", false);
+                    animator.SetBool("fast", false);
+                    CondObjects[iii].con_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                    CondObjects[iii].isBusy = false;
+                    CondObjects[iii].con_object.SetActive(false);
+                    spell_timer.text = "";
+                    CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null; 
+                    spell_stacks.text = "";
+                }
+                
+            }
+
+            yield break;
+        }
 
         print(condID + ": " + spell_ind + " - ");
         bool isOK = true;
@@ -1343,7 +1373,17 @@ public class PlayerUI : MonoBehaviour
                         animator.Play("idle");
                     }
 
-                    if (data.cond_time == 0)
+                    bool isRestarting = false;
+                    for (int i = 0; i < playercontrol.MyUI.CondObjects.Count; i++)
+                    {
+                        if (playercontrol.MyUI.CondObjects[i].spell_index==1006 || playercontrol.MyUI.CondObjects[i].spell_index == 1007)
+                        {
+                            isRestarting = true;
+                            break;
+                        }
+                    }
+
+                    if (data.cond_time == 0 || isRestarting)
                     {
                         break;
                     }
