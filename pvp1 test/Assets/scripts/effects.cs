@@ -19,7 +19,7 @@ public class effects : MonoBehaviour
 
     private List<GameObject> Cancels = new List<GameObject>();
 
-    
+    private bool isCheckingFrozenSpilesSpell58;
 
     public bool isStunned, isShieldSlam, isCasting, isChanneling, isSpellShooting;
 
@@ -35,6 +35,7 @@ public class effects : MonoBehaviour
     //mage 1 effects
     public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff, IceNova;
     private ObjectPooling FireSteps;
+    private AudioClip FrostTrap;
 
 
     //barbarian 1 effects
@@ -142,6 +143,9 @@ public class effects : MonoBehaviour
             FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
             FireStepEff.SetActive(false);
             IceNova.SetActive(false);
+
+            FrostTrap = Resources.Load<AudioClip>("sounds/frost nova");
+            
         }
 
         if (MyPlayerClass == 3)
@@ -273,6 +277,8 @@ public class effects : MonoBehaviour
             }
         }
 
+       
+
     }
 
 
@@ -371,8 +377,9 @@ public class effects : MonoBehaviour
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58)
             {                
-                StartCoroutine(TurnOnSomeEffect(FrozenSpikes, 5f, 0));
+                StartCoroutine(TurnOnSomeEffect(FrozenSpikes, SomeConds.cond_time, 0));
                 //StartCoroutine(PlaySomeSound(BuffSound, 0, false));
+
             }
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 997)
@@ -758,6 +765,7 @@ public class effects : MonoBehaviour
         GameObject SpellSource = Instantiate(IceNova, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.05f, CurrConditions.coord_z);
         SpellSource.SetActive(true);
+        StartCoroutine(PlaySomeSound(FrostTrap, 0, false));
         isSpellShooting = false;
         yield return new WaitForSeconds(4f);        
         SpellSource.SetActive(false);
