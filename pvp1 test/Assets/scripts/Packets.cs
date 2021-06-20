@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 public class Conds
 {
     public string cond_id;
@@ -109,6 +110,8 @@ public class ConditionsAnalys
         
         string[] getstrcond = getstrcond1[1].Split('-');
         curr_conds[Index].cond_type = getstrcond[0];
+
+        curr_conds[Index].cond_stack = 0;
 
         if (curr_conds[Index].cond_type == "co") //condition type in conditions
         {
@@ -1077,6 +1080,7 @@ public class PlayerUI : MonoBehaviour
     private float EnergyAllAmount = 100;
     private Image HealthButton;
     private Image EnergyButton;
+    private bool isRestarting;
 
     private Image CastingBar;
     private Image CastingSpellImage;
@@ -1176,6 +1180,7 @@ public class PlayerUI : MonoBehaviour
         CancelationText.gameObject.SetActive(false);
         CancelationText.text = lang.Canceled;
         UIPosition = AllObject.GetComponent<RectTransform>();
+        ResetAllConds();
     }
 
     public void StopCurrentCasting()
@@ -1218,7 +1223,40 @@ public class PlayerUI : MonoBehaviour
         CancelationText.gameObject.SetActive(false);
     }
 
+    private void ResetAllConds()
+    {
+        for (int iii = 0; iii < CondObjects.Count; iii++)
+        {
+           
+            Animator animator = CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Animator>();
+            TextMeshProUGUI spell_timer = CondObjects[iii].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI spell_stacks = CondObjects[iii].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
+            
 
+            animator.SetBool("long", false);
+            animator.SetBool("fast", false);
+            CondObjects[iii].con_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            CondObjects[iii].isBusy = false;
+            CondObjects[iii].cond_id = null;
+            CondObjects[iii].spell_index = 0;
+            CondObjects[iii].spell_timer = 0;
+
+
+            CondObjects[iii].con_object.SetActive(false);
+            spell_timer.text = "";
+            CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null;
+            spell_stacks.text = "";
+            Color curcolor = CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().color;
+            curcolor.a = 1f;
+            CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().color = curcolor;
+
+                       
+
+        }
+
+        
+
+    }
     public IEnumerator AddCondition(Conds data)
     {
         string condID = data.cond_id;
@@ -1231,29 +1269,11 @@ public class PlayerUI : MonoBehaviour
             yield break;
         }
 
-        if (data.spell_index == 1006 || data.spell_index == 1007)
+        if (data.spell_index == 1007)
         {
+            yield return new WaitForSeconds(data.cond_time);
+            ResetAllConds();          
             
-            for (int iii = 0; iii < CondObjects.Count; iii++)
-            {
-                if (CondObjects[iii].isBusy)
-                {
-                    Animator animator = CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Animator>();
-                    TextMeshProUGUI spell_timer = CondObjects[iii].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-                    TextMeshProUGUI spell_stacks = CondObjects[iii].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-
-                    animator.SetBool("long", false);
-                    animator.SetBool("fast", false);
-                    CondObjects[iii].con_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                    CondObjects[iii].isBusy = false;
-                    CondObjects[iii].con_object.SetActive(false);
-                    spell_timer.text = "";
-                    CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null; 
-                    spell_stacks.text = "";
-                }
-                
-            }
-
             yield break;
         }
 

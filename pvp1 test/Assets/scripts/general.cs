@@ -30,7 +30,7 @@ public class general
     public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
 
     public static int LoginServerTCPPort = (int)Ports.tcp2324;
-    public static string LoginServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+    public static string LoginServerIP = "192.168.0.103"; //185.18.53.239   "45.67.57.30"
 
     public static string SessionPlayerID; //playerX
     public static string SessionTicket; //sessionX
@@ -41,6 +41,8 @@ public class general
     public static encryption PlayerEncryption = new encryption();
     public static byte[] SecretKey;
     public static string PacketID;
+
+    public static bool isRestarting;
 
     public static string CharacterName;
     public static int CharacterType;

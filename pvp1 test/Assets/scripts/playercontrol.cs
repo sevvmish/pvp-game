@@ -7,7 +7,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine.EventSystems;
 using System.Globalization;
-
+using UnityEngine.SceneManagement;
 using System.Threading;
 //using UnityEngine.UIElements;
 
@@ -96,6 +96,7 @@ public class playercontrol : MonoBehaviour
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
         Application.targetFrameRate = 60;
+        general.isRestarting = false;
 
         /*
         string EncodingData = connection.SendAndGetTCP($"0~6~{general.SessionPlayerID}~{general.SessionTicket}~0");
@@ -229,6 +230,8 @@ public class playercontrol : MonoBehaviour
         }
 
         MyConds.Check(SendAndReceive.MyPlayerData.conditions);
+
+        
 
         if (SendAndReceive.OtherPlayerData.Length > 0)
         {
@@ -546,6 +549,12 @@ public class playercontrol : MonoBehaviour
         {
             if (!MyConds.curr_conds[i].isChecked)
             {
+                if (MyConds.curr_conds[i].spell_index==1007 && !general.isRestarting)
+                {
+                    general.isRestarting = true;
+                    print("howmany times");
+                    StartCoroutine(RestartLevel(MyConds.curr_conds[i]));
+                }
 
                 MyEffects.RegisterConds(MyConds.curr_conds[i]);
                 
@@ -672,6 +681,7 @@ public class playercontrol : MonoBehaviour
 
             }
 
+            
 
         }
     }
@@ -684,6 +694,7 @@ public class playercontrol : MonoBehaviour
         {
             for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
             {
+                
 
                 if (!OtherGamers[ii].Conds.curr_conds[iii].isChecked)
                 {
@@ -765,6 +776,8 @@ public class playercontrol : MonoBehaviour
                     OtherGamers[ii].Conds.curr_conds[iii].isChecked = true;
 
                 }
+
+               
             }
         }
 
@@ -933,7 +946,22 @@ public class playercontrol : MonoBehaviour
         isBadLat = false;
     }
 
+    public static void ResetAllCondAnalysData(ConditionsAnalys _any_data)
+    {
+        _any_data.curr_conds.Clear();
+    }
 
+
+    public IEnumerator RestartLevel(Conds _data)
+    {
+        float _timer = _data.cond_time;
+        print(_timer + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        yield return new WaitForSeconds(_timer+0.4f);       
+
+        general.DataForSession.Clear();
+      
+        SceneManager.LoadScene("SampleScene");
+    }
     public IEnumerator killmess(string MessFromButt)
     {
         if (PoolOfMessages.Count>3)
