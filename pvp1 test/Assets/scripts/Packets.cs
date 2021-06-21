@@ -1368,7 +1368,15 @@ public class PlayerUI : MonoBehaviour
                     yield return new WaitForSeconds(0.2f);
 
                     //CondObjects[index].spell_timer -= 0.2f;                    
-                    spell_timer.text = data.cond_time.ToString("f0");
+                    if (data.cond_time==99)
+                    {
+                        spell_timer.text = "";
+                    } 
+                    else
+                    {
+                        spell_timer.text = data.cond_time.ToString("f0");
+                    }
+                    
                 
 
                     if (data.cond_stack>1)
