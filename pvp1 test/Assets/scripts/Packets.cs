@@ -1128,17 +1128,17 @@ public class PlayerUI : MonoBehaviour
 
 
     private Vector2[] CondPositionsForOtherPlayer = {  //-65    -120
-        new Vector2(0,40),
-        new Vector2(32,40),
-        new Vector2(64,40),
-        new Vector2(96,40),
-        new Vector2(0,80),
-        new Vector2(32,80),
-        new Vector2(64,80),
+        new Vector2(0,35),
+        new Vector2(34,35),
+        new Vector2(68,35),
+        new Vector2(102,35),
+        new Vector2(0,70),
+        new Vector2(34,70),
+        new Vector2(68,70),
         
         
         //=============================
-        new Vector2(96,80),
+        new Vector2(102,70),
         //new Vector2(40,50),
         //new Vector2(80,50),
         //new Vector2(120,50),
@@ -1231,10 +1231,7 @@ public class PlayerUI : MonoBehaviour
             Animator animator = CondObjects[iii].con_object.transform.GetChild(0).gameObject.GetComponent<Animator>();
             TextMeshProUGUI spell_timer = CondObjects[iii].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
             TextMeshProUGUI spell_stacks = CondObjects[iii].con_object.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-            
 
-            animator.SetBool("long", false);
-            animator.SetBool("fast", false);
             CondObjects[iii].con_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             CondObjects[iii].isBusy = false;
             CondObjects[iii].cond_id = null;
@@ -1277,7 +1274,7 @@ public class PlayerUI : MonoBehaviour
             yield break;
         }
 
-        print(condID + ": " + spell_ind + " - ");
+        //print(condID + ": " + spell_ind + " - ");
         bool isOK = true;
 
         for (int i = 0; i < CondObjects.Count; i++)
@@ -1361,11 +1358,14 @@ public class PlayerUI : MonoBehaviour
                 }
                 CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = DB.GetSpellByNumber(spell_ind).Spell1_icon;
                 Animator animator = CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Animator>();
+                
+                
 
+                animator.SetBool("appear", true);
 
                 do
                 {
-                    yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForSeconds(0.4f);
 
                     //CondObjects[index].spell_timer -= 0.2f;                    
                     if (data.cond_time==99)
@@ -1376,29 +1376,36 @@ public class PlayerUI : MonoBehaviour
                     {
                         spell_timer.text = data.cond_time.ToString("f0");
                     }
-                    
-                
 
-                    if (data.cond_stack>1)
+
+
+                    if (data.cond_stack > 1 && spell_stacks.text!= data.cond_stack.ToString())
                     {
                         spell_stacks.text = data.cond_stack.ToString();
+                        animator.SetBool("long", false);                        
+                        animator.SetBool("appear", false);
+                        animator.SetBool("tremor", true);
+                        animator.Play("idle");
                     }
+                    else
+                    {
 
-                    if (data.cond_time<3 && data.cond_time > 0.5f)
-                    {
-                        animator.SetBool("long", true);
-                        animator.SetBool("fast", false);
-                    } 
-                    else if (data.cond_time <= 0.5f)
-                    {                        
-                        animator.SetBool("fast", true);
-                        animator.SetBool("long", false);
-                        animator.Play("idle");
-                    } else if (data.cond_time >=3f)
-                    {
-                        animator.SetBool("long", false);
-                        animator.SetBool("fast", false);
-                        animator.Play("idle");
+                        if (data.cond_time < 2f)
+                        {
+                            animator.SetBool("long", true);                            
+                            animator.SetBool("appear", false);
+                            animator.SetBool("tremor", false);
+                            animator.Play("idle");
+                        }                        
+                        else if (data.cond_time >= 2f)
+                        {
+                            
+                            animator.SetBool("long", false);                           
+                            animator.SetBool("appear", false);
+                            animator.SetBool("tremor", false);
+                            //animator.Play("idle");
+                            
+                        }
                     }
 
                     bool isRestarting = false;
@@ -1422,12 +1429,14 @@ public class PlayerUI : MonoBehaviour
                 //string texter = CondObjects[index].con_object.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;
                 Vector2 expCoords = CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition;
                 animator.SetBool("long", false);
-                animator.SetBool("fast", false);
+                animator.SetBool("appear", false); 
+                animator.SetBool("tremor", false);
                 CondObjects[index].con_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
                 CondObjects[index].isBusy = false;
                 CondObjects[index].con_object.SetActive(false);
                 spell_timer.text = "";
                 CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null;
+                CondObjects[index].con_object.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.white;
                 spell_stacks.text = "";
 
                 //JustDO(CondObjects[index], position, spell_time);

@@ -107,7 +107,7 @@ public class playercontrol : MonoBehaviour
         
         print(encryption.InitEncodingConnection(general.Ports.tcp2323) + " - result of encoding");
 
-        print("new packetID - " + general.PacketID);
+        //print("new packetID - " + general.PacketID);
         
         string SessionResult = connection.SendAndGetTCP(SessionData.SendSessionDataRequest(), general.Ports.tcp2323, general.GameServerIP, true);
         print(SessionResult  +" - result of sess");

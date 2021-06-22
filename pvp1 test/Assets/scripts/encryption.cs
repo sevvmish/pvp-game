@@ -19,7 +19,7 @@ public class encryption
         string[] string_data = data.Split('~');
 
         general.SecretKey = GetRandom256Code();
-        Debug.Log("secret key is - " + FromByteToString(general.SecretKey));
+        //Debug.Log("secret key is - " + FromByteToString(general.SecretKey));
         general.PacketID = string_data[3];
 
         //getting back real public key by public key string
