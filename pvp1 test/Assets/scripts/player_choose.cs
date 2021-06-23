@@ -40,6 +40,7 @@ public class player_choose : MonoBehaviour
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
 
+        
         EnterTheGameText.text = lang.EnterTheGameText;
         ChooseAnotherText.text = lang.ChooseAnotherText;
         //ConnError.text = lang.ConnectionErrorText;
