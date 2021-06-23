@@ -552,7 +552,7 @@ public class playercontrol : MonoBehaviour
                 if (MyConds.curr_conds[i].spell_index==1007 && !general.isRestarting)
                 {
                     general.isRestarting = true;
-                    print("howmany times");
+                    print(connection.SendAndGetTCP($"{general.PacketID}~0~7~{general.SessionPlayerID}~{general.SessionTicket}", general.Ports.tcp2323, general.GameServerIP, true));
                     StartCoroutine(RestartLevel(MyConds.curr_conds[i]));
                 }
 

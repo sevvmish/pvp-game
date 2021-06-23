@@ -328,3 +328,50 @@ public class TalentsButton : MonoBehaviour
 
     
 }
+
+public class PVPStatisticsPanel: MonoBehaviour
+{
+    private GameObject WholePanel_left, WholePanel_right;
+    private int HowManyPlayers, GameType;
+    private string[] data;
+    private List<_players_in_pvp> ListOfPlayers = new List<_players_in_pvp>();
+    private struct _players_in_pvp
+    {
+        string player_name;
+        int player_class;
+        int player_score;
+        int player_teamID;
+
+        public _players_in_pvp(string _name, int _pl_class, int _teamID, int _score)
+        {
+            player_name = _name;
+            player_class = _pl_class;
+            player_teamID = _teamID;
+            player_score = _score;
+        }
+    }
+    public PVPStatisticsPanel(string _data, Transform _where_to_locate)
+    {
+        WholePanel_left = Instantiate(Resources.Load<GameObject>("prefabs/PVPStatisticsPanel"), new Vector3(0, 0, 0), Quaternion.identity, _where_to_locate);
+        WholePanel_left.SetActive(true);
+        WholePanel_left.GetComponent<RectTransform>().anchoredPosition = new Vector2(-175, 0);
+
+        WholePanel_right = Instantiate(Resources.Load<GameObject>("prefabs/PVPStatisticsPanel"), new Vector3(0, 0, 0), Quaternion.identity, _where_to_locate);
+        WholePanel_right.SetActive(true);
+        WholePanel_right.GetComponent<RectTransform>().anchoredPosition = new Vector2(175, 0);
+
+        //parsing   0~7~game type~player_count~name-player_class-player_teamID-score~...
+        /*
+        data = _data.Split('~');
+        GameType = int.Parse(data[2]);
+        HowManyPlayers = int.Parse(data[3]);
+
+        for (int i = 0; i < HowManyPlayers; i++)
+        {
+            string[] _temp_data = data[5 + i].Split('-');
+            ListOfPlayers.Add(new _players_in_pvp(_temp_data[0], int.Parse(_temp_data[1]), int.Parse(_temp_data[2]), int.Parse(_temp_data[3])));
+        }
+        */
+    }
+
+}
