@@ -552,7 +552,8 @@ public class playercontrol : MonoBehaviour
                 if (MyConds.curr_conds[i].spell_index==1007 && !general.isRestarting)
                 {
                     general.isRestarting = true;
-                    print(connection.SendAndGetTCP($"{general.PacketID}~0~7~{general.SessionPlayerID}~{general.SessionTicket}", general.Ports.tcp2323, general.GameServerIP, true));
+                    //print(connection.SendAndGetTCP($"{general.PacketID}~0~7~{general.SessionPlayerID}~{general.SessionTicket}", general.Ports.tcp2323, general.GameServerIP, true));
+                    PVPStatisticsPanel panel1 = new PVPStatisticsPanel(connection.SendAndGetTCP($"{general.PacketID}~0~7~{general.SessionPlayerID}~{general.SessionTicket}", general.Ports.tcp2323, general.GameServerIP, true), GameObject.Find("CanvasInterface").transform);
                     StartCoroutine(RestartLevel(MyConds.curr_conds[i]));
                 }
 

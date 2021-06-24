@@ -406,6 +406,10 @@ public class lang
     //ТАЛАНТЫ======================
     public static string Talent1Name = "оглушение";
     public static string Talent1Description = "оглушение gvbrffgd egerg  egref";
+
+    public static string PVPStatsTeamName = "КОМАНДА";
+    public static string PVPStatsPlayerName = "игрок:";
+    public static string PVPStatsPlayerScore = "очки:";
 }
 
 public class ENlang

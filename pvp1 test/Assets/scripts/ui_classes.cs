@@ -331,16 +331,16 @@ public class TalentsButton : MonoBehaviour
 
 public class PVPStatisticsPanel: MonoBehaviour
 {
-    private GameObject WholePanel_left, WholePanel_right;
-    private int HowManyPlayers, GameType;
+    //private GameObject WholePanel_left, WholePanel_right;
+    private int HowManyPlayers, GameType, MaxPlayersInTeam;
     private string[] data;
     private List<_players_in_pvp> ListOfPlayers = new List<_players_in_pvp>();
     private struct _players_in_pvp
     {
-        string player_name;
-        int player_class;
-        int player_score;
-        int player_teamID;
+        public string player_name;
+        public int player_class;
+        public int player_score;
+        public int player_teamID;
 
         public _players_in_pvp(string _name, int _pl_class, int _teamID, int _score)
         {
@@ -352,26 +352,113 @@ public class PVPStatisticsPanel: MonoBehaviour
     }
     public PVPStatisticsPanel(string _data, Transform _where_to_locate)
     {
+        //parsing   0~7~game type~player_count~name-player_class-player_teamID-score~...
+        //example 0~7~0~5~mage-2-0-0~barbarian-3-1-1~warrior-1-2-1~rogue-4-3-1~wizard-5-4-1~
+
+        try
+        {
+            data = _data.Split('~');
+            GameType = int.Parse(data[2]);
+            HowManyPlayers = int.Parse(data[3]);
+
+            for (int i = 0; i < HowManyPlayers; i++)
+            {
+                string[] _temp_data = data[4 + i].Split('-');
+                
+                ListOfPlayers.Add(new _players_in_pvp(_temp_data[0], int.Parse(_temp_data[1]), int.Parse(_temp_data[2]), int.Parse(_temp_data[3])));
+            }
+        }
+        catch (System.Exception ex)
+        {
+            print(ex);
+            return;
+        }
+        
+        
+        if (GameType==0)
+        {
+            int team_left_ID = ListOfPlayers[0].player_teamID;
+
+            List<_players_in_pvp> team_left_players = new List<_players_in_pvp>();
+            List<_players_in_pvp> team_right_players = new List<_players_in_pvp>();
+
+            for (int i = 0; i < ListOfPlayers.Count; i++)
+            {
+                if (ListOfPlayers[i].player_teamID== team_left_ID)
+                {
+                    team_left_players.Add(ListOfPlayers[i]);
+                } else
+                {
+                    team_right_players.Add(ListOfPlayers[i]);
+                }
+            }
+
+            if (team_left_players.Count> team_right_players.Count)
+            {
+                MaxPlayersInTeam = team_left_players.Count;
+            } else
+            {
+                MaxPlayersInTeam = team_right_players.Count;
+            }
+
+            PVPDoublePanelControl(new Vector2(-194,0), _where_to_locate, team_left_players, MaxPlayersInTeam);
+            PVPDoublePanelControl(new Vector2( 194,0), _where_to_locate, team_right_players, MaxPlayersInTeam);
+        }
+
+        /*
         WholePanel_left = Instantiate(Resources.Load<GameObject>("prefabs/PVPStatisticsPanel"), new Vector3(0, 0, 0), Quaternion.identity, _where_to_locate);
         WholePanel_left.SetActive(true);
-        WholePanel_left.GetComponent<RectTransform>().anchoredPosition = new Vector2(-175, 0);
+        WholePanel_left.GetComponent<RectTransform>().anchoredPosition = new Vector2(-194, 0);
 
         WholePanel_right = Instantiate(Resources.Load<GameObject>("prefabs/PVPStatisticsPanel"), new Vector3(0, 0, 0), Quaternion.identity, _where_to_locate);
         WholePanel_right.SetActive(true);
-        WholePanel_right.GetComponent<RectTransform>().anchoredPosition = new Vector2(175, 0);
-
-        //parsing   0~7~game type~player_count~name-player_class-player_teamID-score~...
-        /*
-        data = _data.Split('~');
-        GameType = int.Parse(data[2]);
-        HowManyPlayers = int.Parse(data[3]);
-
-        for (int i = 0; i < HowManyPlayers; i++)
-        {
-            string[] _temp_data = data[5 + i].Split('-');
-            ListOfPlayers.Add(new _players_in_pvp(_temp_data[0], int.Parse(_temp_data[1]), int.Parse(_temp_data[2]), int.Parse(_temp_data[3])));
-        }
+        WholePanel_right.GetComponent<RectTransform>().anchoredPosition = new Vector2(194, 0);
         */
+        
+    }
+
+    private void PVPDoublePanelControl(Vector2 _location, Transform _where_to_locate, List<_players_in_pvp> current_players, int _size)
+    {
+        int score = current_players[0].player_score;
+        int team = current_players[0].player_teamID;
+
+        GameObject WholePanel = Instantiate(Resources.Load<GameObject>("prefabs/PVPStatisticsPanel"), new Vector3(0, 0, 0), Quaternion.identity, _where_to_locate);
+        WholePanel.SetActive(true);
+        WholePanel.GetComponent<RectTransform>().anchoredPosition = _location;
+
+        GameObject panel = WholePanel.transform.GetChild(0).gameObject;
+        print(panel.GetComponent<RectTransform>().sizeDelta.x + " - " + WholePanel.GetComponent<RectTransform>().sizeDelta.y);
+        panel.GetComponent<RectTransform>().sizeDelta = new Vector2(420, 150 +(_size-1)*45);
+
+        panel.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{lang.PVPStatsTeamName} {team}:";
+        panel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = score.ToString();
+        panel.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = lang.PVPStatsPlayerName;
+        panel.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = lang.PVPStatsPlayerScore;
+               
+        for (int i = 0; i < current_players.Count; i++)
+        {
+            new PlayerLine(panel.transform.GetChild(5).gameObject, panel.transform, new Vector2(-5, -110 - 40 * i), current_players[i].player_class, current_players[i].player_name, current_players[i].player_score);
+        }
+
+        panel.transform.GetChild(5).gameObject.SetActive(false);
+
+    }
+
+
+
+    private class PlayerLine
+    {
+        public PlayerLine(GameObject _form, Transform _where_to_locate, Vector2 _location, int _player_class, string _player_name, int _player_score)
+        {
+            GameObject PlayerL = Instantiate(_form, Vector2.zero, Quaternion.identity, _where_to_locate);
+            PlayerL.SetActive(true);
+            PlayerL.GetComponent<RectTransform>().anchoredPosition = _location;
+
+            PlayerL.transform.GetChild(1).GetComponent<Image>().sprite = DB.get_logo_by_number(_player_class);
+            PlayerL.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = _player_name;
+            PlayerL.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = _player_score.ToString();
+
+        }
     }
 
 }

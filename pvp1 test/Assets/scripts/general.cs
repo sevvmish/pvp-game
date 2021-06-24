@@ -30,7 +30,7 @@ public class general
     public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
 
     public static int LoginServerTCPPort = (int)Ports.tcp2324;
-    public static string LoginServerIP = "192.168.0.103"; //185.18.53.239   "45.67.57.30"
+    public static string LoginServerIP = "31.172.66.150"; //185.18.53.239   "45.67.57.30"
 
     public static string SessionPlayerID; //playerX
     public static string SessionTicket; //sessionX
