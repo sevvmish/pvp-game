@@ -23,11 +23,11 @@ public class general
 
     public static int GameServerTCPPort = 2323;
     public static int GameServerUDPPort = 2325;
-    public static string HUB1_ip = "127.0.0.1";
-    public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57   //192.168.0.103
+    public static string HUB1_ip = "31.172.66.150";
+    public static string GameServerIP;  //134.0.116.169       45.67.57.30      185.18.53.239    usa - 170.130.40.170 //45.67.58.92   fornex dotnet small //91.228.155.57   //192.168.0.103  //31.172.66.150
 
     public static int SetupServerTCPPort = (int)Ports.tcp2326;
-    public static string SetupServerIP = "45.67.57.30"; //185.18.53.239   "45.67.57.30"
+    public static string SetupServerIP = "31.172.66.150"; //185.18.53.239   "45.67.57.30"
 
     public static int LoginServerTCPPort = (int)Ports.tcp2324;
     public static string LoginServerIP = "31.172.66.150"; //185.18.53.239   "45.67.57.30"
