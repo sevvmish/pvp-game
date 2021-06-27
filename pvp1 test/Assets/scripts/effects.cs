@@ -564,25 +564,35 @@ public class effects : MonoBehaviour
             //=================================
 
             //WIZARD===================================
+            
             if (SomeConds.cond_type == "ca" && SomeConds.spell_index == 201)
             {
+                
                 ChargeDeathBeam.SetActive(true);
             } 
+            
             if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 201 && ChargeDeathBeam.activeSelf)
             {
                 ChargeDeathBeam.SetActive(false);
             }
 
+            
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 201)
             {
                 
-                StartCoroutine(TurnOnSomeEffect(DeathBeam, SomeConds.cond_time, 0));                
+                StartCoroutine(TurnOnSomeEffect(DeathBeam, SomeConds.cond_time, 0));
                 ChargeDeathBeam.SetActive(false);
-            }            
-            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 201 && DeathBeam.activeSelf)
-            {
-                DeathBeam.SetActive(false);
             }
+            
+
+            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 201 && DeathBeam.activeSelf ) //
+            {
+                //DeathBeam.SetActive(false);
+                StartCoroutine(TurnOFFSomeEffect(DeathBeam, 0));
+                PlayerAnimator.Play("Idle");
+                PlayerAnimator.Play("Idle1");
+            }
+            
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 204)
             {                

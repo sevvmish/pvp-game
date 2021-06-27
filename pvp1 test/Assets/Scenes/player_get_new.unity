@@ -1428,6 +1428,13 @@ MonoBehaviour:
   - 0.25
   - 0.3
   - 0.35
+  _after_s_end:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!1 &592493767
 GameObject:
   m_ObjectHideFlags: 0

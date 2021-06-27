@@ -216,6 +216,7 @@ public struct AnimationsForPlayers
 
     public AnimationsForPlayers(Animator animat, AudioSource AudSource)
     {
+        
         PrevAnimationState = 0;
         MyEffects = animat.gameObject.GetComponent<effects>();
         animator = animat;
@@ -233,11 +234,11 @@ public struct AnimationsForPlayers
 
     public void RefreshAnimations(int state)
     {
-       
 
-        //Debug.Log(state + " - " + CurrentAnimationState + " - " + animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"));
 
-        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18 || PrevAnimationState == 22) && (/*state==1 || state==0*/ state < 2) )
+
+        /*
+        if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18 || PrevAnimationState == 22) && (state < 2) )
         {
             Idle();
         }
@@ -260,49 +261,6 @@ public struct AnimationsForPlayers
         {
             CurrentAnimationState = -2;
         }
-        
-
-        /*
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") && CurrentAnimationState != -2)
-        {
-            CurrentAnimationState = -2;
-        }
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("turning") && CurrentAnimationState != -1)
-        {
-            CurrentAnimationState = 0;
-        }
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("run") && CurrentAnimationState != 1)
-        {
-            CurrentAnimationState = 1;
-        }
-        */
-
-        /*
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && CurrentAnimationState != 0)
-        {
-            CurrentAnimationState = 0;
-        }
-        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && CurrentAnimationState != 1)
-        {
-            CurrentAnimationState = 1;
-        }
-        */
-        /*
-        if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && playercontrol.MyJoystick.Vertical <= -0.3f && CurrentAnimationState==1)
-        {
-            animator.Play("Runback");
-        } 
-        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Runback") || animator.GetCurrentAnimatorStateInfo(0).IsName("turning")) && playercontrol.MyJoystick.Vertical >= 0.3f && CurrentAnimationState == 1)
-        {
-            animator.Play("Run");
-        }
-        else if ((animator.GetCurrentAnimatorStateInfo(0).IsName("Run") || animator.GetCurrentAnimatorStateInfo(0).IsName("Runback")) && playercontrol.MyJoystick.Vertical < 0.3f && playercontrol.MyJoystick.Vertical > -0.3f && CurrentAnimationState == 1)
-        {
-            animator.Play("turning");
-        }
-        */
 
 
         //data control send to EFFECTS
@@ -496,6 +454,174 @@ public struct AnimationsForPlayers
         }
 
         PrevAnimationState = CurrentAnimationState;
+        */
+
+        if (CurrentAnimationState !=0 && (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && animator.GetCurrentAnimatorStateInfo(1).IsName("Idle1")))
+        {
+            CurrentAnimationState = 0;
+            Debug.Log("worked to 00000000000000");
+        }
+
+        if (state!=0)
+        {
+            Debug.Log(state + " - state          curr state - "  + CurrentAnimationState);
+        }
+
+        switch (state)
+        {
+            case -2:
+                if (CurrentAnimationState < 2)
+                {
+                    Runback();
+                }
+                break;
+            case -1:
+                if (CurrentAnimationState < 2)
+                {
+                    turning();
+                }
+                break;
+            case 0:
+                if (CurrentAnimationState < 2)
+                {
+                    Idle();
+                }
+                break;
+            case 1:
+                if (CurrentAnimationState < 2)
+                {
+                    Run();
+                }
+                break;
+            case 2:
+
+                if (!animator.GetCurrentAnimatorStateInfo(1).IsName("HitWith1H2"))
+                {
+                    HitWith1H();
+                }
+
+                break;
+            case 3:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("casting"))
+                {
+                    Casting();
+                }
+                break;
+            case 4:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("ReceiveDamage"))
+                {
+                    ReceiveDamage();
+                }
+                break;
+            case 5:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shoot spell"))
+                {
+                    ShootSpell();
+                }
+                break;
+            case 6:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Dodge"))
+                {
+                    Dodge();
+                }
+                break;
+            case 7:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Block"))
+                {
+                    Block();
+                }
+                break;
+            case 8:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned"))
+                {
+                    Stunned();
+                }
+                break;
+            case 9:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam"))
+                {
+                    ShieldSlam();
+                }
+                break;
+            case 10:
+                if (!animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn"))
+                {
+                    ShieldOn();
+                }
+                break;
+            case 11:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("alternative attack"))
+                {
+                    AltAttack();
+                }
+                break;
+            case 12:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("superior attack"))
+                {
+                    SuperAttack();
+                }
+                break;
+            case 13:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell"))
+                {
+                    ChannelingSpell();
+                }
+                break;
+            case 14:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("invisibility"))
+                {
+                    invisibility();
+                }
+                break;
+            case 15:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("hurricane"))
+                {
+                    hurricane();
+                }
+                break;
+            case 16:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("heroic leap"))
+                {
+                    heroicleap();
+                }
+                break;
+            case 17:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("fall down"))
+                {
+                    falldown();
+                }
+                break;
+            case 18:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("lying"))
+                {
+                    lying();
+                }
+                break;
+            case 19:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("get up"))
+                {
+                    getup();
+                }
+                break;
+            case 20:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("raise gun"))
+                {
+                    raise_gun();
+                }
+                break;
+            case 21:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shot gun"))
+                {
+                    shot_gun();
+                }
+                break;
+            case 22:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
+                {
+                    death();
+                }
+                break;
+        }
     }
 
     void Runback()
@@ -1203,7 +1329,7 @@ public class PlayerUI : MonoBehaviour
 
         float delta = 1 / (spell_time / 0.1f);
 
-        for (float i = spell_time; i > 0; i -= 0.1f)
+        for (float i = spell_time; i > 0; i -= 0.05f)
         {
             CastingBar.fillAmount -=delta;
             if (isShowStopCastingText)
@@ -1211,7 +1337,7 @@ public class PlayerUI : MonoBehaviour
                 CancelationText.gameObject.SetActive(true);
                 break;
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
 
         isCasting = false;

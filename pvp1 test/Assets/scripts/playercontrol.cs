@@ -301,6 +301,12 @@ public class playercontrol : MonoBehaviour
 
         //MY ANIMATIONS===========================================================        
         myanimator.RefreshAnimations(SendAndReceive.MyPlayerData.animation_id);
+        
+        //if (SendAndReceive.MyPlayerData.animation_id!=0)
+       // {
+         //   print(SendAndReceive.MyPlayerData.animation_id);
+       // }
+        
 
         //LATENCY
         if (latency_check == SendAndReceive.OrderReceived && isLatency)

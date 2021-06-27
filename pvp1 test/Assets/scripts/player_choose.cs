@@ -8,7 +8,7 @@ using TMPro;
 
 public class player_choose : MonoBehaviour
 {
-    public Button pl1, pl2, pl3, pl4, pl5, ChooseAnother, EnterTheGame;
+    public Button pl1, pl2, pl3, pl4, pl5, ChooseAnother, EnterTheGame, PVPTesting;
 
     public GameObject warr, mage, barb, rog, wiz;
 
@@ -57,6 +57,8 @@ public class player_choose : MonoBehaviour
         pl4.gameObject.SetActive(false);
         pl5.gameObject.SetActive(false);
 
+
+        PVPTesting.onClick.AddListener(PVPtesting);
         pl1.onClick.AddListener(p1);
         pl2.onClick.AddListener(p2);
         pl3.onClick.AddListener(p3);
@@ -161,6 +163,13 @@ public class player_choose : MonoBehaviour
         pl1.transform.GetChild(2).gameObject.SetActive(true);
 
     }
+
+
+    private void PVPtesting()
+    {
+        SceneManager.LoadScene("plchoose");
+    }
+
 
     private void base_reset()
     {

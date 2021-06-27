@@ -8,7 +8,7 @@ public class players : MonoBehaviour
 {
     
     public Transform PlayerTransform;    
-    private AnimationsForPlayers PlayerAnimator;    
+    public AnimationsForPlayers PlayerAnimator;    
     private TextMeshProUGUI TempText1;
     public int NumberInSendAndReceive;
     public int previousstate;
@@ -27,7 +27,8 @@ public class players : MonoBehaviour
     float rotAngle, sighAngle;
 
     // Start is called before the first frame update
-    void OnEnable()
+    //void OnEnable()
+    private void Start()
     {        
         PlayerTransform = this.GetComponent<Transform>();
         PlayerAnimator = new AnimationsForPlayers(this.GetComponent<Animator>(), this.GetComponent<AudioSource>());

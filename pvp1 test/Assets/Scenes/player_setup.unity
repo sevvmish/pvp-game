@@ -6629,6 +6629,12 @@ MonoBehaviour:
   - 0.1
   - 0.1
   - 0.13
+  _after_s_end:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!1 &573999185
 GameObject:
   m_ObjectHideFlags: 0
