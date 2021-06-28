@@ -28,15 +28,15 @@ public class players : MonoBehaviour
 
     // Start is called before the first frame update
     //void OnEnable()
-    private void Start()
+
+
+    private void OnEnable()
     {        
         PlayerTransform = this.GetComponent<Transform>();
         PlayerAnimator = new AnimationsForPlayers(this.GetComponent<Animator>(), this.GetComponent<AudioSource>());
         TempText1 = GameObject.Find("OtherHP").GetComponent<TextMeshProUGUI>();
         PlayerTransform.position = Vector3.zero;
-        PlayerEffects = this.GetComponent<effects>();
-
-        
+        PlayerEffects = this.GetComponent<effects>();        
     }
 
     public void CreateUI()

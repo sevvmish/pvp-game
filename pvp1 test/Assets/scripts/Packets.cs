@@ -211,6 +211,7 @@ public struct AnimationsForPlayers
     private AudioClip BasicWeaponHit;
     private effects MyEffects;
     private int PrevAnimationState;
+    private bool isIdle0, isIdle1;
 
     public int CurrentAnimationState;
 
@@ -224,6 +225,8 @@ public struct AnimationsForPlayers
         CurrentAnimationState = 0;
         //BasicMovement = null;
         BasicWeaponHit = null;
+        isIdle0 = false;
+        isIdle1 = false;
 
         if (general.MainPlayerClass == 1)
         {
@@ -456,6 +459,39 @@ public struct AnimationsForPlayers
         PrevAnimationState = CurrentAnimationState;
         */
 
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
+            isIdle0 = true;
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Idle1"))
+        {
+            isIdle1 = true;
+        }
+
+
+        if ((CurrentAnimationState == 3 || CurrentAnimationState == 8 || CurrentAnimationState == 10 || CurrentAnimationState == 13 || CurrentAnimationState == 15 || CurrentAnimationState == 18 || CurrentAnimationState == 22) && (state < 2))
+        {
+            Idle();
+        }
+
+        if (isIdle0 && state==1)
+        {
+            animator.StopPlayback();
+            animator.Play("Run");
+        }
+
+        if (state==0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && isIdle1)
+        {
+            animator.StopPlayback();
+            animator.Play("Idle");
+        }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell") && state!=13)
+        {
+            animator.StopPlayback();
+            animator.Play("Idle");
+        }
+
         if (CurrentAnimationState !=0 && (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && animator.GetCurrentAnimatorStateInfo(1).IsName("Idle1")))
         {
             CurrentAnimationState = 0;
@@ -464,7 +500,7 @@ public struct AnimationsForPlayers
 
         if (state!=0)
         {
-            Debug.Log(state + " - state          curr state - "  + CurrentAnimationState);
+            //Debug.Log(state + " - state          curr state - "  + CurrentAnimationState);
         }
 
         switch (state)
@@ -638,7 +674,7 @@ public struct AnimationsForPlayers
 
     void Idle()
     {
-        
+        animator.StopPlayback();
         animator.Play("Idle");
         animator.Play("Idle1");
         CurrentAnimationState = 0;
@@ -654,12 +690,10 @@ public struct AnimationsForPlayers
 
     void HitWith1H()
     {
-        
+        animator.StopPlayback();
         animator.Play("HitWith1H2");
         CurrentAnimationState = 2;
-        MyAudioSource.loop = false;
-        MyAudioSource.clip = BasicWeaponHit;
-        MyAudioSource.Play();
+        
     }
 
     void Casting()
