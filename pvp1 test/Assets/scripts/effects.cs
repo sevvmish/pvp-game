@@ -211,6 +211,7 @@ public class effects : MonoBehaviour
             }
         }
 
+       
         
         
         if (isCasting)
@@ -285,7 +286,7 @@ public class effects : MonoBehaviour
 
     public void RegisterConds(Conds SomeConds)
     {
-
+       
         if (!SomeConds.isChecked)
         {
             

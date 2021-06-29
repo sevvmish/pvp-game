@@ -35,7 +35,7 @@ public class playercontrol : MonoBehaviour
     private effects MyEffects;
 
     //conditions of myPlayer
-    private ConditionsAnalys MyConds = new ConditionsAnalys();
+    public static ConditionsAnalys MyConds = new ConditionsAnalys();
 
     //main player transform
     private Transform PlayerTransform;
@@ -607,7 +607,7 @@ public class playercontrol : MonoBehaviour
 
                     if (!MyUI.isCasting)
                     {
-                        StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i].cond_id, MyConds.curr_conds[i].spell_index, MyConds.curr_conds[i].cond_time));
+                        StartCoroutine(MyUI.AddCasting(MyConds.curr_conds[i]));
                         MyConds.curr_conds[i].isChecked = true;
                     }
                     if (MyConds.curr_conds[i].cond_message == "CANCELED")

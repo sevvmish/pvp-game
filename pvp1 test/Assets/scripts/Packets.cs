@@ -459,6 +459,8 @@ public struct AnimationsForPlayers
         PrevAnimationState = CurrentAnimationState;
         */
 
+
+
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
             isIdle0 = true;
         }
@@ -474,7 +476,15 @@ public struct AnimationsForPlayers
             Idle();
         }
 
+        
         if (isIdle0 && state==1)
+        {
+            animator.StopPlayback();
+            animator.Play("Run");
+        }
+        
+
+        if (isIdle0 && animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn") && Math.Abs(playercontrol.MyJoystick.Horizontal)>0) //
         {
             animator.StopPlayback();
             animator.Play("Run");
@@ -486,7 +496,14 @@ public struct AnimationsForPlayers
             animator.Play("Idle");
         }
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell") && state!=13)
+        if (
+            (animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell") && state!=13) ||
+            (animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && state != 3) ||
+            //(animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && state != 8) ||
+            (animator.GetCurrentAnimatorStateInfo(0).IsName("ShieldOn") && state != 10) ||            
+            (animator.GetCurrentAnimatorStateInfo(0).IsName("hurricane") && state != 15) ||
+            (animator.GetCurrentAnimatorStateInfo(0).IsName("lying") && state != 18)
+            )
         {
             animator.StopPlayback();
             animator.Play("Idle");
@@ -495,13 +512,15 @@ public struct AnimationsForPlayers
         if (CurrentAnimationState !=0 && (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && animator.GetCurrentAnimatorStateInfo(1).IsName("Idle1")))
         {
             CurrentAnimationState = 0;
-            Debug.Log("worked to 00000000000000");
+            //Debug.Log("worked to 00000000000000");
         }
 
-        if (state!=0)
+        /*
+        if (state>2)
         {
-            //Debug.Log(state + " - state          curr state - "  + CurrentAnimationState);
+            Debug.Log(state + " - state          curr state - "  + CurrentAnimationState);
         }
+        */
 
         switch (state)
         {
@@ -586,7 +605,7 @@ public struct AnimationsForPlayers
                 }
                 break;
             case 11:
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("alternative attack"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("alternative attack") && CurrentAnimationState!=11)
                 {
                     AltAttack();
                 }
@@ -616,7 +635,7 @@ public struct AnimationsForPlayers
                 }
                 break;
             case 16:
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("heroic leap"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("heroic leap") && CurrentAnimationState!=16)
                 {
                     heroicleap();
                 }
@@ -658,6 +677,45 @@ public struct AnimationsForPlayers
                 }
                 break;
         }
+
+        //data control send to EFFECTS
+        //STUNNED
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
+        {
+            MyEffects.isStunned = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && MyEffects.isStunned)
+        {
+            MyEffects.isStunned = false;
+        }
+        //SHIELD SLAM
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam") && !MyEffects.isShieldSlam)
+        {
+            MyEffects.isShieldSlam = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam") && MyEffects.isShieldSlam)
+        {
+            MyEffects.isShieldSlam = false;
+        }
+        //CASTING
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && !MyEffects.isCasting)
+        {
+            MyEffects.isCasting = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && MyEffects.isCasting)
+        {
+            MyEffects.isCasting = false;
+        }
+        //channeling
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell") && !MyEffects.isChanneling)
+        {
+            MyEffects.isChanneling = true;
+        }
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell") && MyEffects.isChanneling)
+        {
+            MyEffects.isChanneling = false;
+        }
+
     }
 
     void Runback()
@@ -1352,9 +1410,10 @@ public class PlayerUI : MonoBehaviour
         CancelationText.gameObject.SetActive(false);
     }
 
-    public IEnumerator AddCasting(string castID, int spell_ind, float spell_time)
+    public IEnumerator AddCasting(Conds data)
     {
-            
+        int spell_ind = data.spell_index;
+        float spell_time = data.cond_time;
         isCasting = true;
         CastingBar.gameObject.SetActive(true);
         CastingSpellImage.gameObject.SetActive(true);
@@ -1363,16 +1422,27 @@ public class PlayerUI : MonoBehaviour
 
         float delta = 1 / (spell_time / 0.1f);
 
+        
         for (float i = spell_time; i > 0; i -= 0.05f)
         {
-            CastingBar.fillAmount -=delta;
+            //CastingBar.fillAmount -=delta;
+            CastingBar.fillAmount = data.cond_time / spell_time;
+
             if (isShowStopCastingText)
             {
                 CancelationText.gameObject.SetActive(true);
                 break;
             }
+
+            if (data.cond_time<0.1f)
+            {
+                break;
+            }
             yield return new WaitForSeconds(0.05f);
         }
+        
+
+       
 
         isCasting = false;
         CastingBar.gameObject.SetActive(false);
@@ -1582,7 +1652,7 @@ public class PlayerUI : MonoBehaviour
                     {
                         break;
                     }
-                } while (data.cond_time > 0);
+                } while (data.cond_time > 0.4f);
 
                 yield return new WaitForSeconds(0.5f);
 
