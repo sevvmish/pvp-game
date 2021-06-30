@@ -80,7 +80,7 @@ public class SpellDescription : MonoBehaviour
             SpellDescr.text = CurrentSpell.Spell1_name;
             SpellDescr.fontSize = 28;
             SpellDescr.fontStyle = FontStyles.Bold;
-            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
+            ManaDescr.text = languages.lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 22;
         } 
         else
@@ -88,7 +88,7 @@ public class SpellDescription : MonoBehaviour
             SpellIcon.sprite = CurrentSpell.Spell1_icon;
             SpellDescr.text = CurrentSpell.Spell1_full_description;
             SpellDescr.fontSize = 18;
-            ManaDescr.text = lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
+            ManaDescr.text = languages.lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 17;
         }
     }
@@ -430,10 +430,10 @@ public class PVPStatisticsPanel: MonoBehaviour
         print(panel.GetComponent<RectTransform>().sizeDelta.x + " - " + WholePanel.GetComponent<RectTransform>().sizeDelta.y);
         panel.GetComponent<RectTransform>().sizeDelta = new Vector2(420, 150 +(_size-1)*45);
 
-        panel.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{lang.PVPStatsTeamName} {team}:";
+        panel.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{languages.lang.PVPStatsTeamName} {team}:";
         panel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = score.ToString();
-        panel.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = lang.PVPStatsPlayerName;
-        panel.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = lang.PVPStatsPlayerScore;
+        panel.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = languages.lang.PVPStatsPlayerName;
+        panel.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = languages.lang.PVPStatsPlayerScore;
                
         for (int i = 0; i < current_players.Count; i++)
         {

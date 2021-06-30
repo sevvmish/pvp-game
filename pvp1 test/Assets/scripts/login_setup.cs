@@ -39,15 +39,15 @@ public class login_setup : MonoBehaviour
         Camera.main.aspect = 16f / 9f;
         NewLogOrGuest.gameObject.SetActive(false);
         CanvasLogin.gameObject.SetActive(false);
-
-        enterasguesttext.text = lang.EnterAsGuest;
-        createnewloginpasstext.text = lang.CreateNewLoginPass;
-        Createnewtext.text = lang.CreateNewText;
-        Logintext.text = lang.LoginText;
-        //ConnError.text = lang.ConnectionErrorText;
-        //AwaitingText.text = lang.AwaitingText;
-        TheLoginText.text = lang.TheLoginText;
-        ThePasswordText.text = lang.ThePasswordText;
+        
+        enterasguesttext.text = languages.lang.EnterAsGuest;
+        createnewloginpasstext.text = languages.lang.CreateNewLoginPass;
+        Createnewtext.text = languages.lang.CreateNewText;
+        Logintext.text = languages.lang.LoginText;
+        //ConnError.text = languages.lang.ConnectionErrorText;
+        //AwaitingText.text = languages.lang.AwaitingText;
+        TheLoginText.text = languages.lang.TheLoginText;
+        ThePasswordText.text = languages.lang.ThePasswordText;
         
 
         

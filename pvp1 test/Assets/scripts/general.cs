@@ -53,7 +53,7 @@ public class general
     public static int MainPlayerTeam;
     public const float Tick = 0.05f;
 
-
+    
 
     public static void SetSessionData()
     {
@@ -452,68 +452,68 @@ public static class codes
         switch (CodeResult)
         {
             case "wll":
-                result = lang.wlltext; //long login
+                result = languages.lang.wlltext; //long login
                 break;
             case "wds":
-                result = lang.wdstext; //wrong symbols
+                result = languages.lang.wdstext; //wrong symbols
                 break;
             case "wlp":
-                result = lang.wlptext; //long pass
+                result = languages.lang.wlptext; //long pass
                 break;
             case "uae":
-                result = lang.uaetext; //user allready exists
+                result = languages.lang.uaetext; //user allready exists
                 break;
             case "ecu":
-                result = lang.ecutext; // err creating login
+                result = languages.lang.ecutext; // err creating login
                 break;
             case "ude":
-                result = lang.udetext; //no user with such name
+                result = languages.lang.udetext; //no user with such name
                 break;
             case "wp":
-                result = lang.wptext; //wrong pass
+                result = languages.lang.wptext; //wrong pass
                 break;
             case "load":
-                result = lang.loadtext; //loading...
+                result = languages.lang.loadtext; //loading...
                 break;
 
             case "egt":
-                result = lang.egttext; //err getting ticket
+                result = languages.lang.egttext; //err getting ticket
                 break;
             case "err":
-                result = lang.errtext; //just err
+                result = languages.lang.errtext; //just err
                 break;
             case "con_err":
-                result = lang.conerrtext;
+                result = languages.lang.conerrtext;
                 break;
             case "nst":
-                result = lang.nsttext ; //loading...
+                result = languages.lang.nsttext ; //loading...
                 break;
             case "wcn":
-                result = lang.wcntext ; //loading...
+                result = languages.lang.wcntext ; //loading...
                 break;
             case "cae":
-                result = lang.caetext; //loading...
+                result = languages.lang.caetext; //loading...
                 break;
             case "tae":
-                result = lang.taetext ; //loading...
+                result = languages.lang.taetext ; //loading...
                 break;
             case "nd":
-                result = lang.errtext; //loading...
+                result = languages.lang.errtext; //loading...
                 break;
             case "ns":
-                result = lang.nsctext; //loading...
+                result = languages.lang.nsctext; //loading...
                 break;
             case "eit":
-                result = lang.eittext; //loading...
+                result = languages.lang.eittext; //loading...
                 break;
             case "nss":
-                result = lang.nsstext; //loading...
+                result = languages.lang.nsstext; //loading...
                 break;
             case "rsn":
-                result = lang.nsstext; //loading...
+                result = languages.lang.nsstext; //loading...
                 break;
             case "dbe":
-                result = lang.dbetext; //loading...
+                result = languages.lang.dbetext; //loading...
                 break;
 
             default:

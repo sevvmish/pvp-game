@@ -41,8 +41,8 @@ public class player_choose : MonoBehaviour
         Camera.main.aspect = 16f / 9f;
 
         
-        EnterTheGameText.text = lang.EnterTheGameText;
-        ChooseAnotherText.text = lang.ChooseAnotherText;
+        EnterTheGameText.text = languages.lang.EnterTheGameText;
+        ChooseAnotherText.text = languages.lang.ChooseAnotherText;
         //ConnError.text = lang.ConnectionErrorText;
 
         //ConnectionError.SetActive(false);

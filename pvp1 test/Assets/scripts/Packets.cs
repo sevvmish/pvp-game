@@ -1396,7 +1396,7 @@ public class PlayerUI : MonoBehaviour
         CastingBar.gameObject.SetActive(false);
         CastingSpellImage.gameObject.SetActive(false);
         CancelationText.gameObject.SetActive(false);
-        CancelationText.text = lang.Canceled;
+        CancelationText.text = languages.lang.Canceled;
         UIPosition = AllObject.GetComponent<RectTransform>();
         ResetAllConds();
     }

@@ -202,22 +202,22 @@ public class player_setup : MonoBehaviour
         }
         
 
-        BackTo.text = lang.back;
-
-        SpeedTextText.text = lang.SpeedText;
-        HealthTextText.text = lang.HealthText;
-        HealthRegenTextText.text = lang.HealthRegenText;
-        EnergyRegenTextText.text = lang.EnergyRegenText;
-        WeaponAttackTextText.text = lang.WeaponAttackText;
-        HitPowerTextText.text = lang.HitPowerText;
-        ArmorTextText.text = lang.ArmorText;
-        ShieldBlockTextText.text = lang.ShieldBlockText;
-        MagicResistanceTextText.text = lang.MagicResistanceText;
-        DodgeTextText.text = lang.DodgeText;
-        CastSpeedTextText.text = lang.CastSpeedText;
-        MeleeCritTextText.text = lang.MeleeCritText;
-        MagicCritTextText.text = lang.MagicCritText;
-        SpellPowerTextText.text = lang.SpellPowerText;
+        BackTo.text = languages.lang.back;
+        
+        SpeedTextText.text = languages.lang.SpeedText;
+        HealthTextText.text = languages.lang.HealthText;
+        HealthRegenTextText.text = languages.lang.HealthRegenText;
+        EnergyRegenTextText.text = languages.lang.EnergyRegenText;
+        WeaponAttackTextText.text = languages.lang.WeaponAttackText;
+        HitPowerTextText.text = languages.lang.HitPowerText;
+        ArmorTextText.text = languages.lang.ArmorText;
+        ShieldBlockTextText.text = languages.lang.ShieldBlockText;
+        MagicResistanceTextText.text = languages.lang.MagicResistanceText;
+        DodgeTextText.text = languages.lang.DodgeText;
+        CastSpeedTextText.text = languages.lang.CastSpeedText;
+        MeleeCritTextText.text = languages.lang.MeleeCritText;
+        MagicCritTextText.text = languages.lang.MagicCritText;
+        SpellPowerTextText.text = languages.lang.SpellPowerText;
 
         SpellAttrInside = GameObject.Find("spell attr inside").GetComponent<RectTransform>();
 
@@ -1283,59 +1283,59 @@ public class player_setup : MonoBehaviour
             switch (HintLog)
             {
                 case "sp":
-                    HintText.text = lang.SpeedTextHint;
+                    HintText.text = languages.lang.SpeedTextHint;
                     break;
 
                 case "h":
-                    HintText.text = lang.HealthTextHint;
+                    HintText.text = languages.lang.HealthTextHint;
                     break;
 
                 case "hr":
-                    HintText.text = lang.HealthRegenTextHint;
+                    HintText.text = languages.lang.HealthRegenTextHint;
                     break;
 
                 case "er":
-                    HintText.text = lang.EnergyRegenTextHint;
+                    HintText.text = languages.lang.EnergyRegenTextHint;
                     break;
 
                 case "ar":
-                    HintText.text = lang.ArmorTextHint;
+                    HintText.text = languages.lang.ArmorTextHint;
                     break;
 
                 case "do":
-                    HintText.text = lang.DodgeTextHint;
+                    HintText.text = languages.lang.DodgeTextHint;
                     break;
 
                 case "mr":
-                    HintText.text = lang.MagicResistanceTextHint;
+                    HintText.text = languages.lang.MagicResistanceTextHint;
                     break;
 
                 case "sb":
-                    HintText.text = lang.ShieldBlockTextHint;
+                    HintText.text = languages.lang.ShieldBlockTextHint;
                     break;
 
                 case "cs":
-                    HintText.text = lang.CastSpeedTextHint;
+                    HintText.text = languages.lang.CastSpeedTextHint;
                     break;
 
                 case "spw":
-                    HintText.text = lang.SpellPowerTextHint;
+                    HintText.text = languages.lang.SpellPowerTextHint;
                     break;
 
                 case "mc":
-                    HintText.text = lang.MagicCritTextHint;
+                    HintText.text = languages.lang.MagicCritTextHint;
                     break;
 
                 case "wa":
-                    HintText.text = lang.WeaponAttackTextHint;
+                    HintText.text = languages.lang.WeaponAttackTextHint;
                     break;
 
                 case "hp":
-                    HintText.text = lang.HitPowerTextHint;
+                    HintText.text = languages.lang.HitPowerTextHint;
                     break;
 
                 case "melc":
-                    HintText.text = lang.MeleeCritTextHint;
+                    HintText.text = languages.lang.MeleeCritTextHint;
                     break;
 
             }

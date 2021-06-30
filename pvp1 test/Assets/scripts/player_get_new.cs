@@ -87,13 +87,13 @@ public class player_get_new : MonoBehaviour
         OkOnChoosing.onClick.AddListener(OkOnChoose);
         back_button.onClick.AddListener(Back);
 
-        enter_char_name_text.text = lang.EnterCharName;
+        enter_char_name_text.text = languages.lang.EnterCharName;
         
         
         
         
-        createnewchartext.text = lang.CreateNewCharacter;
-        backtext.text = lang.back;
+        createnewchartext.text = languages.lang.CreateNewCharacter;
+        backtext.text = languages.lang.back;
 
 
         if (existing_chars.Count > 0)
@@ -212,33 +212,33 @@ public class player_get_new : MonoBehaviour
         switch (CurrentPlayerNumber)
         {
             case 1:
-                char_class_name_in_discr.text = lang.WarriorText;
-                char_descr.text = lang.WarriorText_descr;
-                char_conspros.text = lang.WarriorText_conspros;
+                char_class_name_in_discr.text = languages.lang.WarriorText;
+                char_descr.text = languages.lang.WarriorText_descr;
+                char_conspros.text = languages.lang.WarriorText_conspros;
                 pl1.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 2:
-                char_class_name_in_discr.text = lang.ElemText;
-                char_descr.text = lang.ElemText_descr;
-                char_conspros.text = lang.ElemText_conspros;
+                char_class_name_in_discr.text = languages.lang.ElemText;
+                char_descr.text = languages.lang.ElemText_descr;
+                char_conspros.text = languages.lang.ElemText_conspros;
                 pl2.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 3:
-                char_class_name_in_discr.text = lang.BarbarText;
-                char_descr.text = lang.BarbarText_descr;
-                char_conspros.text = lang.BarbarText_conspros;
+                char_class_name_in_discr.text = languages.lang.BarbarText;
+                char_descr.text = languages.lang.BarbarText_descr;
+                char_conspros.text = languages.lang.BarbarText_conspros;
                 pl3.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 4:
-                char_class_name_in_discr.text = lang.RogText;
-                char_descr.text = lang.RogText_descr;
-                char_conspros.text = lang.RogText_conspros;
+                char_class_name_in_discr.text = languages.lang.RogText;
+                char_descr.text = languages.lang.RogText_descr;
+                char_conspros.text = languages.lang.RogText_conspros;
                 pl4.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case 5:
-                char_class_name_in_discr.text = lang.WizText;
-                char_descr.text = lang.WizText_descr;
-                char_conspros.text = lang.WizText_conspros;
+                char_class_name_in_discr.text = languages.lang.WizText;
+                char_descr.text = languages.lang.WizText_descr;
+                char_conspros.text = languages.lang.WizText_conspros;
                 pl5.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 break;
 

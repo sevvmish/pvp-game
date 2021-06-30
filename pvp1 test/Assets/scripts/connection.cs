@@ -114,7 +114,7 @@ public class connection : MonoBehaviour
 
             if (raw_data_received.ToString() != "" && raw_data_received.ToString() != null)
             {                
-                print(raw_data_received.ToString());
+                //print(raw_data_received.ToString());
                 RawPacketsProcess(raw_data_received.ToString());
             }
 
