@@ -286,8 +286,26 @@ public class effects : MonoBehaviour
 
     public void RegisterConds(Conds SomeConds)
     {
-       
-        if (!SomeConds.isChecked)
+
+        if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58 &&  !FrozenSpikes.activeSelf)
+        {
+            //StartCoroutine(TurnOnSomeEffect(FrozenSpikes, SomeConds.cond_time, 0));
+            //StartCoroutine(PlaySomeSound(BuffSound, 0, false));
+            FrozenSpikes.SetActive(true);
+
+        }
+        else if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58 && (SomeConds.cond_message == "CANCELED" || SomeConds.cond_time==0) && FrozenSpikes.activeSelf)
+        {
+            //StartCoroutine(TurnOFFSomeEffect(FrozenSpikes, 0.2f));
+            FrozenSpikes.SetActive(false);
+            SomeConds.isToDelete = true;
+        }
+
+
+
+
+        //======================================================================================================================
+        if (1==1) //!SomeConds.isChecked
         {
             
             if (SomeConds.cond_type == "cs")
@@ -365,23 +383,19 @@ public class effects : MonoBehaviour
                 if (DB.GetSpellByNumber(SomeConds.spell_index).spell_type == spellsIDs.spell_types.direct_melee)
                 {
                     StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
-
+                    SomeConds.isToDelete = true;
                 }
                 else if (DB.GetSpellByNumber(SomeConds.spell_index).spell_type == spellsIDs.spell_types.direct_magic)
                 {
 
                     StartCoroutine(PlaySomeSound(HitWith1HSword, 0, false));
                     StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
+                    SomeConds.isToDelete = true;
                 }
 
             }
 
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58)
-            {                
-                StartCoroutine(TurnOnSomeEffect(FrozenSpikes, SomeConds.cond_time, 0));
-                //StartCoroutine(PlaySomeSound(BuffSound, 0, false));
-
-            }
+            
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 997)
             {
@@ -738,7 +752,9 @@ public class effects : MonoBehaviour
         while (isSpellShooting);
         SpellSource.SetActive(false);
         Destroy(SpellSource);
+        CurrConditions.isToDelete = true;
         CurrentConds.Remove(CurrConditions);
+
     }
 
     IEnumerator SpellShooting52(Conds CurrConditions)

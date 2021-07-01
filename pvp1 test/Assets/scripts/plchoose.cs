@@ -9,6 +9,7 @@ public class plchoose : MonoBehaviour
     public Button pl1, pl2, pl2_3, pl2_4, pl2_5, pl3, pl4, pl5, pl6, pl7, pl8;
 
     private int HowManyPlayers = 5;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -553,6 +553,8 @@ public class playercontrol : MonoBehaviour
 
         for (int i = 0; i < MyConds.curr_conds.Count; i++)
         {
+            MyEffects.RegisterConds(MyConds.curr_conds[i]);
+
             if (!MyConds.curr_conds[i].isChecked)
             {
                 if (MyConds.curr_conds[i].spell_index==1007 && !general.isRestarting)
@@ -563,7 +565,7 @@ public class playercontrol : MonoBehaviour
                     StartCoroutine(RestartLevel(MyConds.curr_conds[i]));
                 }
 
-                MyEffects.RegisterConds(MyConds.curr_conds[i]);
+                //MyEffects.RegisterConds(MyConds.curr_conds[i]);
                 
                 //if (MyConds.curr_conds[i].cond_type == "cs")
                 //{
@@ -701,12 +703,12 @@ public class playercontrol : MonoBehaviour
         {
             for (int iii = 0; iii < OtherGamers[ii].Conds.curr_conds.Count; iii++)
             {
-                
+                OtherGamers[ii].PlayerEffects.RegisterConds(OtherGamers[ii].Conds.curr_conds[iii]);
 
                 if (!OtherGamers[ii].Conds.curr_conds[iii].isChecked)
                 {
 
-                    OtherGamers[ii].PlayerEffects.RegisterConds(OtherGamers[ii].Conds.curr_conds[iii]);
+                    //OtherGamers[ii].PlayerEffects.RegisterConds(OtherGamers[ii].Conds.curr_conds[iii]);
 
                     
                     if (OtherGamers[ii].Conds.curr_conds[iii].cond_type == "co")

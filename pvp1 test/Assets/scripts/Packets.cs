@@ -25,6 +25,7 @@ public class Conds
     public bool isChecked;
     public float coord_x, coord_z;
     public string [] additional_data;
+    public bool isToDelete;
 }
 
 
@@ -44,6 +45,15 @@ public class ConditionsAnalys
             {
                 curr_conds.Remove(curr_conds[0]);
             }
+        }
+
+        for (int i = 0; i < curr_conds.Count; i++)
+        {
+            if (curr_conds[i].isToDelete)
+            {
+                curr_conds.Remove(curr_conds[i]);
+            }
+            
         }
 
 
@@ -1648,7 +1658,7 @@ public class PlayerUI : MonoBehaviour
                         }
                     }
 
-                    if (data.cond_time == 0 || isRestarting)
+                    if (data.cond_time == 0 || isRestarting || data.cond_message== "CANCELED")
                     {
                         break;
                     }
