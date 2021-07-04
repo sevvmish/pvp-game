@@ -16,7 +16,7 @@ public class effects : MonoBehaviour
     private List<Conds> CurrentConds = new List<Conds>();
     private List<Conds> CastingSpell = new List<Conds>();
     private List<Vector2> CastingCoords = new List<Vector2>();
-
+    public static HashSet<string> IDAllreadyUsed = new HashSet<string>();
     private List<GameObject> Cancels = new List<GameObject>();
 
     private bool isCheckingFrozenSpilesSpell58;
@@ -27,7 +27,7 @@ public class effects : MonoBehaviour
     private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, StrafeEff, StunScreenEffect;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, FrozenSpikesBroken, StrafeEff, StunScreenEffect;
 
     //warr 1 effects
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff, RocksEff;
@@ -35,8 +35,7 @@ public class effects : MonoBehaviour
     //mage 1 effects
     public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff, IceNova;
     private ObjectPooling FireSteps;
-    private AudioClip FrostTrap;
-
+    
 
     //barbarian 1 effects
     public GameObject SplashEffSimpleHit;
@@ -98,6 +97,8 @@ public class effects : MonoBehaviour
         VFXRespPlace = GameObject.Find("OtherPlayers").transform;        
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
 
+        IDAllreadyUsed.Clear();
+
         if (PlayerSessionDataOrder == 0)
         {
             StunScreenEffect = Instantiate(Resources.Load<GameObject>("prefabs/StunScreenEff"), Vector3.zero, Quaternion.identity, GameObject.Find("Canvas").transform);
@@ -109,6 +110,7 @@ public class effects : MonoBehaviour
         BloodLossEff.SetActive(false);
         ExplosionFireBall.SetActive(false);
         FrozenSpikes.SetActive(false);
+        FrozenSpikesBroken.SetActive(false);
         StrafeEff.SetActive(false);
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
@@ -144,8 +146,7 @@ public class effects : MonoBehaviour
             FireStepEff.SetActive(false);
             IceNova.SetActive(false);
 
-            FrostTrap = Resources.Load<AudioClip>("sounds/frost nova");
-            
+                       
         }
 
         if (MyPlayerClass == 3)
@@ -200,7 +201,7 @@ public class effects : MonoBehaviour
             if (!StunEffect.activeSelf)
             {
                 StunEffect.SetActive(true);
-                
+                StunScreenEffect.SetActive(true);
             }
         } 
         else
@@ -208,6 +209,7 @@ public class effects : MonoBehaviour
             if (StunEffect.activeSelf)
             {
                 StunEffect.SetActive(false);
+                StunScreenEffect.SetActive(false);
             }
         }
 
@@ -225,16 +227,13 @@ public class effects : MonoBehaviour
             //casting effects MAGE 1
             if (MyPlayerClass == 2)
             {
-                
-                //if (CurrentConds[CurrentConds.Count-1].spell_index == 51)
-                //{
-
-                    if (!CastingEffFireHandL.activeSelf)
-                    {
-                        CastingEffFireHandL.SetActive(true);
-                        CastingEffFireHandR.SetActive(true);
-                    }
-                //}
+               
+                if (!CastingEffFireHandL.activeSelf)
+                {
+                    CastingEffFireHandL.SetActive(true);
+                    CastingEffFireHandR.SetActive(true);
+                }
+               
             }
 
 
@@ -286,28 +285,12 @@ public class effects : MonoBehaviour
 
     public void RegisterConds(Conds SomeConds)
     {
-
-        if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58 &&  !FrozenSpikes.activeSelf)
-        {
-            //StartCoroutine(TurnOnSomeEffect(FrozenSpikes, SomeConds.cond_time, 0));
-            //StartCoroutine(PlaySomeSound(BuffSound, 0, false));
-            FrozenSpikes.SetActive(true);
-
-        }
-        else if (SomeConds.cond_type == "co" && SomeConds.spell_index == 58 && (SomeConds.cond_message == "CANCELED" || SomeConds.cond_time==0) && FrozenSpikes.activeSelf)
-        {
-            //StartCoroutine(TurnOFFSomeEffect(FrozenSpikes, 0.2f));
-            FrozenSpikes.SetActive(false);
-            SomeConds.isToDelete = true;
-        }
-
-
-
+       
 
         //======================================================================================================================
         if (1==1) //!SomeConds.isChecked
         {
-            
+            /*
             if (SomeConds.cond_type == "cs")
             {
                 bool isOK = true;
@@ -364,19 +347,120 @@ public class effects : MonoBehaviour
                 }
 
             }
+            */
 
-
-
-            switch (SomeConds.cond_bulk)
+            //===========================
+            if (SomeConds.cond_type=="co" && !SomeConds.isChecked)
             {
+                if (SomeConds.spell_index==3)
+                {
+                    StartCoroutine(TurnOnSomeEffect(BuffEff, 6f, 0));
+                    StartCoroutine(PlaySomeSound(BuffSound, 0, false));
+                }
+            }
+            //===========================
+            if (SomeConds.cond_type == "dt" && !SomeConds.isChecked)
+            {
+                if ((SomeConds.spell_index == 2 || SomeConds.spell_index == 7 || SomeConds.spell_index == 8) && SomeConds.damage_or_heal > 0)
+                {
+                    StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f, 0));
+                    StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
+                }
 
-                case "me-b":
+                if (SomeConds.spell_index == 4 || SomeConds.spell_index == 9) 
+                {
+                    StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));
+                }
 
-                    if (MyPlayerClass == 1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f, 0));
+                if (SomeConds.spell_index == 51 || SomeConds.spell_index == 53)
+                {
+                    StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
+                }
 
-                    break;
+                if (!IDAllreadyUsed.Contains(SomeConds.cond_id)) StartCoroutine(ToDelete(SomeConds, 1f));
             }
 
+
+
+            //conditions and casting
+            if (!IDAllreadyUsed.Contains(SomeConds.cond_id)) // && ((SomeConds.cond_time>0.2f && SomeConds.cond_type=="co") || (SomeConds.cond_type == "ca"))
+            {               
+                IDAllreadyUsed.Add(SomeConds.cond_id);
+
+                //=============================
+                switch (SomeConds.spell_index)
+                {                    
+                    case 4:                        
+                        if (SomeConds.cond_type == "ca") StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, SomeConds.cond_time, 0));
+                        break;
+
+                    case 5:
+                        if (SomeConds.cond_type == "co") StartCoroutine(Condition_5(SomeConds));
+                        break;
+
+                    case 9:
+                        if (SomeConds.cond_type == "co") StartCoroutine(TurnOnSomeEffect(RocksEff, 3f, 0));
+                        break;
+
+                    case 51:
+                        if (SomeConds.cond_type=="cs") StartCoroutine(SpellShooting51(SomeConds));
+                        break;
+
+                    case 52:
+                        if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting52(SomeConds));
+                        break;
+
+                    case 53:
+                        if (SomeConds.cond_type == "co") StartCoroutine(Condition_53(SomeConds));
+                        break;
+
+                    case 54:
+                        if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting54(SomeConds));
+                        break;
+
+                    case 55:
+                        if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting55(SomeConds));
+                        break;
+
+                    case 58:
+                        if (SomeConds.cond_type == "co") StartCoroutine(Condition_58(SomeConds));
+                        break;
+
+                    case 201:
+                        if (SomeConds.cond_type == "ca") StartCoroutine(StandartCasting(SomeConds, new List<GameObject>() { ChargeDeathBeam }));
+                       
+                        if (SomeConds.cond_type == "co") StartCoroutine(StandartCasting(SomeConds, new List<GameObject>() { DeathBeam }));
+                        break;
+
+                    case 202:
+                        if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting202(SomeConds));
+                        break;
+
+                    case 997:
+                        if (SomeConds.cond_type == "co") StartCoroutine(TurnOnSomeEffect(StrafeEff, 0.5f, 0));
+                        IDAllreadyUsed.Remove(SomeConds.cond_id);
+                        SomeConds.isToDelete = true;
+                        break;
+
+                }
+
+
+                //======================================
+                if (SomeConds.cond_bulk=="me-b")
+                {
+                    if (MyPlayerClass == 1) StartCoroutine(TurnOnSomeEffect(BlockWithShield, 0.5f, 0));
+                    IDAllreadyUsed.Remove(SomeConds.cond_id);
+                }
+
+                //======================================
+
+
+            }
+
+
+
+            /*
+            
             if (SomeConds.cond_type.Contains("dt") && SomeConds.damage_or_heal > 0)
             {
 
@@ -397,18 +481,6 @@ public class effects : MonoBehaviour
 
             
 
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 997)
-            {
-                StartCoroutine(TurnOnSomeEffect(StrafeEff, 0.5f, 0));
-                
-            }
-
-
-            if (SomeConds.cond_type == "dt" && SomeConds.spell_index == 4)
-            {
-                StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));
-            }
-
 
             if (SomeConds.cond_type == "ca" && SomeConds.cond_message == "CANCELED")
             {
@@ -416,75 +488,8 @@ public class effects : MonoBehaviour
                 CancelCasting();
             }
 
-            //stun screen eff
-            if (SomeConds.spell_index == 1002 && SomeConds.cond_time>0.5f && PlayerSessionDataOrder==0)
-            {
-
-                //StartCoroutine(TurnOnSomeEffect(StunScreenEffect, SomeConds.cond_time, 0));
-                StartCoroutine(StunScreenWholeEff(SomeConds.cond_time));
-            }
-            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 1002 && (StunScreenEffect.activeSelf) && PlayerSessionDataOrder == 0)
-            {
-                //StunScreenEffect.SetActive(false);
-                StartCoroutine(StunScreenFastEnd());
-            }
-            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index == 1002 && (StunEffect.activeSelf))
-            {
-                StunEffect.SetActive(false);
-            }
 
 
-            //ONLY FOR WARRIOR====================================            
-            if (SomeConds.cond_type == "ca" && SomeConds.spell_index == 4)
-            {
-                StartCoroutine(TurnOnSomeEffect(ShieldChargeEff, SomeConds.cond_time, 0));
-
-            }
-
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 9)
-            {
-                StartCoroutine(TurnOnSomeEffect(RocksEff, 3f, 0));
-            }
-            
-
-
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 3)
-            {
-                PlayerAnimator.Play("buff");
-                StartCoroutine(TurnOnSomeEffect(BuffEff, 6f, 0));
-                StartCoroutine(PlaySomeSound(BuffSound, 0, false));
-            }
-
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 5)
-            {
-                StartCoroutine(TurnOnSomeEffect(ShieldOnEff, SomeConds.cond_time, 0));
-
-            }
-
-                                
-            if (SomeConds.cond_type == "dt" && (SomeConds.spell_index == 2 || SomeConds.spell_index == 7 || SomeConds.spell_index == 8) && SomeConds.damage_or_heal > 0)
-            {
-                StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f, 0));
-                StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
-            }
-            //=====================================================
-
-
-
-            
-            //MMMMMMMMAAAAAAAAAGGGGGGGGGGGGEEEEEEEEE           
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 53)
-            {
-                StartCoroutine(TurnOnSomeEffect(FireHandEff, 2.5f, 0.5f));
-                StartCoroutine(TurnOnSomeEffect(CastingEffFireHandR, 2.5f, 0));                    
-            }
-            if (SomeConds.cond_type == "ca" && MyPlayerClass == 2 && SomeConds.cond_message == "CANCELED" && (FireHandEff.activeSelf || CastingEffFireHandR.activeSelf))
-            {                
-                StartCoroutine(TurnOFFSomeEffect(FireHandEff, 0.61f));
-                StartCoroutine(TurnOFFSomeEffect(CastingEffFireHandR, 0.05f));
-                
-            }
-            //=====================================================
 
 
             //BARBARIAN==========================
@@ -493,12 +498,6 @@ public class effects : MonoBehaviour
                 StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));                
             }
 
-            /*
-            if (SomeConds.cond_type == "dg" && SomeConds.spell_index == 103)
-            {
-                StartCoroutine(TurnOnSomeEffect(SlamPlace, 6f, 0));
-            }
-            */
 
             if (SomeConds.cond_type == "co" && SomeConds.spell_index == 102)
             {
@@ -615,7 +614,7 @@ public class effects : MonoBehaviour
             }
 
             //=========================================
-
+            */
         }
 
 
@@ -743,17 +742,24 @@ public class effects : MonoBehaviour
     {
         GameObject SpellSource = Instantiate(Fireball, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.SetActive(true);
-        for (float i=0; i<2; i+=general.Tick)
-        {            
-            SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z);
-            //print(isSpellShooting + "=============================");
-            yield return new WaitForSeconds(general.Tick);
+
+        for (float i=0; i<2; i+=0.03f)
+        {
+            if (CurrConditions.coord_x==999 && CurrConditions.coord_z==999)
+            {
+                break;
+            }
+            SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 1, CurrConditions.coord_z);            
+            yield return new WaitForSeconds(0.03f);
+            
+                         
         }
-        while (isSpellShooting);
+        yield return new WaitForSeconds(0.4f);
         SpellSource.SetActive(false);
         Destroy(SpellSource);
         CurrConditions.isToDelete = true;
-        CurrentConds.Remove(CurrConditions);
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
+        //CurrentConds.Remove(CurrConditions);
 
     }
 
@@ -764,14 +770,16 @@ public class effects : MonoBehaviour
         SpellSource.SetActive(true);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
         StartCoroutine(TurnOnSomeEffect(SpellSource.transform.GetChild(0).gameObject, 1.5f, 1.5f));
-        isSpellShooting = false;
+        
         yield return new WaitForSeconds(0.1f);
-        CurrentConds.Remove(CurrConditions);
+        
         
         yield return new WaitForSeconds(7f);       
         SpellSource.SetActive(false);
         Destroy(SpellSource);
-        
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator SpellShooting54(Conds CurrConditions)
@@ -779,12 +787,14 @@ public class effects : MonoBehaviour
 
         GameObject SpellSource = FireSteps.GetObject();
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
-        isSpellShooting = false;
+        
         yield return new WaitForSeconds(0.1f);
-        CurrentConds.Remove(CurrConditions);
-        yield return new WaitForSeconds(3f);
+        
+        yield return new WaitForSeconds(1f);
         SpellSource.SetActive(false);
 
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator SpellShooting55(Conds CurrConditions)
@@ -792,11 +802,14 @@ public class effects : MonoBehaviour
         GameObject SpellSource = Instantiate(IceNova, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.05f, CurrConditions.coord_z);
         SpellSource.SetActive(true);
-        StartCoroutine(PlaySomeSound(FrostTrap, 0, false));
-        isSpellShooting = false;
+        
+        
         yield return new WaitForSeconds(4f);        
         SpellSource.SetActive(false);
         Destroy(SpellSource);
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator SpellShooting103(Conds CurrConditions)
@@ -856,12 +869,22 @@ public class effects : MonoBehaviour
         GameObject SpellSource = Instantiate(BlackHoleEff, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.1f, CurrConditions.coord_z);
         SpellSource.SetActive(true);
-        isSpellShooting = false;
-        //yield return new WaitForSeconds(0.1f);
-        CurrentConds.Remove(CurrConditions);
-        yield return new WaitForSeconds(5f);
+
+        do
+        {
+            if (CurrConditions.coord_x==999 && CurrConditions.coord_z == 999)
+            {
+                break;
+            }
+            SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.1f, CurrConditions.coord_z);
+            yield return new WaitForSeconds(0.1f);
+        } while (CurrConditions.cond_time>0 || CurrConditions.cond_message!="CANCELED");
+                
         SpellSource.SetActive(false);
         Destroy(SpellSource);
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator ShowInvis153(Conds CurrConditions)
@@ -890,6 +913,147 @@ public class effects : MonoBehaviour
         yield return new WaitForSeconds(0.04f);
 
 
+    }
+
+    public IEnumerator ToDelete(Conds _curr_conds, float _after_sec)
+    {
+        IDAllreadyUsed.Add(_curr_conds.cond_id);
+        yield return new WaitForSeconds(_after_sec);
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
+
+
+    //FREEZED spell 58
+    public IEnumerator Condition_58(Conds _curr_conds) 
+    {
+        FrozenSpikes.SetActive(true);
+        
+        do
+        {
+            if (!FrozenSpikes.activeSelf) FrozenSpikes.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+
+        } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
+
+        FrozenSpikes.SetActive(false);
+        FrozenSpikesBroken.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        FrozenSpikesBroken.SetActive(false);
+
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
+
+    //STUN effect
+    public IEnumerator Condition_1002(Conds _curr_conds)
+    {
+        if (_curr_conds.cond_time<0.5f || PlayerSessionDataOrder != 0)
+        {
+            yield return null;
+        }
+
+        //start stun
+        StunScreenEffect.SetActive(true);
+        for (float i = 0; i <= 10f; i++)
+        {
+            StunScreenEffect.gameObject.GetComponent<RectTransform>().localScale = Vector3.Lerp(new Vector3(2.5f, 2.5f, 1), new Vector3(1, 1, 1), (i / 10f));
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        do
+        {            
+            if (!StunScreenEffect.activeSelf) StunScreenEffect.SetActive(true);
+            yield return new WaitForSeconds(0.2f);
+
+        } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
+
+        //end stun
+        for (float i = 0; i <= 10f; i++)
+        {
+            StunScreenEffect.gameObject.GetComponent<RectTransform>().localScale = Vector3.Lerp(new Vector3(1, 1, 1), new Vector3(2.5f, 2.5f, 1), (i / 10f));
+            yield return new WaitForSeconds(0.03f);
+        }
+        StunScreenEffect.SetActive(false);
+
+        yield return new WaitForSeconds(0.1f);
+    }
+
+
+    //SHIELD ON spell 5
+    public IEnumerator Condition_5(Conds _curr_conds)
+    {
+        ShieldOnEff.SetActive(true);
+
+        do
+        {
+            if (!ShieldOnEff.activeSelf) ShieldOnEff.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+
+        } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
+
+        ShieldOnEff.SetActive(false);
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
+
+    //fire hands 53
+    public IEnumerator Condition_53(Conds _curr_conds)
+    {
+        CastingEffFireHandR.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        FireHandEff.SetActive(true);        
+
+        do
+        {
+            if (!CastingEffFireHandR.activeSelf) FireHandEff.SetActive(true);
+
+            if (_curr_conds.cond_time > 0.5f)
+            {
+                if (!FireHandEff.activeSelf) CastingEffFireHandR.SetActive(true);
+            } else
+            {
+                if (FireHandEff.activeSelf) CastingEffFireHandR.SetActive(false);
+            }
+            yield return new WaitForSeconds(0.250f);
+
+        } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
+
+        FireHandEff.SetActive(false);
+        CastingEffFireHandR.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
+
+
+    //standart form
+    public IEnumerator StandartCasting(Conds _curr_conds, List<GameObject> _obj)
+    {
+        print(_curr_conds.cond_type + " - " + _curr_conds.spell_index +  " !!!!!!!!!!!!!!!!!!!!!!!!!!");
+        for (int i = 0; i < _obj.Count; i++)
+        {
+            _obj[i].SetActive(true);
+        }
+
+        do
+        {
+            for (int i = 0; i < _obj.Count; i++)
+            {
+                if (!_obj[i].activeSelf) _obj[i].SetActive(true);
+            }            
+            yield return new WaitForSeconds(0.1f);
+
+        } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
+
+        for (int i = 0; i < _obj.Count; i++)
+        {
+            _obj[i].SetActive(false);
+        }
+
+        yield return new WaitForSeconds(1f);
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
     }
 
 

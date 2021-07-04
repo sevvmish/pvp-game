@@ -12,49 +12,41 @@ using System.IO;
 
 public class test : MonoBehaviour
 {
+    private List<IEnumerator> tasks = new List<IEnumerator>();
     private void Start()
     {
         Screen.SetResolution(1280, 720, true);
         Camera.main.aspect = 16f / 9f;
 
-        //PVPStatisticsPanel panel1 = new PVPStatisticsPanel("0~7~0~5~mage-2-0-0~barbarian-3-1-1~warrior-1-2-1~rogue-4-3-1~wizard-5-4-1~", GameObject.Find("Canvas").transform);    
+        tasks.Add(p1("one"));
+        tasks.Add(p2("two", "three"));
 
-        print(Application.dataPath);
-
-        test11 trytest = new test11();
-        trytest.tt1 = "test1";
-        trytest.tt2 = "test2";
-
-        /*
-        using (FileStream fs = new FileStream(Application.dataPath +  "/Resources/user.json", FileMode.OpenOrCreate))
-        {
-            byte[] arr = Encoding.UTF8.GetBytes(JsonUtility.ToJson(""));
-            fs.Write(arr, 0, arr.Length);
-
-        }
-        */
-
-        /*
-        using (FileStream fs = new FileStream(Application.dataPath + "/Resources/user.json", FileMode.Open))
-        {
-           
-            byte[] arr = new byte[fs.Length];
-            fs.Read(arr, 0, arr.Length);
-
-            
-            test11 newtest = new test11();
-            newtest = JsonUtility.FromJson<test11>(Encoding.UTF8.GetString(arr));
-            print(newtest.tt1 + " - " + newtest.tt2);
-
-        }
-        */
+        StartCoroutine(mainn(tasks));
     }
 
-    [Serializable]
-    public class test11
+    public IEnumerator mainn(List<IEnumerator> _data)
     {
-        public string tt1;
-        public string tt2;
+        for (int i = 0; i < _data.Count; i++)
+        {
+            StartCoroutine(_data[i]);
+        }
+
+        yield return new WaitForSeconds(0);
     }
+
+    public IEnumerator p1(string x)
+    {
+        print(x);
+
+        yield return new WaitForSeconds(0);
+    }
+
+    public IEnumerator p2(string x, string y)
+    {
+        print(x + " - " + y);
+
+        yield return new WaitForSeconds(0);
+    }
+
 
 }

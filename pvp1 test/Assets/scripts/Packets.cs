@@ -486,20 +486,25 @@ public struct AnimationsForPlayers
             Idle();
         }
 
-        
+        /*
+        if (isIdle0 && state == 101 && animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn"))
+        {
+            //animator.StopPlayback();
+            animator.Play("Run");
+        } else if (isIdle0 && state == 102 && animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn"))
+        {
+            //animator.StopPlayback();
+            animator.Play("Runback");
+        }
+        */
+
         if (isIdle0 && state==1)
         {
             animator.StopPlayback();
             animator.Play("Run");
         }
         
-
-        if (isIdle0 && animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn") && Math.Abs(playercontrol.MyJoystick.Horizontal)>0) //
-        {
-            animator.StopPlayback();
-            animator.Play("Run");
-        }
-
+               
         if (state==0 && animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && isIdle1)
         {
             animator.StopPlayback();
@@ -510,9 +515,9 @@ public struct AnimationsForPlayers
             (animator.GetCurrentAnimatorStateInfo(0).IsName("channeling spell") && state!=13) ||
             (animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && state != 3) ||
             //(animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && state != 8) ||
-            (animator.GetCurrentAnimatorStateInfo(0).IsName("ShieldOn") && state != 10) ||            
+            //(animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn") && (state != 10 && state != 101 && state != 102)) ||            
             (animator.GetCurrentAnimatorStateInfo(0).IsName("hurricane") && state != 15) ||
-            (animator.GetCurrentAnimatorStateInfo(0).IsName("lying") && state != 18)
+            (animator.GetCurrentAnimatorStateInfo(0).IsName("lying") && state != 18)             
             )
         {
             animator.StopPlayback();
@@ -614,6 +619,18 @@ public struct AnimationsForPlayers
                     ShieldOn();
                 }
                 break;
+            case 101:
+                if (!animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn"))
+                {
+                    ShieldOnForward();
+                }
+                break;
+            case 102:
+                if (!animator.GetCurrentAnimatorStateInfo(1).IsName("ShieldOn"))
+                {
+                    ShieldOnBackward();
+                }
+                break;
             case 11:
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("alternative attack") && CurrentAnimationState!=11)
                 {
@@ -684,6 +701,12 @@ public struct AnimationsForPlayers
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
                 {
                     death();
+                }
+                break;
+            case 23:
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("buff"))
+                {
+                    buff();
                 }
                 break;
         }
@@ -822,6 +845,21 @@ public struct AnimationsForPlayers
 
     }
 
+
+    void ShieldOnForward()
+    {
+        animator.Play("ShieldOn");
+        animator.Play("Run");
+        CurrentAnimationState = 101;
+    }
+
+    void ShieldOnBackward()
+    {
+        animator.Play("ShieldOn");
+        animator.Play("Runback");
+        CurrentAnimationState = 102;
+    }
+
     void AltAttack()
     {
         animator.Play("alternative attack");
@@ -896,6 +934,12 @@ public struct AnimationsForPlayers
     {
         animator.Play("death");
         CurrentAnimationState = 22;
+    }
+
+    void buff()
+    {
+        animator.Play("buff");
+        CurrentAnimationState = 23;
     }
 }
 
