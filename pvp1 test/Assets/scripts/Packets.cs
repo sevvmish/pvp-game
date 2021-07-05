@@ -1572,26 +1572,9 @@ public class PlayerUI : MonoBehaviour
 
         if (isOK)
         {
-            bool isSameSpell = false;
+           
 
-            
-            for (int i = 0; i < CondObjects.Count; i++)
-            {
-                if (CondObjects[i].isBusy && CondObjects[i].spell_index == spell_ind)
-                {
-                    isSameSpell = true;
-                    if (spell_time > CondObjects[i].spell_timer)
-                    {
-                        CondObjects[i].spell_timer = spell_time;
-                        
-                    }
-
-                    break;
-                }
-            }
-            
-
-            if (!isSameSpell)
+            if (1==1) //!isSameSpell
             {
                 int index = 0;
                 Vector2 position = Vector2.zero;

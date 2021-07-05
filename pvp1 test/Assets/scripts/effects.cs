@@ -808,6 +808,7 @@ public class effects : MonoBehaviour
         SpellSource.SetActive(false);
         Destroy(SpellSource);
 
+        yield return new WaitForSeconds(1f);
         CurrConditions.isToDelete = true;
         IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
@@ -927,19 +928,33 @@ public class effects : MonoBehaviour
     //FREEZED spell 58
     public IEnumerator Condition_58(Conds _curr_conds) 
     {
-        FrozenSpikes.SetActive(true);
-        
+        GameObject SpellSource = Instantiate(FrozenSpikes, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource.transform.position = FrozenSpikes.transform.position;
+        SpellSource.SetActive(true);
+        //FrozenSpikes.SetActive(true);
+
         do
         {
-            if (!FrozenSpikes.activeSelf) FrozenSpikes.SetActive(true);
+            //if (!FrozenSpikes.activeSelf) FrozenSpikes.SetActive(true);
+            if (!SpellSource.activeSelf) SpellSource.SetActive(true);
             yield return new WaitForSeconds(0.1f);
 
         } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
 
-        FrozenSpikes.SetActive(false);
-        FrozenSpikesBroken.SetActive(true);
+        //FrozenSpikes.SetActive(false);
+        SpellSource.SetActive(false);
+
+        //FrozenSpikesBroken.SetActive(true);
+        GameObject SpellSource1 = Instantiate(FrozenSpikesBroken, Vector3.zero, Quaternion.identity, VFXRespPlace);
+        SpellSource1.transform.position = FrozenSpikesBroken.transform.position;
+        SpellSource1.SetActive(true);
+
         yield return new WaitForSeconds(2f);
-        FrozenSpikesBroken.SetActive(false);
+        //FrozenSpikesBroken.SetActive(false);
+        SpellSource1.SetActive(false);
+
+        Destroy(SpellSource);
+        Destroy(SpellSource1);
 
         _curr_conds.isToDelete = true;
         IDAllreadyUsed.Remove(_curr_conds.cond_id);
