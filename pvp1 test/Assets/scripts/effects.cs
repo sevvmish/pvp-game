@@ -363,8 +363,9 @@ public class effects : MonoBehaviour
             {
                 if ((SomeConds.spell_index == 2 || SomeConds.spell_index == 7 || SomeConds.spell_index == 8) && SomeConds.damage_or_heal > 0)
                 {
-                    StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f, 0));
-                    StartCoroutine(PlaySomeSound(BloodLoss, 0, false));
+                    //StartCoroutine(TurnOnSomeEffect(BloodLossEff, 0.8f, 0));
+                    StartCoroutine(StandartSelfEffect(SomeConds, new List<GameObject>() { BloodLossEff}, 0, 0.8f, this.gameObject.transform));
+                    
                 }
 
                 if (SomeConds.spell_index == 4 || SomeConds.spell_index == 9) 
@@ -374,7 +375,8 @@ public class effects : MonoBehaviour
 
                 if (SomeConds.spell_index == 51 || SomeConds.spell_index == 53)
                 {
-                    StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
+                    //StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
+                    StartCoroutine(StandartSelfEffect(SomeConds, new List<GameObject>() { ExplosionFireBall }, 0, 1f, this.gameObject.transform));
                 }
 
                 if (!IDAllreadyUsed.Contains(SomeConds.cond_id)) StartCoroutine(ToDelete(SomeConds, 1f));
@@ -1045,7 +1047,7 @@ public class effects : MonoBehaviour
     //standart form
     public IEnumerator StandartCasting(Conds _curr_conds, List<GameObject> _obj)
     {
-        print(_curr_conds.cond_type + " - " + _curr_conds.spell_index +  " !!!!!!!!!!!!!!!!!!!!!!!!!!");
+        
         for (int i = 0; i < _obj.Count; i++)
         {
             _obj[i].SetActive(true);
@@ -1071,6 +1073,42 @@ public class effects : MonoBehaviour
         IDAllreadyUsed.Remove(_curr_conds.cond_id);
     }
 
+
+    public IEnumerator StandartSelfEffect(Conds _curr_conds, List<GameObject> _obj, float delay, float duration, Transform Location)
+    {
+        yield return new WaitForSeconds(delay);
+        List<GameObject> CurrentEffects = new List<GameObject>();        
+                
+        for (int i = 0; i < _obj.Count; i++)
+        {
+            GameObject SpellSource = Instantiate(_obj[i], Vector3.zero, Quaternion.identity, Location);
+            SpellSource.transform.position = _obj[i].transform.position;
+            SpellSource.SetActive(true);
+
+            CurrentEffects.Add(SpellSource);
+        }
+
+        for (float u = 0; u < duration; u+=0.1f)        
+        {
+            for (int i = 0; i < CurrentEffects.Count; i++)
+            {
+                if (!CurrentEffects[i].activeSelf) CurrentEffects[i].SetActive(true);
+            }
+            yield return new WaitForSeconds(0.1f);
+
+        }
+
+        for (int i = 0; i < CurrentEffects.Count; i++)
+        {
+            CurrentEffects[i].SetActive(false);
+            Destroy(CurrentEffects[i]);
+        }
+
+        yield return new WaitForSeconds(1f);
+        CurrentEffects.Clear();
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
 
 
 }
