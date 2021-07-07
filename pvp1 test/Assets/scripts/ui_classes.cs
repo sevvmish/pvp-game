@@ -12,12 +12,12 @@ public class ui_classes : MonoBehaviour
 public class SpellDescription : MonoBehaviour
 {
     private GameObject _mainObject, blink_effect, blink_outline;
-    private RectTransform _mainObjectRect;
+    private RectTransform _mainObjectRect, BackFace;
     private spellsIDs CurrentSpell;
     private int SpellNumber;
     private Image SpellIcon;
     private string _name;
-    private TextMeshProUGUI SpellDescr, ManaDescr;
+    private TextMeshProUGUI SpellDescr, ManaDescr, SpellName;
     private bool isPressed, isOnlyNames;
 
 
@@ -36,6 +36,8 @@ public class SpellDescription : MonoBehaviour
         SpellIcon = _mainObject.transform.GetChild(1).GetComponent<Image>();
         SpellDescr = _mainObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         ManaDescr = _mainObject.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
+        SpellName = _mainObject.transform.GetChild(6).GetComponent<TextMeshProUGUI>();
+        BackFace = _mainObject.transform.GetChild(2).GetComponent<RectTransform>();
         CurrentSpell = DB.GetSpellByNumber(_spell_number);
         BlinkOFF();
         SetNewSpell();
@@ -82,11 +84,15 @@ public class SpellDescription : MonoBehaviour
             SpellDescr.fontStyle = FontStyles.Bold;
             ManaDescr.text = languages.lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 22;
+            SpellName.gameObject.SetActive(false);
+            BackFace.localScale = new Vector3(1, 0.8f, 1);
+            ManaDescr.rectTransform.anchoredPosition = new Vector2(ManaDescr.rectTransform.anchoredPosition.x, 0);
         } 
         else
         {
             SpellIcon.sprite = CurrentSpell.Spell1_icon;
             SpellDescr.text = CurrentSpell.Spell1_full_description;
+            SpellName.text = CurrentSpell.Spell1_name;
             SpellDescr.fontSize = 18;
             ManaDescr.text = languages.lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 17;
