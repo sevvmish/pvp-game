@@ -276,35 +276,7 @@ public struct AnimationsForPlayers
         }
 
 
-        //data control send to EFFECTS
-        //STUNNED
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && !MyEffects.isStunned)
-        {
-            MyEffects.isStunned = true;
-        }
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stunned") && MyEffects.isStunned)
-        {
-            MyEffects.isStunned = false;
-        }
-        //SHIELD SLAM
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam") && !MyEffects.isShieldSlam)
-        {
-            MyEffects.isShieldSlam = true;
-        }
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shield slam") && MyEffects.isShieldSlam)
-        {
-            MyEffects.isShieldSlam = false;
-        }
-        //CASTING
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && !MyEffects.isCasting)
-        {
-            MyEffects.isCasting = true;
-        }
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("casting") && MyEffects.isCasting )
-        {
-            MyEffects.isCasting = false;
-        }
-
+        
 
         //changing state
         if (CurrentAnimationState != state)
@@ -481,7 +453,7 @@ public struct AnimationsForPlayers
         }
 
 
-        if ((CurrentAnimationState == 3 || CurrentAnimationState == 8 || CurrentAnimationState == 10 || CurrentAnimationState == 13 || CurrentAnimationState == 15 || CurrentAnimationState == 18 || CurrentAnimationState == 22) && (state < 2))
+        if ((CurrentAnimationState == 3 || CurrentAnimationState == 8 || CurrentAnimationState == 10 || CurrentAnimationState == 13 || CurrentAnimationState == 15 || CurrentAnimationState == 18 || CurrentAnimationState == 20 || CurrentAnimationState == 21 || CurrentAnimationState == 22) && (state < 2)) // 
         {
             Idle();
         }
@@ -686,13 +658,13 @@ public struct AnimationsForPlayers
                 }
                 break;
             case 20:
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("raise gun"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("raise gun") && CurrentAnimationState != 20)
                 {
                     raise_gun();
                 }
                 break;
             case 21:
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shot gun"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("shot gun") && CurrentAnimationState != 21)
                 {
                     shot_gun();
                 }

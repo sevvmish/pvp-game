@@ -349,6 +349,25 @@ public class effects : MonoBehaviour
             }
             */
 
+            //===============================
+            if (SomeConds.cond_type == "dg" && !SomeConds.isChecked)
+            {
+
+                if (SomeConds.spell_index == 101)
+                {
+                    StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));
+                }
+
+                if (SomeConds.spell_index == 152)
+                {
+                    StartCoroutine(TurnOnSomeEffect(BackStabEffect, 1f, 0));
+                }
+
+                
+                if (!IDAllreadyUsed.Contains(SomeConds.cond_id)) StartCoroutine(ToDelete(SomeConds, 1f));
+            }
+
+
             //===========================
             if (SomeConds.cond_type=="co" && !SomeConds.isChecked)
             {
@@ -378,6 +397,7 @@ public class effects : MonoBehaviour
                     //StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
                     StartCoroutine(StandartSelfEffect(SomeConds, new List<GameObject>() { ExplosionFireBall }, 0, 1f, this.gameObject.transform));
                 }
+
 
                 if (!IDAllreadyUsed.Contains(SomeConds.cond_id)) StartCoroutine(ToDelete(SomeConds, 1f));
             }
@@ -426,6 +446,70 @@ public class effects : MonoBehaviour
 
                     case 58:
                         if (SomeConds.cond_type == "co") StartCoroutine(Condition_58(SomeConds));
+                        break;
+
+                    case 102:
+                        if (SomeConds.cond_type == "co") StartCoroutine(StandartCasting(SomeConds, new List<GameObject>() {WhirlWind}));
+                        break;
+
+                    case 103:
+                        if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting103(SomeConds));
+                        break;
+
+                    case 153:
+                        if (SomeConds.cond_type == "cs")
+                        {
+                            StartCoroutine(SpellShooting153(SomeConds));
+                        }
+                        if (SomeConds.cond_type == "co")
+                        {
+                            if (PlayerSessionDataOrder != 0)
+                            {
+                                StartCoroutine(TurnOffAfterDelay(SkeletonMesh, 0.1f));
+                                StartCoroutine(TurnOffAfterDelay(MainMesh, 0.1f));
+                            }
+                            else
+                            {
+                                RogSkin.material = InvisibleRogue;
+                                FogWith.SetActive(true);
+                            }
+
+                            StartCoroutine(ToDelete(SomeConds, 0));
+                        }
+
+                        if (SomeConds.cond_type == "ad")
+                        {
+                            StartCoroutine(ShowInvis153(SomeConds));
+                        }                            
+
+                        break;
+
+                    case 154:
+                        if (SomeConds.cond_type == "co") StartCoroutine(StandartCasting(SomeConds, new List<GameObject>() { ButcheryEff }));
+                        break;
+
+                    case 156:
+                        if (SomeConds.cond_type == "co") StartCoroutine(Condition_156(SomeConds));
+                        if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting156(SomeConds));
+                        break;
+
+
+                    case 157:
+                        if (SomeConds.cond_type == "co")
+                        {
+                            StartCoroutine(TurnOnSomeEffect(UnFogEffect, 2, 0.5f));
+                            if (PlayerSessionDataOrder != 0)
+                            {
+                                StartCoroutine(TurnOnAfterDelay(MainMesh, 1));
+                                StartCoroutine(TurnOnAfterDelay(SkeletonMesh, 1));
+                            }
+                            else
+                            {
+                                StartCoroutine(StartVisible());
+                            }
+
+                            StartCoroutine(ToDelete(SomeConds, 1f));
+                        }
                         break;
 
                     case 201:
@@ -494,22 +578,6 @@ public class effects : MonoBehaviour
 
 
 
-            //BARBARIAN==========================
-            if (SomeConds.cond_type == "dg" && SomeConds.spell_index == 101)
-            {
-                StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));                
-            }
-
-
-            if (SomeConds.cond_type == "co" && SomeConds.spell_index == 102)
-            {
-                StartCoroutine(TurnOnSomeEffect(WhirlWind, 3f, 0));
-            }
-
-            if (SomeConds.cond_message == "CANCELED" && SomeConds.spell_index==102 && WhirlWind.activeSelf)
-            {
-                StartCoroutine(TurnOFFSomeEffect(WhirlWind, 0));
-            }
 
             //=============================
 
@@ -819,10 +887,15 @@ public class effects : MonoBehaviour
     {
         GameObject SpellSource = Instantiate(SlamPlace, Vector3.zero, Quaternion.identity, VFXRespPlace);
         SpellSource.transform.localEulerAngles = new Vector3(-90, 0, 0);
+
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0.02f, CurrConditions.coord_z);
+
         SpellSource.SetActive(true);        
-        yield return new WaitForSeconds(1f);        
+        yield return new WaitForSeconds(2f);        
         Destroy(SpellSource);
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator SpellShooting153(Conds CurrConditions)
@@ -835,10 +908,14 @@ public class effects : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         Destroy(SpellSource);
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator SpellShooting156(Conds CurrConditions)
     {
+        print("fnsjkgfjkfbgkhdbgkhdrbghdbghdbg");
         GameObject SpellSource = Instantiate(BulletTrail, new Vector3(this.gameObject.transform.position.x, 1.3f, this.gameObject.transform.position.z), Quaternion.identity, VFXRespPlace);        
         SpellSource.SetActive(true);
         SmokePuff.SetActive(true);
@@ -849,13 +926,14 @@ public class effects : MonoBehaviour
         SpellSource.transform.position = Vector3.Lerp(new Vector3(this.gameObject.transform.position.x, 1.3f, this.gameObject.transform.position.z), new Vector3(CurrConditions.coord_x, 1.3f, CurrConditions.coord_z), 1);
         Fuseeff.SetActive(false);
 
-        StartCoroutine(TurnOnAfterDelay(PistolOnBelt, 1f));
-        StartCoroutine(TurnOffAfterDelay(PistolRightHand, 1f));
-        StartCoroutine(TurnOnAfterDelay(DaggerRightHand, 1f));
+        
 
         yield return new WaitForSeconds(1.2f);
         SmokePuff.SetActive(false);        
         Destroy(SpellSource);
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
     IEnumerator StartVisible()
@@ -900,11 +978,13 @@ public class effects : MonoBehaviour
         SpellSource.transform.localEulerAngles = new Vector3(0, rot_y, 0);
         SpellSource.SetActive(true);
         
-        //yield return new WaitForSeconds(0.1f);
-        CurrentConds.Remove(CurrConditions);
+        
         yield return new WaitForSeconds(2f);
         SpellSource.SetActive(false);
         Destroy(SpellSource);
+
+        CurrConditions.isToDelete = true;
+        IDAllreadyUsed.Remove(CurrConditions.cond_id);
     }
 
 
@@ -920,7 +1000,7 @@ public class effects : MonoBehaviour
 
     public IEnumerator ToDelete(Conds _curr_conds, float _after_sec)
     {
-        IDAllreadyUsed.Add(_curr_conds.cond_id);
+        if (!IDAllreadyUsed.Contains(_curr_conds.cond_id)) IDAllreadyUsed.Add(_curr_conds.cond_id);
         yield return new WaitForSeconds(_after_sec);
         _curr_conds.isToDelete = true;
         IDAllreadyUsed.Remove(_curr_conds.cond_id);
@@ -1106,6 +1186,35 @@ public class effects : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         CurrentEffects.Clear();
+        _curr_conds.isToDelete = true;
+        IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
+
+
+    //pistol shot 156
+    public IEnumerator Condition_156(Conds _curr_conds)
+    {
+
+        PistolOnBelt.SetActive(false);
+        Fuseeff.SetActive(true);
+        PistolRightHand.SetActive(true);
+        DaggerRightHand.SetActive(false);
+
+        do
+        {
+            
+            yield return new WaitForSeconds(0.1f);
+
+        } while (_curr_conds.cond_time > 0 || _curr_conds.cond_message == "CANCELED");
+        
+        yield return new WaitForSeconds(0.2f);
+        
+        PistolOnBelt.SetActive(true);
+        Fuseeff.SetActive(false);
+        PistolRightHand.SetActive(false);
+        DaggerRightHand.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
         _curr_conds.isToDelete = true;
         IDAllreadyUsed.Remove(_curr_conds.cond_id);
     }
