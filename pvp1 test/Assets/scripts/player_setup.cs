@@ -357,7 +357,7 @@ public class player_setup : MonoBehaviour
 
             AllSpellBookSpells = new List<SpellDescription>();
 
-            float VerticalInterval = -100;
+            float VerticalInterval = -105;
 
             string[] _spells = CurrentCharacterData.spell_book.Split(',');
 

@@ -80,6 +80,7 @@ public class SpellDescription : MonoBehaviour
         {
             SpellIcon.sprite = CurrentSpell.Spell1_icon;
             SpellDescr.text = CurrentSpell.Spell1_name;
+            SpellDescr.rectTransform.anchoredPosition = new Vector2(SpellDescr.rectTransform.anchoredPosition.x, 6.8f);
             SpellDescr.fontSize = 28;
             SpellDescr.fontStyle = FontStyles.Bold;
             ManaDescr.text = languages.lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
@@ -93,6 +94,7 @@ public class SpellDescription : MonoBehaviour
             SpellIcon.sprite = CurrentSpell.Spell1_icon;
             SpellDescr.text = CurrentSpell.Spell1_full_description;
             SpellName.text = CurrentSpell.Spell1_name;
+            SpellName.fontSize = 21;
             SpellDescr.fontSize = 18;
             ManaDescr.text = languages.lang.ManaCostText + " " + CurrentSpell.Spell_manacost.ToString("f0") + " \t";
             ManaDescr.fontSize = 17;

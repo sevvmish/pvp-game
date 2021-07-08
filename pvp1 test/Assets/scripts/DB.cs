@@ -7,18 +7,18 @@ public class DB : MonoBehaviour
 {
     public static spellsIDs spell0 = new spellsIDs("", 0, Resources.Load<Sprite>("sprites/spell0"), "", "", spellsIDs.spell_types.direct_melee, 0);
     //WARRIOR
-    public static spellsIDs spell1 = new spellsIDs(languages.lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spell1"), languages.lang.Spell1ShortDescri, languages.lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee, 10);
-    public static spellsIDs spell2 = new spellsIDs(languages.lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spell2"), languages.lang.Spell2ShortDescri, languages.lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee, 20);
-    public static spellsIDs spell3 = new spellsIDs(languages.lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spell3"), languages.lang.Spell3ShortDescri, languages.lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff, 10);
-    public static spellsIDs spell4 = new spellsIDs(languages.lang.Spell4Name, 4, Resources.Load<Sprite>("sprites/spell4"), languages.lang.Spell4ShortDescri, languages.lang.Spell4FullDescri, spellsIDs.spell_types.direct_melee, 25);
-    public static spellsIDs spell5 = new spellsIDs(languages.lang.Spell5Name, 5, Resources.Load<Sprite>("sprites/spell5"), languages.lang.Spell5ShortDescri, languages.lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
-    public static spellsIDs spell6 = new spellsIDs(languages.lang.Spell6Name, 6, Resources.Load<Sprite>("sprites/spell6"), languages.lang.Spell6ShortDescri, languages.lang.Spell6FullDescri, spellsIDs.spell_types.direct_melee, 20);
+    public static spellsIDs spell1 = new spellsIDs(languages.lang.Spell1Name, 1, Resources.Load<Sprite>("sprites/spells/simple hit"), languages.lang.Spell1ShortDescri, languages.lang.Spell1FullDescri, spellsIDs.spell_types.direct_melee, 10);
+    public static spellsIDs spell2 = new spellsIDs(languages.lang.Spell2Name, 2, Resources.Load<Sprite>("sprites/spells/bleeding"), languages.lang.Spell2ShortDescri, languages.lang.Spell2FullDescri, spellsIDs.spell_types.DOT_melee, 20);
+    public static spellsIDs spell3 = new spellsIDs(languages.lang.Spell3Name, 3, Resources.Load<Sprite>("sprites/spells/strong health"), languages.lang.Spell3ShortDescri, languages.lang.Spell3FullDescri, spellsIDs.spell_types.positive_buff, 10);
+    public static spellsIDs spell4 = new spellsIDs(languages.lang.Spell4Name, 4, Resources.Load<Sprite>("sprites/spells/bleeding"), languages.lang.Spell4ShortDescri, languages.lang.Spell4FullDescri, spellsIDs.spell_types.direct_melee, 25);
+    public static spellsIDs spell5 = new spellsIDs(languages.lang.Spell5Name, 5, Resources.Load<Sprite>("sprites/spells/bleeding"), languages.lang.Spell5ShortDescri, languages.lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
+    public static spellsIDs spell6 = new spellsIDs(languages.lang.Spell6Name, 6, Resources.Load<Sprite>("sprites/spells/bleeding"), languages.lang.Spell6ShortDescri, languages.lang.Spell6FullDescri, spellsIDs.spell_types.direct_melee, 20);
 
     //MAGE
-    public static spellsIDs spell51 = new spellsIDs(languages.lang.Spell51Name, 51, Resources.Load<Sprite>("sprites/spell51"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_magic, 10);
-    public static spellsIDs spell52 = new spellsIDs(languages.lang.Spell52Name, 52, Resources.Load<Sprite>("sprites/spell52"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
-    public static spellsIDs spell53 = new spellsIDs(languages.lang.Spell52Name, 53, Resources.Load<Sprite>("sprites/spell52"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
-    public static spellsIDs spell54 = new spellsIDs(languages.lang.Spell52Name, 54, Resources.Load<Sprite>("sprites/spell52"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell51 = new spellsIDs(languages.lang.Spell51Name, 51, Resources.Load<Sprite>("sprites/spells/fireball"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell52 = new spellsIDs(languages.lang.Spell52Name, 52, Resources.Load<Sprite>("sprites/spells/meteor"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell53 = new spellsIDs(languages.lang.Spell52Name, 53, Resources.Load<Sprite>("sprites/spells/fire hands"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell54 = new spellsIDs(languages.lang.Spell52Name, 54, Resources.Load<Sprite>("sprites/spells/fire steps"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
 
     //BARBARIAN
     public static spellsIDs spell101 = new spellsIDs(languages.lang.Spell51Name, 101, Resources.Load<Sprite>("sprites/spell51"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_melee, 10);

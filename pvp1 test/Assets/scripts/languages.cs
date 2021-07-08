@@ -44,7 +44,7 @@ public class lang_general
     //public  string LoginText = "";
     public  string LoginText = "ВОЙТИ";
     public  string CreateNewText = "СОЗДАТЬ";
-    public  string AwaitingText = "ЗАГРУЗКА...";
+    public  string AwaitingText = "<size=200%>ЗАГРУЗКА!..<size=100%>";
     public  string ConnectionErrorText = "НЕТ СОЕДИНЕНИЯ";
     public  string CreateNewLoginPass = "создать новый логин-пароль";
     public  string EnterAsGuest = "войти в игру как гость";
@@ -117,20 +117,20 @@ public class lang_general
     public  string MagicCritText = "шанс крит атаки";
     public  string SpellPowerText = "сила магии";
 
-    public  string SpeedTextHint = "скорость";
-    public  string HealthTextHint = "здоровье";
-    public  string HealthRegenTextHint = "восст здоровья";
-    public  string EnergyRegenTextHint = "восст энергии";
-    public  string WeaponAttackTextHint = "атака оружия";
-    public  string HitPowerTextHint = "сила удара";
-    public  string ArmorTextHint = "броня";
-    public  string ShieldBlockTextHint = "блок щитом";
-    public  string MagicResistanceTextHint = "защита от магии";
-    public  string DodgeTextHint = "уклонение";
-    public  string CastSpeedTextHint = "скорость применения магии";
-    public  string MeleeCritTextHint = "шанс крит атаки";
-    public  string MagicCritTextHint = "шанс крит атаки";
-    public  string SpellPowerTextHint = "сила магии";
+    public  string SpeedTextHint = "<size=120%>скорость<size=100%> определяет, как быстро Вы можете передви- гаться. Стандартный показатель - это 1 единица";
+    public  string HealthTextHint = "<size=120%>здоровье<size=105%> показывает, какое максимальное количество повреждений может получить персонаж";
+    public  string HealthRegenTextHint = "<size=120%>восст здоровья<size=100%> показывает количество здоровья, восста- навливаемого за 1 секунду вре- мени";
+    public  string EnergyRegenTextHint = "<size=120%>восст энергии<size=100%> показывает количество энергии, восста- навливаемой за 1 секунду вре- мени";
+    public  string WeaponAttackTextHint = "<size=120%>атака оружия<size=95%> - это базовое повреждение оружием, выбирается случайно между меньшим и большим значениями";
+    public  string HitPowerTextHint = "<size=120%>сила удара<size=100%> показывает, насколько увеличивается базовое повреждение оружием из атаки оружия";
+    public  string ArmorTextHint = "<size=120%>броня<size=90%> снижает количество получаемого урона. Максимальное значение в 1000 единиц означает, что урон будет снижен до нуля";
+    public  string ShieldBlockTextHint = "<size=120%>блок щитом<size=85%> показывает вероятность заблокировать входящий урон от атаки или магии, направленной спереди. Максимальное значение - 100%";
+    public  string MagicResistanceTextHint = "<size=120%>защита от магии<size=95%> уменьшает урон и негативное влияние любых заклинаний. Максимальное значение - 100%";
+    public  string DodgeTextHint = "<size=120%>уклонение<size=87%> определяет вероят- ность увернуться от физического повреждения, направленного с лю- бой стороны. Максимальное значение - 100%";
+    public  string CastSpeedTextHint = "<size=110%>скорость применения магии<size=95%> показывает скорость чтения заклинаний. Максимальное значение - 100% или мгновенно";
+    public  string MeleeCritTextHint = "<size=120%>шанс крит атаки<size=95%> показывает веротяность нанести увеличенное повреждение. Максимальное значение - 100%";
+    public  string MagicCritTextHint = "<size=120%>шанс крит атаки<size=95%> показывает веротяность нанести увеличенное повреждение. Максимальное значение - 100%";
+    public  string SpellPowerTextHint = "<size=120%>сила магии<size=105%> - это базовое значение нанесения урона магией";
 
     //envir===================================
     public  string Canceled = "ОТМЕНА";
