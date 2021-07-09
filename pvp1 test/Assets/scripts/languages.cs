@@ -136,18 +136,18 @@ public class lang_general
     public  string Canceled = "ОТМЕНА";
     public  string ManaCostText = "затраты маны:";
 
-    //all spells===============================
+    //all spells=============================== 36 symbols in 3 rows "dddddddddddddddddddddddddddddddddddd"
     public  string Spell1Name = "простой удар";
     public  string Spell1ShortDescri = "простой удар одноручным оружием";
     public  string Spell1FullDescri = "простой удар одноручным оружием";
 
     public  string Spell2Name = "кровотечение";
     public  string Spell2ShortDescri = "легкое повреждение в течение 5 сек";
-    public  string Spell2FullDescri = "наносит легкое повреждение каждую секунду в течение 5 секунд";
+    public  string Spell2FullDescri = "наносит легкое повреждение каждую секунду в течение 10 секунд";
 
     public  string Spell3Name = "крепкое здоровье";
     public  string Spell3ShortDescri = "здоровье +20%, восстановление жизни +1 на 60 сек";
-    public  string Spell3FullDescri = "увеличивает запас здоровья на 20% и регенерацию здоровья на 1 на 60 сек";
+    public  string Spell3FullDescri = "на 60 секунд увеличивает запас здо- ровья на 20% и регенерацию здоровья на 1 себе и ближайшим союзникам";
 
     public  string Spell4Name = "удар щитом";
     public  string Spell4ShortDescri = "удар щитом и оглушение на 3 сек";
