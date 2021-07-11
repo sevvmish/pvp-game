@@ -247,9 +247,12 @@ public struct AnimationsForPlayers
 
     public void RefreshAnimations(int state)
     {
-
-
-
+        if (MyEffects.CurrentBaseAnimationID==0 && state > 1)
+        {
+            MyEffects.CurrentBaseAnimationID = state;
+        }
+            
+        
         /*
         if ((PrevAnimationState==3 || PrevAnimationState==8 || PrevAnimationState == 10 || PrevAnimationState == 13 || PrevAnimationState == 15 || PrevAnimationState == 18 || PrevAnimationState == 22) && (state < 2) )
         {

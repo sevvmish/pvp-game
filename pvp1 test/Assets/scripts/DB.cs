@@ -21,7 +21,7 @@ public class DB : MonoBehaviour
     public static spellsIDs spell54 = new spellsIDs(languages.lang.Spell52Name, 54, Resources.Load<Sprite>("sprites/spells/fire steps"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
 
     //BARBARIAN
-    public static spellsIDs spell101 = new spellsIDs(languages.lang.Spell51Name, 101, Resources.Load<Sprite>("sprites/spell51"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_melee, 10);
+    public static spellsIDs spell101 = new spellsIDs(languages.lang.Spell51Name, 101, Resources.Load<Sprite>("sprites/spells/swing"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_melee, 10);
 
 
     public static spellsIDs spell1002 = new spellsIDs(languages.lang.Spell1002Name, 1002, Resources.Load<Sprite>("sprites/spell1002"), languages.lang.Spell1002ShortDescri, languages.lang.Spell1002FullDescri, spellsIDs.spell_types.negative_eff,0);

@@ -965,10 +965,19 @@ public class playercontrol : MonoBehaviour
     {
         float _timer = _data.cond_time;
         print(_timer + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        Destroy(GameObject.Find("OtherPlayers"));
         yield return new WaitForSeconds(_timer+0.4f);       
 
         general.DataForSession.Clear();
-      
+
+
+        ResetAllCondAnalysData(MyConds);
+        for (int i = 0; i < OtherGamers.Count; i++)
+        {
+            ResetAllCondAnalysData(OtherGamers[i].Conds);            
+        }
+
+
         SceneManager.LoadScene("SampleScene");
     }
     public IEnumerator killmess(string MessFromButt)

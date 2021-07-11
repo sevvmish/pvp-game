@@ -93760,6 +93760,7 @@ MonoBehaviour:
   StrafeEff: {fileID: 5123965852691697486}
   StunScreenEffect: {fileID: 213460023823247303, guid: 0bb4d43f5a3c47a4aac320cca5457f9b,
     type: 3}
+  PistolShotImpact: {fileID: 1358213774012884481}
   BlockWithShield: {fileID: 0}
   WeaponTrail: {fileID: 0}
   ShieldSlam: {fileID: 0}
@@ -94520,12 +94521,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b021339ad0d36ec4480d0ff1c3f5c382, type: 3}
---- !u!4 &1246961191287721561 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
-    type: 3}
-  m_PrefabInstance: {fileID: 7614115862073286533}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6427580383857953897 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3502002005098157036, guid: b021339ad0d36ec4480d0ff1c3f5c382,
@@ -94553,6 +94548,18 @@ GameObject:
 --- !u!1 &2662803399708692035 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5575152446123889094, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1358213774012884481 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8895627627589482884, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1246961191287721561 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}

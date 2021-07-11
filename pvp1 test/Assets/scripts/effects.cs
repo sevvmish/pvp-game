@@ -13,28 +13,28 @@ public class effects : MonoBehaviour
     public int MyPlayerClass;
     private Transform VFXRespPlace;
 
-    private List<Conds> CurrentConds = new List<Conds>();
-    private List<Conds> CastingSpell = new List<Conds>();
-    private List<Vector2> CastingCoords = new List<Vector2>();
+    //private List<Conds> CurrentConds = new List<Conds>();
+    //private List<Conds> CastingSpell = new List<Conds>();
+    //private List<Vector2> CastingCoords = new List<Vector2>();
     public static HashSet<string> IDAllreadyUsed = new HashSet<string>();
     private List<GameObject> Cancels = new List<GameObject>();
 
-    private bool isCheckingFrozenSpilesSpell58;
+    public int CurrentBaseAnimationID;
 
     public bool isStunned, isShieldSlam, isCasting, isChanneling, isSpellShooting;
 
     public AudioSource MyAudioSourse;
-    private AudioClip HitWith1HSword, ShieldSlamSound, SwingHuge, BuffSound, BloodLoss, CancelCastingEffinBar, CastingSpellSound;
+    private AudioClip ShieldSlamSound, SwingHuge, BuffSound, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, FrozenSpikesBroken, StrafeEff, StunScreenEffect;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, FrozenSpikesBroken, StrafeEff, StunScreenEffect, PistolShotImpact;
 
     //warr 1 effects
-    public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff, RocksEff;
+    public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff, RocksEff, WarHitWith1H;
 
     //mage 1 effects
     public GameObject CastingEffFireHandL, CastingEffFireHandR, Fireball, Meteor, FireHandEff, FireStepEff, IceNova;
-    private ObjectPooling FireSteps;
+    private ObjectPooling ObjectsToUse;
     
 
     //barbarian 1 effects
@@ -60,6 +60,8 @@ public class effects : MonoBehaviour
     public GameObject SmokePuff;
     public GameObject Fuseeff;
     public GameObject CheckForRogueInvis;
+    public GameObject TinyWeaponSound;
+    public GameObject TinyWeaponSound2;
 
     //wizard 1 effects
     private ObjectPooling DeathBeamsList;
@@ -95,7 +97,7 @@ public class effects : MonoBehaviour
     void Start()
     {        
         VFXRespPlace = GameObject.Find("OtherPlayers").transform;        
-        PlayerAnimator = this.gameObject.GetComponent<Animator>();
+        //PlayerAnimator = this.gameObject.GetComponent<Animator>();
 
         IDAllreadyUsed.Clear();
 
@@ -112,11 +114,12 @@ public class effects : MonoBehaviour
         FrozenSpikes.SetActive(false);
         FrozenSpikesBroken.SetActive(false);
         StrafeEff.SetActive(false);
+        PistolShotImpact.SetActive(false);
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
-        BloodLoss = Resources.Load<AudioClip>("sounds/blood loss");
-        HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
+        //PistolShotImpact = Resources.Load<AudioClip>("sounds/pistol shot impact");
+        //HitWith1HSword = Resources.Load<AudioClip>("sounds/hit by weapon sword");
         ShieldSlamSound = Resources.Load<AudioClip>("sounds/shield slam");
         CancelCastingEffinBar = Resources.Load<AudioClip>("sounds/canceled spell sound");
         CastingSpellSound = Resources.Load<AudioClip>("sounds/casting spell");
@@ -134,6 +137,7 @@ public class effects : MonoBehaviour
             BuffEff.SetActive(false);
             ShieldOnEff.SetActive(false);
             RocksEff.SetActive(false);
+            WarHitWith1H.SetActive(false);
         }
         if (MyPlayerClass == 2)
         {            
@@ -142,7 +146,7 @@ public class effects : MonoBehaviour
             Fireball.SetActive(false);
             Meteor.SetActive(false);
             FireHandEff.SetActive(false);
-            FireSteps = new ObjectPooling(20, FireStepEff, VFXRespPlace);
+            ObjectsToUse = new ObjectPooling(20, FireStepEff, VFXRespPlace);
             FireStepEff.SetActive(false);
             IceNova.SetActive(false);
 
@@ -172,6 +176,8 @@ public class effects : MonoBehaviour
             SmokePuff.SetActive(false);
             Fuseeff.SetActive(false);
             CheckForRogueInvis.SetActive(false);
+            TinyWeaponSound.SetActive(false);
+            TinyWeaponSound2.SetActive(false);
         }
 
         if (MyPlayerClass == 5)
@@ -183,14 +189,39 @@ public class effects : MonoBehaviour
             AutoHealShield.SetActive(false);
         }
 
+       
+
     }
 
     
 
     private void FixedUpdate()
     {
+        if (CurrentBaseAnimationID > 1)
+        {
+            if (MyPlayerClass == 1 && CurrentBaseAnimationID == 2)
+            {
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { WarHitWith1H }, 0, 1f, this.gameObject.transform, true));
+            }
 
-       
+            if (MyPlayerClass == 4 && CurrentBaseAnimationID == 2)
+            {
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound }, 0, 1f, this.gameObject.transform, true));
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound2 }, 0.2f, 0.8f, this.gameObject.transform, false));
+            }
+
+            if (MyPlayerClass == 4 && CurrentBaseAnimationID == 15)
+            {
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound }, 0, 1.5f, this.gameObject.transform, true));
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound2 }, 0.25f, 0.5f, this.gameObject.transform, false));
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound }, 0.5f, 0.5f, this.gameObject.transform, false));
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound2 }, 0.75f, 0.5f, this.gameObject.transform, false));
+                StartCoroutine(StandartSelfAnimation(new List<GameObject>() { TinyWeaponSound }, 1, 0.5f, this.gameObject.transform, false));
+            }
+
+            CurrentBaseAnimationID = -10;
+        }
+
         if (Input.GetKeyDown(KeyCode.O))
         {
             print(GetPlayerCoordsByOrderNumber(1) + " - " + GetPlayerCoordsByOrderNumber(2));
@@ -285,70 +316,13 @@ public class effects : MonoBehaviour
 
     public void RegisterConds(Conds SomeConds)
     {
-       
+
+        
 
         //======================================================================================================================
         if (1==1) //!SomeConds.isChecked
         {
-            /*
-            if (SomeConds.cond_type == "cs")
-            {
-                bool isOK = true;
-
-                for (int i = 0; i < CurrentConds.Count; i++)
-                {
-                    if (CurrentConds[i].spell_index == SomeConds.spell_index && CurrentConds[i].cond_id == SomeConds.cond_id)
-                    {
-                        CurrentConds[i].coord_x = SomeConds.coord_x;
-                        CurrentConds[i].coord_z = SomeConds.coord_z;
-                        isOK = false;
-                    }
-                }
-
-                if (isOK)
-                {
-                    CurrentConds.Add(SomeConds);
-                    int CurrCondIndex = CurrentConds.Count - 1;
-                    
-                    switch (SomeConds.spell_index)
-                    {
-                        case 51:
-                            StartCoroutine(SpellShooting51(CurrentConds[CurrCondIndex]));
-                            break;
-                        case 52:
-                            StartCoroutine(SpellShooting52(CurrentConds[CurrCondIndex]));
-                            break;
-                        case 54:
-                            StartCoroutine(SpellShooting54(CurrentConds[CurrCondIndex]));
-                            break;
-                        case 55:
-                            StartCoroutine(SpellShooting55(CurrentConds[CurrCondIndex]));
-                            break;
-
-                        case 103:
-                            StartCoroutine(SpellShooting103(CurrentConds[CurrCondIndex]));
-                            break;
-
-
-                        case 153:                            
-                            StartCoroutine(SpellShooting153(CurrentConds[CurrCondIndex]));
-                            break;
-                        case 156:
-                            StartCoroutine(SpellShooting156(CurrentConds[CurrCondIndex]));
-                            break;
-
-
-                        
-                        case 202:
-                            StartCoroutine(SpellShooting202(CurrentConds[CurrCondIndex]));
-                            break;
-                    }
-
-                }
-
-            }
-            */
-
+           
             //===============================
             if (SomeConds.cond_type == "dg" && !SomeConds.isChecked)
             {
@@ -390,6 +364,11 @@ public class effects : MonoBehaviour
                 if (SomeConds.spell_index == 4 || SomeConds.spell_index == 9) 
                 {
                     StartCoroutine(PlaySomeSound(ShieldSlamSound, 0.2f, false));
+                }
+
+                if (SomeConds.spell_index == 156)
+                {
+                    StartCoroutine(StandartSelfEffect(SomeConds, new List<GameObject>() { PistolShotImpact }, 0.2f, 1f, this.gameObject.transform));
                 }
 
                 if (SomeConds.spell_index == 51 || SomeConds.spell_index == 53)
@@ -855,7 +834,8 @@ public class effects : MonoBehaviour
     IEnumerator SpellShooting54(Conds CurrConditions)
     {
 
-        GameObject SpellSource = FireSteps.GetObject();
+        GameObject SpellSource = ObjectsToUse.GetObject();
+        
         SpellSource.transform.position = new Vector3(CurrConditions.coord_x, 0, CurrConditions.coord_z);
         
         yield return new WaitForSeconds(0.1f);
@@ -915,7 +895,7 @@ public class effects : MonoBehaviour
 
     IEnumerator SpellShooting156(Conds CurrConditions)
     {
-        print("fnsjkgfjkfbgkhdbgkhdrbghdbghdbg");
+        
         GameObject SpellSource = Instantiate(BulletTrail, new Vector3(this.gameObject.transform.position.x, 1.3f, this.gameObject.transform.position.z), Quaternion.identity, VFXRespPlace);        
         SpellSource.SetActive(true);
         SmokePuff.SetActive(true);
@@ -1217,6 +1197,37 @@ public class effects : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _curr_conds.isToDelete = true;
         IDAllreadyUsed.Remove(_curr_conds.cond_id);
+    }
+
+
+    public IEnumerator StandartSelfAnimation(List<GameObject> _obj, float delay, float duration, Transform Location, bool isNullAnimationState)
+    {
+        
+        yield return new WaitForSeconds(delay);
+        List<GameObject> CurrentEffects = new List<GameObject>();
+
+        for (int i = 0; i < _obj.Count; i++)
+        {
+            GameObject SpellSource = Instantiate(_obj[i], Vector3.zero, Quaternion.identity, Location);
+            
+            SpellSource.transform.position = _obj[i].transform.position;
+            SpellSource.SetActive(true);
+
+            CurrentEffects.Add(SpellSource);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        for (int i = 0; i < CurrentEffects.Count; i++)
+        {
+            CurrentEffects[i].SetActive(false);
+            Destroy(CurrentEffects[i]);
+        }
+
+        
+        CurrentEffects.Clear();
+
+        if (isNullAnimationState) CurrentBaseAnimationID = 0;
     }
 
 
