@@ -371,7 +371,7 @@ public class effects : MonoBehaviour
                     StartCoroutine(StandartSelfEffect(SomeConds, new List<GameObject>() { PistolShotImpact }, 0.2f, 1f, this.gameObject.transform));
                 }
 
-                if (SomeConds.spell_index == 51 || SomeConds.spell_index == 53)
+                if (SomeConds.spell_index == 51 || SomeConds.spell_index == 53 || SomeConds.spell_index == 57)
                 {
                     //StartCoroutine(TurnOnSomeEffect(ExplosionFireBall, 1f, 0));
                     StartCoroutine(StandartSelfEffect(SomeConds, new List<GameObject>() { ExplosionFireBall }, 0, 1f, this.gameObject.transform));

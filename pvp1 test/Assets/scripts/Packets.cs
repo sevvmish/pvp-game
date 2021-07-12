@@ -1248,6 +1248,9 @@ public static class SendAndReceive
             case 14:
                 ReturnMess = "you are knocked down";
                 break;
+            case 15:
+                ReturnMess = "cant do it right now";
+                break;
 
         }
         return ReturnMess;

@@ -14,11 +14,16 @@ public class DB : MonoBehaviour
     public static spellsIDs spell5 = new spellsIDs(languages.lang.Spell5Name, 5, Resources.Load<Sprite>("sprites/spells/bleeding"), languages.lang.Spell5ShortDescri, languages.lang.Spell5FullDescri, spellsIDs.spell_types.positive_eff, 20);
     public static spellsIDs spell6 = new spellsIDs(languages.lang.Spell6Name, 6, Resources.Load<Sprite>("sprites/spells/bleeding"), languages.lang.Spell6ShortDescri, languages.lang.Spell6FullDescri, spellsIDs.spell_types.direct_melee, 20);
 
+    public static spellsIDs spell9 = new spellsIDs(languages.lang.Spell6Name, 9, Resources.Load<Sprite>("sprites/spells/ram"), languages.lang.Spell6ShortDescri, languages.lang.Spell6FullDescri, spellsIDs.spell_types.direct_melee, 20);
+
     //MAGE
     public static spellsIDs spell51 = new spellsIDs(languages.lang.Spell51Name, 51, Resources.Load<Sprite>("sprites/spells/fireball"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_magic, 10);
     public static spellsIDs spell52 = new spellsIDs(languages.lang.Spell52Name, 52, Resources.Load<Sprite>("sprites/spells/meteor"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
     public static spellsIDs spell53 = new spellsIDs(languages.lang.Spell52Name, 53, Resources.Load<Sprite>("sprites/spells/fire hands"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
     public static spellsIDs spell54 = new spellsIDs(languages.lang.Spell52Name, 54, Resources.Load<Sprite>("sprites/spells/fire steps"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell55 = new spellsIDs(languages.lang.Spell52Name, 55, Resources.Load<Sprite>("sprites/spells/frost trap"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell56 = new spellsIDs(languages.lang.Spell52Name, 56, Resources.Load<Sprite>("sprites/spells/frostbolt"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
+    public static spellsIDs spell57 = new spellsIDs(languages.lang.Spell52Name, 57, Resources.Load<Sprite>("sprites/spells/frost trap"), languages.lang.Spell52ShortDescri, languages.lang.Spell52FullDescri, spellsIDs.spell_types.direct_magic, 10);
 
     //BARBARIAN
     public static spellsIDs spell101 = new spellsIDs(languages.lang.Spell51Name, 101, Resources.Load<Sprite>("sprites/spells/swing"), languages.lang.Spell51ShortDescri, languages.lang.Spell51FullDescri, spellsIDs.spell_types.direct_melee, 10);
@@ -52,6 +57,9 @@ public class DB : MonoBehaviour
             case 6:
                 result = spell6;
                 break;
+            case 9:
+                result = spell9;
+                break;
             case 51:
                 result = spell51;
                 break;
@@ -63,6 +71,15 @@ public class DB : MonoBehaviour
                 break;
             case 54:
                 result = spell54;
+                break;
+            case 55:
+                result = spell55;
+                break;
+            case 56:
+                result = spell56;
+                break;
+            case 57:
+                result = spell57;
                 break;
             case 101:
                 result = spell101;
