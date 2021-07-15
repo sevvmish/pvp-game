@@ -70,7 +70,8 @@ public class effects : MonoBehaviour
     public GameObject BlackHoleEff;
     public GameObject AutoHealShield;
 
-    private Animator PlayerAnimator;    
+    private Animator PlayerAnimator;
+    
     private Vector2 CastingPos;
 
 
@@ -97,7 +98,7 @@ public class effects : MonoBehaviour
     void Start()
     {        
         VFXRespPlace = GameObject.Find("OtherPlayers").transform;        
-        //PlayerAnimator = this.gameObject.GetComponent<Animator>();
+        PlayerAnimator = this.gameObject.GetComponent<Animator>();
 
         IDAllreadyUsed.Clear();
 
@@ -322,7 +323,18 @@ public class effects : MonoBehaviour
         //======================================================================================================================
         if (1==1) //!SomeConds.isChecked
         {
-           
+
+
+            //==============================================
+            if (SomeConds.cond_message=="CANCELED" && !SomeConds.isChecked)
+            {
+                PlayerAnimator.StopPlayback();
+                PlayerAnimator.Play("Idle");
+                PlayerAnimator.Play("Idle1");
+
+            }
+            //==============================================
+
             //===============================
             if (SomeConds.cond_type == "dg" && !SomeConds.isChecked)
             {
