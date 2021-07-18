@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using System;
 
 public class effects : MonoBehaviour
 {
@@ -27,7 +28,12 @@ public class effects : MonoBehaviour
     private AudioClip ShieldSlamSound, SwingHuge, BuffSound, CancelCastingEffinBar, CastingSpellSound;
 
     //common effects
-    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, FrozenSpikesBroken, StrafeEff, StunScreenEffect, PistolShotImpact;
+    public GameObject StunEffect, BloodLossEff, ExplosionFireBall, FrozenSpikes, FrozenSpikesBroken, StrafeEff, StunScreenEffect, PistolShotImpact, FreezedEff;
+    private SkinnedMeshRenderer MyPlaceForMeshRenderer;
+    public Material freezed_material;
+    public GameObject BurningEff;
+    private Material CurrentMaterial;
+    public Material ElemMaterial, WarrMaterial, WizardMaterial, RogMaterial, BarbarianMaterial;
 
     //warr 1 effects
     public GameObject BlockWithShield, WeaponTrail, ShieldSlam, ShieldSlamEff, CritSwordEff, BuffEff, ShieldOnEff, ShieldChargeEff, RocksEff, WarHitWith1H;
@@ -99,6 +105,8 @@ public class effects : MonoBehaviour
     {        
         VFXRespPlace = GameObject.Find("OtherPlayers").transform;        
         PlayerAnimator = this.gameObject.GetComponent<Animator>();
+        MyPlaceForMeshRenderer = this.gameObject.transform.GetChild(0).gameObject.GetComponent<SkinnedMeshRenderer>();
+
 
         IDAllreadyUsed.Clear();
 
@@ -116,6 +124,8 @@ public class effects : MonoBehaviour
         FrozenSpikesBroken.SetActive(false);
         StrafeEff.SetActive(false);
         PistolShotImpact.SetActive(false);
+        FreezedEff.SetActive(false);
+        BurningEff.SetActive(false);
 
         SwingHuge = Resources.Load<AudioClip>("sounds/swing very huge");
         BuffSound = Resources.Load<AudioClip>("sounds/buff sound1");
@@ -128,7 +138,7 @@ public class effects : MonoBehaviour
 
         if (MyPlayerClass == 1)
         {
-            
+            CurrentMaterial = WarrMaterial;
             ShieldSlam.SetActive(false);
             BlockWithShield.SetActive(false);
             WeaponTrail.SetActive(false);
@@ -150,7 +160,7 @@ public class effects : MonoBehaviour
             ObjectsToUse = new ObjectPooling(20, FireStepEff, VFXRespPlace);
             FireStepEff.SetActive(false);
             IceNova.SetActive(false);
-
+            CurrentMaterial = ElemMaterial;
                        
         }
 
@@ -159,6 +169,7 @@ public class effects : MonoBehaviour
             SplashEffSimpleHit.SetActive(false);
             WhirlWind.SetActive(false);
             SlamPlace.SetActive(false);
+            CurrentMaterial = BarbarianMaterial;
         }
 
         if (MyPlayerClass == 4)
@@ -179,6 +190,7 @@ public class effects : MonoBehaviour
             CheckForRogueInvis.SetActive(false);
             TinyWeaponSound.SetActive(false);
             TinyWeaponSound2.SetActive(false);
+            CurrentMaterial = RogMaterial;
         }
 
         if (MyPlayerClass == 5)
@@ -188,14 +200,14 @@ public class effects : MonoBehaviour
             ChargeDeathBeam.SetActive(false);
             BlackHoleEff.SetActive(false);
             AutoHealShield.SetActive(false);
+            CurrentMaterial = WizardMaterial;
         }
 
-       
-
+        MyPlaceForMeshRenderer.material = CurrentMaterial;
+        
     }
 
-    
-
+   
     private void FixedUpdate()
     {
         if (CurrentBaseAnimationID > 1)
@@ -339,6 +351,11 @@ public class effects : MonoBehaviour
             if (SomeConds.cond_type == "dg" && !SomeConds.isChecked)
             {
 
+
+                MyPlaceForMeshRenderer.material = freezed_material;
+
+                FreezedEff.SetActive(true);
+
                 if (SomeConds.spell_index == 101)
                 {
                     StartCoroutine(TurnOnSomeEffect(SplashEffSimpleHit, 1f, 0));
@@ -347,6 +364,7 @@ public class effects : MonoBehaviour
                 if (SomeConds.spell_index == 152)
                 {
                     StartCoroutine(TurnOnSomeEffect(BackStabEffect, 1f, 0));
+                    MyPlaceForMeshRenderer.material = CurrentMaterial;
                 }
 
                 
@@ -433,6 +451,10 @@ public class effects : MonoBehaviour
 
                     case 55:
                         if (SomeConds.cond_type == "cs") StartCoroutine(SpellShooting55(SomeConds));
+                        break;
+
+                    case 57:
+                        if (SomeConds.cond_type == "co") StartCoroutine(StandartCasting(SomeConds, new List<GameObject>() { BurningEff }));
                         break;
 
                     case 58:

@@ -93746,6 +93746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerSessionDataOrder: 0
   MyPlayerClass: 0
+  CurrentBaseAnimationID: 0
   isStunned: 0
   isShieldSlam: 0
   isCasting: 0
@@ -93761,6 +93762,14 @@ MonoBehaviour:
   StunScreenEffect: {fileID: 213460023823247303, guid: 0bb4d43f5a3c47a4aac320cca5457f9b,
     type: 3}
   PistolShotImpact: {fileID: 1358213774012884481}
+  FreezedEff: {fileID: 316018348632967185}
+  freezed_material: {fileID: 2100000, guid: 8ad394781e3181b428ee0f8ac7b407cb, type: 2}
+  BurningEff: {fileID: 6525127458872051561}
+  ElemMaterial: {fileID: 2100000, guid: d357557b55741834d8c59ac4101a3dcd, type: 2}
+  WarrMaterial: {fileID: 2100000, guid: df1fee75671568d4e8ddc213977c8ea3, type: 2}
+  WizardMaterial: {fileID: 2100000, guid: 34db4d3ceaaa27648acf1630e4e13eca, type: 2}
+  RogMaterial: {fileID: 2100000, guid: 5c046261506856d4ba168758eb4db887, type: 2}
+  BarbarianMaterial: {fileID: 2100000, guid: 4a495c02944a97c4a88bd137d08a193b, type: 2}
   BlockWithShield: {fileID: 0}
   WeaponTrail: {fileID: 0}
   ShieldSlam: {fileID: 0}
@@ -93770,6 +93779,7 @@ MonoBehaviour:
   ShieldOnEff: {fileID: 0}
   ShieldChargeEff: {fileID: 0}
   RocksEff: {fileID: 0}
+  WarHitWith1H: {fileID: 0}
   CastingEffFireHandL: {fileID: 0}
   CastingEffFireHandR: {fileID: 0}
   Fireball: {fileID: 0}
@@ -93797,6 +93807,8 @@ MonoBehaviour:
   SmokePuff: {fileID: 0}
   Fuseeff: {fileID: 0}
   CheckForRogueInvis: {fileID: 0}
+  TinyWeaponSound: {fileID: 0}
+  TinyWeaponSound2: {fileID: 0}
   DeathBeam: {fileID: 5181431397942174755}
   ChargeDeathBeam: {fileID: 7591113482905060186}
   BlackHoleEff: {fileID: 7782806065577458776}
@@ -94521,18 +94533,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b021339ad0d36ec4480d0ff1c3f5c382, type: 3}
---- !u!1 &6427580383857953897 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3502002005098157036, guid: b021339ad0d36ec4480d0ff1c3f5c382,
-    type: 3}
-  m_PrefabInstance: {fileID: 7614115862073286533}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2985416903111645072 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4667016545138968597, guid: b021339ad0d36ec4480d0ff1c3f5c382,
-    type: 3}
-  m_PrefabInstance: {fileID: 7614115862073286533}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &887724018700870464 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7348487298854747333, guid: b021339ad0d36ec4480d0ff1c3f5c382,
@@ -94557,9 +94557,33 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6525127458872051561 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3685966304499259628, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6427580383857953897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3502002005098157036, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1246961191287721561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8711332296863289820, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2985416903111645072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4667016545138968597, guid: b021339ad0d36ec4480d0ff1c3f5c382,
+    type: 3}
+  m_PrefabInstance: {fileID: 7614115862073286533}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &316018348632967185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7910712428572022676, guid: b021339ad0d36ec4480d0ff1c3f5c382,
     type: 3}
   m_PrefabInstance: {fileID: 7614115862073286533}
   m_PrefabAsset: {fileID: 0}
